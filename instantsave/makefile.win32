@@ -1,0 +1,61 @@
+# Running make creates config.h then calls the sub makefiles.
+#
+# Other targets are:
+#	deps: delete the dependencies so they are regenerated on next make
+#	clean: clean all generated files
+#
+# localwin32.mk is an optional file to override make variables.
+# Use localwin32.mk instead of editing variables as it is included in sub
+# makefiles.
+# localwin32.mk to set PREFIX instead of the default C:\libs
+# For MSYS use localwin32.mk to set CP and RM.
+# By default this will work in a Windows command prompt.
+
+CC = gcc
+CP = copy
+RM = del
+PREFIX = C:\libs
+GEANY_SRC = c:\geany_svn
+TARGET = instantsave.dll
+.SUFFIXES: .c .o
+-include localwin32.mk
+
+OBJS =	instantsave.o
+INCLUDEDIRS=  -I. \
+              -I$(GEANY_SRC) \
+              -I$(GEANY_SRC)\src \
+              -I$(GEANY_SRC)\plugins \
+              -I$(GEANY_SRC)\tagmanager\include \
+              -I$(GEANY_SRC)\scintilla\include \
+              -I$(PREFIX)/include/gtk-2.0 \
+              -I$(PREFIX)/lib/gtk-2.0/include \
+              -I$(PREFIX)/include/atk-1.0 \
+              -I$(PREFIX)/include/pango-1.0 \
+              -I$(PREFIX)/include/cairo \
+              -I$(PREFIX)/include/glib-2.0 \
+              -I$(PREFIX)/lib/glib-2.0/include \
+              -I$(PREFIX)/include/gettext \
+              -I$(PREFIX)/include
+ALL_GTK_LIBS= \
+	-L"$(PREFIX)/lib" \
+	-lgtk-win32-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 \
+	-lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl -liconv
+CCFLAGS=-Wall -O2 -mms-bitfields -DHAVE_CONFIG_H
+
+
+all: $(TARGET)
+
+deps.mak:
+	$(CC) -MM $(CCFLAGS) $(INCLUDEDIRS) *.c >deps.mak
+
+.c.o:
+	$(CC) $(CCFLAGS) $(INCLUDEDIRS) -c $<
+
+$(TARGET): $(OBJS) deps.mak
+	$(CC) -shared $(OBJS) $(ALL_GTK_LIBS) -o $(TARGET)
+
+clean:
+	-$(RM) deps.mak *.o *.dll
+
+# Generate header dependencies with "make deps.mak"
+include deps.mak
