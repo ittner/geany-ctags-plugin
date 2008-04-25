@@ -1,0 +1,57 @@
+# German translations for copyonsave package.
+# Copyright (C) 2008 THE copyonsave's COPYRIGHT HOLDER
+# This file is distributed under the same license as the copyonsave package.
+# Enrico Tröger <enrico.troeger@uvena.de> 2008
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: copyonsave 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-04-25 14:54+0200\n"
+"PO-Revision-Date: 2008-04-25 15:09+0100\n"
+"Last-Translator: Enrico Tröger <enrico.troeger@uvena.de>\n"
+"Language-Team: German <geany-i18n@uvena.de>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: src/backupcopy.c:50
+#: src/backupcopy.c:230
+msgid "Backup Copy"
+msgstr "Sicherheitskopien anlegen"
+
+#: src/backupcopy.c:50
+msgid "Creates a backup of the current file when saving"
+msgstr "Legt eine Sicherungskopie der aktuellen Datei beim Speichern an"
+
+#. it's unlikely that this happens
+#: src/backupcopy.c:100
+#: src/backupcopy.c:113
+#, c-format
+msgid "Backup Copy: File could not be saved (%s)."
+msgstr "Sicherungskopie konnte nicht gespeichert werden (%s)."
+
+#. initialize the dialog
+#: src/backupcopy.c:199
+msgid "Select Directory"
+msgstr "Verzeichnis wählen"
+
+#: src/backupcopy.c:237
+msgid "Directory to save backup files in:"
+msgstr "Verzeichnis um die Sicherungskopien zu speichern:"
+
+#: src/backupcopy.c:257
+msgid "Date/Time format for backup files (\"man strftime\" for details):"
+msgstr "Datums-/Zeitformat für die Sicherungsdateien (\"man strftime\" für mehr Informationen):"
+
+#: src/backupcopy.c:290
+msgid "Plugin configuration directory could not be created."
+msgstr "Das Konfigurationsverzeichnis für das Plugin konnte nicht erstellt werden."
+
+#: src/backupcopy.c:303
+msgid "Backup directory does not exist or is not writable."
+msgstr "Das Verzeichnis für die Sicherungsdateien existiert nicht oder kann nicht geschrieben werden."
