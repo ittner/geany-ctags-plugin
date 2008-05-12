@@ -1,0 +1,22 @@
+2007-11-29  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * geanysendmail.c: Applied a patch from Enrico to improve code;
+   Version 0.2b
+
+
+2007-11-23  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * geanysendmail.c, TODO: %f added Filename placeholder
+   Fixes a few segfaults and momory problems
+
+
+2007-11-23  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * geanysendmail.c: Added support configuration dialog called by
+   plugin manager and configuration file support to store mailer.
+ * TODO: Added list to keep in mind what is still missing
+
+
+2007-11-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * *: Initial commit
