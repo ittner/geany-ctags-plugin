@@ -78,9 +78,8 @@ static gboolean hide_object_files = TRUE;
 
 static GtkWidget			*file_view_vbox;
 static GtkWidget			*file_view;
-static GtkListStore			*file_store;
-static GtkTreeIter			*last_dir_iter = NULL;
-static GtkEntryCompletion	*entry_completion = NULL;
+static GtkTreeStore			*file_store;
+static GtkTreeIter			*toplevel, *child;
 
 static gchar		*open_cmd;				/* in locale-encoding */
 static gchar		*config_file;
@@ -431,39 +430,6 @@ static void on_open_clicked(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-static void on_find_in_files(GtkMenuItem *menuitem, gpointer user_data)
-{
-	GtkTreeSelection *treesel;
-	GtkTreeModel *model;
-	GList *list;
-	gchar *dir;
-	gboolean is_dir = FALSE;
-
-	treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));
-	if (! check_single_selection(treesel))
-		return;
-
-	list = gtk_tree_selection_get_selected_rows(treesel, &model);
-	is_dir = is_folder_selected(list);
-
-	if (is_dir)
-	{
-		GtkTreePath *treepath = list->data;	/* first selected item */
-
-		dir = get_tree_path_filename(treepath);
-	}
-	else
-		dir = g_strdup(current_dir);
-
-	g_list_foreach(list, (GFunc) gtk_tree_path_free, NULL);
-	g_list_free(list);
-
-	setptr(dir, p_utils->get_utf8_from_locale(dir));
-	p_search->show_find_in_files_dialog(dir);
-	g_free(dir);
-}
-
-
 static void on_hidden_files_clicked(GtkCheckMenuItem *item)
 {
 	show_hidden_files = gtk_check_menu_item_get_active(item);
@@ -500,14 +466,8 @@ static GtkWidget *create_popup_menu(void)
 		G_CALLBACK(on_external_open), NULL);
 	popup_items.open_external = item;
 
-//	image = gtk_image_new_from_stock(GTK_STOCK_FIND, GTK_ICON_SIZE_MENU);
-//	gtk_widget_show(image);
-//	item = gtk_image_menu_item_new_with_mnemonic(_("_Find in Files"));
-//	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
-//	gtk_widget_show(item);
-//	gtk_container_add(GTK_CONTAINER(menu), item);
-//	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_find_in_files), NULL);
-//	popup_items.find_in_files = item;
+
+
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
@@ -591,37 +551,44 @@ static gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer dat
 
 static void prepare_file_view(void)
 {
-	GtkCellRenderer *text_renderer, *icon_renderer;
+	GtkCellRenderer *text_renderer, *icon_renderer, *expand_renderer;
 	GtkTreeViewColumn *expandColumn *column;
 	GtkTreeSelection *select;
 	PangoFontDescription *pfd;
 
-	file_store = gtk_list_store_new(FILEVIEW_N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING);
+	file_store = gtk_tree_store_new(FILEVIEW_N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING);
 
-	gtk_tree_view_set_model(GTK_TREE_VIEW(file_view), GTK_TREE_MODEL(file_store));
+	//gtk_tree_view_set_model(GTK_TREE_VIEW(file_view), GTK_TREE_MODEL(file_store));
 
-	icon_renderer = gtk_cell_renderer_pixbuf_new();
-	text_renderer = gtk_cell_renderer_text_new();
-	column = gtk_tree_view_column_new();
-    gtk_tree_view_column_pack_start(column, icon_renderer, FALSE);
-  	gtk_tree_view_column_set_attributes(column, icon_renderer, "stock-id", FILEVIEW_COLUMN_ICON, NULL);
-    gtk_tree_view_column_pack_start(column, text_renderer, TRUE);
-  	gtk_tree_view_column_set_attributes(column, text_renderer, "text", FILEVIEW_COLUMN_NAME, NULL);
-	gtk_tree_view_append_column(GTK_TREE_VIEW(file_view), column);
-	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(file_view), FALSE);
+//	icon_renderer = gtk_cell_renderer_pixbuf_new();
+//	text_renderer = gtk_cell_renderer_text_new();
+//	column = gtk_tree_view_column_new();
+	
+	
+	
+//	gtk_tree_view_column_pack_start(column, NULL , FALSE);
+//	gtk_tree_view_set_expander_column(column);
+	
+	
+//    gtk_tree_view_column_pack_start(column, icon_renderer, FALSE);
+ // 	gtk_tree_view_column_set_attributes(column, icon_renderer, "stock-id", FILEVIEW_COLUMN_ICON, NULL);
+  //  gtk_tree_view_column_pack_start(column, text_renderer, TRUE);
+ // 	gtk_tree_view_column_set_attributes(column, text_renderer, "text", FILEVIEW_COLUMN_NAME, NULL);
+//	gtk_tree_view_append_column(GTK_TREE_VIEW(file_view), column);
+//	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(file_view), FALSE);
 
-	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(file_view), TRUE);
-	gtk_tree_view_set_search_column(GTK_TREE_VIEW(file_view), FILEVIEW_COLUMN_NAME);
+//	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(file_view), TRUE);
+//	gtk_tree_view_set_search_column(GTK_TREE_VIEW(file_view), FILEVIEW_COLUMN_NAME);
 
-	pfd = pango_font_description_from_string(prefs->tagbar_font);
-	gtk_widget_modify_font(file_view, pfd);
-	pango_font_description_free(pfd);
+//	pfd = pango_font_description_from_string(prefs->tagbar_font);
+//	gtk_widget_modify_font(file_view, pfd);
+//	pango_font_description_free(pfd);
 
 	/* selection handling */
-	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));
-	gtk_tree_selection_set_mode(select, GTK_SELECTION_MULTIPLE);
+//	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));
+//	gtk_tree_selection_set_mode(select, GTK_SELECTION_MULTIPLE);
 
-	g_signal_connect(G_OBJECT(file_view), "realize", G_CALLBACK(on_current_path), NULL);
+//	g_signal_connect(G_OBJECT(file_view), "realize", G_CALLBACK(on_current_path), NULL);
 	g_signal_connect(G_OBJECT(file_view), "button-press-event",
 		G_CALLBACK(on_button_press), NULL);
 	g_signal_connect(G_OBJECT(file_view), "button-release-event",
@@ -655,64 +622,6 @@ static GtkWidget *make_toolbar(void)
 
 	return toolbar;
 }
-
-
-static gboolean completion_match_func(GtkEntryCompletion *completion, const gchar *key,
-									  GtkTreeIter *iter, gpointer user_data)
-{
-	gchar *str, *icon;
-	gboolean result = FALSE;
-
-	gtk_tree_model_get(GTK_TREE_MODEL(file_store), iter,
-		FILEVIEW_COLUMN_ICON, &icon, FILEVIEW_COLUMN_NAME, &str, -1);
-
-	if (str != NULL && icon != NULL && p_utils->str_equal(icon, GTK_STOCK_DIRECTORY) &&
-		! g_str_has_suffix(key, G_DIR_SEPARATOR_S))
-	{
-		/* key is something like "/tmp/te" and str is a filename like "test",
-		 * so strip the path from key to make them comparable */
-		gchar *base_name = g_path_get_basename(key);
-		gchar *str_lowered = g_utf8_strdown(str, -1);
-		result = g_str_has_prefix(str_lowered, base_name);
-		g_free(base_name);
-		g_free(str_lowered);
-	}
-	g_free(str);
-	g_free(icon);
-
-	return result;
-}
-
-
-static gboolean completion_match_selected(GtkEntryCompletion *widget, GtkTreeModel *model,
-										  GtkTreeIter *iter, gpointer user_data)
-{
-	gchar *str;
-	gtk_tree_model_get(model, iter, FILEVIEW_COLUMN_NAME, &str, -1);
-	if (str != NULL)
-	{
-		
-	}
-	g_free(str);
-
-	return TRUE;
-}
-
-
-static void completion_create(void)
-{
-	entry_completion = gtk_entry_completion_new();
-
-	gtk_entry_completion_set_inline_completion(entry_completion, FALSE);
-	gtk_entry_completion_set_popup_completion(entry_completion, TRUE);
-	gtk_entry_completion_set_text_column(entry_completion, FILEVIEW_COLUMN_NAME);
-	gtk_entry_completion_set_match_func(entry_completion, completion_match_func, NULL, NULL);
-
-	g_signal_connect(entry_completion, "match-selected",
-		G_CALLBACK(completion_match_selected), NULL);
-
-}
-
 
 #define CHECK_READ_SETTING(var, error, tmp) \
 	if ((error) != NULL) \
@@ -769,7 +678,6 @@ void init(GeanyData *data)
 
 	file_view = gtk_tree_view_new();
 //	prepare_file_view();
-	completion_create();
 
 	scrollwin = gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(
