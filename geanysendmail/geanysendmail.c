@@ -56,7 +56,7 @@ gboolean icon_in_toolbar = FALSE;
 /* Needed global to remove from toolbar again */
 GtkWidget *mailbutton = NULL;
 GtkWidget *separator = NULL;
-
+GtkWidget *separator2 = NULL;
 
 
 void configure(GtkWidget *parent)
@@ -229,18 +229,28 @@ void init(GeanyData *data)
 
 	if (icon_in_toolbar == TRUE)
 	{
+
+		int number_of_icons = 0;
+		number_of_icons = gtk_toolbar_get_n_items(GTK_TOOLBAR(app->toolbar));
+		
 		pixbuf = gdk_pixbuf_new_from_inline(-1, mail_pixbuf, FALSE, NULL);
 		icon = gtk_image_new_from_pixbuf(pixbuf);
 		g_object_unref(pixbuf);
 
-		separator = (GtkWidget*) gtk_separator_tool_item_new ();
+		separator = (GtkWidget*) gtk_separator_tool_item_new();
 		gtk_widget_show (separator);
-		gtk_container_add (GTK_CONTAINER (app->toolbar), separator);
+		gtk_toolbar_insert(GTK_TOOLBAR(app->toolbar), GTK_TOOL_ITEM(separator), number_of_icons - 2);
 
 		mailbutton = (GtkWidget*) gtk_tool_button_new (icon, "Mail");
-		gtk_container_add (GTK_CONTAINER (app->toolbar), mailbutton);
+		gtk_toolbar_insert(GTK_TOOLBAR(app->toolbar), GTK_TOOL_ITEM(mailbutton), number_of_icons - 1);
 		g_signal_connect (G_OBJECT(mailbutton), "clicked", G_CALLBACK(send_as_attachment), NULL);
 		gtk_widget_show_all (mailbutton);
+	
+		separator2 = (GtkWidget*) gtk_separator_tool_item_new();
+		gtk_widget_show (separator2);
+		gtk_toolbar_insert(GTK_TOOLBAR(app->toolbar), GTK_TOOL_ITEM(separator2), number_of_icons);
+
+
 	}
 
 	// Build up menu
@@ -276,6 +286,11 @@ void cleanup()
 	if (separator != NULL)
 	{
 		gtk_container_remove(GTK_CONTAINER (app->toolbar), separator);
+	}
+
+	if (separator2 != NULL)
+	{
+		gtk_container_remove(GTK_CONTAINER (app->toolbar), separator2);
 	}
 	g_free(mailer);
 	g_free(config_file);
