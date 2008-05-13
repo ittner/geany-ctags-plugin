@@ -1,3 +1,8 @@
+2008-05-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Restart using ChangeLog. 
+
+
 2007-11-29  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * geanysendmail.c: Applied a patch from Enrico to improve code;
