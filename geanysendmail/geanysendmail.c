@@ -143,6 +143,23 @@ void show_icon()
 	gtk_toolbar_insert(GTK_TOOLBAR(app->toolbar), GTK_TOOL_ITEM(separator2), number_of_icons);
 }
 
+void cleanup_icon()
+{
+	if (mailbutton != NULL)
+	{
+		gtk_container_remove(GTK_CONTAINER (app->toolbar), mailbutton);
+	}
+	if (separator != NULL)
+	{
+		gtk_container_remove(GTK_CONTAINER (app->toolbar), separator);
+	}
+
+	if (separator2 != NULL)
+	{
+		gtk_container_remove(GTK_CONTAINER (app->toolbar), separator2);
+	}
+}
+
 void configure(GtkWidget *parent)
 {
 	GtkWidget	*dialog, *label1, *label2, *entry, *vbox;
@@ -202,6 +219,11 @@ void configure(GtkWidget *parent)
 			icon_in_toolbar = TRUE;
 			show_icon();
 		}
+		else if (icon_in_toolbar == TRUE && gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_icon_to_toolbar)) == FALSE)
+		{
+			cleanup_icon();
+			icon_in_toolbar = FALSE;
+		}
 		else
 		{
 			icon_in_toolbar = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_icon_to_toolbar));
@@ -230,8 +252,6 @@ void configure(GtkWidget *parent)
 	gtk_widget_destroy(dialog);
 }
 
-
-
 /* Called by Geany to initialize the plugin */
 void init(GeanyData *data)
 {
@@ -252,7 +272,7 @@ void init(GeanyData *data)
 	// Initialising options from config file
 	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 	mailer = g_key_file_get_string(config, "tools", "mailer", NULL);
-	icon_in_toolbar =g_key_file_get_boolean(config, "icon", "show_icon", NULL);
+	icon_in_toolbar = g_key_file_get_boolean(config, "icon", "show_icon", NULL);
 
 	g_key_file_free(config);
 
@@ -291,19 +311,7 @@ void init(GeanyData *data)
 void cleanup()
 {
 	gtk_widget_destroy(plugin_fields->menu_item);
-	if (mailbutton != NULL)
-	{
-		gtk_container_remove(GTK_CONTAINER (app->toolbar), mailbutton);
-	}
-	if (separator != NULL)
-	{
-		gtk_container_remove(GTK_CONTAINER (app->toolbar), separator);
-	}
-
-	if (separator2 != NULL)
-	{
-		gtk_container_remove(GTK_CONTAINER (app->toolbar), separator2);
-	}
+	cleanup_icon();
 	g_free(mailer);
 	g_free(config_file);
 }
