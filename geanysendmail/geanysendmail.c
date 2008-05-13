@@ -58,86 +58,6 @@ GtkWidget *mailbutton = NULL;
 GtkWidget *separator = NULL;
 GtkWidget *separator2 = NULL;
 
-
-void configure(GtkWidget *parent)
-{
-	GtkWidget	*dialog, *label1, *label2, *entry, *vbox;
-	GtkWidget	*checkbox_icon_to_toolbar = NULL;
-	GKeyFile 	*config = g_key_file_new();
-	gchar 		*config_dir = g_path_get_dirname(config_file);
-	gint 		tmp;
-	GtkTooltips *tooltip = NULL;
-
-	tooltip = gtk_tooltips_new();
-
-	dialog = gtk_dialog_new_with_buttons(_("Mail Configuration"),
-		GTK_WINDOW(parent), GTK_DIALOG_DESTROY_WITH_PARENT,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-	vbox = ui->dialog_vbox_new(GTK_DIALOG(dialog));
-	gtk_widget_set_name(dialog, "GeanyDialog");
-	gtk_box_set_spacing(GTK_BOX(vbox), 10);
-
-	// add a label and a text entry to the dialog
-	label1 = gtk_label_new(_("Path and options for the mail programm:"));
-	gtk_widget_show(label1);
-	gtk_misc_set_alignment(GTK_MISC(label1), 0, 0.5);
-	entry = gtk_entry_new();
-	gtk_widget_show(entry);
-	if (mailer != NULL)
-		gtk_entry_set_text(GTK_ENTRY(entry), mailer);
-
-	label2 = gtk_label_new(_("Note: \%f will be replaced by your filename."));
-	gtk_widget_show(label2);
-	gtk_misc_set_alignment(GTK_MISC(label2), 0, 0.5);
-
-	checkbox_icon_to_toolbar = gtk_check_button_new_with_label(_("Showing icon in toolbar (EXPERIMENTAL)"));
-	gtk_tooltips_set_tip(tooltip, checkbox_icon_to_toolbar,
-			     _
-			     ("Shows a icon in the toolbar to send file more easy."),
-			     NULL);
-	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_icon_to_toolbar), FALSE);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_icon_to_toolbar), icon_in_toolbar);
-	gtk_widget_show(checkbox_icon_to_toolbar); 
-	
-	gtk_container_add(GTK_CONTAINER(vbox), label1);
-	gtk_container_add(GTK_CONTAINER(vbox), entry);
-	gtk_container_add(GTK_CONTAINER(vbox), label2);
-	gtk_box_pack_start(GTK_BOX(vbox), checkbox_icon_to_toolbar, TRUE, FALSE, 2);
-		
-	gtk_widget_show(vbox);
-
-	// run the dialog and check for the response code
-	tmp = gtk_dialog_run(GTK_DIALOG(dialog));
-	if (tmp == GTK_RESPONSE_ACCEPT)
-	{
-		g_free(mailer);
-		mailer = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry)));
-		
-		icon_in_toolbar = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_icon_to_toolbar));
-		
-		g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
-		g_key_file_set_string(config, "tools", "mailer", mailer);
-		g_key_file_set_boolean(config, "icon", "show_icon", icon_in_toolbar);
-
-		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && utils->mkdir(config_dir, TRUE) != 0)
-		{
-			dialogs->show_msgbox(GTK_MESSAGE_ERROR,
-				_("Plugin configuration directory could not be created."));
-		}
-		else
-		{
-			// write config to file
-			gchar *data = g_key_file_to_data(config, NULL, NULL);
-			utils->write_file(config_file, data);
-			g_free(data);
-		}
-		g_key_file_free(config);
-		g_free(config_dir);
-	}
-
-	gtk_widget_destroy(dialog);
-}
-
 /* Callback for sending file as attachment */
 static void
 send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gdata)
@@ -197,6 +117,120 @@ static void key_send_as_attachment(G_GNUC_UNUSED guint key_id)
 	send_as_attachment(NULL, NULL);
 }
 
+void show_icon()
+{
+	GdkPixbuf *pixbuf = NULL;
+	GtkWidget *icon = NULL;
+		
+	int number_of_icons = 0;
+	number_of_icons = gtk_toolbar_get_n_items(GTK_TOOLBAR(app->toolbar));
+		
+	pixbuf = gdk_pixbuf_new_from_inline(-1, mail_pixbuf, FALSE, NULL);
+	icon = gtk_image_new_from_pixbuf(pixbuf);
+	g_object_unref(pixbuf);
+
+	separator = (GtkWidget*) gtk_separator_tool_item_new();
+	gtk_widget_show (separator);
+	gtk_toolbar_insert(GTK_TOOLBAR(app->toolbar), GTK_TOOL_ITEM(separator), number_of_icons - 2);
+
+	mailbutton = (GtkWidget*) gtk_tool_button_new (icon, "Mail");
+	gtk_toolbar_insert(GTK_TOOLBAR(app->toolbar), GTK_TOOL_ITEM(mailbutton), number_of_icons - 1);
+	g_signal_connect (G_OBJECT(mailbutton), "clicked", G_CALLBACK(send_as_attachment), NULL);
+	gtk_widget_show_all (mailbutton);
+	
+	separator2 = (GtkWidget*) gtk_separator_tool_item_new();
+	gtk_widget_show (separator2);
+	gtk_toolbar_insert(GTK_TOOLBAR(app->toolbar), GTK_TOOL_ITEM(separator2), number_of_icons);
+}
+
+void configure(GtkWidget *parent)
+{
+	GtkWidget	*dialog, *label1, *label2, *entry, *vbox;
+	GtkWidget	*checkbox_icon_to_toolbar = NULL;
+	GKeyFile 	*config = g_key_file_new();
+	gchar 		*config_dir = g_path_get_dirname(config_file);
+	gint 		tmp;
+	GtkTooltips *tooltip = NULL;
+
+	tooltip = gtk_tooltips_new();
+
+	dialog = gtk_dialog_new_with_buttons(_("Mail Configuration"),
+		GTK_WINDOW(parent), GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+	vbox = ui->dialog_vbox_new(GTK_DIALOG(dialog));
+	gtk_widget_set_name(dialog, "GeanyDialog");
+	gtk_box_set_spacing(GTK_BOX(vbox), 10);
+
+	// add a label and a text entry to the dialog
+	label1 = gtk_label_new(_("Path and options for the mail programm:"));
+	gtk_widget_show(label1);
+	gtk_misc_set_alignment(GTK_MISC(label1), 0, 0.5);
+	entry = gtk_entry_new();
+	gtk_widget_show(entry);
+	if (mailer != NULL)
+		gtk_entry_set_text(GTK_ENTRY(entry), mailer);
+
+	label2 = gtk_label_new(_("Note: \%f will be replaced by your filename."));
+	gtk_widget_show(label2);
+	gtk_misc_set_alignment(GTK_MISC(label2), 0, 0.5);
+
+	checkbox_icon_to_toolbar = gtk_check_button_new_with_label(_("Showing icon in toolbar (EXPERIMENTAL)"));
+	gtk_tooltips_set_tip(tooltip, checkbox_icon_to_toolbar,
+			     _
+			     ("Shows a icon in the toolbar to send file more easy."),
+			     NULL);
+	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_icon_to_toolbar), FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_icon_to_toolbar), icon_in_toolbar);
+	gtk_widget_show(checkbox_icon_to_toolbar); 
+	
+	gtk_container_add(GTK_CONTAINER(vbox), label1);
+	gtk_container_add(GTK_CONTAINER(vbox), entry);
+	gtk_container_add(GTK_CONTAINER(vbox), label2);
+	gtk_box_pack_start(GTK_BOX(vbox), checkbox_icon_to_toolbar, TRUE, FALSE, 2);
+		
+	gtk_widget_show(vbox);
+
+	// run the dialog and check for the response code
+	tmp = gtk_dialog_run(GTK_DIALOG(dialog));
+	if (tmp == GTK_RESPONSE_ACCEPT)
+	{
+		g_free(mailer);
+		mailer = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry)));
+		
+		if (icon_in_toolbar == FALSE && gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_icon_to_toolbar)) == TRUE)
+		{
+			icon_in_toolbar = TRUE;
+			show_icon();
+		}
+		else
+		{
+			icon_in_toolbar = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_icon_to_toolbar));
+		}
+			
+		g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
+		g_key_file_set_string(config, "tools", "mailer", mailer);
+		g_key_file_set_boolean(config, "icon", "show_icon", icon_in_toolbar);
+
+		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && utils->mkdir(config_dir, TRUE) != 0)
+		{
+			dialogs->show_msgbox(GTK_MESSAGE_ERROR,
+				_("Plugin configuration directory could not be created."));
+		}
+		else
+		{
+			// write config to file
+			gchar *data = g_key_file_to_data(config, NULL, NULL);
+			utils->write_file(config_file, data);
+			g_free(data);
+		}
+		g_key_file_free(config);
+		g_free(config_dir);
+	}
+
+	gtk_widget_destroy(dialog);
+}
+
+
 
 /* Called by Geany to initialize the plugin */
 void init(GeanyData *data)
@@ -210,8 +244,7 @@ void init(GeanyData *data)
 	GtkWidget *menu_mail = NULL;
 	GtkWidget *menu_mail_submenu = NULL;
 	GtkWidget *menu_mail_attachment = NULL;
-	GdkPixbuf *pixbuf = NULL;
-	GtkWidget *icon = NULL;
+
 
 	config_file = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
 		"geanysendmail", G_DIR_SEPARATOR_S, "mail.conf", NULL);
@@ -229,28 +262,7 @@ void init(GeanyData *data)
 
 	if (icon_in_toolbar == TRUE)
 	{
-
-		int number_of_icons = 0;
-		number_of_icons = gtk_toolbar_get_n_items(GTK_TOOLBAR(app->toolbar));
-		
-		pixbuf = gdk_pixbuf_new_from_inline(-1, mail_pixbuf, FALSE, NULL);
-		icon = gtk_image_new_from_pixbuf(pixbuf);
-		g_object_unref(pixbuf);
-
-		separator = (GtkWidget*) gtk_separator_tool_item_new();
-		gtk_widget_show (separator);
-		gtk_toolbar_insert(GTK_TOOLBAR(app->toolbar), GTK_TOOL_ITEM(separator), number_of_icons - 2);
-
-		mailbutton = (GtkWidget*) gtk_tool_button_new (icon, "Mail");
-		gtk_toolbar_insert(GTK_TOOLBAR(app->toolbar), GTK_TOOL_ITEM(mailbutton), number_of_icons - 1);
-		g_signal_connect (G_OBJECT(mailbutton), "clicked", G_CALLBACK(send_as_attachment), NULL);
-		gtk_widget_show_all (mailbutton);
-	
-		separator2 = (GtkWidget*) gtk_separator_tool_item_new();
-		gtk_widget_show (separator2);
-		gtk_toolbar_insert(GTK_TOOLBAR(app->toolbar), GTK_TOOL_ITEM(separator2), number_of_icons);
-
-
+		show_icon();
 	}
 
 	// Build up menu
