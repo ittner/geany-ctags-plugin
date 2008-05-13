@@ -1,7 +1,7 @@
 /*
  *      geanysendmail.c
  *
- *      Copyright 2007,2008 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
+ *      Copyright 2007, 2008 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
  * 		Copyright 2007 Enrico Tröger <enrico.troeger@uvena.de>
  *		Copyright 2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
@@ -103,7 +103,7 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
 		}
 		else
 		{
-			ui->set_statusbar(FALSE, _("Have to define some mailing tool before."));
+			ui->set_statusbar(FALSE, _("Please define a mailing tool first."));
 		}
 	}
 	else
@@ -153,7 +153,6 @@ void cleanup_icon()
 	{
 		gtk_container_remove(GTK_CONTAINER (app->toolbar), separator);
 	}
-
 	if (separator2 != NULL)
 	{
 		gtk_container_remove(GTK_CONTAINER (app->toolbar), separator2);
