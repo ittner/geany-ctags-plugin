@@ -4,4 +4,5 @@
    Initial import of spellcheck plugin.
  * Makefile.am:
    Add missing dist-bzip2 and sign targets.
+ * Initial 0.1 release of the spellcheck plugin.
 

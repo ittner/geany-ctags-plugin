@@ -27,6 +27,8 @@ And obviously, you will need have Geany installed. If you have Geany installed
 from the sources, you should be ready to go.
 If you used a preprared package e.g. from your distribution you probably need
 to install an additional package, this might be called geany-dev or geany-devel.
+Please note that in order to compile and use this plugin, you need a current SVN
+version of Geany, at least SVN >= r2590.
 
 Furthermore you need, of course, a C compiler and the Make tool.
 The GNU versions of these tools are recommended.
