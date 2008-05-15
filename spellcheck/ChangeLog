@@ -2,4 +2,6 @@
 
  * po/*, src/*, *:
    Initial import of spellcheck plugin.
+ * Makefile.am:
+   Add missing dist-bzip2 and sign targets.
 
