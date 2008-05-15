@@ -1,0 +1,63 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-05-15 18:36+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/spellcheck.c:51 src/spellcheck.c:332
+msgid "Spell Check"
+msgstr ""
+
+#: src/spellcheck.c:51
+msgid "Checks the spelling of the current document."
+msgstr ""
+
+#: src/spellcheck.c:52
+msgid "The Geany developer team"
+msgstr ""
+
+#: src/spellcheck.c:112
+#, c-format
+msgid "Checking file \"%s\" (lines %d to %d):"
+msgstr ""
+
+#: src/spellcheck.c:119
+#, c-format
+msgid "Checking file \"%s\":"
+msgstr ""
+
+#: src/spellcheck.c:152
+msgid "Try: "
+msgstr ""
+
+#: src/spellcheck.c:168
+msgid "The checked text is spelled correctly."
+msgstr ""
+
+#: src/spellcheck.c:312
+msgid "_Spell Check"
+msgstr ""
+
+#: src/spellcheck.c:322
+msgid "Run Spell Check"
+msgstr ""
+
+#: src/spellcheck.c:339
+msgid "Language to use for the spell check:"
+msgstr ""
+
+#: src/spellcheck.c:371
+msgid "Plugin configuration directory could not be created."
+msgstr ""
