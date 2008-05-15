@@ -1,0 +1,54 @@
+# Belarusian translations for geanydoc package.
+msgid ""
+msgstr ""
+"Project-Id-Version: geanydoc 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-04-18 19:35+0300\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Language: Belarusian\n"
+"X-Poedit-Country: BELARUS\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#. All plugins must set name, description, version and author.
+#: ../src/geanydoc.c:55 ../src/geanydoc.c:343
+msgid "Doc"
+msgstr "Даведка"
+
+#: ../src/geanydoc.c:55
+msgid "Call documentation viewer on current symbol."
+msgstr "Паказаць даведку па слове, на якім засяроджаны курсор."
+
+#: ../src/geanydoc.c:56
+msgid "Yura Siamshka <yurand2@gmail.com>"
+msgstr "Юра Сямашка <yurand2@gmail.com>"
+
+#: ../src/geanydoc.c:169
+msgid "Could not parse the output of command"
+msgstr "Немагчыма прааналізаваць вывад каманды"
+
+#: ../src/geanydoc.c:353
+msgid "Put output in buffer"
+msgstr "Выводзіць у буфер"
+
+#: ../src/geanydoc.c:365
+msgid "Command 0:"
+msgstr "Каманда 0:"
+
+#: ../src/geanydoc.c:371
+msgid "Command 1:"
+msgstr "Каманда 1:"
+
+#: ../src/geanydoc.c:389
+msgid "%w will be replaced with current word\n"
+msgstr "%w будзе заменены на слова, на якім засяроджаны курсор\n"
+
+#: ../src/geanydoc.c:432
+msgid "Document current word"
+msgstr "Даведка па слове, на якім засяроджаны курсор"
+
+#: ../src/geanydoc.c:433
+msgid "Document interactive"
+msgstr "Інтэрактыўная даведка"

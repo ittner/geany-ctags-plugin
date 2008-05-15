@@ -1,0 +1,43 @@
+!include "StrFunc.nsh"
+
+${StrRep}
+
+; The name of the installer
+Name "PKGNAME"
+
+; The file to write
+OutFile "PKGNAME-VERSION_setup.exe"
+
+SetCompressor /SOLID lzma
+
+; Request application privileges for Windows Vista
+RequestExecutionLevel user
+
+LicenseData ../COPYING
+
+;;;;;;;;;;;;;;;;
+; Init code    ;
+;;;;;;;;;;;;;;;;
+Function .onInit
+  ReadRegStr $R0 "HKLM" "Software\Microsoft\Windows\CurrentVersion\Uninstall\Geany" "UninstallString"
+  StrCmp $R0 "" warning
+    ${StrRep} $INSTDIR $R0 "uninst.exe" "plugins"
+    goto done
+  warning:
+   	MessageBox MB_OK|MB_ICONEXCLAMATION "You need install geany first."
+  done:
+FunctionEnd
+
+
+; Pages
+Page license
+Page directory
+Page instfiles
+
+Section ""
+  ; Set output path to the installation directory.
+  SetOutPath $INSTDIR
+
+  ; Put file there
+  File ..\PKGNAME.dll
+SectionEnd
