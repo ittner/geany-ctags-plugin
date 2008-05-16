@@ -110,14 +110,14 @@ static gint check_document(AspellSpeller *speller, gint idx)
 
 		p_msgwindow->msg_add(COLOR_BLUE, -1, -1,
 			_("Checking file \"%s\" (lines %d to %d):"),
-			doc_list[idx].file_name, first_line + 1, last_line + 1);
+			DOC_FILENAME(idx), first_line + 1, last_line + 1);
 	}
 	else
 	{
 		first_line = 0;
 		last_line = p_sci->get_line_count(doc_list[idx].sci);
 		p_msgwindow->msg_add(COLOR_BLUE, -1, -1, _("Checking file \"%s\":"),
-			doc_list[idx].file_name);
+			DOC_FILENAME(idx));
 	}
 
 	/* Set up the document checker */
