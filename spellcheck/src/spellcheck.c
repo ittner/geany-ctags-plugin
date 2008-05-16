@@ -257,14 +257,13 @@ static const gchar *get_default_lang(void)
 }
 
 
-static GArray *get_available_languages(void)
+static void fill_dicts_combo(GtkComboBox *combo)
 {
 	AspellConfig *config;
 	AspellDictInfoList *dlist;
 	AspellDictInfoEnumeration *dels;
 	const AspellDictInfo *entry;
-	GArray *dicts = g_array_new(TRUE, TRUE, sizeof(gchar*));
-	gchar *tmp;
+	guint i = 0;
 
 	config = new_aspell_config();
 	dlist = get_aspell_dict_info_list(config);
@@ -273,25 +272,13 @@ static GArray *get_available_languages(void)
 	dels = aspell_dict_info_list_elements(dlist);
 	while ((entry = aspell_dict_info_enumeration_next(dels)) != 0)
 	{
-		tmp = g_strdup(entry->name);
-		g_array_append_val(dicts, tmp);
+		gtk_combo_box_append_text(combo, entry->name);
+
+		if (p_utils->str_equal(entry->name, language))
+			gtk_combo_box_set_active(GTK_COMBO_BOX(combo), i);
+		i++;
 	}
 	delete_aspell_dict_info_enumeration(dels);
-
-	return dicts;
-}
-
-
-static guint find_index(GArray *ar, const gchar *needle)
-{
-	guint i;
-
-	for (i = 0; i < ar->len; i++)
-	{
-		if (p_utils->str_equal(g_array_index(ar, gchar*, i), needle))
-			return i;
-	}
-	return 0;
 }
 
 
@@ -326,8 +313,6 @@ void init(GeanyData *data)
 void configure(GtkWidget *parent)
 {
 	GtkWidget *dialog, *label, *vbox, *combo;
-	GArray *dicts;
-	guint i;
 
 	dialog = gtk_dialog_new_with_buttons(_("Spell Check"),
 		GTK_WINDOW(parent), GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -340,14 +325,9 @@ void configure(GtkWidget *parent)
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 
-	dicts = get_available_languages();
 	combo = gtk_combo_box_new_text();
-	for (i = 0; i < dicts->len; i++)
-	{
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo), g_array_index(dicts, gchar*, i));
-	}
+	fill_dicts_combo(GTK_COMBO_BOX(combo));
 
-	gtk_combo_box_set_active(GTK_COMBO_BOX(combo), find_index(dicts, language));
 	gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo), 3);
 	gtk_box_pack_start(GTK_BOX(vbox), combo, FALSE, FALSE, 0);
 

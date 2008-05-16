@@ -4,6 +4,8 @@
    Post-release version bump.
    Display install location of the plugin binary and separately the
    location of other files like translations for clarity.
+ * src/spellcheck.c:
+   Fix a big memory leak and don't use an unneeded array.
 
 
 2008-05-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
