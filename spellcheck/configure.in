@@ -2,7 +2,7 @@
 # $Id: configure.in 2 2008-04-02 14:52:33Z eht16 $
 
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(spellcheck, 0.1)
+AM_INIT_AUTOMAKE(spellcheck, 0.2)
 
 AM_CONFIG_HEADER(config.h)
 
@@ -61,9 +61,10 @@ po/Makefile.in
 ])
 
 echo "----------------------------------------"
-echo "Install Spell Check in             : ${libdir}"
-echo "Using Geany version                : ${GEANY_VERSION}"
-echo "Using GTK version                  : ${GTK_VERSION}"
+echo "Install Spell Check plugin binary in : ${libdir}"
+echo "Install Spell Check files in         : ${prefix}"
+echo "Using Geany version                  : ${GEANY_VERSION}"
+echo "Using GTK version                    : ${GTK_VERSION}"
 echo ""
 echo "Configuration is done OK."
 echo ""
