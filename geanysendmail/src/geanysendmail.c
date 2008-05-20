@@ -135,7 +135,7 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
 		}
 		else
 		{
-			p_ui->set_statusbar(FALSE, _("Please define a mailing tool first."));
+			p_ui->set_statusbar(FALSE, _("Please define a mail client first."));
 		}
 	}
 	else
@@ -210,7 +210,7 @@ void configure(GtkWidget *parent)
 	gtk_box_set_spacing(GTK_BOX(vbox), 10);
 
 	// add a label and a text entry to the dialog
-	label1 = gtk_label_new(_("Path and options for the mail programm:"));
+	label1 = gtk_label_new(_("Path and options for the mail client:"));
 	gtk_widget_show(label1);
 	gtk_misc_set_alignment(GTK_MISC(label1), 0, 0.5);
 	entry = gtk_entry_new();
