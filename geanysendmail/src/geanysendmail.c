@@ -35,7 +35,7 @@
 PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 
-VERSION_CHECK(49)
+VERSION_CHECK(60)
 
 PLUGIN_INFO(_("GeanySendMail"), _("A little plugin to send the current \
 file as attachment by user's favorite mailer"), "0.4dev", "Frank Lanitz <frank@frank.uvena.de>")
@@ -69,7 +69,7 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
 	GString	*cmd_str = NULL;
 
 
-	idx = documents->get_cur_idx();
+	idx = p_document->get_cur_idx();
 
 	if (doc_list[idx].file_name == NULL)
 	{
