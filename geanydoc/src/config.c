@@ -34,6 +34,7 @@
 #include "geanydoc.h"
 
 extern GeanyData *geany_data;
+extern GeanyFunctions *geany_functions;
 
 const gchar defaults[] =
 	"[C]\n"

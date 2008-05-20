@@ -43,6 +43,7 @@
 /* These items are set by Geany before init() is called. */
 PluginFields *plugin_fields;
 GeanyData *geany_data;
+GeanyFunctions *geany_functions;
 
 static GtkWidget *keyb1;
 static GtkWidget *keyb2;
@@ -50,7 +51,7 @@ static GtkWidget *keyb2;
 
 /* Check that Geany supports plugin API version 52 or later, and check
  * for binary compatibility. */
-PLUGIN_VERSION_CHECK(53)
+PLUGIN_VERSION_CHECK(60)
 /* All plugins must set name, description, version and author. */
 	PLUGIN_INFO(_("Doc"), _("Call documentation viewer on current symbol."), VERSION,
 	    _("Yura Siamshka <yurand2@gmail.com>"));
@@ -155,7 +156,7 @@ show_output(const gchar * std_output, const gchar * name, const gchar * force_en
 		if (idx == -1)
 		{
 			idx = p_document->new_file(name,
-						   geany_data->filetypes[filetype_new_file],
+						   filetypes_array->pdata[filetype_new_file],
 						   std_output);
 		}
 		else
@@ -456,7 +457,7 @@ init(G_GNUC_UNUSED GeanyData * data)
 static void
 init_Configure(GtkWidget * dialog)
 {
-	gint i;
+	guint i;
 	GtkWidget *cbTypes;
 
 	cbTypes = p_support->lookup_widget(dialog, "comboboxType");
@@ -464,7 +465,9 @@ init_Configure(GtkWidget * dialog)
 
 	for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
 	{
-		gtk_combo_box_append_text(GTK_COMBO_BOX(cbTypes), geany_data->filetypes[i]->name);
+		gtk_combo_box_append_text(GTK_COMBO_BOX(cbTypes),
+					  ((struct _GeanyFiletype *) (filetypes_array->pdata[i]))->
+					  name);
 	}
 	g_object_set_data(G_OBJECT(cbTypes), "config", config_clone());
 	g_object_set_data(G_OBJECT(cbTypes), "current", NULL);
