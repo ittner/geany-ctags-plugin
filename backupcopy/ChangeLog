@@ -10,6 +10,9 @@
    Make Windows Makefile working.
  * README:
    Update and reformat into reST text.
+ * configure.in, Makefile.am:
+   Remove unnecessary intltool dependency.
+ * Initial release: backupcopy 0.1.
 
 
 2008-04-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
