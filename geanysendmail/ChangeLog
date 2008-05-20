@@ -1,3 +1,8 @@
+2008-05-20  Frank Lanitz  <frank@frank.uvena.de>
+
+ * Ported build system from spellcheck plugin. Thanks for it.
+
+
 2008-05-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Restart using ChangeLog. 

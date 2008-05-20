@@ -1,0 +1,87 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-05-20 14:55+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/geanysendmail.c:40
+msgid "GeanySendMail"
+msgstr ""
+
+#: src/geanysendmail.c:40
+msgid ""
+"A little plugin to send the current file as attachment by user's favorite "
+"mailer"
+msgstr ""
+
+#: src/geanysendmail.c:91
+msgid "Filename placeholder not found. The executed command might have failed."
+msgstr ""
+
+#: src/geanysendmail.c:97
+msgid "Could not execute mailer. Please check your configuration."
+msgstr ""
+
+#: src/geanysendmail.c:106
+msgid "Please define a mailing tool first."
+msgstr ""
+
+#: src/geanysendmail.c:111
+msgid "File have to be saved before sending."
+msgstr ""
+
+#: src/geanysendmail.c:173
+msgid "Mail Configuration"
+msgstr ""
+
+#. add a label and a text entry to the dialog
+#: src/geanysendmail.c:181
+msgid "Path and options for the mail programm:"
+msgstr ""
+
+#: src/geanysendmail.c:189
+#, c-format
+msgid "Note: \\%f will be replaced by your filename."
+msgstr ""
+
+#: src/geanysendmail.c:193
+msgid "Showing icon in toolbar (EXPERIMENTAL)"
+msgstr ""
+
+#: src/geanysendmail.c:196
+msgid "Shows a icon in the toolbar to send file more easy."
+msgstr ""
+
+#: src/geanysendmail.c:238
+msgid "Plugin configuration directory could not be created."
+msgstr ""
+
+#: src/geanysendmail.c:261
+msgid "Send file by mail"
+msgstr ""
+
+#. Build up menu
+#: src/geanysendmail.c:289
+msgid "_Mail"
+msgstr ""
+
+#: src/geanysendmail.c:295
+msgid "_Mail document"
+msgstr ""
+
+#: src/geanysendmail.c:298
+msgid ""
+"Sends the opened file as unzipped attachment by any mailer from your $PATH"
+msgstr ""
