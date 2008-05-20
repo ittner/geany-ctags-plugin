@@ -4,6 +4,8 @@
    Add new GeanyFunctions API.
    Avoid crashes when LANG environment variable can't be read
    (e.g. on Windows).
+   Detect the Aspell installation prefix on Windows and use it to find
+   installed dictionaries.
 
 
 2008-05-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

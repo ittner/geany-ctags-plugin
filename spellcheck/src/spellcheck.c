@@ -30,6 +30,10 @@
 # include <locale.h>
 #endif
 
+#ifdef G_OS_WIN32
+# include <windows.h>
+#endif
+
 #include <aspell.h>
 
 #include "plugindata.h"
@@ -63,6 +67,28 @@ PLUGIN_KEY_GROUP(spellcheck, KB_COUNT)
 
 static gchar *config_file;
 static gchar *language;
+
+
+/* On Windows we need to find the Aspell installation prefix via the Windows Registry
+ * and then set the prefix in the Aspell config object. */
+static void set_up_aspell_prefix(AspellConfig *config)
+{
+#ifdef G_OS_WIN32
+	char sTemp[1024];
+	HKEY hkey;
+	DWORD len = sizeof(sTemp);
+	
+	if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("SOFTWARE\\Aspell"), 0,
+			KEY_QUERY_VALUE, &hkey) != ERROR_SUCCESS)
+		return;
+	
+	if (RegQueryValueEx(hkey, NULL, 0, NULL, (LPBYTE)sTemp, &len) == ERROR_SUCCESS)
+		aspell_config_replace(config, "prefix", sTemp);
+
+	RegCloseKey(hkey);
+#endif
+}
+
 
 static void print_word_list(AspellSpeller *speller, GString *str, const AspellWordList *wl)
 {
@@ -188,6 +214,7 @@ static void perform_check(gint idx)
 	config = new_aspell_config();
 	aspell_config_replace(config, "lang", language);
 	aspell_config_replace(config, "encoding", "utf-8");
+	set_up_aspell_prefix(config);
 
 	ret = new_aspell_speller(config);
 	delete_aspell_config(config);
@@ -270,6 +297,7 @@ static void fill_dicts_combo(GtkComboBox *combo)
 	guint i = 0;
 
 	config = new_aspell_config();
+	set_up_aspell_prefix(config);
 	dlist = get_aspell_dict_info_list(config);
 	delete_aspell_config(config);
 
