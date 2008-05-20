@@ -45,6 +45,7 @@
 
 PluginFields	*plugin_fields;
 GeanyData		*geany_data;
+GeanyFunctions *geany_functions;
 
 
 PLUGIN_VERSION_CHECK(58)
@@ -246,13 +247,16 @@ static void locale_init(void)
 static const gchar *get_default_lang(void)
 {
 	const gchar *lang = g_getenv("LANG");
-	if (lang)
+	if (lang != NULL)
 	{
 		if (g_strncasecmp(lang, "C", 1) == 0)
 			lang = "en";
 		else if (lang[0] == 0)
 			lang = "en";
 	}
+	else
+		lang = "en";
+	
 	return lang;
 }
 
