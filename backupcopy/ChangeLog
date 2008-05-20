@@ -8,6 +8,8 @@
    Explicitly depend on Geany >= 0.15.
  * makefile.win32:
    Make Windows Makefile working.
+ * README:
+   Update and reformat into reST text.
 
 
 2008-04-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

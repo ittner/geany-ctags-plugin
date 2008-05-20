@@ -1,13 +1,38 @@
 Backup Copy Plugin
-------------------
+==================
 
 
 About
 -----
 This plugin creates a backup copy of the current file in Geany when it is
 saved. You can specify the directory where the backup copy is saved and
-you can cpnfigure the automatically added extension in the configure dialog
+you can configure the automatically added extension in the configure dialog
 in Geany's plugin manager.
+
+
+Downloads
+---------
+
+Backup Copy 0.1
+^^^^^^^^^^^^^^^
+
+http://geany-plugins.sourceforge.net/backupcopy/backupcopy-0.1.tar.bz2
+
+http://geany-plugins.sourceforge.net/backupcopy/backupcopy-0.1.tar.bz2.sig (GPG-Signature)
+
+or
+
+http://geany-plugins.sourceforge.net/backupcopy/backupcopy-0.1.tar.gz
+
+http://geany-plugins.sourceforge.net/backupcopy/backupcopy-0.1.tar.gz.sig (GPG-Signature)
+
+
+Development Code
+^^^^^^^^^^^^^^^^
+
+Get the code from:
+
+	svn checkout http://geany-plugins.svn.sourceforge.net/svnroot/geany-plugins/trunk/backupcopy
 
 
 Requirements
@@ -17,10 +42,12 @@ and header files. You will also need its dependency libraries and header
 files, such as Pango, Glib and ATK. All these files are available at
 http://www.gtk.org.
 
-And obviously, you will need have Geany installed. If you have Geany installed
+And obviously, you will need have Geany (>= 0.15) installed. If you have Geany installed
 from the sources, you should be ready to go.
 If you used a preprared package e.g. from your distribution you probably need
 to install an additional package, this might be called geany-dev or geany-devel.
+Please note that in order to compile and use this plugin, you need a current SVN
+version of Geany, at least SVN >= r2604.
 
 Furthermore you need, of course, a C compiler and the Make tool.
 The GNU versions of these tools are recommended.
@@ -49,7 +76,7 @@ is saved in Geany.
 
 License
 -------
-copyonsave is distributed under the terms of the GNU General Public License
+backupcopy is distributed under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2 of the
 License, or (at your option) any later version.  A copy of this license
 can be found in the file COPYING included with the source code of this
@@ -59,3 +86,4 @@ program.
 Ideas, questions, patches and bug reports
 -----------------------------------------
 Send it to me at enrico(dot)troeger(at)uvena(dot)de
+or report them at http://sourceforge.net/tracker/?group_id=222729.
