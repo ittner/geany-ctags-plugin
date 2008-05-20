@@ -49,7 +49,7 @@ GeanyFunctions	*geany_functions;
 PLUGIN_VERSION_CHECK(51)
 
 PLUGIN_INFO(_("Backup Copy"), _("Creates a backup of the current file when saving"),
-	VERSION, "Enrico Tröger")
+	"0.1", "Enrico Tröger")
 
 
 static gchar *config_file;
