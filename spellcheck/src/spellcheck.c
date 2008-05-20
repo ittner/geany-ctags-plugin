@@ -53,7 +53,7 @@ GeanyFunctions *geany_functions;
 
 
 PLUGIN_VERSION_CHECK(58)
-PLUGIN_INFO(_("Spell Check"), _("Checks the spelling of the current document."), VERSION,
+PLUGIN_INFO(_("Spell Check"), _("Checks the spelling of the current document."), "0.2",
 			_("The Geany developer team"))
 
 
