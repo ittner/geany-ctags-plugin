@@ -33,6 +33,7 @@
 #include "support.h"
 #include "document.h"
 #include "filetypes.h"
+#include "utils.h"
 
 #include "plugindata.h"
 #include "pluginmacros.h"
@@ -40,16 +41,17 @@
 
 PluginFields	*plugin_fields;
 GeanyData		*geany_data;
+GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(51)
+PLUGIN_VERSION_CHECK(60)
 
 PLUGIN_INFO(_("Instant Save"), _("Save instantly new files without an explicit Save As dialog."),
 	"0.1", "Enrico Tröger")
 
 
 static gchar *config_file;
-static gint default_ft_uid; /* this is the filetype uid, not a filetype id */
+static gchar *default_ft;
 
 
 static void on_document_new(GObject *obj, gint idx, gpointer user_data)
@@ -58,15 +60,20 @@ static void on_document_new(GObject *obj, gint idx, gpointer user_data)
     {
 		gchar *new_filename;
 		gint fd;
+		GeanyFiletype *ft = p_filetypes->lookup_by_name(default_ft);
 
 		fd = g_file_open_tmp("gis_XXXXXX", &new_filename, NULL);
 		if (fd != -1)
 			close(fd); /* close the returned file descriptor as we only need the filename */
 
+		if (ft != NULL)
+			/* add the filetype's default extension to the new filename */
+			setptr(new_filename, g_strconcat(new_filename, ".", ft->extension, NULL));
+			
 		doc_list[idx].file_name = new_filename;
 
-		if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_ALL)
-			p_document->set_filetype(idx, p_filetypes->get_from_uid(default_ft_uid));
+		if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_NONE)
+			p_document->set_filetype(idx, p_filetypes->lookup_by_name(default_ft));
 
 		/* force saving the file to enable all the related actions(tab name, filetype, etc.) */
 		p_document->save_file(idx, TRUE);
@@ -114,8 +121,8 @@ void init(GeanyData *data)
 		"instantsave", G_DIR_SEPARATOR_S, "instantsave.conf", NULL);
 
 	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
-	default_ft_uid = p_utils->get_setting_integer(config, "instantsave", "default_ft",
-		geany_data->filetypes[GEANY_FILETYPES_ALL]->uid);
+	default_ft = p_utils->get_setting_string(config, "instantsave", "default_ft",
+		filetypes[GEANY_FILETYPES_NONE]->name);
 
 	locale_init();
 
@@ -127,7 +134,6 @@ void configure(GtkWidget *parent)
 {
 	GtkWidget *dialog, *label, *vbox, *combo;
 	gint i;
-	filetype *ft;
 
 	dialog = gtk_dialog_new_with_buttons(_("Instant Save"),
 		GTK_WINDOW(parent), GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -141,12 +147,13 @@ void configure(GtkWidget *parent)
 	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 
 	combo = gtk_combo_box_new_text();
-	for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
+	for (i = 0; i < filetypes_array->len; i++)
 	{
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo), geany_data->filetypes[i]->name);
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo), filetypes[i]->name);
+
+		if (p_utils->str_equal(filetypes[i]->name, default_ft))
+			gtk_combo_box_set_active(GTK_COMBO_BOX(combo), i);
 	}
-	ft = p_filetypes->get_from_uid(default_ft_uid);
-	gtk_combo_box_set_active(GTK_COMBO_BOX(combo), FILETYPE_ID(ft));
 	gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo), 3);
 	gtk_box_pack_start(GTK_BOX(vbox), combo, FALSE, FALSE, 0);
 
@@ -158,13 +165,12 @@ void configure(GtkWidget *parent)
 		GKeyFile *config = g_key_file_new();
 		gchar *data;
 		gchar *config_dir = g_path_get_dirname(config_file);
-		gint selected_ft_id;
 
-		selected_ft_id = gtk_combo_box_get_active(GTK_COMBO_BOX(combo));
-		default_ft_uid = geany_data->filetypes[selected_ft_id]->uid;
+		g_free(default_ft);
+		default_ft = gtk_combo_box_get_active_text(GTK_COMBO_BOX(combo));
 
 		g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
-		g_key_file_set_integer(config, "instantsave", "default_ft", default_ft_uid);
+		g_key_file_set_string(config, "instantsave", "default_ft", default_ft);
 
 		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && p_utils->mkdir(config_dir, TRUE) != 0)
 		{
@@ -189,4 +195,5 @@ void configure(GtkWidget *parent)
 void cleanup(void)
 {
 	g_free(config_file);
+	g_free(default_ft);
 }
