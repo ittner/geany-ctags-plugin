@@ -34,6 +34,7 @@
 
 PluginFields	*plugin_fields;
 GeanyData		*geany_data;
+GeanyFunctions	*geany_functions;
 
 VERSION_CHECK(60)
 
@@ -73,28 +74,28 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
 
 	if (doc_list[idx].file_name == NULL)
 	{
-		dialogs->show_save_as();
+		p_dialogs->show_save_as();
 	}
 	else
 	{
-		documents->save_file(idx, FALSE);
+		p_document->save_file(idx, FALSE);
 	}
 
     if (doc_list[idx].file_name != NULL)
 	{
 		if (mailer)
 		{
-			locale_filename = utils->get_locale_from_utf8(doc_list[idx].file_name);
+			locale_filename = p_utils->get_locale_from_utf8(doc_list[idx].file_name);
 			cmd_str = g_string_new(mailer);
 
-			if (! utils->string_replace_all(cmd_str, "%f", locale_filename))
-				ui->set_statusbar(FALSE, _("Filename placeholder not found. The executed command might have failed."));
+			if (! p_utils->string_replace_all(cmd_str, "%f", locale_filename))
+				p_ui->set_statusbar(FALSE, _("Filename placeholder not found. The executed command might have failed."));
 
 			command = g_string_free(cmd_str, FALSE);
 			g_spawn_command_line_async(command, &error);
 			if (error != NULL)
 			{
-				ui->set_statusbar(FALSE, _("Could not execute mailer. Please check your configuration."));
+				p_ui->set_statusbar(FALSE, _("Could not execute mailer. Please check your configuration."));
 				g_error_free(error);
 			}
 
@@ -103,12 +104,12 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
 		}
 		else
 		{
-			ui->set_statusbar(FALSE, _("Please define a mailing tool first."));
+			p_ui->set_statusbar(FALSE, _("Please define a mailing tool first."));
 		}
 	}
 	else
 	{
-		ui->set_statusbar(FALSE, _("File have to be saved before sending."));
+		p_ui->set_statusbar(FALSE, _("File have to be saved before sending."));
 	}
 }
 
@@ -173,7 +174,7 @@ void configure(GtkWidget *parent)
 	dialog = gtk_dialog_new_with_buttons(_("Mail Configuration"),
 		GTK_WINDOW(parent), GTK_DIALOG_DESTROY_WITH_PARENT,
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-	vbox = ui->dialog_vbox_new(GTK_DIALOG(dialog));
+	vbox = p_ui->dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 10);
 
@@ -232,16 +233,16 @@ void configure(GtkWidget *parent)
 		g_key_file_set_string(config, "tools", "mailer", mailer);
 		g_key_file_set_boolean(config, "icon", "show_icon", icon_in_toolbar);
 
-		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && utils->mkdir(config_dir, TRUE) != 0)
+		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && p_utils->mkdir(config_dir, TRUE) != 0)
 		{
-			dialogs->show_msgbox(GTK_MESSAGE_ERROR,
+			p_dialogs->show_msgbox(GTK_MESSAGE_ERROR,
 				_("Plugin configuration directory could not be created."));
 		}
 		else
 		{
 			// write config to file
 			gchar *data = g_key_file_to_data(config, NULL, NULL);
-			utils->write_file(config_file, data);
+			p_utils->write_file(config_file, data);
 			g_free(data);
 		}
 		g_key_file_free(config);
