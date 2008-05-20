@@ -1,9 +1,10 @@
 2008-05-20  Frank Lanitz  <frank@frank.uvena.de>
 
  * Ported build system from spellcheck plugin. Thanks for it.
- * Updated Geany plugin API
+ * Updated Geany plugin API.
+ * Activating of i18n support and adding a first German translation.
  
-
+ 
 2008-05-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Restart using ChangeLog. 

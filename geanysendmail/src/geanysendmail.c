@@ -32,6 +32,10 @@
 #include "keybindings.h"
 #include "icon.h"
 
+#if HAVE_LOCALE_H
+# include <locale.h>
+#endif
+
 PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
@@ -58,6 +62,33 @@ gboolean icon_in_toolbar = FALSE;
 GtkWidget *mailbutton = NULL;
 GtkWidget *separator = NULL;
 GtkWidget *separator2 = NULL;
+
+
+static void locale_init(void)
+{
+#ifdef ENABLE_NLS
+	gchar *locale_dir = NULL;
+
+#if HAVE_LOCALE_H
+	setlocale(LC_ALL, "");
+#endif
+
+#ifdef G_OS_WIN32
+	gchar *install_dir = g_win32_get_package_installation_directory("geany", NULL);
+	/* e.g. C:\Program Files\geany\lib\locale */
+	locale_dir = g_strconcat(install_dir, "\\lib\\locale", NULL);
+	g_free(install_dir);
+#else
+	locale_dir = g_strdup(LOCALEDIR);
+#endif
+
+	bindtextdomain(GETTEXT_PACKAGE, locale_dir);
+	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+	textdomain(GETTEXT_PACKAGE);
+	g_free(locale_dir);
+#endif
+}
+
 
 /* Callback for sending file as attachment */
 static void
@@ -265,6 +296,8 @@ void init(GeanyData *data)
 	GtkWidget *menu_mail_submenu = NULL;
 	GtkWidget *menu_mail_attachment = NULL;
 
+
+	locale_init();
 
 	config_file = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
 		"geanysendmail", G_DIR_SEPARATOR_S, "mail.conf", NULL);
