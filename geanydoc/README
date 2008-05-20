@@ -75,17 +75,9 @@ Download
 
 The current version is |(version)|, download it here http://users.cosmostv.by/yurand/geanydoc/geanydoc-0.2.tar.gz.
 
-There is also git repository http://git.or.cz available. In http://repo.or.cz/w/geanydoc.git you can
-always find an up-to-date version of source code, even between releases.
+Up to date source code can be downloaded here::
 
-To clone geanydoc make sure you have the git package installed on your system.
-Then run the following command::
-
- git clone git://repo.or.cz/geanydoc.git
-
-or::
-
- git clone http://repo.or.cz/r/geanydoc.git
+  svn checkout http://geany-plugins.svn.sourceforge.net/svnroot/geany-plugins/trunk/geanydoc
 
 Gentoo
 ------
@@ -102,5 +94,7 @@ Windows
 
 A windows installer is available here: http://users.cosmostv.by/yurand/geanydoc/geanydoc-0.2_setup.exe
 
-2008 by Yura Siamashka
-yurand2(at)gmail(dot)com
+Author
+======
+Yura Siamashka http://users.cosmostv.by/yurand/cv.html
+
