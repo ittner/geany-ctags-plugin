@@ -13,8 +13,8 @@ in Geany's plugin manager.
 Downloads
 ---------
 
-Backup Copy 0.1
-^^^^^^^^^^^^^^^
+Backup Copy 0.1 Sources
+^^^^^^^^^^^^^^^^^^^^^^^
 
 http://geany-plugins.sourceforge.net/backupcopy/backupcopy-0.1.tar.bz2
 
@@ -26,6 +26,11 @@ http://geany-plugins.sourceforge.net/backupcopy/backupcopy-0.1.tar.gz
 
 http://geany-plugins.sourceforge.net/backupcopy/backupcopy-0.1.tar.gz.sig (GPG-Signature)
 
+
+Backup Copy 0.1 Windows DLL
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+http://geany-plugins.sourceforge.net/backupcopy/backupcopy-0.1_win32.zip
 
 Development Code
 ^^^^^^^^^^^^^^^^
@@ -55,13 +60,15 @@ The GNU versions of these tools are recommended.
 
 Installation
 ------------
-Compiling and installing the code is done by the following three commands:
-$ ./configure
-$ make
-$ make install
+Compiling and installing the code is done by the following three commands::
+	
+	$ ./configure
+	$ make
+	$ make install
 
-For more configuration details run
-$ ./configure --help
+For more configuration details run::
+
+	$ ./configure --help
 
 If there are any errors during compilation, check your build environment
 and try to find the error, otherwise contact one of the authors.
