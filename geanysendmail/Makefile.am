@@ -1,15 +1,17 @@
-## Makefile.am -- Process this file with automake to produce Makefile.in
-#SUBDIRS = tests
+SUBDIRS = src po
 
-lib_LTLIBRARIES = geanysendmail.la
-geanysendmail_la_SOURCES = geanysendmail.c
-geanysendmail_la_LDFLAGS = -module -avoid-version
-geanysendmail_la_LIBADD  = @GEANY_LIBS@
+EXTRA_DIST =				\
+	autogen.sh				\
+	makefile.win32			\
+	po/LINGUAS
 
-AM_CPPFLAGS = @GEANY_CFLAGS@
+dist-bzip2: distdir
+	BZIP2=$(BZIP2_ENV) $(AMTAR) --bzip2 -chof $(distdir).tar.bz2 $(distdir)
+	-rm -rf $(distdir)
 
-GEANY_DIR = $(shell geany --print-prefix | grep lib)
+sign:
+	if test -f $(PACKAGE)-$(VERSION).tar.gz; then \
+		gpg --detach-sign --digest-algo SHA512 $(PACKAGE)-$(VERSION).tar.gz; fi
+	if test -f $(PACKAGE)-$(VERSION).tar.bz2; then \
+		gpg --detach-sign --digest-algo SHA512 $(PACKAGE)-$(VERSION).tar.bz2; fi
 
-install: .libs/$(PACKAGE).so
-	mkdir -p $(DESTDIR)$(GEANY_DIR)/geany
-	cp $< $(DESTDIR)$(GEANY_DIR)/geany/
