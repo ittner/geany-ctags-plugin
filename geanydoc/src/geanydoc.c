@@ -33,6 +33,7 @@
 #include "support.h"		/* for the _() translation macro (see also po/POTFILES.in) */
 #include "document.h"
 #include "filetypes.h"
+#include "ui_utils.h"
 #include "utils.h"
 
 #include "plugindata.h"		/* this defines the plugin API */
@@ -162,7 +163,7 @@ show_output(const gchar * std_output, const gchar * name, const gchar * force_en
 		else
 		{
 			p_sci->set_text(doc_list[idx].sci, std_output);
-			book = GTK_NOTEBOOK(app->notebook);
+			book = GTK_NOTEBOOK(main_widgets->notebook);
 			page = gtk_notebook_page_num(book, GTK_WIDGET(doc_list[idx].sci));
 			gtk_notebook_set_current_page(book, page);
 		}
@@ -312,7 +313,7 @@ create_Interactive(void)
 	GtkWidget *dialog_vbox1;
 	GtkWidget *entry_word;
 	GtkWidget *dialog = gtk_dialog_new_with_buttons("Document interactive",
-							GTK_WINDOW(app->window),
+							GTK_WINDOW(main_widgets->window),
 							GTK_DIALOG_MODAL |
 							GTK_DIALOG_DESTROY_WITH_PARENT,
 							GTK_STOCK_OK,
