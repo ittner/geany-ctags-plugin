@@ -27,22 +27,24 @@
 #include "plugindata.h"
 #include "document.h"
 #include "filetypes.h"
-#include "pluginmacros.h"
 #include "utils.h"
+#include "ui_utils.h"
 #include "keybindings.h"
 #include "icon.h"
+#include "pluginmacros.h"
 
 #if HAVE_LOCALE_H
 # include <locale.h>
 #endif
 
+PluginInfo		*plugin_info;
 PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
-VERSION_CHECK(60)
+VERSION_CHECK(63)
 
-PLUGIN_INFO(_("GeanySendMail"), _("A little plugin to send the current \
+PLUGIN_SET_INFO(_("GeanySendMail"), _("A little plugin to send the current \
 file as attachment by user's favorite mailer"), "0.4dev", "Frank Lanitz <frank@frank.uvena.de>")
 
 /* Keybinding(s) */
@@ -155,39 +157,38 @@ void show_icon()
 	GtkWidget *icon = NULL;
 		
 	int number_of_icons = 0;
-	number_of_icons = gtk_toolbar_get_n_items(GTK_TOOLBAR(app->toolbar));
-		
-	pixbuf = gdk_pixbuf_new_from_inline(-1, mail_pixbuf, FALSE, NULL);
+	number_of_icons = gtk_toolbar_get_n_items(GTK_TOOLBAR(main_widgets->toolbar));
+			pixbuf = gdk_pixbuf_new_from_inline(-1, mail_pixbuf, FALSE, NULL);
 	icon = gtk_image_new_from_pixbuf(pixbuf);
 	g_object_unref(pixbuf);
 
 	separator = (GtkWidget*) gtk_separator_tool_item_new();
 	gtk_widget_show (separator);
-	gtk_toolbar_insert(GTK_TOOLBAR(app->toolbar), GTK_TOOL_ITEM(separator), number_of_icons - 2);
+	gtk_toolbar_insert(GTK_TOOLBAR(main_widgets->toolbar), GTK_TOOL_ITEM(separator), number_of_icons - 2);
 
 	mailbutton = (GtkWidget*) gtk_tool_button_new (icon, "Mail");
-	gtk_toolbar_insert(GTK_TOOLBAR(app->toolbar), GTK_TOOL_ITEM(mailbutton), number_of_icons - 1);
+	gtk_toolbar_insert(GTK_TOOLBAR(main_widgets->toolbar), GTK_TOOL_ITEM(mailbutton), number_of_icons - 1);
 	g_signal_connect (G_OBJECT(mailbutton), "clicked", G_CALLBACK(send_as_attachment), NULL);
 	gtk_widget_show_all (mailbutton);
 	
 	separator2 = (GtkWidget*) gtk_separator_tool_item_new();
 	gtk_widget_show (separator2);
-	gtk_toolbar_insert(GTK_TOOLBAR(app->toolbar), GTK_TOOL_ITEM(separator2), number_of_icons);
+	gtk_toolbar_insert(GTK_TOOLBAR(main_widgets->toolbar), GTK_TOOL_ITEM(separator2), number_of_icons);
 }
 
 void cleanup_icon()
 {
 	if (mailbutton != NULL)
 	{
-		gtk_container_remove(GTK_CONTAINER (app->toolbar), mailbutton);
+		gtk_container_remove(GTK_CONTAINER (main_widgets->toolbar), mailbutton);
 	}
 	if (separator != NULL)
 	{
-		gtk_container_remove(GTK_CONTAINER (app->toolbar), separator);
+		gtk_container_remove(GTK_CONTAINER (main_widgets->toolbar), separator);
 	}
 	if (separator2 != NULL)
 	{
-		gtk_container_remove(GTK_CONTAINER (app->toolbar), separator2);
+		gtk_container_remove(GTK_CONTAINER (main_widgets->toolbar), separator2);
 	}
 }
 
@@ -321,7 +322,7 @@ void init(GeanyData *data)
 	// Build up menu
 
 	menu_mail = gtk_image_menu_item_new_with_mnemonic(_("_Mail"));
-	gtk_container_add(GTK_CONTAINER(data->tools_menu), menu_mail);
+	gtk_container_add(GTK_CONTAINER(main_widgets->tools_menu), menu_mail);
 
 	menu_mail_submenu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_mail), menu_mail_submenu);
