@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geanysendmail\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-20 14:55+0200\n"
-"PO-Revision-Date: 2008-05-20 20:56+0100\n"
+"POT-Creation-Date: 2008-05-24 19:12+0200\n"
+"PO-Revision-Date: 2008-05-24 19:13+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team:  <frank@frank.uvena.de>\n"
 "MIME-Version: 1.0\n"
@@ -13,70 +13,80 @@ msgstr ""
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: src/geanysendmail.c:40
+#: src/geanysendmail.c:47
 msgid "GeanySendMail"
 msgstr "GeanySendMail"
 
-#: src/geanysendmail.c:40
-msgid "A little plugin to send the current file as attachment by user's favorite mailer"
-msgstr "Ein Plugin zum Senden einer Datei als Anhang unter Verwendung eines Mailprogrammes."
+#: src/geanysendmail.c:47
+msgid ""
+"A little plugin to send the current file as attachment by user's favorite "
+"mailer"
+msgstr ""
+"Ein Plugin zum Senden einer Datei als Anhang unter Verwendung eines "
+"Mailprogrammes."
 
-#: src/geanysendmail.c:91
+#: src/geanysendmail.c:125
 msgid "Filename placeholder not found. The executed command might have failed."
-msgstr "Konnte den Platzhalter für den Dateinamen (\\%s) nicht finden. Das angegebene Kommando könnte nicht korrekt ausgeführt worden sein."
+msgstr ""
+"Konnte den Platzhalter für den Dateinamen (\\%s) nicht finden. Das "
+"angegebene Kommando könnte nicht korrekt ausgeführt worden sein."
 
-#: src/geanysendmail.c:97
+#: src/geanysendmail.c:131
 msgid "Could not execute mailer. Please check your configuration."
 msgstr "Konnte das Mailprogramm nicht aufrufen. Ist die Konfiguration korrekt?"
 
-#: src/geanysendmail.c:106
-msgid "Please define a mailing tool first."
+#: src/geanysendmail.c:140
+msgid "Please define a mail client first."
 msgstr "Bitte ein Mailprogramm angeben!"
 
-#: src/geanysendmail.c:111
+#: src/geanysendmail.c:145
 msgid "File have to be saved before sending."
 msgstr "Due Datei muss vor dem Senden gespeichert werden."
 
-#: src/geanysendmail.c:173
+#: src/geanysendmail.c:206
 msgid "Mail Configuration"
 msgstr "Maileinstellungen"
 
 #. add a label and a text entry to the dialog
-#: src/geanysendmail.c:181
-msgid "Path and options for the mail programm:"
+#: src/geanysendmail.c:214
+msgid "Path and options for the mail client:"
 msgstr "Pfad und Optionen für das Mailprogramm:"
 
-#: src/geanysendmail.c:189
+#: src/geanysendmail.c:222
 #, c-format
 msgid "Note: \\%f will be replaced by your filename."
 msgstr "Anmerkung: \\%f wird durch den Dateinamen ersetzt."
 
-#: src/geanysendmail.c:193
+#: src/geanysendmail.c:226
 msgid "Showing icon in toolbar (EXPERIMENTAL)"
 msgstr "Symbol in der Werkzeugliste anzeigen (Experimental)"
 
-#: src/geanysendmail.c:196
+#: src/geanysendmail.c:229
 msgid "Shows a icon in the toolbar to send file more easy."
-msgstr "Zeigt ein Symbol in der Werkzeugliste an, so dass eine Datei einfacher versendet werden kann."
+msgstr ""
+"Zeigt ein Symbol in der Werkzeugliste an, so dass eine Datei einfacher "
+"versendet werden kann."
 
-#: src/geanysendmail.c:238
+#: src/geanysendmail.c:271
 msgid "Plugin configuration directory could not be created."
 msgstr "Konfigurationsdatei konnte nicht erstellt werden."
 
-#: src/geanysendmail.c:261
+#: src/geanysendmail.c:294
 msgid "Send file by mail"
 msgstr "Per Mail senden"
 
 #. Build up menu
-#: src/geanysendmail.c:289
+#: src/geanysendmail.c:324
 msgid "_Mail"
 msgstr "_Mail"
 
-#: src/geanysendmail.c:295
+#: src/geanysendmail.c:330
 msgid "_Mail document"
 msgstr "_Dokument versenden"
 
-#: src/geanysendmail.c:298
-msgid "Sends the opened file as unzipped attachment by any mailer from your $PATH"
-msgstr "Sendet ein geöffnete Dokument als ungepackter Anhang unter Verwendung eines Mailprogrammes."
-
+#: src/geanysendmail.c:333
+msgid ""
+"Sends the opened file as unzipped attachment by any mailer from your $PATH"
+msgstr ""
+"Sendet ein geöffnete Dokument als ungepackter Anhang unter Verwendung eines "
+"Mailprogrammes."
