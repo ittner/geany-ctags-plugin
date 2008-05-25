@@ -295,7 +295,7 @@ void configure(GtkWidget *parent)
 }
 
 /* Called by Geany to initialize the plugin */
-void init(GeanyData *data)
+void init(GeanyData G_GNUC_UNUSED *data)
 {
 	GtkTooltips *tooltips = NULL;
 
