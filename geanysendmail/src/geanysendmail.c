@@ -153,14 +153,24 @@ static void key_send_as_attachment(G_GNUC_UNUSED guint key_id)
 
 void show_icon()
 {
-	GdkPixbuf *pixbuf = NULL;
+	GdkPixbuf *mailbutton_pb = NULL;
 	GtkWidget *icon = NULL;
-		
+	GtkIconSize size = geany_data->toolbar_prefs->icon_size;
+
 	int number_of_icons = 0;
 	number_of_icons = gtk_toolbar_get_n_items(GTK_TOOLBAR(main_widgets->toolbar));
-			pixbuf = gdk_pixbuf_new_from_inline(-1, mail_pixbuf, FALSE, NULL);
-	icon = gtk_image_new_from_pixbuf(pixbuf);
-	g_object_unref(pixbuf);
+
+	mailbutton_pb = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(), 
+					"mail-message-new", size, GTK_ICON_LOOKUP_GENERIC_FALLBACK, NULL);
+	
+	/* Fallback if icon is not part of theme */
+	if (mailbutton_pb == NULL)
+	{
+		mailbutton_pb = gdk_pixbuf_new_from_inline(-1, mail_pixbuf, FALSE, NULL);
+	}
+	
+	icon = gtk_image_new_from_pixbuf(mailbutton_pb);
+	g_object_unref(mailbutton_pb);
 
 	separator = (GtkWidget*) gtk_separator_tool_item_new();
 	gtk_widget_show (separator);
