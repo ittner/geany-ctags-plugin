@@ -438,7 +438,7 @@ create_Configure(void)
 }
 
 void
-init(G_GNUC_UNUSED GeanyData * data)
+plugin_init(G_GNUC_UNUSED GeanyData * data)
 {
 	gchar *kb_label1 = _("Document current word");
 	gchar *kb_label2 = _("Document interactive");
@@ -476,7 +476,7 @@ init_Configure(GtkWidget * dialog)
 }
 
 void
-configure(G_GNUC_UNUSED GtkWidget * parent)
+plugin_configure(G_GNUC_UNUSED GtkWidget * parent)
 {
 	int ret;
 	GtkWidget *dialog;
@@ -509,7 +509,7 @@ configure(G_GNUC_UNUSED GtkWidget * parent)
 }
 
 void
-cleanup(void)
+plugin_cleanup(void)
 {
 	config_uninit();
 	keyb1 = NULL;
