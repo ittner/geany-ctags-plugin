@@ -23,6 +23,7 @@
  */
 
 #include <gtk/gtk.h>
+#include <string.h>
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,8 +55,8 @@ static GtkWidget *keyb2;
  * for binary compatibility. */
 PLUGIN_VERSION_CHECK(60)
 /* All plugins must set name, description, version and author. */
-	PLUGIN_INFO(_("Doc"), _("Call documentation viewer on current symbol."), VERSION,
-	    _("Yura Siamshka <yurand2@gmail.com>"));
+	PLUGIN_SET_INFO(_("Doc"), _("Call documentation viewer on current symbol."), VERSION,
+		_("Yura Siamshka <yurand2@gmail.com>"));
 
 /* Keybinding(s) */
      enum
