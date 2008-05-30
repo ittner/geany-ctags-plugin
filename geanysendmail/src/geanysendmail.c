@@ -42,7 +42,7 @@ PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
-VERSION_CHECK(63)
+VERSION_CHECK(64)
 
 PLUGIN_SET_INFO(_("GeanySendMail"), _("A little plugin to send the current \
 file as attachment by user's favorite mailer"), "0.4dev", "Frank Lanitz <frank@frank.uvena.de>")
@@ -105,7 +105,7 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
 
 	idx = p_document->get_cur_idx();
 
-	if (doc_list[idx].file_name == NULL)
+	if (documents[idx]->file_name == NULL)
 	{
 		p_dialogs->show_save_as();
 	}
@@ -114,11 +114,11 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
 		p_document->save_file(idx, FALSE);
 	}
 
-    if (doc_list[idx].file_name != NULL)
+    if (documents[idx]->file_name != NULL)
 	{
 		if (mailer)
 		{
-			locale_filename = p_utils->get_locale_from_utf8(doc_list[idx].file_name);
+			locale_filename = p_utils->get_locale_from_utf8(documents[idx]->file_name);
 			cmd_str = g_string_new(mailer);
 
 			if (! p_utils->string_replace_all(cmd_str, "%f", locale_filename))
@@ -202,7 +202,7 @@ void cleanup_icon()
 	}
 }
 
-void configure(GtkWidget *parent)
+void plugin_configure(GtkWidget *parent)
 {
 	GtkWidget	*dialog, *label1, *label2, *entry, *vbox;
 	GtkWidget	*checkbox_icon_to_toolbar = NULL;
@@ -295,7 +295,7 @@ void configure(GtkWidget *parent)
 }
 
 /* Called by Geany to initialize the plugin */
-void init(GeanyData G_GNUC_UNUSED *data)
+void plugin_init(GeanyData G_GNUC_UNUSED *data)
 {
 	GtkTooltips *tooltips = NULL;
 
@@ -352,7 +352,7 @@ void init(GeanyData G_GNUC_UNUSED *data)
 }
 
 
-void cleanup()
+void plugin_cleanup()
 {
 	gtk_widget_destroy(plugin_fields->menu_item);
 	cleanup_icon();
