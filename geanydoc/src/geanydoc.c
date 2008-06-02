@@ -97,22 +97,22 @@ current_word()
 	gint text_len;
 
 	idx = p_document->get_cur_idx();
-	g_return_val_if_fail(DOC_IDX_VALID(idx) && doc_list[idx].file_name != NULL, NULL);
+	g_return_val_if_fail(DOC_IDX_VALID(idx) && documents[idx]->file_name != NULL, NULL);
 
-	text_len = p_sci->get_selected_text_length(doc_list[idx].sci);
+	text_len = p_sci->get_selected_text_length(documents[idx]->sci);
 	if (text_len > 1)
 	{
 		txt = g_malloc(text_len + 1);
-		p_sci->get_selected_text(doc_list[idx].sci, txt);
+		p_sci->get_selected_text(documents[idx]->sci, txt);
 		return txt;
 	}
 
-	pos = p_sci->get_current_position(doc_list[idx].sci);
+	pos = p_sci->get_current_position(documents[idx]->sci);
 	if (pos > 0)
 		pos--;
 
 	cstart = pos;
-	c = p_sci->get_char_at(doc_list[idx].sci, cstart);
+	c = p_sci->get_char_at(documents[idx]->sci, cstart);
 
 	if (!word_check_left(c))
 		return NULL;
@@ -121,25 +121,25 @@ current_word()
 	{
 		cstart--;
 		if (cstart >= 0)
-			c = p_sci->get_char_at(doc_list[idx].sci, cstart);
+			c = p_sci->get_char_at(documents[idx]->sci, cstart);
 		else
 			break;
 	}
 	cstart++;
 
 	cend = pos;
-	c = p_sci->get_char_at(doc_list[idx].sci, cend);
-	while (word_check_right(c) && cend < p_sci->get_length(doc_list[idx].sci))
+	c = p_sci->get_char_at(documents[idx]->sci, cend);
+	while (word_check_right(c) && cend < p_sci->get_length(documents[idx]->sci))
 	{
 		cend++;
-		c = p_sci->get_char_at(doc_list[idx].sci, cend);
+		c = p_sci->get_char_at(documents[idx]->sci, cend);
 	}
 
 	if (cstart == cend)
 		return NULL;
 	txt = g_malloc0(cend - cstart + 1);
 
-	p_sci->get_text_range(doc_list[idx].sci, cstart, cend, txt);
+	p_sci->get_text_range(documents[idx]->sci, cstart, cend, txt);
 	return txt;
 }
 
@@ -163,12 +163,12 @@ show_output(const gchar * std_output, const gchar * name, const gchar * force_en
 		}
 		else
 		{
-			p_sci->set_text(doc_list[idx].sci, std_output);
+			p_sci->set_text(documents[idx]->sci, std_output);
 			book = GTK_NOTEBOOK(main_widgets->notebook);
-			page = gtk_notebook_page_num(book, GTK_WIDGET(doc_list[idx].sci));
+			page = gtk_notebook_page_num(book, GTK_WIDGET(documents[idx]->sci));
 			gtk_notebook_set_current_page(book, page);
 		}
-		doc_list[idx].changed = FALSE;
+		documents[idx]->changed = FALSE;
 		p_document->set_text_changed(idx);
 		p_document->set_encoding(idx, (force_encoding ? force_encoding : "UTF-8"));
 		p_navqueue->goto_line(cur_idx, p_document->get_cur_idx(), 1);
@@ -189,9 +189,9 @@ show_doc(const gchar * word, gint cmd_num)
 	gboolean intern;
 
 	idx = p_document->get_cur_idx();
-	g_return_if_fail(DOC_IDX_VALID(idx) && doc_list[idx].file_name != NULL);
+	g_return_if_fail(DOC_IDX_VALID(idx) && documents[idx]->file_name != NULL);
 
-	ftype = doc_list[idx].file_type->name;
+	ftype = documents[idx]->file_type->name;
 	command = config_get_command(ftype, cmd_num, &intern);
 	if (!NZV(command))
 	{
@@ -211,7 +211,7 @@ show_doc(const gchar * word, gint cmd_num)
 		g_spawn_command_line_sync(command, &tmp, NULL, NULL, NULL);
 		if (NZV(tmp))
 		{
-			show_output(tmp, "*DOC*", NULL, doc_list[idx].file_type->id);
+			show_output(tmp, "*DOC*", NULL, documents[idx]->file_type->id);
 		}
 		else
 		{
@@ -468,7 +468,7 @@ init_Configure(GtkWidget * dialog)
 	for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
 	{
 		gtk_combo_box_append_text(GTK_COMBO_BOX(cbTypes),
-					  ((struct _GeanyFiletype *) (filetypes_array->pdata[i]))->
+					  ((struct GeanyFiletype *) (filetypes_array->pdata[i]))->
 					  name);
 	}
 	g_object_set_data(G_OBJECT(cbTypes), "config", config_clone());
