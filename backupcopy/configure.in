@@ -2,7 +2,7 @@
 # $Id: configure.in 2 2008-04-02 14:52:33Z eht16 $
 
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(backupcopy, 0.1)
+AM_INIT_AUTOMAKE(backupcopy, 0.2)
 
 AM_CONFIG_HEADER(config.h)
 
@@ -56,6 +56,7 @@ po/Makefile.in
 
 echo "----------------------------------------"
 echo "Install Backup Copy in             : ${libdir}"
+echo "Install Backup Copy files in       : ${prefix}"
 echo "Using Geany version                : ${GEANY_VERSION}"
 echo "Using GTK version                  : ${GTK_VERSION}"
 echo ""

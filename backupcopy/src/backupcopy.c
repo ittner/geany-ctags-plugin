@@ -27,7 +27,7 @@
 #include <errno.h>
 #include <time.h>
 
-#if HAVE_LOCALE_H
+#ifdef HAVE_LOCALE_H
 # include <locale.h>
 #endif
 
@@ -46,10 +46,10 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(51)
+PLUGIN_VERSION_CHECK(67)
 
-PLUGIN_INFO(_("Backup Copy"), _("Creates a backup of the current file when saving"),
-	"0.1", "Enrico Tröger")
+PLUGIN_SET_INFO(_("Backup Copy"), _("Creates a backup of the current file when saving"),
+	"0.2", "Enrico Tröger")
 
 
 static gchar *config_file;
@@ -93,7 +93,7 @@ static void on_document_save(GObject *obj, gint idx, gpointer user_data)
 	time_t t = time(NULL);
 	struct tm *now = localtime(&t);
 
-	locale_filename_src = p_utils->get_locale_from_utf8(doc_list[idx].file_name);
+	locale_filename_src = p_utils->get_locale_from_utf8(documents[idx]->file_name);
 
 	if ((src = g_fopen(locale_filename_src, "r")) == NULL)
 	{
@@ -131,7 +131,7 @@ static void on_document_save(GObject *obj, gint idx, gpointer user_data)
 }
 
 
-GeanyCallback geany_callbacks[] =
+PluginCallback plugin_callbacks[] =
 {
     { "document-save", (GCallback) &on_document_save, FALSE, NULL },
     { NULL, NULL, FALSE, NULL }
@@ -143,7 +143,7 @@ static void locale_init(void)
 #ifdef ENABLE_NLS
 	gchar *locale_dir = NULL;
 
-#if HAVE_LOCALE_H
+#ifdef HAVE_LOCALE_H
 	setlocale(LC_ALL, "");
 #endif
 
@@ -164,7 +164,7 @@ static void locale_init(void)
 }
 
 
-void init(GeanyData *data)
+void plugin_init(GeanyData *data)
 {
 	GKeyFile *config = g_key_file_new();
 	gchar *tmp;
@@ -224,16 +224,56 @@ static void on_dir_button_clicked(GtkButton *button, gpointer item)
 }
 
 
-void configure(GtkWidget *parent)
+static void on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
-	GtkWidget *dialog, *label, *vbox, *hbox, *entry_dir, *entry_time, *button, *image;
+	if (response == GTK_RESPONSE_OK || response == GTK_RESPONSE_APPLY)
+	{
+		GKeyFile *config = g_key_file_new();
+		gchar *data;
+		const gchar *text_dir, *text_time;
+		gchar *config_dir = g_path_get_dirname(config_file);
 
-	dialog = gtk_dialog_new_with_buttons(_("Backup Copy"),
-		GTK_WINDOW(parent), GTK_DIALOG_DESTROY_WITH_PARENT,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-	vbox = p_ui->dialog_vbox_new(GTK_DIALOG(dialog));
-	gtk_widget_set_name(dialog, "GeanyDialog");
-	gtk_box_set_spacing(GTK_BOX(vbox), 6);
+		text_dir = gtk_entry_get_text(GTK_ENTRY(g_object_get_data(G_OBJECT(dialog), "entry_dir")));
+		text_time = gtk_entry_get_text(GTK_ENTRY(g_object_get_data(G_OBJECT(dialog), "entry_time")));
+
+		if (NZV(text_dir) && set_backup_dir(text_dir))
+		{
+			g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
+			g_key_file_set_string(config, "backupcopy", "backup_dir", text_dir);
+			g_key_file_set_string(config, "backupcopy", "time_fmt", text_time);
+			setptr(time_fmt, g_strdup(text_time));
+
+			if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && p_utils->mkdir(config_dir, TRUE) != 0)
+			{
+				p_dialogs->show_msgbox(GTK_MESSAGE_ERROR,
+					_("Plugin configuration directory could not be created."));
+			}
+			else
+			{
+				/* write config to file */
+				data = g_key_file_to_data(config, NULL, NULL);
+				p_utils->write_file(config_file, data);
+				g_free(data);
+			}
+		}
+		else
+		{
+			p_dialogs->show_msgbox(GTK_MESSAGE_ERROR,
+					_("Backup directory does not exist or is not writable."));
+			g_free(config_dir);
+			g_key_file_free(config);
+		}
+		g_free(config_dir);
+		g_key_file_free(config);
+	}
+}
+
+
+GtkWidget *plugin_configure(GtkDialog *dialog)
+{
+	GtkWidget *label, *vbox, *hbox, *entry_dir, *entry_time, *button, *image;
+
+	vbox = gtk_vbox_new(FALSE, 6);
 
 	label = gtk_label_new(_("Directory to save backup files in:"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
@@ -264,57 +304,17 @@ void configure(GtkWidget *parent)
 		gtk_entry_set_text(GTK_ENTRY(entry_time), time_fmt);
 	gtk_box_pack_start(GTK_BOX(vbox), entry_time, FALSE, FALSE, 0);
 
+	g_object_set_data(G_OBJECT(dialog), "entry_dir", entry_dir);
+	g_object_set_data(G_OBJECT(dialog), "entry_time", entry_time);
+	g_signal_connect(dialog, "response", G_CALLBACK(on_configure_response), NULL);
+
 	gtk_widget_show_all(vbox);
 
-	/* run the dialog and check for the response code */
-retry:
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
-	{
-		GKeyFile *config = g_key_file_new();
-		gchar *data;
-		const gchar *text_dir, *text_time;
-		gchar *config_dir = g_path_get_dirname(config_file);
-
-		text_dir = gtk_entry_get_text(GTK_ENTRY(entry_dir));
-		text_time = gtk_entry_get_text(GTK_ENTRY(entry_time));
-
-		if (NZV(text_dir) && set_backup_dir(text_dir))
-		{
-			g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
-			g_key_file_set_string(config, "backupcopy", "backup_dir", text_dir);
-			g_key_file_set_string(config, "backupcopy", "time_fmt", text_time);
-			setptr(time_fmt, g_strdup(text_time));
-
-			if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && p_utils->mkdir(config_dir, TRUE) != 0)
-			{
-				p_dialogs->show_msgbox(GTK_MESSAGE_ERROR,
-					_("Plugin configuration directory could not be created."));
-			}
-			else
-			{
-				/* write config to file */
-				data = g_key_file_to_data(config, NULL, NULL);
-				p_utils->write_file(config_file, data);
-				g_free(data);
-			}
-		}
-		else
-		{
-			p_dialogs->show_msgbox(GTK_MESSAGE_ERROR,
-					_("Backup directory does not exist or is not writable."));
-			g_free(config_dir);
-			g_key_file_free(config);
-			goto retry;
-
-		}
-		g_free(config_dir);
-		g_key_file_free(config);
-	}
-	gtk_widget_destroy(dialog);
+	return vbox;
 }
 
 
-void cleanup(void)
+void plugin_cleanup(void)
 {
 	g_free(backup_dir);
 	g_free(config_file);
