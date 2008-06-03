@@ -26,7 +26,7 @@
 #include "geany.h"
 #include "support.h"
 
-#if HAVE_LOCALE_H
+#ifdef HAVE_LOCALE_H
 # include <locale.h>
 #endif
 
@@ -34,6 +34,7 @@
 # include <windows.h>
 #endif
 
+#include <string.h>
 #include <aspell.h>
 
 #include "plugindata.h"
@@ -43,17 +44,18 @@
 #include "msgwindow.h"
 #include "keybindings.h"
 #include "utils.h"
+#include "ui_utils.h"
 
 #include "pluginmacros.h"
 
 
 PluginFields	*plugin_fields;
 GeanyData		*geany_data;
-GeanyFunctions *geany_functions;
+GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(58)
-PLUGIN_INFO(_("Spell Check"), _("Checks the spelling of the current document."), "0.2",
+PLUGIN_VERSION_CHECK(67)
+PLUGIN_SET_INFO(_("Spell Check"), _("Checks the spelling of the current document."), "0.2",
 			_("The Geany developer team"))
 
 
@@ -128,12 +130,12 @@ static gint check_document(AspellSpeller *speller, gint idx)
 	return 1;
 
 	str = g_string_sized_new(1024);
-	if (p_sci->can_copy(doc_list[idx].sci))
+	if (p_sci->can_copy(documents[idx]->sci))
 	{
 		first_line = p_sci->get_line_from_position(
-			doc_list[idx].sci, p_sci->get_selection_start(doc_list[idx].sci));
+			documents[idx]->sci, p_sci->get_selection_start(documents[idx]->sci));
 		last_line = p_sci->get_line_from_position(
-			doc_list[idx].sci, p_sci->get_selection_end(doc_list[idx].sci));
+			documents[idx]->sci, p_sci->get_selection_end(documents[idx]->sci));
 
 		p_msgwindow->msg_add(COLOR_BLUE, -1, -1,
 			_("Checking file \"%s\" (lines %d to %d):"),
@@ -142,7 +144,7 @@ static gint check_document(AspellSpeller *speller, gint idx)
 	else
 	{
 		first_line = 0;
-		last_line = p_sci->get_line_count(doc_list[idx].sci);
+		last_line = p_sci->get_line_count(documents[idx]->sci);
 		p_msgwindow->msg_add(COLOR_BLUE, -1, -1, _("Checking file \"%s\":"),
 			DOC_FILENAME(idx));
 	}
@@ -159,7 +161,7 @@ static gint check_document(AspellSpeller *speller, gint idx)
 
 	for (i = first_line; i < last_line; i++)
 	{
-		line = p_sci->get_line(doc_list[idx].sci, i);
+		line = p_sci->get_line(documents[idx]->sci, i);
 		linewidth = strlen(line);
 
 		/* First process the line */
@@ -250,7 +252,7 @@ static void locale_init(void)
 #ifdef ENABLE_NLS
 	gchar *locale_dir = NULL;
 
-#if HAVE_LOCALE_H
+#ifdef HAVE_LOCALE_H
 	setlocale(LC_ALL, "");
 #endif
 
@@ -314,65 +316,16 @@ static void fill_dicts_combo(GtkComboBox *combo)
 }
 
 
-void init(GeanyData *data)
+static void on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
-	GtkWidget *sp_item;
-	GKeyFile *config = g_key_file_new();
-
-	config_file = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
-		"spellcheck", G_DIR_SEPARATOR_S, "spellcheck.conf", NULL);
-
-	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
-	language = p_utils->get_setting_string(config, "spellcheck", "language", get_default_lang());
-	g_key_file_free(config);
-
-	locale_init();
-
-	sp_item = gtk_menu_item_new_with_mnemonic(_("_Spell Check"));
-	gtk_widget_show(sp_item);
-	gtk_container_add(GTK_CONTAINER(geany_data->tools_menu), sp_item);
-	g_signal_connect(G_OBJECT(sp_item), "activate", G_CALLBACK(item_activate), NULL);
-
-	plugin_fields->menu_item = sp_item;
-	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
-
-	/* setup keybindings */
-	p_keybindings->set_item(plugin_key_group, KB_SPELL_CHECK, kb_activate,
-		0, 0, "spell_check", _("Run Spell Check"), NULL);
-}
-
-
-void configure(GtkWidget *parent)
-{
-	GtkWidget *dialog, *label, *vbox, *combo;
-
-	dialog = gtk_dialog_new_with_buttons(_("Spell Check"),
-		GTK_WINDOW(parent), GTK_DIALOG_DESTROY_WITH_PARENT,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-	vbox = p_ui->dialog_vbox_new(GTK_DIALOG(dialog));
-	gtk_widget_set_name(dialog, "GeanyDialog");
-	gtk_box_set_spacing(GTK_BOX(vbox), 6);
-
-	label = gtk_label_new(_("Language to use for the spell check:"));
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
-
-	combo = gtk_combo_box_new_text();
-	fill_dicts_combo(GTK_COMBO_BOX(combo));
-
-	gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo), 3);
-	gtk_box_pack_start(GTK_BOX(vbox), combo, FALSE, FALSE, 0);
-
-	gtk_widget_show_all(vbox);
-
-	/* run the dialog and check for the response code */
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	if (response == GTK_RESPONSE_OK || response == GTK_RESPONSE_APPLY)
 	{
 		GKeyFile *config = g_key_file_new();
 		gchar *data;
 		gchar *config_dir = g_path_get_dirname(config_file);
 
-		setptr(language, gtk_combo_box_get_active_text(GTK_COMBO_BOX(combo)));
+		setptr(language, gtk_combo_box_get_active_text(GTK_COMBO_BOX(
+			g_object_get_data(G_OBJECT(dialog), "combo"))));
 
 		g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 		g_key_file_set_string(config, "spellcheck", "language", language);
@@ -392,11 +345,63 @@ void configure(GtkWidget *parent)
 		g_free(config_dir);
 		g_key_file_free(config);
 	}
-	gtk_widget_destroy(dialog);
 }
 
 
-void cleanup(void)
+void plugin_init(GeanyData *data)
+{
+	GtkWidget *sp_item;
+	GKeyFile *config = g_key_file_new();
+
+	config_file = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
+		"spellcheck", G_DIR_SEPARATOR_S, "spellcheck.conf", NULL);
+
+	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
+	language = p_utils->get_setting_string(config, "spellcheck", "language", get_default_lang());
+	g_key_file_free(config);
+
+	locale_init();
+
+	sp_item = gtk_menu_item_new_with_mnemonic(_("_Spell Check"));
+	gtk_widget_show(sp_item);
+	gtk_container_add(GTK_CONTAINER(main_widgets->tools_menu), sp_item);
+	g_signal_connect(G_OBJECT(sp_item), "activate", G_CALLBACK(item_activate), NULL);
+
+	plugin_fields->menu_item = sp_item;
+	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
+
+	/* setup keybindings */
+	p_keybindings->set_item(plugin_key_group, KB_SPELL_CHECK, kb_activate,
+		0, 0, "spell_check", _("Run Spell Check"), NULL);
+}
+
+
+GtkWidget *plugin_configure(GtkDialog *dialog)
+{
+	GtkWidget *label, *vbox, *combo;
+
+	vbox = gtk_vbox_new(FALSE, 6);
+
+	label = gtk_label_new(_("Language to use for the spell check:"));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
+
+	combo = gtk_combo_box_new_text();
+	fill_dicts_combo(GTK_COMBO_BOX(combo));
+
+	gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo), 3);
+	gtk_box_pack_start(GTK_BOX(vbox), combo, FALSE, FALSE, 0);
+
+	g_object_set_data(G_OBJECT(dialog), "combo", combo);
+	g_signal_connect(dialog, "response", G_CALLBACK(on_configure_response), NULL);
+
+	gtk_widget_show_all(vbox);
+
+	return vbox;
+}
+
+
+void plugin_cleanup(void)
 {
 	g_free(language);
 	g_free(config_file);

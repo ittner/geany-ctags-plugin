@@ -16,3 +16,5 @@ sign:
 	if test -f $(PACKAGE)-$(VERSION).tar.bz2; then \
 		gpg --detach-sign --digest-algo SHA512 $(PACKAGE)-$(VERSION).tar.bz2; fi
 
+html:
+	rst2html README index.html
