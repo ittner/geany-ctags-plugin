@@ -25,7 +25,7 @@
 #include <config.h>
 #include <unistd.h>
 
-#if HAVE_LOCALE_H
+#ifdef HAVE_LOCALE_H
 # include <locale.h>
 #endif
 
@@ -44,10 +44,10 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(60)
+PLUGIN_VERSION_CHECK(67)
 
-PLUGIN_INFO(_("Instant Save"), _("Save instantly new files without an explicit Save As dialog."),
-	"0.1", "Enrico Tröger")
+PLUGIN_SET_INFO(_("Instant Save"), _("Save instantly new files without an explicit Save As dialog."),
+	"0.2", "Enrico Tröger")
 
 
 static gchar *config_file;
@@ -56,7 +56,7 @@ static gchar *default_ft;
 
 static void on_document_new(GObject *obj, gint idx, gpointer user_data)
 {
-    if (doc_list[idx].file_name ==  NULL)
+    if (documents[idx]->file_name ==  NULL)
     {
 		gchar *new_filename;
 		gint fd;
@@ -70,9 +70,9 @@ static void on_document_new(GObject *obj, gint idx, gpointer user_data)
 			/* add the filetype's default extension to the new filename */
 			setptr(new_filename, g_strconcat(new_filename, ".", ft->extension, NULL));
 			
-		doc_list[idx].file_name = new_filename;
+		documents[idx]->file_name = new_filename;
 
-		if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_NONE)
+		if (FILETYPE_ID(documents[idx]->file_type) == GEANY_FILETYPES_NONE)
 			p_document->set_filetype(idx, p_filetypes->lookup_by_name(default_ft));
 
 		/* force saving the file to enable all the related actions(tab name, filetype, etc.) */
@@ -81,7 +81,7 @@ static void on_document_new(GObject *obj, gint idx, gpointer user_data)
 }
 
 
-GeanyCallback geany_callbacks[] =
+PluginCallback plugin_callbacks[] =
 {
     { "document-new", (GCallback) &on_document_new, FALSE, NULL },
     { NULL, NULL, FALSE, NULL }
@@ -93,7 +93,7 @@ static void locale_init(void)
 #ifdef ENABLE_NLS
 	gchar *locale_dir = NULL;
 
-#if HAVE_LOCALE_H
+#ifdef HAVE_LOCALE_H
 	setlocale(LC_ALL, "");
 #endif
 
@@ -114,60 +114,17 @@ static void locale_init(void)
 }
 
 
-void init(GeanyData *data)
+static void on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
-	GKeyFile *config = g_key_file_new();
-	config_file = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
-		"instantsave", G_DIR_SEPARATOR_S, "instantsave.conf", NULL);
-
-	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
-	default_ft = p_utils->get_setting_string(config, "instantsave", "default_ft",
-		filetypes[GEANY_FILETYPES_NONE]->name);
-
-	locale_init();
-
-	g_key_file_free(config);
-}
-
-
-void configure(GtkWidget *parent)
-{
-	GtkWidget *dialog, *label, *vbox, *combo;
-	gint i;
-
-	dialog = gtk_dialog_new_with_buttons(_("Instant Save"),
-		GTK_WINDOW(parent), GTK_DIALOG_DESTROY_WITH_PARENT,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-	vbox = p_ui->dialog_vbox_new(GTK_DIALOG(dialog));
-	gtk_widget_set_name(dialog, "GeanyDialog");
-	gtk_box_set_spacing(GTK_BOX(vbox), 6);
-
-	label = gtk_label_new(_("Filetype to use for newly opened files:"));
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
-
-	combo = gtk_combo_box_new_text();
-	for (i = 0; i < filetypes_array->len; i++)
-	{
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo), filetypes[i]->name);
-
-		if (p_utils->str_equal(filetypes[i]->name, default_ft))
-			gtk_combo_box_set_active(GTK_COMBO_BOX(combo), i);
-	}
-	gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo), 3);
-	gtk_box_pack_start(GTK_BOX(vbox), combo, FALSE, FALSE, 0);
-
-	gtk_widget_show_all(vbox);
-
-	/* run the dialog and check for the response code */
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	if (response == GTK_RESPONSE_OK || response == GTK_RESPONSE_APPLY)
 	{
 		GKeyFile *config = g_key_file_new();
 		gchar *data;
 		gchar *config_dir = g_path_get_dirname(config_file);
 
 		g_free(default_ft);
-		default_ft = gtk_combo_box_get_active_text(GTK_COMBO_BOX(combo));
+		default_ft = gtk_combo_box_get_active_text(GTK_COMBO_BOX(
+			g_object_get_data(G_OBJECT(dialog), "combo")));
 
 		g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 		g_key_file_set_string(config, "instantsave", "default_ft", default_ft);
@@ -188,11 +145,57 @@ void configure(GtkWidget *parent)
 		g_free(config_dir);
 		g_key_file_free(config);
 	}
-	gtk_widget_destroy(dialog);
 }
 
 
-void cleanup(void)
+void plugin_init(GeanyData *data)
+{
+	GKeyFile *config = g_key_file_new();
+	config_file = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
+		"instantsave", G_DIR_SEPARATOR_S, "instantsave.conf", NULL);
+
+	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
+	default_ft = p_utils->get_setting_string(config, "instantsave", "default_ft",
+		filetypes[GEANY_FILETYPES_NONE]->name);
+
+	locale_init();
+
+	g_key_file_free(config);
+}
+
+
+GtkWidget *plugin_configure(GtkDialog *dialog)
+{
+	GtkWidget *label, *vbox, *combo;
+	gint i;
+
+	vbox = gtk_vbox_new(FALSE, 6);
+
+	label = gtk_label_new(_("Filetype to use for newly opened files:"));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
+
+	combo = gtk_combo_box_new_text();
+	for (i = 0; i < filetypes_array->len; i++)
+	{
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo), filetypes[i]->name);
+
+		if (p_utils->str_equal(filetypes[i]->name, default_ft))
+			gtk_combo_box_set_active(GTK_COMBO_BOX(combo), i);
+	}
+	gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo), 3);
+	gtk_box_pack_start(GTK_BOX(vbox), combo, FALSE, FALSE, 0);
+
+	gtk_widget_show_all(vbox);
+
+	g_object_set_data(G_OBJECT(dialog), "combo", combo);
+	g_signal_connect(dialog, "response", G_CALLBACK(on_configure_response), NULL);
+	
+	return vbox;
+}
+
+
+void plugin_cleanup(void)
 {
 	g_free(config_file);
 	g_free(default_ft);
