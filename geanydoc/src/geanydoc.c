@@ -154,7 +154,7 @@ show_output(const gchar * std_output, const gchar * name, const gchar * force_en
 	if (std_output)
 	{
 		cur_idx = p_document->get_cur_idx();
-		idx = p_document->find_by_filename(name, FALSE);
+		idx = p_document->find_by_filename(name);
 		if (idx == -1)
 		{
 			idx = p_document->new_file(name,
