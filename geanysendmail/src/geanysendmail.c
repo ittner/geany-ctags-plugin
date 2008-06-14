@@ -33,7 +33,7 @@
 #include "icon.h"
 #include "pluginmacros.h"
 
-#if HAVE_LOCALE_H
+#ifdef HAVE_LOCALE_H
 # include <locale.h>
 #endif
 
@@ -42,7 +42,7 @@ PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
-VERSION_CHECK(64)
+PLUGIN_VERSION_CHECK(68)
 
 PLUGIN_SET_INFO(_("GeanySendMail"), _("A little plugin to send the current \
 file as attachment by user's favorite mailer"), "0.4dev", "Frank Lanitz <frank@frank.uvena.de>")
@@ -55,7 +55,6 @@ enum
 };
 
 PLUGIN_KEY_GROUP(sendmail, COUNT_KB)
-
 
 static gchar *config_file = NULL;
 static gchar *mailer = NULL;
@@ -71,7 +70,7 @@ static void locale_init(void)
 #ifdef ENABLE_NLS
 	gchar *locale_dir = NULL;
 
-#if HAVE_LOCALE_H
+#ifdef HAVE_LOCALE_H
 	setlocale(LC_ALL, "");
 #endif
 
@@ -160,7 +159,7 @@ void show_icon()
 	int number_of_icons = 0;
 	number_of_icons = gtk_toolbar_get_n_items(GTK_TOOLBAR(main_widgets->toolbar));
 
-	mailbutton_pb = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(), 
+	mailbutton_pb = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
 					"mail-message-new", size, GTK_ICON_LOOKUP_GENERIC_FALLBACK, NULL);
 	
 	/* Fallback if icon is not part of theme */

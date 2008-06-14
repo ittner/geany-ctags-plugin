@@ -1,3 +1,8 @@
+2008-06-14  Frank Lanitz  <frank@frank.uvena.de>
+
+ * Update of plugin API
+
+
 2008-05-20  Frank Lanitz  <frank@frank.uvena.de>
 
  * Ported build system from spellcheck plugin. Thanks for it.
