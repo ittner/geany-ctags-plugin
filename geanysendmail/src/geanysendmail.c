@@ -150,6 +150,12 @@ static void key_send_as_attachment(G_GNUC_UNUSED guint key_id)
 	send_as_attachment(NULL, NULL);
 }
 
+#if GTK_CHECK_VERSION(2, 12, 0)
+#define ICON_LOOKUP_MODE GTK_ICON_LOOKUP_GENERIC_FALLBACK
+#else
+#define ICON_LOOKUP_MODE GTK_ICON_LOOKUP_USE_BUILTIN
+#endif
+
 void show_icon()
 {
 	GdkPixbuf *mailbutton_pb = NULL;
@@ -160,14 +166,14 @@ void show_icon()
 	number_of_icons = gtk_toolbar_get_n_items(GTK_TOOLBAR(main_widgets->toolbar));
 
 	mailbutton_pb = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
-					"mail-message-new", size, GTK_ICON_LOOKUP_GENERIC_FALLBACK, NULL);
-	
+					"mail-message-new", size, ICON_LOOKUP_MODE, NULL);
+
 	/* Fallback if icon is not part of theme */
 	if (mailbutton_pb == NULL)
 	{
 		mailbutton_pb = gdk_pixbuf_new_from_inline(-1, mail_pixbuf, FALSE, NULL);
 	}
-	
+
 	icon = gtk_image_new_from_pixbuf(mailbutton_pb);
 	g_object_unref(mailbutton_pb);
 

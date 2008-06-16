@@ -1,9 +1,15 @@
-2008-06-14  Frank Lanitz  <frank@frank.uvena.de>
+2008-06-16  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Make plugin also work together with GTK-2.8. Thanks to Nick for 
+   providing patch. 
+
+
+2008-06-14  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Update of plugin API
 
 
-2008-05-20  Frank Lanitz  <frank@frank.uvena.de>
+2008-05-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Ported build system from spellcheck plugin. Thanks for it.
  * Updated Geany plugin API.
