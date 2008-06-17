@@ -2,6 +2,8 @@
 
  * configure.in:
    Fix build using autogen.sh (Makefile.in was not created).
+ * latexencodings.h:
+   Fix multiple definition of latex_encodings array.
 
 
 2008-06-17  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

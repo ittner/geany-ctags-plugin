@@ -49,7 +49,7 @@ typedef struct
 	gint geany_enc;
 } LaTeXEncodings;
 
-LaTeXEncodings latex_encodings[LATEX_ENCODINGS_MAX];
+extern LaTeXEncodings latex_encodings[LATEX_ENCODINGS_MAX];
 
 void init_encodings_latex(void);
 
