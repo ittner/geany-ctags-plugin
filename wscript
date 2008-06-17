@@ -71,7 +71,7 @@ plugins = [
          [ 'geanydoc', 'geanydoc/src' ], # include dirs
          '0.3'),
     Plugin('geanylatex',
-         [ 'geanylatex/latexencodings.c', 'geanylatex/geanylatex.c' ], # source files
+         [ 'geanylatex/latexencodings.c', 'geanylatex/geanylatex.c', 'geanylatex/letters.c' ],
          [ 'geanylatex' ], # include dirs
          '0.2-dev'),
     Plugin('instantsave',
