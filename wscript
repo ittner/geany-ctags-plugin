@@ -70,6 +70,10 @@ plugins = [
          [ 'geanydoc/src/config.c', 'geanydoc/src/geanydoc.c' ], # source files
          [ 'geanydoc', 'geanydoc/src' ], # include dirs
          '0.3'),
+    Plugin('geanylatex',
+         [ 'geanylatex/latexencodings.c', 'geanylatex/geanylatex.c' ], # source files
+         [ 'geanylatex' ], # include dirs
+         '0.2-dev'),
     Plugin('instantsave',
          [ 'instantsave/src/instantsave.c' ], # source files
          [ 'instantsave', 'instantsave/src/' ], # include dirs
