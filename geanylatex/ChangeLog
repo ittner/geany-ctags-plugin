@@ -1,3 +1,9 @@
+2008-06-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * configure.in:
+   Fix build using autogen.sh (Makefile.in was not created).
+
+
 2008-06-17  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
- * Moved plugin to geany-plugin svn. 
+ * Moved plugin to geany-plugin svn.

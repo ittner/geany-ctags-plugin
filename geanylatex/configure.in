@@ -7,7 +7,7 @@ AC_INIT([geanylatex], [0.2-dev], [frank@frank.uvena.de])
 AM_INIT_AUTOMAKE([1.9 foreign])
 
 AC_PROG_CC
-AC_PROG_LIBTOOL
+AM_PROG_LIBTOOL
 
 PKG_CHECK_MODULES(GEANY, [geany >= 0.15])
 AC_SUBST(GEANY_CFLAGS)
