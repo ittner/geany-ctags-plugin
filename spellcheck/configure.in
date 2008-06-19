@@ -16,19 +16,17 @@ AC_PROG_INSTALL
 
 # checking for Geany
 PKG_CHECK_MODULES(GEANY, [geany >= 0.15])
-AC_SUBST(GTK_CFLAGS)
-AC_SUBST(GTK_LIBS)
+AC_SUBST(GEANY_CFLAGS)
+AC_SUBST(GEANY_LIBS)
+
+# checking for libenchant
+PKG_CHECK_MODULES(ENCHANT, [enchant >= 1.3])
+AC_SUBST(ENCHANT_CFLAGS)
+AC_SUBST(ENCHANT_LIBS)
 
 GEANY_VERSION=`$PKG_CONFIG --modversion geany`
 GTK_VERSION=`$PKG_CONFIG --modversion gtk+-2.0`
-
-# checking for aspell
-AC_CHECK_HEADER(aspell.h, [AC_DEFINE(HAVE_ASPELL_H, 1,
-   [Define to 1 if you have the <aspell.h> header file.] )],
-      [AC_MSG_ERROR([You must have the aspell dev library installed to build the spellcheck plugin.]) ] )
-AC_CHECK_LIB(aspell, new_aspell_speller, SPELLER_LIB="-laspell",
-      [AC_MSG_ERROR([You must have the aspell dev library installed to build the spellcheck plugin.]) ] )
-AC_SUBST(SPELLER_LIB)
+ENCHANT_VERSION=`$PKG_CONFIG --modversion enchant`
 
 # i18n
 GETTEXT_PACKAGE=spellcheck
@@ -65,6 +63,7 @@ echo "Install Spell Check plugin binary in : ${libdir}"
 echo "Install Spell Check files in         : ${prefix}"
 echo "Using Geany version                  : ${GEANY_VERSION}"
 echo "Using GTK version                    : ${GTK_VERSION}"
+echo "Using libenchant version             : ${ENCHANT_VERSION}"
 echo ""
 echo "Configuration is done OK."
 echo ""

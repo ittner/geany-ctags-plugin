@@ -1,18 +1,46 @@
 Spell Check Plugin
-------------------
+==================
+
+.. contents::
 
 
 About
 -----
 This plugin checks the content of the current document in Geany with the spell
-check program Aspell. You can also select a certain text passage, then the
+check library Enchant. You can also select a certain text passage, then the
 plugin will only check the selected text. All lines with misspelled words
 are highlighted with a red squiggly underline and the wrong words are printed
 in the messages window at the bottom of Geany together with available
-suggestions. For the plugin to work at all, you need to have the Aspell
-library installed together with at least one dictionary.
+suggestions. For the plugin to work at all, you need to have the Enchant
+library installed together with at least one backend (Aspell, Myspell,
+Hunspell, ...).
 The plugin's configure dialog lists all available languages/dictionaries
 which can be used for the spell check.
+
+
+Downloads
+---------
+
+Spellcheck 0.1
+^^^^^^^^^^^^^^
+
+http://geany-plugins.sourceforge.net/spellcheck/spellcheck-0.1.tar.bz2
+
+http://geany-plugins.sourceforge.net/spellcheck/spellcheck-0.1.tar.bz2.sig (GPG-Signature)
+
+or
+
+http://geany-plugins.sourceforge.net/spellcheck/spellcheck-0.1.tar.gz
+
+http://geany-plugins.sourceforge.net/spellcheck/spellcheck-0.1.tar.gz.sig (GPG-Signature)
+
+
+Development Code
+^^^^^^^^^^^^^^^^
+
+Get the code from:
+
+	svn checkout http://geany-plugins.svn.sourceforge.net/svnroot/geany-plugins/trunk/spellcheck
 
 
 Requirements
@@ -21,14 +49,15 @@ For compiling the plugin yourself, you will need the GTK (>= 2.6.0) libraries
 and header files. You will also need its dependency libraries and header
 files, such as Pango, Glib and ATK. All these files are available at
 http://www.gtk.org.
-Furthermore, you need to have installed libaspell with its development files.
+Furthermore, you need to have installed enchant with its development files
+(libenchant-dev or enchant-devel).
 
 And obviously, you will need have Geany installed. If you have Geany installed
 from the sources, you should be ready to go.
 If you used a preprared package e.g. from your distribution you probably need
 to install an additional package, this might be called geany-dev or geany-devel.
 Please note that in order to compile and use this plugin, you need a current SVN
-version of Geany, at least SVN >= r2590.
+version of Geany, at least SVN >= 2715.
 
 Furthermore you need, of course, a C compiler and the Make tool.
 The GNU versions of these tools are recommended.
@@ -68,3 +97,4 @@ program.
 Ideas, questions, patches and bug reports
 -----------------------------------------
 Send it to me at enrico(dot)troeger(at)uvena(dot)de
+or report them at http://sourceforge.net/tracker/?group_id=222729.
