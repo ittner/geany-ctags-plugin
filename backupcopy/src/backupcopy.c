@@ -26,6 +26,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <time.h>
+#include <string.h>
 
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
@@ -46,7 +47,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(67)
+PLUGIN_VERSION_CHECK(71)
 
 PLUGIN_SET_INFO(_("Backup Copy"), _("Creates a backup of the current file when saving"),
 	"0.2", "Enrico Tröger")
@@ -55,6 +56,7 @@ PLUGIN_SET_INFO(_("Backup Copy"), _("Creates a backup of the current file when s
 static gchar *config_file;
 static gchar *backup_dir; /* path to an existing directory in locale encoding */
 static gchar *time_fmt;
+static gint dir_levels;
 
 
 /* Ensures utf8_dir exists and is writable and
@@ -83,32 +85,108 @@ static gboolean set_backup_dir(const gchar *utf8_dir)
 }
 
 
-static void on_document_save(GObject *obj, gint idx, gpointer user_data)
+static gchar *skip_root(gchar *filename)
+{
+	/* first skip the root (e.g. c:\ on windows) */
+	const gchar *dir = g_path_skip_root(filename);
+
+	/* if this has failed, use the filename again */
+	if (dir == NULL)
+		dir = filename;
+	/* check again for leading / or \ */
+	while (*dir == G_DIR_SEPARATOR)
+		dir++;
+
+	return (gchar *) dir;
+}
+
+
+static gchar *create_dir_parts(const gchar *filename)
+{
+	gint cnt_dir_parts = 0;
+	gchar *cp;
+	gchar *dirname;
+	gchar last_char = 0;
+	gint error;
+	gchar *result;
+	gchar *target_dir;
+
+	if (dir_levels == 0)
+		return g_strdup("");
+
+	dirname = g_path_get_dirname(filename);
+
+	cp = dirname;
+	/* walk to the end of the string */
+	while (*cp != '\0')
+		cp++;
+
+	/* walk backwards to find directory parts */
+	while (cp > dirname)
+	{
+		if (*cp == G_DIR_SEPARATOR && last_char != G_DIR_SEPARATOR)
+			cnt_dir_parts++;
+
+		if (cnt_dir_parts == dir_levels)
+			break;
+
+		last_char = *cp;
+		cp--;
+	}
+
+	result = skip_root(cp); /* skip leading slash/backslash and c:\ */
+	target_dir = g_build_filename(backup_dir, result, NULL);
+
+	error = p_utils->mkdir(target_dir, TRUE);
+	if (error != 0)
+	{
+		p_ui->set_statusbar(FALSE, _("Backup Copy: Directory could not be created (%s)."),
+			g_strerror(error));
+
+		result = g_strdup(""); /* return an empty string in case of an error */
+	}
+	else
+		result = g_strdup(result);
+
+	g_free(dirname);
+	g_free(target_dir);
+
+	return result;
+}
+
+
+static void on_document_save(GObject *obj, GeanyDocument *doc, gpointer user_data)
 {
 	FILE *src, *dst;
 	gchar *locale_filename_src;
 	gchar *locale_filename_dst;
-	gchar *tmp;
-	gchar line[512];
+	gchar *basename_src;
+	gchar *dir_parts_src;
+	gchar stamp[512];
 	time_t t = time(NULL);
 	struct tm *now = localtime(&t);
 
-	locale_filename_src = p_utils->get_locale_from_utf8(documents[idx]->file_name);
+	locale_filename_src = p_utils->get_locale_from_utf8(doc->file_name);
 
 	if ((src = g_fopen(locale_filename_src, "r")) == NULL)
 	{
 		/* it's unlikely that this happens */
-		p_ui->set_statusbar(FALSE, _("Backup Copy: File could not be saved (%s)."),
+		p_ui->set_statusbar(FALSE, _("Backup Copy: File could not be read (%s)."),
 			g_strerror(errno));
 		g_free(locale_filename_src);
 		return;
 	}
 
-	strftime(line, sizeof(line), time_fmt, now);
-	tmp = g_path_get_basename(locale_filename_src);
+	strftime(stamp, sizeof(stamp), time_fmt, now);
+	basename_src = g_path_get_basename(locale_filename_src);
+	dir_parts_src = create_dir_parts(locale_filename_src);
 	locale_filename_dst = g_strconcat(
-		backup_dir, G_DIR_SEPARATOR_S, tmp, ".", line, NULL);
-	g_free(tmp);
+		backup_dir, G_DIR_SEPARATOR_S,
+		dir_parts_src, G_DIR_SEPARATOR_S,
+		basename_src, ".", stamp, NULL);
+	g_free(basename_src);
+	g_free(dir_parts_src);
+
 	if ((dst = g_fopen(locale_filename_dst, "wb")) == NULL)
 	{
 		p_ui->set_statusbar(FALSE, _("Backup Copy: File could not be saved (%s)."),
@@ -119,9 +197,9 @@ static void on_document_save(GObject *obj, gint idx, gpointer user_data)
 		return;
 	}
 
-	while (fgets(line, sizeof(line), src) != NULL)
+	while (fgets(stamp, sizeof(stamp), src) != NULL)
 	{
-		fputs(line, dst);
+		fputs(stamp, dst);
 	}
 
 	fclose(src);
@@ -173,8 +251,10 @@ void plugin_init(GeanyData *data)
 
 	backup_dir = NULL;
 	time_fmt = NULL;
+	dir_levels = 0;
 
 	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
+	dir_levels = p_utils->get_setting_integer(config, "backupcopy", "dir_levels", 0);
 	time_fmt = p_utils->get_setting_string(config, "backupcopy", "time_fmt", "%Y-%m-%d-%H-%M-%S");
 	tmp = p_utils->get_setting_string(config, "backupcopy", "backup_dir", g_get_tmp_dir());
 	set_backup_dir(tmp);
@@ -235,10 +315,13 @@ static void on_configure_response(GtkDialog *dialog, gint response, gpointer use
 
 		text_dir = gtk_entry_get_text(GTK_ENTRY(g_object_get_data(G_OBJECT(dialog), "entry_dir")));
 		text_time = gtk_entry_get_text(GTK_ENTRY(g_object_get_data(G_OBJECT(dialog), "entry_time")));
+		dir_levels = gtk_spin_button_get_value_as_int(
+			GTK_SPIN_BUTTON(g_object_get_data(G_OBJECT(dialog), "spin_dir_levels")));
 
 		if (NZV(text_dir) && set_backup_dir(text_dir))
 		{
 			g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
+			g_key_file_set_integer(config, "backupcopy", "dir_levels", dir_levels);
 			g_key_file_set_string(config, "backupcopy", "backup_dir", text_dir);
 			g_key_file_set_string(config, "backupcopy", "time_fmt", text_time);
 			setptr(time_fmt, g_strdup(text_time));
@@ -271,7 +354,7 @@ static void on_configure_response(GtkDialog *dialog, gint response, gpointer use
 
 GtkWidget *plugin_configure(GtkDialog *dialog)
 {
-	GtkWidget *label, *vbox, *hbox, *entry_dir, *entry_time, *button, *image;
+	GtkWidget *label, *vbox, *hbox, *entry_dir, *entry_time, *button, *image, *spin_dir_levels;
 
 	vbox = gtk_vbox_new(FALSE, 6);
 
@@ -297,15 +380,28 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 
 	label = gtk_label_new(_("Date/Time format for backup files (\"man strftime\" for details):"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 7);
 
 	entry_time = gtk_entry_new();
 	if (NZV(time_fmt))
 		gtk_entry_set_text(GTK_ENTRY(entry_time), time_fmt);
 	gtk_box_pack_start(GTK_BOX(vbox), entry_time, FALSE, FALSE, 0);
 
+	hbox = gtk_hbox_new(FALSE, 6);
+
+	label = gtk_label_new(_("Directory levels to include in the backup destination:"));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+	spin_dir_levels = gtk_spin_button_new_with_range(0, 20, 1);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin_dir_levels), dir_levels);
+	gtk_box_pack_start(GTK_BOX(hbox), spin_dir_levels, FALSE, FALSE, 0);
+
+	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 7);
+
 	g_object_set_data(G_OBJECT(dialog), "entry_dir", entry_dir);
 	g_object_set_data(G_OBJECT(dialog), "entry_time", entry_time);
+	g_object_set_data(G_OBJECT(dialog), "spin_dir_levels", spin_dir_levels);
 	g_signal_connect(dialog, "response", G_CALLBACK(on_configure_response), NULL);
 
 	gtk_widget_show_all(vbox);

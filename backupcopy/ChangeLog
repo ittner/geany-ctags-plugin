@@ -1,3 +1,11 @@
+2008-06-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/backupcopy.c:
+   Change doc pointer usage.
+   Add option to include parts of the source path in the path of the
+   backup file.
+
+
 2008-06-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/backupcopy.c:
