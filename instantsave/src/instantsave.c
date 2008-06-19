@@ -44,7 +44,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(67)
+PLUGIN_VERSION_CHECK(71)
 
 PLUGIN_SET_INFO(_("Instant Save"), _("Save instantly new files without an explicit Save As dialog."),
 	"0.2", "Enrico Tröger")
@@ -54,9 +54,9 @@ static gchar *config_file;
 static gchar *default_ft;
 
 
-static void on_document_new(GObject *obj, gint idx, gpointer user_data)
+static void on_document_new(GObject *obj, GeanyDocument *doc, gpointer user_data)
 {
-    if (documents[idx]->file_name ==  NULL)
+    if (doc->file_name ==  NULL)
     {
 		gchar *new_filename;
 		gint fd;
@@ -69,14 +69,14 @@ static void on_document_new(GObject *obj, gint idx, gpointer user_data)
 		if (ft != NULL)
 			/* add the filetype's default extension to the new filename */
 			setptr(new_filename, g_strconcat(new_filename, ".", ft->extension, NULL));
-			
-		documents[idx]->file_name = new_filename;
 
-		if (FILETYPE_ID(documents[idx]->file_type) == GEANY_FILETYPES_NONE)
-			p_document->set_filetype(idx, p_filetypes->lookup_by_name(default_ft));
+		doc->file_name = new_filename;
+
+		if (FILETYPE_ID(doc->file_type) == GEANY_FILETYPES_NONE)
+			p_document->set_filetype(doc, p_filetypes->lookup_by_name(default_ft));
 
 		/* force saving the file to enable all the related actions(tab name, filetype, etc.) */
-		p_document->save_file(idx, TRUE);
+		p_document->save_file(doc, TRUE);
     }
 }
 
@@ -167,7 +167,7 @@ void plugin_init(GeanyData *data)
 GtkWidget *plugin_configure(GtkDialog *dialog)
 {
 	GtkWidget *label, *vbox, *combo;
-	gint i;
+	guint i;
 
 	vbox = gtk_vbox_new(FALSE, 6);
 
@@ -190,7 +190,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 
 	g_object_set_data(G_OBJECT(dialog), "combo", combo);
 	g_signal_connect(dialog, "response", G_CALLBACK(on_configure_response), NULL);
-	
+
 	return vbox;
 }
 
