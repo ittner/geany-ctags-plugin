@@ -1,3 +1,5 @@
+.. |(version)| replace:: 0.3
+
 ========
 geanyprj
 ========
@@ -125,7 +127,7 @@ the current code style. Run this script before commit.
 Download
 ========
 
-The current version is |(version)|, download it here http://users.cosmostv.by/yurand/geanyprj/geanyprj-0.2.tar.gz
+The current version is |(version)|, download it here http://users.cosmostv.by/yurand/geanyprj/geanyprj-0.3.tar.gz
 
 Up to date source code can be downloaded here::
 
