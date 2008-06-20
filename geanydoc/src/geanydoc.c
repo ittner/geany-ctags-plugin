@@ -476,7 +476,7 @@ init_Configure(GtkWidget * dialog)
 	gtk_combo_box_set_active(GTK_COMBO_BOX(cbTypes), 0);
 }
 
-void
+GtkWidget *
 plugin_configure(G_GNUC_UNUSED GtkWidget * parent)
 {
 	int ret;
@@ -507,6 +507,7 @@ plugin_configure(G_GNUC_UNUSED GtkWidget * parent)
 	}
 	g_free(current);
 	gtk_widget_destroy(dialog);
+	return NULL;
 }
 
 void
