@@ -118,19 +118,11 @@ the current code style. Run this script before commit.
 Download
 ========
 
-The current version is |(version)|, download it here http://users.cosmostv.by/yurand/geanyvc/geanyvc-0.3.tar.gz.
+The current version is |(version)|, download it here http://users.cosmostv.by/yurand/geanyvc/geanyvc-0.3.tar.gz
 
-There is also git repository http://git.or.cz available. In http://repo.or.cz/w/geanyvc.git you can
-always find an up-to-date version of source code, even between releases.
+Up to date source code can be downloaded here::
 
-To clone geanyvc make sure you have the git package installed on your system.
-Then run the following command::
-
- git clone git://repo.or.cz/geanyvc.git
-
-or::
-
- git clone http://repo.or.cz/r/geanyvc.git
+  svn checkout http://geany-plugins.svn.sourceforge.net/svnroot/geany-plugins/trunk/geanydoc
 
 Gentoo
 ------
