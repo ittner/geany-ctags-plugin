@@ -53,7 +53,7 @@ static GtkWidget *keyb2;
 
 /* Check that Geany supports plugin API version 52 or later, and check
  * for binary compatibility. */
-PLUGIN_VERSION_CHECK(60)
+PLUGIN_VERSION_CHECK(71)
 /* All plugins must set name, description, version and author. */
 	PLUGIN_SET_INFO(_("Doc"), _("Call documentation viewer on current symbol."), VERSION,
 		_("Yura Siamshka <yurand2@gmail.com>"));
@@ -89,30 +89,30 @@ static gchar *
 current_word()
 {
 	gchar *txt;
-	gint idx;
+	GeanyDocument *doc;
 
 	gint pos;
 	gint cstart, cend;
 	gchar c;
 	gint text_len;
 
-	idx = p_document->get_cur_idx();
-	g_return_val_if_fail(DOC_IDX_VALID(idx) && documents[idx]->file_name != NULL, NULL);
+	doc = p_document->get_current();
+	g_return_val_if_fail(doc != NULL && doc->file_name != NULL, NULL);
 
-	text_len = p_sci->get_selected_text_length(documents[idx]->sci);
+	text_len = p_sci->get_selected_text_length(doc->sci);
 	if (text_len > 1)
 	{
 		txt = g_malloc(text_len + 1);
-		p_sci->get_selected_text(documents[idx]->sci, txt);
+		p_sci->get_selected_text(doc->sci, txt);
 		return txt;
 	}
 
-	pos = p_sci->get_current_position(documents[idx]->sci);
+	pos = p_sci->get_current_position(doc->sci);
 	if (pos > 0)
 		pos--;
 
 	cstart = pos;
-	c = p_sci->get_char_at(documents[idx]->sci, cstart);
+	c = p_sci->get_char_at(doc->sci, cstart);
 
 	if (!word_check_left(c))
 		return NULL;
@@ -121,25 +121,25 @@ current_word()
 	{
 		cstart--;
 		if (cstart >= 0)
-			c = p_sci->get_char_at(documents[idx]->sci, cstart);
+			c = p_sci->get_char_at(doc->sci, cstart);
 		else
 			break;
 	}
 	cstart++;
 
 	cend = pos;
-	c = p_sci->get_char_at(documents[idx]->sci, cend);
-	while (word_check_right(c) && cend < p_sci->get_length(documents[idx]->sci))
+	c = p_sci->get_char_at(doc->sci, cend);
+	while (word_check_right(c) && cend < p_sci->get_length(doc->sci))
 	{
 		cend++;
-		c = p_sci->get_char_at(documents[idx]->sci, cend);
+		c = p_sci->get_char_at(doc->sci, cend);
 	}
 
 	if (cstart == cend)
 		return NULL;
 	txt = g_malloc0(cend - cstart + 1);
 
-	p_sci->get_text_range(documents[idx]->sci, cstart, cend, txt);
+	p_sci->get_text_range(doc->sci, cstart, cend, txt);
 	return txt;
 }
 
@@ -148,30 +148,30 @@ static void
 show_output(const gchar * std_output, const gchar * name, const gchar * force_encoding,
 	    gint filetype_new_file)
 {
-	gint idx, cur_idx, page;
+	gint page;
 	GtkNotebook *book;
+	GeanyDocument *doc, *cur_doc;
 
 	if (std_output)
 	{
-		cur_idx = p_document->get_cur_idx();
-		idx = p_document->find_by_filename(name);
-		if (idx == -1)
+		cur_doc = p_document->get_current();
+		doc = p_document->find_by_filename(name);
+		if (doc == NULL)
 		{
-			idx = p_document->new_file(name,
+			doc = p_document->new_file(name,
 						   filetypes_array->pdata[filetype_new_file],
 						   std_output);
 		}
 		else
 		{
-			p_sci->set_text(documents[idx]->sci, std_output);
+			p_sci->set_text(doc->sci, std_output);
 			book = GTK_NOTEBOOK(main_widgets->notebook);
-			page = gtk_notebook_page_num(book, GTK_WIDGET(documents[idx]->sci));
+			page = gtk_notebook_page_num(book, GTK_WIDGET(doc->sci));
 			gtk_notebook_set_current_page(book, page);
 		}
-		documents[idx]->changed = FALSE;
-		p_document->set_text_changed(idx);
-		p_document->set_encoding(idx, (force_encoding ? force_encoding : "UTF-8"));
-		p_navqueue->goto_line(cur_idx, p_document->get_cur_idx(), 1);
+		p_document->set_text_changed(doc, FALSE);
+		p_document->set_encoding(doc, (force_encoding ? force_encoding : "UTF-8"));
+		p_navqueue->goto_line(cur_doc, p_document->get_current(), 1);
 	}
 	else
 	{
@@ -182,16 +182,16 @@ show_output(const gchar * std_output, const gchar * name, const gchar * force_en
 void
 show_doc(const gchar * word, gint cmd_num)
 {
-	gint idx;
+	GeanyDocument *doc;
 	const gchar *ftype;
 	gchar *command;
 	gchar *tmp;
 	gboolean intern;
 
-	idx = p_document->get_cur_idx();
-	g_return_if_fail(DOC_IDX_VALID(idx) && documents[idx]->file_name != NULL);
+	doc = p_document->get_current();
+	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
-	ftype = documents[idx]->file_type->name;
+	ftype = doc->file_type->name;
 	command = config_get_command(ftype, cmd_num, &intern);
 	if (!NZV(command))
 	{
@@ -211,7 +211,7 @@ show_doc(const gchar * word, gint cmd_num)
 		g_spawn_command_line_sync(command, &tmp, NULL, NULL, NULL);
 		if (NZV(tmp))
 		{
-			show_output(tmp, "*DOC*", NULL, documents[idx]->file_type->id);
+			show_output(tmp, "*DOC*", NULL, doc->file_type->id);
 		}
 		else
 		{
@@ -465,7 +465,7 @@ init_Configure(GtkWidget * dialog)
 	cbTypes = p_support->lookup_widget(dialog, "comboboxType");
 	g_object_set(cbTypes, "wrap-width", 3, NULL);
 
-	for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
+	for (i = 0; i < filetypes_array->len; i++)
 	{
 		gtk_combo_box_append_text(GTK_COMBO_BOX(cbTypes),
 					  ((struct GeanyFiletype *) (filetypes_array->pdata[i]))->
