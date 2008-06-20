@@ -1,0 +1,24 @@
+# Copyright 1999-2008 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Version control systems plugin for Geany IDE"
+HOMEPAGE="http://users.cosmostv.by/yurand/geanyvc/"
+SRC_URI="http://users.cosmostv.by/yurand/${PN}/${P}.tar.gz"
+
+LICENSE="GPL-3"
+SLOT="0"
+KEYWORDS="~amd64 ~x86"
+
+RDEPEND=">=dev-util/geany-0.14"
+
+DEPEND="${RDEPEND}"
+
+src_compile() {
+	econf || die "econf failed."
+	emake || die "emake failed."
+}
+
+src_install() {
+	emake DESTDIR="${D}" install || die "emake install failed."
+}
+

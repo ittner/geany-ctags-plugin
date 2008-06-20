@@ -1,0 +1,8 @@
+geanyvc.c
+geanyvc.h
+vc_bzr.c
+vc_cvs.c
+vc_git.c
+vc_hg.c
+vc_svk.c
+vc_svn.c
