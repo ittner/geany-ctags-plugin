@@ -122,7 +122,7 @@ The current version is |(version)|, download it here http://users.cosmostv.by/yu
 
 Up to date source code can be downloaded here::
 
-  svn checkout http://geany-plugins.svn.sourceforge.net/svnroot/geany-plugins/trunk/geanydoc
+  svn checkout http://geany-plugins.svn.sourceforge.net/svnroot/geany-plugins/trunk/geanyvc
 
 Gentoo
 ------
