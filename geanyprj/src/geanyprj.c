@@ -1,0 +1,166 @@
+/*
+ *  geanyprj - Alternative project support for geany light IDE.
+ *
+ *  Copyright 2007 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
+ *  Copyright 2007 Enrico Tröger <enrico.troeger@uvena.de>
+ *  Copyright 2007 Nick Treleaven <nick.treleaven@btinternet.com>
+ *  Copyright 2007,2008 Yura Siamashka <yurand2@gmail.com>
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include <sys/time.h>
+
+#include "geany.h"
+#include "support.h"
+#include "plugindata.h"
+#include "document.h"
+#include "filetypes.h"
+#include "utils.h"
+#include "ui_utils.h"
+#include "pluginmacros.h"
+
+#include "project.h"
+
+#include "geanyprj.h"
+
+PLUGIN_VERSION_CHECK(38);
+PLUGIN_SET_INFO(_("Project"), _("Alternative project support."), VERSION,
+		_("Yura Siamashka <yurand2@gmail.com>"));
+
+PluginFields *plugin_fields;
+GeanyData *geany_data;
+GeanyFunctions *geany_functions;
+
+static void
+reload_project()
+{
+	gint idx;
+	gchar *dir;
+	gchar *proj;
+
+	debug("%s\n", __FUNCTION__);
+
+	idx = p_document->get_cur_idx();
+	if (!DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL)
+		return;
+
+	dir = g_path_get_dirname(doc_list[idx].file_name);
+	proj = find_file_path(dir, ".geanyprj");
+
+	// This is not our project, close it as best as we can
+	if (project && project->type != PROJECT_TYPE)
+	{
+		debug("%s Closing unknown project type \n", __FUNCTION__);
+		xproject_close(TRUE);
+	}
+
+	if (!proj)
+	{
+		if (project)
+			xproject_close(TRUE);
+		return;
+	}
+
+	if (!project)
+	{
+		xproject_open(proj);
+	}
+	else if (strcmp(proj, g_current_project->path) != 0)
+	{
+		xproject_close(TRUE);
+		xproject_open(proj);
+	}
+	if (proj)
+		g_free(proj);
+}
+
+static void
+on_doc_save(G_GNUC_UNUSED GObject * obj, gint idx, G_GNUC_UNUSED gpointer user_data)
+{
+	gchar *name;
+
+	debug("%s obj=%p, idx = %d, user_data = %p\n", __FUNCTION__, obj, idx, user_data);
+	g_return_if_fail(DOC_IDX_VALID(idx) && doc_list[idx].file_name != NULL);
+
+	name = g_path_get_basename(doc_list[idx].file_name);
+	if (g_current_project && strcmp(name, ".geanyprj") == 0)
+	{
+		xproject_close(FALSE);
+	}
+	reload_project();
+	xproject_update_tag(doc_list[idx].file_name);
+}
+
+static void
+on_doc_open(G_GNUC_UNUSED GObject * obj, G_GNUC_UNUSED gint idx, G_GNUC_UNUSED gpointer user_data)
+{
+	debug("%s obj=%p, idx = %d, user_data = %p\n", __FUNCTION__, obj, idx, user_data);
+	reload_project();
+}
+
+static void
+on_doc_activate(G_GNUC_UNUSED GObject * obj, G_GNUC_UNUSED gint idx,
+		G_GNUC_UNUSED gpointer user_data)
+{
+	debug("%s obj=%p, idx = %d, user_data = %p\n", __FUNCTION__, obj, idx, user_data);
+	reload_project();
+}
+
+GeanyCallback geany_callbacks[] = {
+	{"document-open", (GCallback) & on_doc_open, TRUE, NULL},
+	{"document-save", (GCallback) & on_doc_save, TRUE, NULL},
+	{"document-activate", (GCallback) & on_doc_activate, TRUE, NULL},
+	{NULL, NULL, FALSE, NULL}
+};
+
+/* Called by Geany to initialize the plugin */
+void
+plugin_init(G_GNUC_UNUSED GeanyData * data)
+{
+	GtkWidget *prj =
+		p_support->lookup_widget(GTK_WIDGET(main_widgets->window), "menu_project1");
+	tools_menu_init();
+
+	gtk_widget_set_child_visible(prj, FALSE);
+	gtk_widget_set_size_request(prj, 0, 0);
+
+	xproject_init();
+	create_sidebar();
+	reload_project();
+}
+
+/* Called by Geany before unloading the plugin. */
+void
+plugin_cleanup()
+{
+	GtkWidget *prj =
+		p_support->lookup_widget(GTK_WIDGET(main_widgets->window), "menu_project1");
+	gtk_widget_set_child_visible(prj, TRUE);
+	gtk_widget_set_size_request(prj, -1, -1);
+
+	tools_menu_uninit();
+
+	if (project)
+	{
+		xproject_close(TRUE);
+	}
+
+	if (g_current_project)
+		geany_project_free(g_current_project);
+	g_current_project = NULL;
+
+	xproject_cleanup();
+	destroy_sidebar();
+}

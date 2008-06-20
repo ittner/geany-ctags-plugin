@@ -1,0 +1,9 @@
+# List of source files containing translatable strings.
+
+src/geanyprj.c
+src/geanyprj.h
+src/menu.c
+src/project.c
+src/sidebar.c
+src/utils.c
+src/xproject.c

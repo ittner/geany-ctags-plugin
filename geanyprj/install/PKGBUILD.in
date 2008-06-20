@@ -1,0 +1,22 @@
+# Contributor: Yura Siamashka <yurand2@gmail.com>
+pkgname=geanyprj
+pkgver=VERSION
+pkgrel=1
+pkgdesc="Alternative project management plugin for Geany IDE"
+arch=(i686 x86_64)
+url="http://users.cosmostv.by/yurand/geanyprj/"
+license=("GPL3")
+depends=('geany>=0.14')
+makedepends=()
+conflicts=()
+replaces=()
+backup=()
+install=
+source=(http://users.cosmostv.by/yurand/$pkgname/$pkgname-$pkgver.tar.gz)
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr || return 1
+  make || return 1
+  make install DESTDIR=$startdir/pkg || return 1
+}

@@ -1,0 +1,13 @@
+These installation instructions are written for a GNU/Linux system.
+
+At the time of this writing, building the plugin requires a recent SVN geany (r2340+)
+installed.
+
+ % configure
+ % make
+ % make install
+
+There is no "make uninstall" target, so if you want to remove the plugin,
+just delete the "geanyprj.so" from geany plugins directory (usually: /usr/lib/geany).
+
+

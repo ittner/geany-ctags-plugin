@@ -1,0 +1,123 @@
+# Belarusian translations for geanyprj package.
+#: ../src/menu.c:178
+msgid ""
+msgstr ""
+"Project-Id-Version: geanyprj 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-04-20 02:19+0300\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Language: Belarusian\n"
+"X-Poedit-Country: BELARUS\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: ../src/geanyprj.c:38 ../src/sidebar.c:458
+msgid "Project"
+msgstr ""
+
+#: ../src/geanyprj.c:38
+msgid "Alternative project support."
+msgstr ""
+
+#: ../src/geanyprj.c:39
+msgid "Yura Siamashka <yurand2@gmail.com>"
+msgstr ""
+
+#: ../src/menu.c:102
+msgid "Project Preferences"
+msgstr ""
+
+#: ../src/menu.c:110 ../src/menu.c:395 ../src/sidebar.c:180
+msgid "New Project"
+msgstr ""
+
+#: ../src/menu.c:119
+msgid "C_reate"
+msgstr ""
+
+#: ../src/menu.c:132
+msgid "Name:"
+msgstr ""
+
+#: ../src/menu.c:141
+msgid "Location:"
+msgstr ""
+
+#: ../src/menu.c:156
+msgid "Choose Project Location"
+msgstr ""
+
+#: ../src/menu.c:164
+msgid "Base path:"
+msgstr ""
+
+#: ../src/menu.c:169
+msgid ""
+"Base directory of all files that make up the project. This can be a new "
+"path, or an existing directory tree. You can use paths relative to the "
+"project filename."
+msgstr ""
+
+#: ../src/menu.c:172
+msgid "Choose Project Base Path"
+msgstr ""
+
+#: ../src/menu.c:179
+msgid "Generate file list on load"
+msgstr ""
+
+#: ../src/menu.c:181
+msgid ""
+"Automatically add files that match project type on project load automaticly. "
+"You can't manually add/remove files if you checked this option, since your "
+"modification will be lost on on next project load"
+msgstr ""
+
+#: ../src/menu.c:189
+msgid "Type:"
+msgstr ""
+
+#: ../src/menu.c:227
+#, c-format
+msgid "Project file \"%s\" already exists"
+msgstr ""
+
+#: ../src/menu.c:383
+msgid "_Project"
+msgstr ""
+
+#: ../src/menu.c:404 ../src/sidebar.c:189
+msgid "Delete Project"
+msgstr ""
+
+#: ../src/menu.c:415 ../src/sidebar.c:202
+msgid "Add File"
+msgstr ""
+
+#: ../src/menu.c:426 ../src/sidebar.c:224
+msgid "Preferences"
+msgstr ""
+
+#: ../src/menu.c:437 ../src/sidebar.c:237
+msgid "Find in Project"
+msgstr ""
+
+#: ../src/sidebar.c:211
+msgid "Remove File"
+msgstr ""
+
+#: ../src/sidebar.c:248
+msgid "H_ide Sidebar"
+msgstr ""
+
+#: ../src/xproject.c:64
+#, c-format
+msgid "Project \"%s\" closed."
+msgstr ""
+
+#: ../src/xproject.c:115
+#, c-format
+msgid "Project \"%s\" opened."
+msgstr ""
