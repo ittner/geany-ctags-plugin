@@ -42,7 +42,7 @@ PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
-PLUGIN_VERSION_CHECK(68)
+PLUGIN_VERSION_CHECK(71)
 
 PLUGIN_SET_INFO(_("GeanySendMail"), _("A little plugin to send the current \
 file as attachment by user's favorite mailer"), "0.4dev", "Frank Lanitz <frank@frank.uvena.de>")
@@ -95,29 +95,30 @@ static void locale_init(void)
 static void
 send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gdata)
 {
-	guint	idx;
+	GeanyDocument *doc;
 	gchar	*locale_filename = NULL;
 	gchar	*command = NULL;
 	GError	*error = NULL;
 	GString	*cmd_str = NULL;
 
 
-	idx = p_document->get_cur_idx();
+	doc = p_document->get_current();
 
-	if (documents[idx]->file_name == NULL)
+
+	if (doc->file_name == NULL)
 	{
 		p_dialogs->show_save_as();
 	}
 	else
 	{
-		p_document->save_file(idx, FALSE);
+		p_document->save_file(doc, FALSE);
 	}
 
-    if (documents[idx]->file_name != NULL)
+    if (doc->file_name != NULL)
 	{
 		if (mailer)
 		{
-			locale_filename = p_utils->get_locale_from_utf8(documents[idx]->file_name);
+			locale_filename = p_utils->get_locale_from_utf8(doc->file_name);
 			cmd_str = g_string_new(mailer);
 
 			if (! p_utils->string_replace_all(cmd_str, "%f", locale_filename))
