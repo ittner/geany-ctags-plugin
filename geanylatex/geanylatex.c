@@ -46,7 +46,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(68)
+PLUGIN_VERSION_CHECK(71)
 PLUGIN_SET_INFO(_("LaTeX"), _("Plugin to make Geany better support LaTeX"), "0.2-dev",
 	    "Frank Lanitz <frank@frank.uvena.de>")
 
@@ -92,11 +92,16 @@ PLUGIN_KEY_GROUP(geanylatex, COUNT_KB)
 static void
 insert_string(gchar *string)
 {
-	gint idx = p_document->get_cur_idx();
-	if (DOC_IDX_VALID(idx))
+	GeanyDocument *doc = NULL;
+
+	doc = p_document->get_current();
+
+	if (doc != NULL)
 	{
-		gint pos = p_sci->get_current_position(documents[idx]->sci);
-		p_sci->insert_text(documents[idx]->sci, pos, string);
+		gint pos = p_sci->get_current_position(doc->sci);
+		p_sci->insert_text(doc->sci, pos, string);
+
+		g_free(doc);
 	}
 }
 
@@ -390,13 +395,13 @@ find_latex_enc(gint l_geany_enc)
 static void
 show_output(const gchar * output, const gchar * name, const gint local_enc)
 {
-	gint idx;
+	GeanyDocument *doc = NULL;
 	GeanyFiletype *ft = p_filetypes->lookup_by_name("LaTeX");
 	
 	if (output)
 	{
-		idx = p_document->new_file(name, ft, output);
-		p_document->set_encoding(idx, p_encodings->get_charset_from_index(latex_encodings[local_enc].geany_enc));
+		doc = p_document->new_file(name, ft, output);
+		p_document->set_encoding(doc, p_encodings->get_charset_from_index(latex_encodings[local_enc].geany_enc));
 	}
 
 }
