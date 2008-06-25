@@ -100,8 +100,6 @@ insert_string(gchar *string)
 	{
 		gint pos = p_sci->get_current_position(doc->sci);
 		p_sci->insert_text(doc->sci, pos, string);
-
-		g_free(doc);
 	}
 }
 
