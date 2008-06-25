@@ -263,19 +263,17 @@ create_popup_menu()
 static void
 update_popup_menu(G_GNUC_UNUSED GtkWidget * popup_menu)
 {
-	gint idx;
 	gboolean cur_file_exists;
 	gboolean badd_file;
+	GeanyDocument *doc;
 
-	idx = p_document->get_cur_idx();
+	doc = p_document->get_current();
 
-	cur_file_exists = DOC_IDX_VALID(idx) &&
-		doc_list[idx].file_name != NULL && g_path_is_absolute(doc_list[idx].file_name);
+	cur_file_exists = doc && doc->file_name != NULL && g_path_is_absolute(doc->file_name);
 
 	badd_file = (g_current_project ? TRUE : FALSE) &&
 		!g_current_project->regenerate &&
-		cur_file_exists &&
-		!g_hash_table_lookup(g_current_project->tags, doc_list[idx].file_name);
+		cur_file_exists && !g_hash_table_lookup(g_current_project->tags, doc->file_name);
 
 	GtkTreeSelection *treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));
 	gboolean bremove_file = (g_current_project ? TRUE : FALSE) &&

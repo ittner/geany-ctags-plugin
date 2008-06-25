@@ -21,6 +21,7 @@
  */
 
 #include <sys/time.h>
+#include <string.h>
 
 #include "geany.h"
 #include "support.h"
@@ -35,7 +36,7 @@
 
 #include "geanyprj.h"
 
-PLUGIN_VERSION_CHECK(38);
+PLUGIN_VERSION_CHECK(71);
 PLUGIN_SET_INFO(_("Project"), _("Alternative project support."), VERSION,
 		_("Yura Siamashka <yurand2@gmail.com>"));
 
@@ -46,17 +47,17 @@ GeanyFunctions *geany_functions;
 static void
 reload_project()
 {
-	gint idx;
 	gchar *dir;
 	gchar *proj;
+	GeanyDocument *doc;
 
 	debug("%s\n", __FUNCTION__);
 
-	idx = p_document->get_cur_idx();
-	if (!DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL)
+	doc = p_document->get_current();
+	if (doc == NULL || doc->file_name == NULL)
 		return;
 
-	dir = g_path_get_dirname(doc_list[idx].file_name);
+	dir = g_path_get_dirname(doc->file_name);
 	proj = find_file_path(dir, ".geanyprj");
 
 	// This is not our project, close it as best as we can
@@ -87,34 +88,32 @@ reload_project()
 }
 
 static void
-on_doc_save(G_GNUC_UNUSED GObject * obj, gint idx, G_GNUC_UNUSED gpointer user_data)
+on_doc_save(G_GNUC_UNUSED GObject * obj, GeanyDocument * doc, G_GNUC_UNUSED gpointer user_data)
 {
 	gchar *name;
 
-	debug("%s obj=%p, idx = %d, user_data = %p\n", __FUNCTION__, obj, idx, user_data);
-	g_return_if_fail(DOC_IDX_VALID(idx) && doc_list[idx].file_name != NULL);
+	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
-	name = g_path_get_basename(doc_list[idx].file_name);
+	name = g_path_get_basename(doc->file_name);
 	if (g_current_project && strcmp(name, ".geanyprj") == 0)
 	{
 		xproject_close(FALSE);
 	}
 	reload_project();
-	xproject_update_tag(doc_list[idx].file_name);
+	xproject_update_tag(doc->file_name);
 }
 
 static void
-on_doc_open(G_GNUC_UNUSED GObject * obj, G_GNUC_UNUSED gint idx, G_GNUC_UNUSED gpointer user_data)
+on_doc_open(G_GNUC_UNUSED GObject * obj, G_GNUC_UNUSED GeanyDocument * doc,
+	    G_GNUC_UNUSED gpointer user_data)
 {
-	debug("%s obj=%p, idx = %d, user_data = %p\n", __FUNCTION__, obj, idx, user_data);
 	reload_project();
 }
 
 static void
-on_doc_activate(G_GNUC_UNUSED GObject * obj, G_GNUC_UNUSED gint idx,
+on_doc_activate(G_GNUC_UNUSED GObject * obj, G_GNUC_UNUSED GeanyDocument * doc,
 		G_GNUC_UNUSED gpointer user_data)
 {
-	debug("%s obj=%p, idx = %d, user_data = %p\n", __FUNCTION__, obj, idx, user_data);
 	reload_project();
 }
 

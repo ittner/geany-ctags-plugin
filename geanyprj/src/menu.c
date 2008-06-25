@@ -82,14 +82,14 @@ build_properties_dialog(gboolean properties)
 	PropertyDialogElements *e;
 	gchar *dir = NULL;
 	gchar *basename = NULL;
-	gint idx;
 	gint i;
+	GeanyDocument *doc;
 
-	idx = p_document->get_cur_idx();
-	if (DOC_IDX_VALID(idx) &&
-	    doc_list[idx].file_name != NULL && g_path_is_absolute(doc_list[idx].file_name))
+	doc = p_document->get_current();
+
+	if (doc && doc->file_name != NULL && g_path_is_absolute(doc->file_name))
 	{
-		dir = g_path_get_dirname(doc_list[idx].file_name);
+		dir = g_path_get_dirname(doc->file_name);
 	}
 	else
 	{
@@ -221,7 +221,7 @@ on_new_project(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer user
 	if (response == GTK_RESPONSE_OK)
 	{
 		gchar *path;
-		struct GeanyProject *prj;
+		struct GeanyPrj *prj;
 
 		path = g_build_filename(gtk_entry_get_text(GTK_ENTRY(e->file_name)), ".geanyprj",
 					NULL);
@@ -321,17 +321,15 @@ on_delete_project(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer u
 void
 on_add_file(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer user_data)
 {
-	gint idx;
+	GeanyDocument *doc;
 
-	idx = p_document->get_cur_idx();
-	g_return_if_fail(DOC_IDX_VALID(idx) &&
-			 doc_list[idx].file_name != NULL &&
-			 g_path_is_absolute(doc_list[idx].file_name));
+	doc = p_document->get_current();
+	g_return_if_fail(doc && doc->file_name != NULL && g_path_is_absolute(doc->file_name));
 
 	if (!g_current_project)
 		return;
 
-	xproject_add_file(doc_list[idx].file_name);
+	xproject_add_file(doc->file_name);
 }
 
 void
@@ -350,19 +348,18 @@ on_find_in_project(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 static void
 update_menu_items()
 {
-	gint idx;
 	gboolean cur_file_exists;
 	gboolean badd_file;
+	GeanyDocument *doc;
 
-	idx = p_document->get_cur_idx();
+	doc = p_document->get_current();
+	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
-	cur_file_exists = DOC_IDX_VALID(idx) &&
-		doc_list[idx].file_name != NULL && g_path_is_absolute(doc_list[idx].file_name);
+	cur_file_exists = doc && doc->file_name != NULL && g_path_is_absolute(doc->file_name);
 
 	badd_file = (g_current_project ? TRUE : FALSE) &&
 		!g_current_project->regenerate &&
-		cur_file_exists &&
-		!g_hash_table_lookup(g_current_project->tags, doc_list[idx].file_name);
+		cur_file_exists && !g_hash_table_lookup(g_current_project->tags, doc->file_name);
 
 	gtk_widget_set_sensitive(menu_items.new_project, TRUE);
 	gtk_widget_set_sensitive(menu_items.delete_project, g_current_project ? TRUE : FALSE);

@@ -20,6 +20,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
 #include <sys/time.h>
 
 #include "geany.h"
@@ -39,7 +40,7 @@ extern GeanyData *geany_data;
 extern GeanyFunctions *geany_functions;
 
 
-struct GeanyProject *g_current_project = NULL;
+struct GeanyPrj *g_current_project = NULL;
 static GPtrArray *g_projects = NULL;
 
 static void
@@ -96,14 +97,14 @@ void
 xproject_open(const gchar * path)
 {
 	guint i;
-	struct GeanyProject *p = NULL;
+	struct GeanyPrj *p = NULL;
 	debug("%s\n", __FUNCTION__);
 
 	for (i = 0; i < g_projects->len; i++)
 	{
-		if (strcmp(path, ((struct GeanyProject *) g_projects->pdata[i])->path) == 0)
+		if (strcmp(path, ((struct GeanyPrj *) g_projects->pdata[i])->path) == 0)
 		{
-			p = (struct GeanyProject *) g_projects->pdata[i];
+			p = (struct GeanyPrj *) g_projects->pdata[i];
 			g_ptr_array_remove_index(g_projects, i);
 			break;
 		}
@@ -116,7 +117,7 @@ xproject_open(const gchar * path)
 
 	p_ui->set_statusbar(TRUE, _("Project \"%s\" opened."), p->name);
 
-	project = g_new0(struct _GeanyProject, 1);
+	project = g_new0(struct GeanyProject, 1);
 	project->type = PROJECT_TYPE;
 	project->name = g_strdup(p->name);
 	project->description = g_strdup(p->description);
@@ -148,7 +149,7 @@ xproject_update_tag(const gchar * filename)
 	for (i = 0; i < g_projects->len; i++)
 	{
 		tm_obj = (TMWorkObject *)
-			g_hash_table_lookup(((struct GeanyProject *) (g_projects->pdata[i]))->tags,
+			g_hash_table_lookup(((struct GeanyPrj *) (g_projects->pdata[i]))->tags,
 					    filename);
 		if (tm_obj)
 		{
@@ -217,7 +218,7 @@ xproject_cleanup()
 	guint i;
 	for (i = 0; i < g_projects->len; i++)
 	{
-		geany_project_free(((struct GeanyProject *) (g_projects->pdata[i])));
+		geany_project_free(((struct GeanyPrj *) (g_projects->pdata[i])));
 	}
 	g_ptr_array_free(g_projects, TRUE);
 	g_projects = NULL;

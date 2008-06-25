@@ -47,7 +47,7 @@ enum
 	NEW_PROJECT_TYPE_SIZE
 };
 
-struct GeanyProject
+struct GeanyPrj
 {
 	gchar *path;		///< path to disk file
 
@@ -67,27 +67,27 @@ extern const gchar *project_type_string[NEW_PROJECT_TYPE_SIZE];
 extern void *project_type_filter[NEW_PROJECT_TYPE_SIZE];
 
 // project.c
-struct GeanyProject *geany_project_new();
-struct GeanyProject *geany_project_load(const gchar * path);
-void geany_project_free(struct GeanyProject *prj);
+struct GeanyPrj *geany_project_new();
+struct GeanyPrj *geany_project_load(const gchar * path);
+void geany_project_free(struct GeanyPrj *prj);
 
-void geany_project_regenerate_file_list(struct GeanyProject *prj);
+void geany_project_regenerate_file_list(struct GeanyPrj *prj);
 
-gboolean geany_project_add_file(struct GeanyProject *prj, const gchar * path);
-gboolean geany_project_remove_file(struct GeanyProject *prj, const gchar * path);
-void geany_project_save(struct GeanyProject *prj);
+gboolean geany_project_add_file(struct GeanyPrj *prj, const gchar * path);
+gboolean geany_project_remove_file(struct GeanyPrj *prj, const gchar * path);
+void geany_project_save(struct GeanyPrj *prj);
 
-void geany_project_set_path(struct GeanyProject *prj, const gchar * path);
-void geany_project_set_name(struct GeanyProject *prj, const gchar * name);
-void geany_project_set_type_int(struct GeanyProject *prj, gint val);
-void geany_project_set_type_string(struct GeanyProject *prj, const gchar * val);
-void geany_project_set_regenerate(struct GeanyProject *prj, gboolean val);
+void geany_project_set_path(struct GeanyPrj *prj, const gchar * path);
+void geany_project_set_name(struct GeanyPrj *prj, const gchar * name);
+void geany_project_set_type_int(struct GeanyPrj *prj, gint val);
+void geany_project_set_type_string(struct GeanyPrj *prj, const gchar * val);
+void geany_project_set_regenerate(struct GeanyPrj *prj, gboolean val);
 
-void geany_project_set_description(struct GeanyProject *prj, const gchar * description);
-void geany_project_set_base_path(struct GeanyProject *prj, const gchar * base_path);
-void geany_project_set_run_cmd(struct GeanyProject *prj, const gchar * run_cmd);
+void geany_project_set_description(struct GeanyPrj *prj, const gchar * description);
+void geany_project_set_base_path(struct GeanyPrj *prj, const gchar * base_path);
+void geany_project_set_run_cmd(struct GeanyPrj *prj, const gchar * run_cmd);
 
-void geany_project_set_tags_from_list(struct GeanyProject *prj, GSList * files);
+void geany_project_set_tags_from_list(struct GeanyPrj *prj, GSList * files);
 
 
 // sidebar.c
@@ -130,6 +130,6 @@ GSList *get_file_list(const gchar * path, guint * length, gboolean(*func) (const
 		      GError ** error);
 
 
-extern struct GeanyProject *g_current_project;
+extern struct GeanyPrj *g_current_project;
 
 #endif

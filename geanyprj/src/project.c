@@ -20,6 +20,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
 #include <sys/time.h>
 
 #include "geany.h"
@@ -101,21 +102,21 @@ free_tag_object(gpointer obj)
 	p_tm->workspace_remove_object((TMWorkObject *) obj, TRUE, FALSE);
 }
 
-struct GeanyProject *
+struct GeanyPrj *
 geany_project_new()
 {
-	struct GeanyProject *ret;
+	struct GeanyPrj *ret;
 
-	ret = (struct GeanyProject *) g_new0(struct GeanyProject, 1);
+	ret = (struct GeanyPrj *) g_new0(struct GeanyPrj, 1);
 	ret->tags = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, free_tag_object);
 
 	return ret;
 }
 
-struct GeanyProject *
+struct GeanyPrj *
 geany_project_load(const gchar * path)
 {
-	struct GeanyProject *ret;
+	struct GeanyPrj *ret;
 	TMWorkObject *tm_obj = NULL;
 	GKeyFile *config;
 	gint i = 0;
@@ -198,7 +199,7 @@ geany_project_load(const gchar * path)
 }
 
 void
-geany_project_regenerate_file_list(struct GeanyProject *prj)
+geany_project_regenerate_file_list(struct GeanyPrj *prj)
 {
 	GSList *lst;
 
@@ -213,7 +214,7 @@ geany_project_regenerate_file_list(struct GeanyProject *prj)
 }
 
 void
-geany_project_set_path(struct GeanyProject *prj, const gchar * path)
+geany_project_set_path(struct GeanyPrj *prj, const gchar * path)
 {
 	gchar *norm_path = normpath(path);
 	if (prj->path)
@@ -228,7 +229,7 @@ geany_project_set_path(struct GeanyProject *prj, const gchar * path)
 }
 
 void
-geany_project_set_name(struct GeanyProject *prj, const gchar * name)
+geany_project_set_name(struct GeanyPrj *prj, const gchar * name)
 {
 	if (prj->name)
 		g_free(prj->name);
@@ -246,13 +247,13 @@ geany_project_set_name(struct GeanyProject *prj, const gchar * name)
 }
 
 void
-geany_project_set_type_int(struct GeanyProject *prj, gint val)
+geany_project_set_type_int(struct GeanyPrj *prj, gint val)
 {
 	prj->type = val;
 }
 
 void
-geany_project_set_type_string(struct GeanyProject *prj, const gchar * val)
+geany_project_set_type_string(struct GeanyPrj *prj, const gchar * val)
 {
 	guint i;
 
@@ -264,13 +265,13 @@ geany_project_set_type_string(struct GeanyProject *prj, const gchar * val)
 }
 
 void
-geany_project_set_regenerate(struct GeanyProject *prj, gboolean val)
+geany_project_set_regenerate(struct GeanyPrj *prj, gboolean val)
 {
 	prj->regenerate = val;
 }
 
 void
-geany_project_set_description(struct GeanyProject *prj, const gchar * description)
+geany_project_set_description(struct GeanyPrj *prj, const gchar * description)
 {
 	if (prj->description)
 		g_free(prj->description);
@@ -288,7 +289,7 @@ geany_project_set_description(struct GeanyProject *prj, const gchar * descriptio
 }
 
 void
-geany_project_set_base_path(struct GeanyProject *prj, const gchar * base_path)
+geany_project_set_base_path(struct GeanyPrj *prj, const gchar * base_path)
 {
 	if (prj->base_path)
 		g_free(prj->base_path);
@@ -314,7 +315,7 @@ geany_project_set_base_path(struct GeanyProject *prj, const gchar * base_path)
 }
 
 void
-geany_project_set_run_cmd(struct GeanyProject *prj, const gchar * run_cmd)
+geany_project_set_run_cmd(struct GeanyPrj *prj, const gchar * run_cmd)
 {
 	if (prj->run_cmd)
 		g_free(prj->run_cmd);
@@ -334,7 +335,7 @@ geany_project_set_run_cmd(struct GeanyProject *prj, const gchar * run_cmd)
 
 // list in utf8
 void
-geany_project_set_tags_from_list(struct GeanyProject *prj, GSList * files)
+geany_project_set_tags_from_list(struct GeanyPrj *prj, GSList * files)
 {
 	GSList *tmp;
 	gchar *locale_filename;
@@ -360,7 +361,7 @@ geany_project_set_tags_from_list(struct GeanyProject *prj, GSList * files)
 
 
 void
-geany_project_free(struct GeanyProject *prj)
+geany_project_free(struct GeanyPrj *prj)
 {
 	debug("%s prj=%p\n", __FUNCTION__, prj);
 	g_return_if_fail(prj);
@@ -382,7 +383,7 @@ geany_project_free(struct GeanyProject *prj)
 }
 
 gboolean
-geany_project_add_file(struct GeanyProject *prj, const gchar * path)
+geany_project_add_file(struct GeanyPrj *prj, const gchar * path)
 {
 	gchar *filename;
 	TMWorkObject *tm_obj = NULL;
@@ -417,7 +418,7 @@ geany_project_add_file(struct GeanyProject *prj, const gchar * path)
 
 struct CFGData
 {
-	struct GeanyProject *prj;
+	struct GeanyPrj *prj;
 	GKeyFile *config;
 	int i;
 };
@@ -441,7 +442,7 @@ geany_project_save_files(gpointer key, G_GNUC_UNUSED gpointer value, gpointer us
 }
 
 gboolean
-geany_project_remove_file(struct GeanyProject *prj, const gchar * path)
+geany_project_remove_file(struct GeanyPrj *prj, const gchar * path)
 {
 	if (!g_hash_table_remove(prj->tags, path))
 	{
@@ -453,7 +454,7 @@ geany_project_remove_file(struct GeanyProject *prj, const gchar * path)
 }
 
 void
-geany_project_save(struct GeanyProject *prj)
+geany_project_save(struct GeanyPrj *prj)
 {
 	GKeyFile *config;
 	struct CFGData data;
