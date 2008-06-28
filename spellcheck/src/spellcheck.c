@@ -54,7 +54,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(71)
+PLUGIN_VERSION_CHECK(72)
 PLUGIN_SET_INFO(_("Spell Check"), _("Checks the spelling of the current document."), "0.2",
 			_("The Geany developer team"))
 
@@ -66,11 +66,27 @@ typedef struct
 	gboolean check_while_typing;
 	gulong signal_id;
 	GPtrArray *dicts;
+	GtkWidget *edit_menu;
+	GtkWidget *edit_menu_sep;
+	GtkWidget *edit_menu_sub;
 	EnchantBroker *broker;
 	EnchantDict *dict;
 } SpellCheck;
 static SpellCheck *sc;
 
+#define MAX_MENU_SUGGESTIONS 10
+typedef struct
+{
+	gint pos;
+	GeanyDocument *doc;
+	gchar *suggs[MAX_MENU_SUGGESTIONS];
+	gchar *word;
+} SpellClickInfo;
+static SpellClickInfo clickinfo;
+
+
+static void on_populate_edit_menu(GObject *obj, const gchar *word, gint pos,
+								  GeanyDocument *doc, gpointer user_data);
 
 /* Keybinding(s) */
 enum
@@ -80,6 +96,13 @@ enum
 };
 PLUGIN_KEY_GROUP(spellcheck, KB_COUNT)
 
+
+
+PluginCallback plugin_callbacks[] =
+{
+    { "populate-edit-menu", (GCallback) &on_populate_edit_menu, FALSE, NULL },
+    { NULL, NULL, FALSE, NULL }
+};
 
 
 /* currently unused */
@@ -103,6 +126,140 @@ static void set_up_aspell_prefix(AspellConfig *config)
 	RegCloseKey(hkey);
 }
 #endif
+
+
+static void clear_indicators_on_range(GeanyDocument *doc, gint start, gint len)
+{
+	g_return_if_fail(doc != NULL);
+
+	if (len > 0)
+	{
+		p_sci->send_message(doc->sci, SCI_STARTSTYLING, start, INDIC2_MASK);
+		p_sci->send_message(doc->sci, SCI_SETSTYLING, len, 0);
+	}
+}
+
+
+static void clear_indicators_on_line(GeanyDocument *doc, gint line_number)
+{
+	gint start_pos, length;
+
+	g_return_if_fail(doc != NULL);
+
+	start_pos = p_sci->get_position_from_line(doc->sci, line_number);
+	length = p_sci->get_line_length(doc->sci, line_number);
+
+	clear_indicators_on_range(doc, start_pos, length);
+}
+
+
+
+static void on_menu_suggestion_item_activate(GtkMenuItem *menuitem, gpointer gdata)
+{
+	gchar *sugg = gdata;
+	gint startword, endword;
+
+	if (clickinfo.doc == NULL || clickinfo.pos == -1)
+	{
+		g_free(sugg);
+		return;
+	}
+
+	startword = p_sci->send_message(clickinfo.doc->sci, SCI_WORDSTARTPOSITION, clickinfo.pos, 0);
+	endword = p_sci->send_message(clickinfo.doc->sci, SCI_WORDENDPOSITION, clickinfo.pos, 0);
+
+	if (startword != endword)
+	{
+		p_sci->set_selection_start(clickinfo.doc->sci, startword);
+		p_sci->set_selection_end(clickinfo.doc->sci, endword);
+		p_sci->replace_sel(clickinfo.doc->sci, sugg);
+
+		clear_indicators_on_range(clickinfo.doc, startword, endword - startword);
+	}
+}
+
+
+static void on_menu_addword_item_activate(GtkMenuItem *menuitem, gpointer gdata)
+{
+	gint startword, endword;
+
+	if (clickinfo.doc == NULL || clickinfo.word == NULL || clickinfo.pos == -1)
+		return;
+
+	enchant_dict_add_to_pwl(sc->dict, clickinfo.word, -1);
+
+	startword = p_sci->send_message(clickinfo.doc->sci, SCI_WORDSTARTPOSITION, clickinfo.pos, 0);
+	endword = p_sci->send_message(clickinfo.doc->sci, SCI_WORDENDPOSITION, clickinfo.pos, 0);
+	if (startword != endword)
+	{
+		clear_indicators_on_range(clickinfo.doc, startword, endword - startword);
+	}
+}
+
+
+static void on_populate_edit_menu(GObject *obj, const gchar *word, gint pos,
+								  GeanyDocument *doc, gpointer user_data)
+{
+	gsize n_suggs, i;
+	gchar **tmp_suggs;
+
+	if (! NZV(word) || enchant_dict_check(sc->dict, word, -1) == 0)
+	{
+		gtk_widget_hide(sc->edit_menu);
+		gtk_widget_hide(sc->edit_menu_sep);
+		return;
+	}
+
+	tmp_suggs = enchant_dict_suggest(sc->dict, word, -1, &n_suggs);
+
+	if (tmp_suggs != NULL)
+	{
+		GtkWidget *menu_item, *image;
+		gchar *label;
+
+		clickinfo.pos = pos;
+		clickinfo.doc = doc;
+		setptr(clickinfo.word, g_strdup(word));
+
+		if (GTK_IS_WIDGET(sc->edit_menu_sub))
+			gtk_widget_destroy(sc->edit_menu_sub);
+
+		sc->edit_menu_sub = gtk_menu_new();
+		gtk_menu_item_set_submenu(GTK_MENU_ITEM(sc->edit_menu), sc->edit_menu_sub);
+
+		/* TODO do we need more than 10 suggestions? gtkspell offers additional suggestions
+		 * in another sub menu, should we too? */
+		for (i = 0; i < MIN(n_suggs, 10); i++)
+		{
+			/* keep the suggestions in a static array for the callback function */
+			g_free(clickinfo.suggs[i]);
+			clickinfo.suggs[i] = g_strdup(tmp_suggs[i]);
+
+			menu_item = gtk_menu_item_new_with_label(clickinfo.suggs[i]);
+			gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
+			g_signal_connect((gpointer) menu_item, "activate",
+				G_CALLBACK(on_menu_suggestion_item_activate), clickinfo.suggs[i]);
+		}
+		menu_item = gtk_separator_menu_item_new();
+		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
+
+		image = gtk_image_new_from_stock(GTK_STOCK_ADD, GTK_ICON_SIZE_MENU);
+
+		label = g_strdup_printf(_("Add \"%s\" to Dictionary"), word);
+		menu_item = gtk_image_menu_item_new_with_label(label);
+		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item), image);
+		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
+		g_signal_connect((gpointer) menu_item, "activate",
+			G_CALLBACK(on_menu_addword_item_activate), NULL);
+
+		gtk_widget_show(sc->edit_menu);
+		gtk_widget_show(sc->edit_menu_sep);
+		gtk_widget_show_all(sc->edit_menu_sub);
+
+		enchant_dict_free_string_list(sc->dict, tmp_suggs);
+		g_free(label);
+	}
+}
 
 
 static void dict_describe(const gchar* const lang, const gchar* const name,
@@ -245,22 +402,6 @@ static void perform_check(GeanyDocument *doc)
 	p_msgwindow->switch_tab(MSG_MESSAGE, FALSE);
 
 	check_document(doc);
-}
-
-
-static void clear_indicators_on_line(GeanyDocument *doc, gint line_number)
-{
-	glong start_pos, length;
-
-	g_return_if_fail(doc != NULL);
-
-	start_pos = p_sci->get_position_from_line(doc->sci, line_number);
-	length = p_sci->get_line_length(doc->sci, line_number);
-	if (length > 0)
-	{
-		p_sci->send_message(doc->sci, SCI_STARTSTYLING, start_pos, INDIC2_MASK);
-		p_sci->send_message(doc->sci, SCI_SETSTYLING, length, 0);
-	}
 }
 
 
@@ -458,6 +599,20 @@ static void create_dicts_array()
 }
 
 
+static void create_edit_menu()
+{
+	sc->edit_menu = gtk_image_menu_item_new_from_stock(GTK_STOCK_SPELL_CHECK, NULL);
+	gtk_container_add(GTK_CONTAINER(main_widgets->editor_menu), sc->edit_menu);
+	gtk_menu_reorder_child(GTK_MENU(main_widgets->editor_menu), sc->edit_menu, 0);
+
+	sc->edit_menu_sep = gtk_separator_menu_item_new();
+	gtk_container_add(GTK_CONTAINER(main_widgets->editor_menu), sc->edit_menu_sep);
+	gtk_menu_reorder_child(GTK_MENU(main_widgets->editor_menu), sc->edit_menu_sep, 1);
+
+	gtk_widget_show_all(sc->edit_menu);
+}
+
+
 static GtkWidget *create_menu()
 {
 	GtkWidget *sp_item, *menu, *subitem;
@@ -494,6 +649,7 @@ void plugin_init(GeanyData *data)
 {
 	GtkWidget *sp_item;
 	GKeyFile *config = g_key_file_new();
+	guint i;
 
 	sc = g_new0(SpellCheck, 1);
 
@@ -517,8 +673,15 @@ void plugin_init(GeanyData *data)
 		return;
 	}
 
+	for (i = 0; i < MAX_MENU_SUGGESTIONS; i++)
+	{
+		clickinfo.suggs[i] = NULL;
+	}
+	clickinfo.word = NULL;
+
 	create_dicts_array();
 
+	create_edit_menu();
 	sp_item = create_menu();
 	gtk_widget_show_all(sp_item);
 
@@ -578,6 +741,11 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 void plugin_cleanup(void)
 {
 	guint i;
+	for (i = 0; i < MAX_MENU_SUGGESTIONS; i++)
+	{
+		clickinfo.suggs[i] = NULL;
+	}
+	g_free(clickinfo.word);
 	for (i = 0; i < sc->dicts->len; i++)
 	{
 		g_free(g_ptr_array_index(sc->dicts, i));
@@ -585,6 +753,9 @@ void plugin_cleanup(void)
 	g_ptr_array_free(sc->dicts, TRUE);
 
 	g_signal_handler_disconnect(main_widgets->window, sc->signal_id);
+
+	gtk_widget_destroy(sc->edit_menu);
+	gtk_widget_destroy(sc->edit_menu_sep);
 
 	enchant_broker_free_dict(sc->broker, sc->dict);
 	enchant_broker_free(sc->broker);

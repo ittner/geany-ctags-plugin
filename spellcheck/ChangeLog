@@ -1,3 +1,12 @@
+2008-06-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/spellcheck.c:
+   Use "populate-edit-menu" signal to add a "Spell Check" menu item to
+   the editing menu and provide a submenu with suggestions for
+   misspelled words and allow to add the word to the personal
+   dictionary.
+
+
 2008-06-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * README, configure.in, src/Makefile.am, src/spellcheck.c:
