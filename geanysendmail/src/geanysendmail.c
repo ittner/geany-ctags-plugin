@@ -58,7 +58,7 @@ PLUGIN_KEY_GROUP(sendmail, COUNT_KB)
 
 static gchar *config_file = NULL;
 static gchar *mailer = NULL;
-gboolean icon_in_toolbar = FALSE;
+gboolean icon_in_toolbar = FALSE;	
 /* Needed global to remove from toolbar again */
 GtkWidget *mailbutton = NULL;
 GtkWidget *separator = NULL;
@@ -186,7 +186,7 @@ void show_icon()
 	gtk_toolbar_insert(GTK_TOOLBAR(main_widgets->toolbar), GTK_TOOL_ITEM(mailbutton), number_of_icons - 1);
 	g_signal_connect (G_OBJECT(mailbutton), "clicked", G_CALLBACK(send_as_attachment), NULL);
 	gtk_widget_show_all (mailbutton);
-
+	
 	separator2 = (GtkWidget*) gtk_separator_tool_item_new();
 	gtk_widget_show (separator2);
 	gtk_toolbar_insert(GTK_TOOLBAR(main_widgets->toolbar), GTK_TOOL_ITEM(separator2), number_of_icons);
@@ -241,7 +241,7 @@ on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
 		{
 			icon_in_toolbar = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.checkbox_icon_to_toolbar));
 		}
-
+			
 		g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 		g_key_file_set_string(config, "tools", "mailer", mailer);
 		g_key_file_set_boolean(config, "icon", "show_icon", icon_in_toolbar);
@@ -272,7 +272,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	tooltip = gtk_tooltips_new();
 
 	vbox = gtk_vbox_new(FALSE, 6);
-
+	
 	/* add a label and a text entry to the dialog */
 	label1 = gtk_label_new(_("Path and options for the mail client:"));
 	gtk_widget_show(label1);
@@ -293,13 +293,13 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 			     NULL);
 	gtk_button_set_focus_on_click(GTK_BUTTON(pref_widgets.checkbox_icon_to_toolbar), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pref_widgets.checkbox_icon_to_toolbar), icon_in_toolbar);
-	gtk_widget_show(pref_widgets.checkbox_icon_to_toolbar);
-
+	gtk_widget_show(pref_widgets.checkbox_icon_to_toolbar); 
+	
 	gtk_container_add(GTK_CONTAINER(vbox), label1);
 	gtk_container_add(GTK_CONTAINER(vbox), pref_widgets.entry);
 	gtk_container_add(GTK_CONTAINER(vbox), label2);
 	gtk_box_pack_start(GTK_BOX(vbox), pref_widgets.checkbox_icon_to_toolbar, TRUE, FALSE, 2);
-
+		
 	gtk_widget_show(vbox);
 
 	g_signal_connect(dialog, "response", G_CALLBACK(on_configure_response), NULL);
