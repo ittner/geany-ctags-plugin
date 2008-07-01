@@ -12,6 +12,7 @@
 #define NEED_FAIL_ARG_TYPE
 #include "glspi.h"
 
+#include "templates.h"
 
 
 
@@ -31,11 +32,11 @@ static gint glspi_pluginver(lua_State* L)
 static gint glspi_tools(lua_State* L)
 {
 	lua_newtable(L);
-	SetTableStr("browser", prefs->tools_browser_cmd);
-	SetTableStr("make",    prefs->tools_make_cmd);
-	SetTableStr("term",    prefs->tools_term_cmd);
-	SetTableStr("grep",    prefs->tools_grep_cmd);
-	SetTableStr("action",  prefs->context_action_cmd);
+	SetTableStr("browser", geany_data->tool_prefs->browser_cmd);
+	SetTableStr("make",    geany_data->tool_prefs->make_cmd);
+	SetTableStr("term",    geany_data->tool_prefs->term_cmd);
+	SetTableStr("grep",    geany_data->tool_prefs->grep_cmd);
+	SetTableStr("action",  geany_data->tool_prefs->context_action_cmd);
 	return 1;
 }
 
@@ -43,11 +44,11 @@ static gint glspi_tools(lua_State* L)
 static gint glspi_template(lua_State* L)
 {
 	lua_newtable(L);
-	SetTableStr("developer", prefs->template_developer);
-	SetTableStr("company",   prefs->template_company);
-	SetTableStr("mail",      prefs->template_mail);
-	SetTableStr("initial",   prefs->template_initial);
-	SetTableStr("version",   prefs->template_version);
+	SetTableStr("developer", geany_data->template_prefs->developer);
+	SetTableStr("company",   geany_data->template_prefs->company);
+	SetTableStr("mail",      geany_data->template_prefs->mail);
+	SetTableStr("initial",   geany_data->template_prefs->initials);
+	SetTableStr("version",   geany_data->template_prefs->version);
 	return 1;
 }
 
@@ -144,7 +145,7 @@ static gint glspi_signal(lua_State* L) {
 	if (!lua_isstring(L,1) ) {	return FAIL_STRING_ARG(1); }
 	widname=lua_tostring(L,1);
 	signame=lua_tostring(L,2);
-	w=p_support->lookup_widget(app->window, widname);
+	w=p_support->lookup_widget(main_widgets->window, widname);
 	if (!w) {
 		lua_pushfstring(L, _("Error in module \"%s\" at function %s():\n"
 			"widget \"%s\"  not found for argument #1.\n "),
@@ -581,7 +582,7 @@ static gint glspi_keygrab(lua_State* L)
 		gint pos=p_sci->get_position_from_line(doc->sci, fvl+1);
 		sci_send_message(doc->sci,SCI_CALLTIPSHOW,pos+3, (gint)prompt);
 	}
-	gdk_window_add_filter(app->window->window, keygrab_cb, &km);
+	gdk_window_add_filter(main_widgets->window->window, keygrab_cb, &km);
 	do {
 		while (gtk_events_pending()) {
 			if (km.group==2) { break; }
@@ -591,7 +592,7 @@ static gint glspi_keygrab(lua_State* L)
 		dosleep();
 	} while (km.group!=2);
 
-	gdk_window_remove_filter(app->window->window, keygrab_cb, &km);
+	gdk_window_remove_filter(main_widgets->window->window, keygrab_cb, &km);
 	if (prompt && doc && doc->is_valid) {
 	p_sci->send_command(doc->sci, SCI_CALLTIPCANCEL);
 	}

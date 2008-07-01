@@ -7,6 +7,7 @@
 #define NEED_FAIL_ARG_TYPE
 #include "glspi.h"
 
+#include "editor.h"
 
 
 
@@ -48,7 +49,7 @@ static void repaint_scintilla(void)
 	document* doc=p_document->get_current();
 	if ( doc && doc->is_valid ) {
 		gdk_window_invalidate_rect(GTK_WIDGET(doc->sci)->window, NULL, TRUE);
-		gdk_window_process_updates(GTK_WIDGET(doc->sci)->window, TRUE); 
+		gdk_window_process_updates(GTK_WIDGET(doc->sci)->window, TRUE);
 	}
 }
 
@@ -60,7 +61,7 @@ static gboolean glspi_show_question(gchar*title, gchar*question, gboolean defaul
 	GtkWidget *dialog, *yes_btn, *no_btn;
 	GtkResponseType dv, rv;
 	dv=default_result?GTK_RESPONSE_YES:GTK_RESPONSE_NO;
-	dialog=gtk_message_dialog_new(GTK_WINDOW(app->window),
+	dialog=gtk_message_dialog_new(GTK_WINDOW(main_widgets->window),
 		GTK_DIALOG_DESTROY_WITH_PARENT|GTK_DIALOG_MODAL,
 			GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, "%s", title);
 	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", question);
@@ -99,25 +100,25 @@ static gboolean glspi_goto_error(gchar *fn, gint line)
 
 /*
   Display a message box showing any script error...
-  Depending on the type of error, Lua will sometimes prepend the filename 
+  Depending on the type of error, Lua will sometimes prepend the filename
   to the message. If need_name is TRUE then we assume that Lua didn't add
   the filename, so we prepend it ourself. If need_name is FALSE, then the
-  error message likely contains a filename *and* a line number, so we 
-  give the user an option to automatically open the file and scroll to 
+  error message likely contains a filename *and* a line number, so we
+  give the user an option to automatically open the file and scroll to
   the offending line.
 */
 static void glspi_script_error(gchar *script_file, const gchar *msg, gboolean need_name, gint line)
 {
 	GtkWidget *dialog;
 	if (need_name) {
-		dialog=gtk_message_dialog_new(GTK_WINDOW(app->window),
+		dialog=gtk_message_dialog_new(GTK_WINDOW(main_widgets->window),
 			GTK_DIALOG_DESTROY_WITH_PARENT|GTK_DIALOG_MODAL,
 			GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, _("Lua script error:"));
 		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
 				"%s:\n%s", script_file, msg);
 	} else {
 		GtkWidget *open_btn, *cancel_btn;
-		dialog=gtk_message_dialog_new(GTK_WINDOW(app->window),
+		dialog=gtk_message_dialog_new(GTK_WINDOW(main_widgets->window),
 			GTK_DIALOG_DESTROY_WITH_PARENT|GTK_DIALOG_MODAL,
 			GTK_MESSAGE_ERROR, GTK_BUTTONS_NONE, _("Lua script error:"));
 		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", msg);
@@ -176,7 +177,7 @@ static gchar *glspi_get_error_info(lua_State* L, gint *line)
 
 static gint glspi_timeout(lua_State* L)
 {
-	if (( lua_gettop(L) > 0 ) && lua_isnumber(L,1)) { 
+	if (( lua_gettop(L) > 0 ) && lua_isnumber(L,1)) {
 		gint n=lua_tonumber(L,1);
 		if (n>=0) {
 			StateInfo*si=find_state(L);
@@ -234,8 +235,8 @@ static void debug_hook(lua_State *L, lua_Debug *ar)
 			}
 		}
 		if (si->counter > 100000) {
-			gdk_window_invalidate_rect(app->window->window, NULL, TRUE);
-			gdk_window_process_updates(app->window->window, TRUE); 
+			gdk_window_invalidate_rect(main_widgets->window->window, NULL, TRUE);
+			gdk_window_process_updates(main_widgets->window->window, TRUE);
 			si->counter=0;
 		} else si->counter++;
 	}
@@ -340,11 +341,11 @@ static gint glspi_traceback(lua_State *L)
 */
 
 static void set_string_token(lua_State *L, gchar*name, gchar*value)
-{	
+{
 	lua_getglobal(L, LUA_MODULE_NAME);
 	if (lua_istable(L, -1)) {
 		lua_pushstring(L,name);
-		lua_pushstring(L,value);		
+		lua_pushstring(L,value);
 		lua_settable(L, -3);
 	} else {
 		g_printerr("*** %s: Failed to set value for %s\n", PLUGIN_NAME, name);
@@ -354,11 +355,11 @@ static void set_string_token(lua_State *L, gchar*name, gchar*value)
 
 
 static void set_numeric_token(lua_State *L, gchar*name, gint value)
-{	
+{
 	lua_getglobal(L, LUA_MODULE_NAME);
 	if (lua_istable(L, -1)) {
 		lua_pushstring(L,name);
-		push_number(L,value);		
+		push_number(L,value);
 		lua_settable(L, -3);
 	} else {
 		g_printerr("*** %s: Failed to set value for %s\n", PLUGIN_NAME, name);
@@ -368,11 +369,11 @@ static void set_numeric_token(lua_State *L, gchar*name, gint value)
 
 
 static void set_boolean_token(lua_State *L, gchar*name, gboolean value)
-{	
+{
 	lua_getglobal(L, LUA_MODULE_NAME);
 	if (lua_istable(L, -1)) {
 		lua_pushstring(L,name);
-		lua_pushboolean(L,value);		
+		lua_pushboolean(L,value);
 		lua_settable(L, -3);
 	} else {
 		g_printerr("*** %s: Failed to set value for %s\n", PLUGIN_NAME, name);
@@ -382,7 +383,7 @@ static void set_boolean_token(lua_State *L, gchar*name, gboolean value)
 
 
 static void set_keyfile_token(lua_State *L, gchar*name, GKeyFile* value)
-{	
+{
 	if (!value) {return;}
 	lua_getglobal(L, LUA_MODULE_NAME);
 	if (lua_istable(L, -1)) {
@@ -429,7 +430,7 @@ static gint glspi_init_module(lua_State *L, gchar *script_file, gint caller, GKe
 	set_string_token(L,tokenDirSep, G_DIR_SEPARATOR_S);
 	set_boolean_token(L,tokenRectSel,FALSE);
 	set_numeric_token(L,tokenCaller, caller);
-	glspi_init_gsdlg_module(L,glspi_pause_timer, geany_data?GTK_WINDOW(app->window):NULL);
+	glspi_init_gsdlg_module(L,glspi_pause_timer, geany_data?GTK_WINDOW(main_widgets->window):NULL);
 	glspi_init_kfile_module(L,&glspi_kfile_assign);
 	set_keyfile_token(L,tokenProject, proj);
 	set_string_token(L,tokenScript,script_file);
@@ -470,7 +471,7 @@ void glspi_run_script(gchar *script_file, gint caller, GKeyFile*proj, gchar *scr
 		status = lua_pcall(L, 0, 0, base);
 		lua_remove(L, base); /* remove traceback function */
 		if (0 == status) {
-			status = lua_pcall(L, 0, 0, 0);	
+			status = lua_pcall(L, 0, 0, 0);
 		} else {
 			lua_gc(L, LUA_GCCOLLECT, 0); /* force garbage collection if error */
 			show_error(L, script_file);

@@ -10,7 +10,7 @@
 
 
 #define DOCS ((document*)(doc_array->data))
-#define NOTEBOOK GTK_NOTEBOOK(app->notebook)
+#define NOTEBOOK GTK_NOTEBOOK(main_widgets->notebook)
 
 
 #ifdef G_OS_WIN32

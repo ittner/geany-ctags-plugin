@@ -32,6 +32,7 @@ PLUGIN_EXPORT
 const gchar* glspi_version = VERSION;
 
 GeanyData *glspi_geany_data=NULL;
+GeanyFunctions *glspi_geany_functions=NULL;
 
 static struct {
 	GtkWidget *menu_item;
@@ -39,8 +40,8 @@ static struct {
 	gchar *on_saved_script;
 	gchar *on_created_script;
 	gchar *on_opened_script;
-	gchar *on_activated_script;	
-	gchar *on_init_script;	
+	gchar *on_activated_script;
+	gchar *on_init_script;
 	gchar *on_cleanup_script;
 	gchar *on_configure_script;
 	gchar *on_proj_opened_script;
@@ -356,7 +357,7 @@ static void init_menu(gpointer data, gpointer user_data)
 		if (g_file_test(data,G_FILE_TEST_IS_DIR)) {
 			gchar*label=strrchr(data,DIR_SEP[0]);
 			if (label) { label++; } else { label=data; }
-			if ((strcasecmp(label,"events")!=0)&&(strcasecmp(label,"support")!=0)) { 
+			if ((strcasecmp(label,"events")!=0)&&(strcasecmp(label,"support")!=0)) {
 				label=g_strdup(label);
 				fixup_label(label);
 				new_menu(user_data, data, label); /* Recursive */
@@ -369,7 +370,7 @@ static void init_menu(gpointer data, gpointer user_data)
 
 
 /*
- * Borrowed from Geany's utils_get_file_list() but modified because I want the 
+ * Borrowed from Geany's utils_get_file_list() but modified because I want the
  * list to store the full path to each file...
  *
  * Gets a sorted list of files in the specified directory.
@@ -383,7 +384,7 @@ static GSList *get_file_list(const gchar *path)
 	GError *err = NULL;
 	g_return_val_if_fail(path && *path, NULL);
 	dir = g_dir_open(path, 0, &err);
-	if (dir) { 
+	if (dir) {
 		while (1) {
 			const gchar *filename = g_dir_read_name(dir);
 			if (!filename) { break; }
@@ -420,9 +421,10 @@ static void build_menu(void)
 {
 	local_data.script_list = NULL;
 	local_data.acc_grp=NULL;
-	local_data.menu_item=new_menu(geany_data->tools_menu, local_data.script_dir, _("_Lua Scripts"));
+	local_data.menu_item=new_menu(main_widgets->tools_menu,
+		local_data.script_dir, _("_Lua Scripts"));
 	if (local_data.acc_grp) {
-		gtk_window_add_accel_group(GTK_WINDOW(app->window), local_data.acc_grp);
+		gtk_window_add_accel_group(GTK_WINDOW(main_widgets->window), local_data.acc_grp);
 	}
 }
 
@@ -430,9 +432,10 @@ static void build_menu(void)
 
 /* Called by Geany to initialize the plugin */
 PLUGIN_EXPORT
-void glspi_init (GeanyData *data, KeyBindingGroup *kg)
+void glspi_init (GeanyData *data, GeanyFunctions *functions, KeyBindingGroup *kg)
 {
 	glspi_geany_data = data;
+	glspi_geany_functions = functions;
 
 	local_data.script_dir =
 		g_strconcat(app->configdir, SCRIPT_FOLDER, NULL);
@@ -443,7 +446,7 @@ void glspi_init (GeanyData *data, KeyBindingGroup *kg)
 			g_strconcat(app->datadir, SCRIPT_FOLDER, NULL);
   }
 	if (app->debug_mode) {
-		g_printerr(_("     ==>> %s: Building menu from '%s'\n"), 
+		g_printerr(_("     ==>> %s: Building menu from '%s'\n"),
 			PLUGIN_NAME, local_data.script_dir);
 	}
 	local_data.on_saved_script =
@@ -509,14 +512,14 @@ void glspi_cleanup(void)
 	done(on_saved_script);
 	done(on_created_script);
 	done(on_opened_script);
-	done(on_activated_script);	
-	done(on_init_script);	
+	done(on_activated_script);
+	done(on_init_script);
 	done(on_cleanup_script);
 	done(on_configure_script);
 	done(on_proj_opened_script);
 	done(on_proj_saved_script);
 	done(on_proj_closed_script);
-	
+
 	if (local_data.script_list) {
 		g_slist_foreach(local_data.script_list, free_script_names, NULL);
 		g_slist_free(local_data.script_list);
@@ -533,7 +536,7 @@ void glspi_cleanup(void)
 /*
  Called by geany when user clicks preferences button
  in plugin manager dialog.
-*/ 
+*/
 PLUGIN_EXPORT
 void glspi_configure(GtkWidget *parent)
 {

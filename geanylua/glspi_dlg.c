@@ -47,7 +47,7 @@ static void  set_dialog_title(lua_State *L, GtkWidget*dialog) {
 			banner=DEFAULT_BANNER;
 			lua_getglobal(L, LUA_MODULE_NAME);
 			lua_pushstring(L,tokenBanner);
-			lua_pushstring(L,banner);		
+			lua_pushstring(L,banner);
 			lua_settable(L, -3);
 		}
 	}
@@ -55,8 +55,8 @@ static void  set_dialog_title(lua_State *L, GtkWidget*dialog) {
 }
 
 
-/* 
-  The GtkMessageDialog wants format strings, but we want literals. 
+/*
+  The GtkMessageDialog wants format strings, but we want literals.
   So we need to replace all '%' with "%%"
 */
 static gchar*pct_esc(const gchar*s)
@@ -73,7 +73,7 @@ static gchar*pct_esc(const gchar*s)
 static GtkWidget*new_dlg(gint msg_type, gint buttons, const gchar*msg1, const gchar*msg2)
 {
 	gchar *tmp=pct_esc(msg1);
-	GtkWidget*rv=gtk_message_dialog_new(GTK_WINDOW(app->window), 
+	GtkWidget*rv=gtk_message_dialog_new(GTK_WINDOW(main_widgets->window),
 										DIALOG_FLAGS, msg_type, buttons, "%s", tmp?tmp:msg1);
 
 	if (tmp) {
@@ -401,7 +401,7 @@ static gboolean create_file_filter(lua_State* L, GtkFileChooser*dlg, const gchar
 static gchar *file_dlg(lua_State* L, gboolean save, const gchar *path,	const gchar *mask, const gchar *name)
 {
 	gchar *rv=NULL;
-	gchar *fullname = NULL;	
+	gchar *fullname = NULL;
 	GtkWidget*dlg=NULL;
 #if NEED_OVERWRITE_PROMPT
 	gboolean accepted=FALSE;
@@ -409,7 +409,7 @@ static gchar *file_dlg(lua_State* L, gboolean save, const gchar *path,	const gch
 	gint resp=GTK_RESPONSE_CANCEL;
 	if (save) {
 		dlg=gtk_file_chooser_dialog_new(_("Save file"),
-					GTK_WINDOW(app->window), GTK_FILE_CHOOSER_ACTION_SAVE,
+					GTK_WINDOW(main_widgets->window), GTK_FILE_CHOOSER_ACTION_SAVE,
 					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,	NULL);
 #if NEED_OVERWRITE_PROMPT
@@ -419,7 +419,7 @@ static gchar *file_dlg(lua_State* L, gboolean save, const gchar *path,	const gch
 #endif
 	} else {
 		dlg=gtk_file_chooser_dialog_new(_("Open file"),
-					GTK_WINDOW(app->window),	GTK_FILE_CHOOSER_ACTION_OPEN,
+					GTK_WINDOW(main_widgets->window),	GTK_FILE_CHOOSER_ACTION_OPEN,
 					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,	NULL);
 	}
@@ -453,7 +453,7 @@ static gchar *file_dlg(lua_State* L, gboolean save, const gchar *path,	const gch
 #endif
 	if (resp == GTK_RESPONSE_ACCEPT) {
 		rv=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dlg));
-	} 
+	}
 	gtk_widget_destroy(dlg);
 	if (fullname) {g_free(fullname);}
 	return rv;
@@ -482,7 +482,7 @@ static gint glspi_pickfile(lua_State* L)
 			const gchar*tmp=lua_tostring(L,1);
 			if (strcasecmp(tmp,"save")==0) {
 				save=TRUE;
-			} else 
+			} else
 			if ( (*tmp != '\0') && (strcasecmp(tmp,"open")!=0) ) {
 				lua_pushfstring(L, _("Error in module \"%s\" at function %s():\n"
 							"expected string \"open\" or \"save\" for argument #1.\n "),

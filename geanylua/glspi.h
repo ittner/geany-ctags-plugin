@@ -21,6 +21,7 @@
 #include "plugindata.h"
 #include "sciwrappers.h"
 #include "keybindings.h"
+#include "ui_utils.h"
 
 #include "pluginmacros.h"
 
@@ -85,6 +86,10 @@
 extern GeanyData *glspi_geany_data;
 
 #define geany_data glspi_geany_data
+
+extern GeanyFunctions *glspi_geany_functions;
+
+#define geany_functions glspi_geany_functions
 
 
 #ifdef NEED_FAIL_ARG_TYPE

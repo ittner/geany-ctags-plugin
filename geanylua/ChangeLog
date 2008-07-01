@@ -1,3 +1,10 @@
+July 1, 2008 (ntrel)
+  Begin updating for Geany 0.15 API changes.
+  Use main_widgets instead of old app.
+  Include some Geany headers due to moved definitions.
+  Add glspi_geany_functions.
+  Use new _prefs structs.
+
 Mar 24, 2008
   Released version 0.7.0
 
@@ -16,7 +23,7 @@ Mar 14, 2008
   no longer requires the --with-geany-src option.
 
 Mar 13, 2008
-  Added support for Geany's new built-in keybinding API. 
+  Added support for Geany's new built-in keybinding API.
   This means that scripts can now take advantage of Geany's
   preferences system to configure keybindings.
   See ./docs/geanylua-keys.html for more info.
@@ -100,8 +107,8 @@ Jan 11, 2008
   The timeout measurement now pauses the timer while dialogs are displayed,
   rather than setting the timer back to zero for each dialog. Actually it
   considers the time spent as 1/10 of a second, to keep timeouts working
-  even if you create an endless loop with a dialog inside. But even still, 
-  you might need to click a lot of buttons before the timer expires! 
+  even if you create an endless loop with a dialog inside. But even still,
+  you might need to click a lot of buttons before the timer expires!
 
 Jan 10, 2008
   Revamped the ugly and broken goto_error() function. Trying to parse the
@@ -114,7 +121,7 @@ Jan 10, 2008
   But for now it's the only way I know how, and at least now it's working.
 
 Jan 8, 2008
-  The "geanylua.c" file was getting a bit too large to navigate easily, 
+  The "geanylua.c" file was getting a bit too large to navigate easily,
   so I moved most of the lua-related code into a new file, "glspi_run.c"
   Added some new features to the filename-to-menu-label generator, a trailing
   underscore in the filename will create an ellipsis after for the menu label,
@@ -149,7 +156,7 @@ Jan 4, 2008
     ways which can't currently be detected. )
   Also added a timeout() function to allow script authors to increase or even
   completely disable the timeout if needed.
-  
+
 Jan 2, 2008
   Released version 0.5.1
   Fix to compile against Geany-SVN-r2145 (API Ver 37)
@@ -161,7 +168,7 @@ Jan 1, 2008
 
 Jan 1, 2008
   Added files "win32-install.vbs" and "win32-uninstall.vbs" to hopefully
-  simplify windows installation. Likewise, added the file "install.sh" 
+  simplify windows installation. Likewise, added the file "install.sh"
   to the pre-compiled Linux-x86 archive.
 
 Dec. 28, 2007
@@ -209,7 +216,7 @@ Nov 21, 2007
   a new Lua "keyfile" module to manipulate this type of object.
 
 Nov 20, 2007
-  Added PLUGIN_AUTHOR define for API compatibility.  
+  Added PLUGIN_AUTHOR define for API compatibility.
   Added a function to display a customized configure dialog for Geany's new
   plugin manager.
 
@@ -258,7 +265,7 @@ Oct 15, 2007
 
 
 Oct 13, 2007
-  Bumped versions: plugin=0.3, API=20 to correspond with "official" 
+  Bumped versions: plugin=0.3, API=20 to correspond with "official"
   Geany 0.12 release.
 
 

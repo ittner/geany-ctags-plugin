@@ -10,6 +10,8 @@
 #include "glspi.h"
 #include "glspi_sci.h"
 
+#include "editor.h"
+
 
 
 

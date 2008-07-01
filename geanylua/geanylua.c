@@ -54,12 +54,15 @@ PLUGIN_EXPORT
 PLUGIN_INFO(PLUGIN_NAME, PLUGIN_DESC, PLUGIN_VER, PLUGIN_AUTHOR)
 
 PLUGIN_EXPORT
+GeanyFunctions *geany_functions;
+
+PLUGIN_EXPORT
 KeyBindingGroup plugin_key_group[1];
 
 
 
 
-typedef void (*InitFunc) (GeanyData *data, KeyBindingGroup *kg);
+typedef void (*InitFunc) (GeanyData *data, GeanyFunctions *functions, KeyBindingGroup *kg);
 typedef void (*ConfigFunc) (GtkWidget *parent);
 typedef void (*CleanupFunc) (void);
 
@@ -167,7 +170,7 @@ void init(GeanyData *data)
 	}
 	copy_callbacks();
 
-	glspi_init(data, plugin_key_group);
+	glspi_init(data, geany_functions, plugin_key_group);
 }
 
 
@@ -177,7 +180,7 @@ void configure(GtkWidget *parent)
 	if (glspi_configure) {
 		glspi_configure(parent);
 	} else {
-		geany_data->dialogs->show_msgbox(GTK_MESSAGE_ERROR,
+		geany_functions->p_dialogs->show_msgbox(GTK_MESSAGE_ERROR,
 			_("The "PLUGIN_NAME" plugin failed to load properly.\n"
 			"Please check your installation.") );
 	}
