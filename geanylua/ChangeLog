@@ -4,6 +4,7 @@ July 1, 2008 (ntrel)
   Include some Geany headers due to moved definitions.
   Add glspi_geany_functions.
   Use new _prefs structs.
+  Update DOCS macro usage for documents_array.
 
 Mar 24, 2008
   Released version 0.7.0

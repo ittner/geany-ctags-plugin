@@ -9,7 +9,7 @@
 
 
 
-#define DOCS ((document*)(doc_array->data))
+#define DOCS ((GeanyDocument**)(documents_array->pdata))
 #define NOTEBOOK GTK_NOTEBOOK(main_widgets->notebook)
 
 
@@ -54,7 +54,7 @@ static gint filename_to_doc_idx(const gchar*fn)
 	if (fn && *fn) {
 		guint i;
 		for(i = 0; i < doc_array->len; i++) {
-			if fncmp(fn,DOCS[i].file_name) {return i; }
+			if fncmp(fn,DOCS[i]->file_name) {return i; }
 		}
 	}
 	return -1;
@@ -65,8 +65,8 @@ static gint filename_to_doc_idx(const gchar*fn)
 static gint doc_idx_to_tab_idx(gint idx)
 {
 	return (
-		(idx>=0) && ((guint)idx<doc_array->len) && DOCS[idx].is_valid
-	) ? gtk_notebook_page_num(NOTEBOOK, GTK_WIDGET(DOCS[idx].sci)):-1;
+		(idx>=0) && ((guint)idx<doc_array->len) && DOCS[idx]->is_valid
+	) ? gtk_notebook_page_num(NOTEBOOK, GTK_WIDGET(DOCS[idx]->sci)):-1;
 }
 
 
@@ -123,7 +123,7 @@ static gint documents_closure(lua_State *L)
 	do { 
 		/* Find next valid index, skipping invalid (closed)  files */
 		idx++; 
-	} while (( idx < max ) && !DOCS[idx].is_valid );
+	} while (( idx < max ) && !DOCS[idx]->is_valid );
 	if ( idx < max ){
 		push_number(L, idx);
 		lua_pushvalue(L, -1);
