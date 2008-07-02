@@ -74,7 +74,7 @@ static gint doc_idx_to_tab_idx(gint idx)
 /* Returns the filename of the specified document, or NULL on bad index */
 static const gchar* doc_idx_to_filename(gint idx) {
 	 if ( (idx >= 0 ) && ( ((guint)idx) < doc_array->len ) ) { 
-		document *doc=&g_array_index(doc_array, document, idx);
+		document *doc=g_ptr_array_index(doc_array, idx);
 		if (doc) { return doc->file_name?doc->file_name:GEANY_STRING_UNTITLED; }
 	}
 	return NULL;
@@ -175,7 +175,7 @@ static gint glspi_count(lua_State* L)
 {
 	guint i, n=0;
 	for (i=0; i<doc_array->len; i++) {
-		if (((document*)&(doc_array->data[i]))->is_valid){n++;}
+		if (DOCS[i]->is_valid){n++;}
 	}
 	push_number(L,n);
 	return 1;
@@ -188,13 +188,15 @@ static gint glspi_save(lua_State* L)
 	gboolean status=FALSE;
 	if (lua_gettop(L)==0){
 		DOC_REQUIRED
-		status=p_document->save_file(p_document->get_cur_idx(), TRUE);
+		status=p_document->save_file(p_document->get_current(), TRUE);
 	} else {
 		if (lua_isnumber(L,1)) {
-			status=p_document->save_file((gint)lua_tonumber(L,1)-1, TRUE);
+			gint idx=(gint)lua_tonumber(L,1)-1;
+			status=p_document->save_file(DOCS[idx], TRUE);
 		} else {
 			if (lua_isstring(L,1)) {
-				status=p_document->save_file(filename_to_doc_idx(lua_tostring(L,1)), TRUE);
+				gint idx=filename_to_doc_idx(lua_tostring(L,1));
+				status=p_document->save_file(DOCS[idx], TRUE);
 			} else { return FAIL_STR_OR_NUM_ARG(1);	}
 		}
 	}
@@ -212,7 +214,7 @@ static gint glspi_open(lua_State* L)
 
 	if (lua_gettop(L)==0) {
 		DOC_REQUIRED
-		idx=p_document->get_cur_idx();
+		idx=p_document->get_current()->index;
 	} else {
 		if (lua_isnumber(L,1)) {
 			idx=lua_tonumber(L,1)-1;
@@ -223,15 +225,17 @@ static gint glspi_open(lua_State* L)
 		}
 	}
 	if (!fn) {
-		status=p_document->reload_file(idx,NULL) ? idx : -1;
+		status=p_document->reload_file(DOCS[idx],NULL) ? idx : -1;
 	} else {
 		guint len=doc_array->len;
-		status=p_document->open_file(fn,FALSE,NULL,NULL);
+		GeanyDocument*doc=p_document->open_file(fn,FALSE,NULL,NULL);
+		status=doc?doc->index:-1;
 		if ( (status>=0) && (len==doc_array->len))
 		{ 
 			/* if len doesn't change, it means we are reloading an already open file */
-			idx=p_document->get_cur_idx();
-			status=p_document->reload_file(idx,NULL) ? idx : -1;
+			/* ntrel: actually, len can stay the same when reusing invalid document slots. */
+			idx=p_document->get_current()->index;
+			status=p_document->reload_file(DOCS[idx],NULL) ? idx : -1;
 		}
 	}
 	push_number(L,status+1);
@@ -245,13 +249,15 @@ static gint glspi_close(lua_State* L)
 	gboolean status=FALSE;
 	if (lua_gettop(L)==0){
 		DOC_REQUIRED
-		status=p_document->remove((guint)p_document->get_cur_idx());
+		status=p_document->close(p_document->get_current());
 	} else {
 		if (lua_isnumber(L,1)) {
-			status=p_document->remove((guint)lua_tonumber(L,1)-1);
+			guint idx=(guint)lua_tonumber(L,1)-1;
+			status=p_document->close(DOCS[idx]);
 		} else {
 			if (lua_isstring(L,1)) {
-				status=p_document->remove((guint)filename_to_doc_idx(lua_tostring(L,1)));
+				guint idx=(guint)filename_to_doc_idx(lua_tostring(L,1));
+				status=p_document->close(DOCS[idx]);
 			} else { return FAIL_STR_OR_NUM_ARG(1);	}
 		}
 	}

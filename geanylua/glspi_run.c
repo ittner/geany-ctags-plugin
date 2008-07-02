@@ -81,11 +81,10 @@ static gboolean glspi_show_question(gchar*title, gchar*question, gboolean defaul
 
 static gboolean glspi_goto_error(gchar *fn, gint line)
 {
-	gint idx=p_document->open_file(fn, FALSE, NULL, NULL);
-	if (idx>=0) {
-		document doc=g_array_index(doc_array,document,idx);
-		if (doc.is_valid) {
-			ScintillaObject*sci=doc.sci;
+	GeanyDocument *doc=p_document->open_file(fn, FALSE, NULL, NULL);
+	if (doc) {
+		if (doc->is_valid) {
+			ScintillaObject*sci=doc->sci;
 			if (sci) {
 				gint pos=p_sci->get_position_from_line(sci,line-1);
 				p_sci->set_current_position(sci,pos,TRUE);

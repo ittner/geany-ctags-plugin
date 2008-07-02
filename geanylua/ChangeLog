@@ -1,3 +1,9 @@
+July 2, 2008 (ntrel)
+  Update to use document pointers.
+  Update MY_GEANY_API_VER now we use p_document->close().
+  Update for new PLUGIN_ macro names.
+  Add comment about reloading in glspi_open().
+
 July 1, 2008 (ntrel)
   Begin updating for Geany 0.15 API changes.
   Use main_widgets instead of old app.
