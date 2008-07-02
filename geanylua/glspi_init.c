@@ -259,7 +259,7 @@ static void on_proj_close(GObject *obj, GKeyFile *config, gpointer user_data)
 
 
 PLUGIN_EXPORT
-GeanyCallback	glspi_geany_callbacks[] = {
+PluginCallback	glspi_geany_callbacks[] = {
 	{"document-new", (GCallback) &on_doc_new, TRUE, NULL},
 	{"document-open", (GCallback) &on_doc_open, TRUE, NULL},
 	{"document-save", (GCallback) &on_doc_save, TRUE, NULL},

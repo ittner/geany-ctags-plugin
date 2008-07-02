@@ -41,7 +41,7 @@
 
 #define SUPPORT_LIB "libgeanylua." G_MODULE_SUFFIX
 
-#define CB_COPY(field) geany_callbacks[i].field=glspi_geany_callbacks[i].field;
+#define CB_COPY(field) plugin_callbacks[i].field=glspi_geany_callbacks[i].field;
 
 #define GETSYM(name,ptr) ( g_module_symbol(libgeanylua, name, (gpointer) &ptr) && ptr )
 
@@ -71,7 +71,7 @@ static gchar **glspi_version = NULL;
 static InitFunc glspi_init = NULL;
 static ConfigFunc glspi_configure = NULL;
 static CleanupFunc glspi_cleanup = NULL;
-static GeanyCallback *glspi_geany_callbacks = NULL;
+static PluginCallback *glspi_geany_callbacks = NULL;
 
 
 
@@ -82,7 +82,7 @@ static GeanyCallback *glspi_geany_callbacks = NULL;
   and all is well...
 */
 PLUGIN_EXPORT
-GeanyCallback	geany_callbacks[8] = {
+PluginCallback	plugin_callbacks[8] = {
 	{NULL, NULL, FALSE, NULL},
 	{NULL, NULL, FALSE, NULL},
 	{NULL, NULL, FALSE, NULL},
@@ -117,10 +117,10 @@ static void fail_init(void) {
 	glspi_configure = NULL;
 	glspi_cleanup = NULL;
 	glspi_geany_callbacks = NULL;
-	geany_callbacks[0].signal_name=NULL;
-	geany_callbacks[0].callback=NULL;
-	geany_callbacks[0].after=FALSE;
-	geany_callbacks[0].user_data=NULL;
+	plugin_callbacks[0].signal_name=NULL;
+	plugin_callbacks[0].callback=NULL;
+	plugin_callbacks[0].after=FALSE;
+	plugin_callbacks[0].user_data=NULL;
 }
 
 static GeanyData *geany_data=NULL;
