@@ -57,7 +57,7 @@
 
 
 #define DOC_REQUIRED \
-	document *doc = p_document->get_current();\
+	GeanyDocument *doc = p_document->get_current();\
 	if (!(doc && doc->sci)) {return 0;}
 
 

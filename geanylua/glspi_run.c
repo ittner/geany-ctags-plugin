@@ -46,7 +46,7 @@ void glspi_init_kfile_module(lua_State *L, KeyfileAssignFunc *func);
 */
 static void repaint_scintilla(void)
 {
-	document* doc=p_document->get_current();
+	GeanyDocument* doc=p_document->get_current();
 	if ( doc && doc->is_valid ) {
 		gdk_window_invalidate_rect(GTK_WIDGET(doc->sci)->window, NULL, TRUE);
 		gdk_window_process_updates(GTK_WIDGET(doc->sci)->window, TRUE);

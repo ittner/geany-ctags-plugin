@@ -559,7 +559,7 @@ static gint init_key(guint keyval){
 
 static gint glspi_keygrab(lua_State* L)
 {
-	document*doc=NULL;
+	GeanyDocument*doc=NULL;
 	const gchar*prompt=NULL;
 	GdkKeymapKey km={0,0,0};
 	km.keycode=0;

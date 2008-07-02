@@ -19,7 +19,7 @@
 static gint glspi_text(lua_State* L)
 {
 
-	document *doc = p_document->get_current();
+	GeanyDocument *doc = p_document->get_current();
 
 	if ((!doc) || (!doc->sci)) { return 0; }
 	if (0 == lua_gettop(L)) { /* Called with no args, GET the current text */
@@ -276,7 +276,7 @@ static gint glspi_word(lua_State* L)
   Pushes the line of text onto the Lua stack from the specified
   line number. Return FALSE only if the index is out of bounds.
 */
-static gchar* get_line_text(document*doc,gint linenum)
+static gchar* get_line_text(GeanyDocument*doc,gint linenum)
 {
 	gint count=p_sci->get_line_count(doc->sci);
 	if ((linenum>0)&&(linenum<=count)) {
@@ -295,7 +295,7 @@ static gchar* get_line_text(document*doc,gint linenum)
 static gint lines_closure(lua_State *L)
 {
 	gint idx=lua_tonumber(L, lua_upvalueindex(1))+1;
-	document *doc=lua_touserdata(L,lua_upvalueindex(2));
+	GeanyDocument *doc=lua_touserdata(L,lua_upvalueindex(2));
 	gchar *text=get_line_text(doc,idx);
 	if ( text ) {
 		push_number(L, idx);

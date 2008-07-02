@@ -74,7 +74,7 @@ static gint doc_idx_to_tab_idx(gint idx)
 /* Returns the filename of the specified document, or NULL on bad index */
 static const gchar* doc_idx_to_filename(gint idx) {
 	 if ( (idx >= 0 ) && ( ((guint)idx) < doc_array->len ) ) { 
-		document *doc=g_ptr_array_index(doc_array, idx);
+		GeanyDocument *doc=g_ptr_array_index(doc_array, idx);
 		if (doc) { return doc->file_name?doc->file_name:GEANY_STRING_UNTITLED; }
 	}
 	return NULL;

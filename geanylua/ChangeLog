@@ -4,6 +4,7 @@ July 2, 2008 (ntrel)
   Update for new PLUGIN_ macro names.
   Add comment about reloading in glspi_open().
   Rename GeanyCallbacks, geany_callbacks symbol.
+  Rename document -> GeanyDocument.
 
 July 1, 2008 (ntrel)
   Begin updating for Geany 0.15 API changes.
