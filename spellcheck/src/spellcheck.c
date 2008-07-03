@@ -74,12 +74,15 @@ typedef struct
 } SpellCheck;
 static SpellCheck *sc;
 
+
 #define MAX_MENU_SUGGESTIONS 10
 typedef struct
 {
 	gint pos;
 	GeanyDocument *doc;
+	/* static array to keep suggestions for use as callback user data for the editing menu items */
 	gchar *suggs[MAX_MENU_SUGGESTIONS];
+	/* static storage for the misspelled word under the cursor when using the editing menu */
 	gchar *word;
 } SpellClickInfo;
 static SpellClickInfo clickinfo;
@@ -229,7 +232,7 @@ static void on_populate_edit_menu(GObject *obj, const gchar *word, gint pos,
 
 		/* TODO do we need more than 10 suggestions? gtkspell offers additional suggestions
 		 * in another sub menu, should we too? */
-		for (i = 0; i < MIN(n_suggs, 10); i++)
+		for (i = 0; i < MIN(n_suggs, MAX_MENU_SUGGESTIONS); i++)
 		{
 			/* keep the suggestions in a static array for the callback function */
 			g_free(clickinfo.suggs[i]);
@@ -451,6 +454,21 @@ static gboolean on_key_release(GtkWidget *widget, GdkEventKey *ev, gpointer user
 }
 
 
+static void init_enchant_dict()
+{
+	/* Request new dict object */
+	if (sc->dict != NULL)
+		enchant_broker_free_dict(sc->broker, sc->dict);
+
+	sc->dict = enchant_broker_request_dict(sc->broker, sc->default_language);
+	if (sc->dict == NULL)
+	{
+		broker_init_failed();
+		return;
+	}
+}
+
+
 static void on_menu_item_activate(GtkMenuItem *menuitem, gpointer gdata)
 {
 	GeanyDocument *doc = p_document->get_current();
@@ -459,14 +477,7 @@ static void on_menu_item_activate(GtkMenuItem *menuitem, gpointer gdata)
     if (gdata != NULL)
 		setptr(sc->default_language, g_strdup(gdata));
 
-	/* Request new dict object */
-	enchant_broker_free_dict(sc->broker, sc->dict);
-	sc->dict = enchant_broker_request_dict(sc->broker, sc->default_language);
-	if (sc->dict == NULL)
-	{
-		broker_init_failed();
-		return;
-	}
+	init_enchant_dict();
 
 	perform_check(doc);
 }
@@ -557,6 +568,7 @@ static void on_configure_response(GtkDialog *dialog, gint response, gpointer use
 
 		setptr(sc->default_language, gtk_combo_box_get_active_text(GTK_COMBO_BOX(
 			g_object_get_data(G_OBJECT(dialog), "combo"))));
+		init_enchant_dict();
 
 		sc->check_while_typing = (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 			g_object_get_data(G_OBJECT(dialog), "check"))));
@@ -666,12 +678,7 @@ void plugin_init(GeanyData *data)
 	locale_init();
 
 	sc->broker = enchant_broker_init();
-	sc->dict = enchant_broker_request_dict(sc->broker, sc->default_language);
-	if (sc->dict == NULL)
-	{
-		broker_init_failed();
-		return;
-	}
+	init_enchant_dict();
 
 	for (i = 0; i < MAX_MENU_SUGGESTIONS; i++)
 	{
