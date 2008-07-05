@@ -63,6 +63,7 @@ typedef struct
 {
 	gchar *config_file;
 	gchar *default_language;
+	gboolean use_msgwin;
 	gboolean check_while_typing;
 	gulong signal_id;
 	GPtrArray *dicts;
@@ -206,12 +207,12 @@ static void on_populate_edit_menu(GObject *obj, const gchar *word, gint pos,
 	gsize n_suggs, i;
 	gchar **tmp_suggs;
 
+	/* hide the submenu in any case, we will reshow it again if we actually found something */
+	gtk_widget_hide(sc->edit_menu);
+	gtk_widget_hide(sc->edit_menu_sep);
+
 	if (! NZV(word) || enchant_dict_check(sc->dict, word, -1) == 0)
-	{
-		gtk_widget_hide(sc->edit_menu);
-		gtk_widget_hide(sc->edit_menu_sep);
 		return;
-	}
 
 	tmp_suggs = enchant_dict_suggest(sc->dict, word, -1, &n_suggs);
 
@@ -302,7 +303,8 @@ static gint check_word(GeanyDocument *doc, gint line_number, GString *str, gint 
 		}
 
 		p_editor->set_indicator(doc, end_pos - strlen(word), end_pos);
-		p_msgwindow->msg_add(COLOR_RED, line_number + 1, doc, "%s", str->str);
+		if (sc->use_msgwin)
+			p_msgwindow->msg_add(COLOR_RED, line_number + 1, doc, "%s", str->str);
 
 		if (suggs != NULL && n_suggs)
 			enchant_dict_free_string_list(sc->dict, suggs);
@@ -362,16 +364,18 @@ static void check_document(GeanyDocument *doc)
 		first_line = p_sci->get_line_from_position(doc->sci, p_sci->get_selection_start(doc->sci));
 		last_line = p_sci->get_line_from_position(doc->sci, p_sci->get_selection_end(doc->sci));
 
-		p_msgwindow->msg_add(COLOR_BLUE, -1, NULL,
-			_("Checking file \"%s\" (lines %d to %d using %s):"),
-			DOC_FILENAME(doc), first_line + 1, last_line + 1, dict_string);
+		if (sc->use_msgwin)
+			p_msgwindow->msg_add(COLOR_BLUE, -1, NULL,
+				_("Checking file \"%s\" (lines %d to %d using %s):"),
+				DOC_FILENAME(doc), first_line + 1, last_line + 1, dict_string);
 	}
 	else
 	{
 		first_line = 0;
 		last_line = p_sci->get_line_count(doc->sci);
-		p_msgwindow->msg_add(COLOR_BLUE, -1, NULL, _("Checking file \"%s\" (using %s):"),
-			DOC_FILENAME(doc), dict_string);
+		if (sc->use_msgwin)
+			p_msgwindow->msg_add(COLOR_BLUE, -1, NULL, _("Checking file \"%s\" (using %s):"),
+				DOC_FILENAME(doc), dict_string);
 	}
 	g_free(dict_string);
 
@@ -384,7 +388,7 @@ static void check_document(GeanyDocument *doc)
 		g_free(line);
 	}
 
-	if (suggestions_found == 0)
+	if (suggestions_found == 0 && sc->use_msgwin)
 		p_msgwindow->msg_add(COLOR_BLUE, -1, NULL, _("The checked text is spelled correctly."));
 }
 
@@ -401,8 +405,11 @@ static void broker_init_failed()
 static void perform_check(GeanyDocument *doc)
 {
 	p_editor->clear_indicators(doc);
-	p_msgwindow->clear_tab(MSG_MESSAGE);
-	p_msgwindow->switch_tab(MSG_MESSAGE, FALSE);
+	if (sc->use_msgwin)
+	{
+		p_msgwindow->clear_tab(MSG_MESSAGE);
+		p_msgwindow->switch_tab(MSG_MESSAGE, FALSE);
+	}
 
 	check_document(doc);
 }
@@ -417,6 +424,7 @@ static gboolean on_key_release(GtkWidget *widget, GdkEventKey *ev, gpointer user
 	GeanyDocument *doc;
 	static time_t time_prev = 0;
 	time_t time_now = time(NULL);
+	GtkWidget *focusw;
 
 	if (! sc->check_while_typing)
 		return FALSE;
@@ -427,7 +435,9 @@ static gboolean on_key_release(GtkWidget *widget, GdkEventKey *ev, gpointer user
 	time_prev = time_now;
 
 	doc = p_document->get_current();
-	if (doc == NULL)
+	/* bail out if we don't have a document or if we are not in the editor widget */
+	focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets->window));
+	if (doc == NULL || focusw != GTK_WIDGET(doc->sci))
 		return FALSE;
 
 	if (ev->keyval == '\r' &&
@@ -444,7 +454,8 @@ static gboolean on_key_release(GtkWidget *widget, GdkEventKey *ev, gpointer user
 	clear_indicators_on_line(doc, line_number);
 	if (process_line(doc, line_number, line) != 0)
 	{
-		p_msgwindow->switch_tab(MSG_MESSAGE, FALSE);
+		if (sc->use_msgwin)
+			p_msgwindow->switch_tab(MSG_MESSAGE, FALSE);
 	}
 
 	g_string_free(str, TRUE);
@@ -571,11 +582,15 @@ static void on_configure_response(GtkDialog *dialog, gint response, gpointer use
 		init_enchant_dict();
 
 		sc->check_while_typing = (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-			g_object_get_data(G_OBJECT(dialog), "check"))));
+			g_object_get_data(G_OBJECT(dialog), "check_type"))));
+
+		sc->use_msgwin = (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
+			g_object_get_data(G_OBJECT(dialog), "check_msgwin"))));
 
 		g_key_file_load_from_file(config, sc->config_file, G_KEY_FILE_NONE, NULL);
 		g_key_file_set_string(config, "spellcheck", "language", sc->default_language);
 		g_key_file_set_boolean(config, "spellcheck", "check_while_typing", sc->check_while_typing);
+		g_key_file_set_boolean(config, "spellcheck", "use_msgwin", sc->use_msgwin);
 
 		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && p_utils->mkdir(config_dir, TRUE) != 0)
 		{
@@ -673,6 +688,7 @@ void plugin_init(GeanyData *data)
 		"spellcheck", "language", get_default_lang());
 	sc->check_while_typing = p_utils->get_setting_boolean(config,
 		"spellcheck", "check_while_typing", FALSE);
+	sc->use_msgwin = p_utils->get_setting_boolean(config, "spellcheck", "use_msgwin", FALSE);
 	g_key_file_free(config);
 
 	locale_init();
@@ -706,14 +722,23 @@ void plugin_init(GeanyData *data)
 
 GtkWidget *plugin_configure(GtkDialog *dialog)
 {
-	GtkWidget *label, *vbox, *combo, *check;
+	GtkWidget *label, *vbox, *combo, *check_type, *check_msgwin;
 	guint i;
 
 	vbox = gtk_vbox_new(FALSE, 6);
 
+	check_type = gtk_check_button_new_with_label(_("Check spelling while typing"));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_type), sc->check_while_typing);
+	gtk_box_pack_start(GTK_BOX(vbox), check_type, FALSE, FALSE, 6);
+
+	check_msgwin = gtk_check_button_new_with_label(
+		_("Print misspelled words and suggestions in the messages window"));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_msgwin), sc->use_msgwin);
+	gtk_box_pack_start(GTK_BOX(vbox), check_msgwin, FALSE, FALSE, 3);
+
 	label = gtk_label_new(_("Language to use for the spell check:"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 3);
 
 	combo = gtk_combo_box_new_text();
 
@@ -729,14 +754,11 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo), 3);
 	else if (sc->dicts->len > 10)
 		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo), 2);
-	gtk_box_pack_start(GTK_BOX(vbox), combo, FALSE, FALSE, 0);
-
-	check = gtk_check_button_new_with_label(_("Check spelling while typing"));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), sc->check_while_typing);
-	gtk_box_pack_start(GTK_BOX(vbox), check, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), combo, FALSE, FALSE, 6);
 
 	g_object_set_data(G_OBJECT(dialog), "combo", combo);
-	g_object_set_data(G_OBJECT(dialog), "check", check);
+	g_object_set_data(G_OBJECT(dialog), "check_type", check_type);
+	g_object_set_data(G_OBJECT(dialog), "check_msgwin", check_msgwin);
 	g_signal_connect(dialog, "response", G_CALLBACK(on_configure_response), NULL);
 
 	gtk_widget_show_all(vbox);
