@@ -54,7 +54,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(72)
+PLUGIN_VERSION_CHECK(74)
 PLUGIN_SET_INFO(_("Spell Check"), _("Checks the spelling of the current document."), "0.2",
 			_("The Geany developer team"))
 
@@ -89,7 +89,7 @@ typedef struct
 static SpellClickInfo clickinfo;
 
 
-static void on_populate_edit_menu(GObject *obj, const gchar *word, gint pos,
+static void on_update_editor_menu(GObject *obj, const gchar *word, gint pos,
 								  GeanyDocument *doc, gpointer user_data);
 
 /* Keybinding(s) */
@@ -104,7 +104,7 @@ PLUGIN_KEY_GROUP(spellcheck, KB_COUNT)
 
 PluginCallback plugin_callbacks[] =
 {
-    { "populate-edit-menu", (GCallback) &on_populate_edit_menu, FALSE, NULL },
+    { "update-editor-menu", (GCallback) &on_update_editor_menu, FALSE, NULL },
     { NULL, NULL, FALSE, NULL }
 };
 
@@ -201,7 +201,7 @@ static void on_menu_addword_item_activate(GtkMenuItem *menuitem, gpointer gdata)
 }
 
 
-static void on_populate_edit_menu(GObject *obj, const gchar *word, gint pos,
+static void on_update_editor_menu(GObject *obj, const gchar *word, gint pos,
 								  GeanyDocument *doc, gpointer user_data)
 {
 	gsize n_suggs, i;

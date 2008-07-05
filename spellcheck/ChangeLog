@@ -5,6 +5,7 @@
    Don't act on key release events when the input focus is not in the
    editor widget.
    Fix showing an empty Spellcheck menu item in the editor popup menu.
+   Rename signal "populate-edit-menu" into "update-editor-menu".
 
 
 2008-07-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
