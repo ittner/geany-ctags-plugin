@@ -46,14 +46,14 @@ static gint glspi_newfile(lua_State* L)
 
 
 /*
-  Try to find the doc_array index of the specified filename.
+  Try to find the documents_array index of the specified filename.
   Returns -1 if the filename doesn't match any open tabs.
 */
 static gint filename_to_doc_idx(const gchar*fn)
 {
 	if (fn && *fn) {
 		guint i;
-		for(i = 0; i < doc_array->len; i++) {
+		for(i = 0; i < documents_array->len; i++) {
 			if fncmp(fn,DOCS[i]->file_name) {return i; }
 		}
 	}
@@ -61,11 +61,11 @@ static gint filename_to_doc_idx(const gchar*fn)
 }
 
 
-/* Converts a doc_array index to a notebook tab index */
+/* Converts a documents_array index to a notebook tab index */
 static gint doc_idx_to_tab_idx(gint idx)
 {
 	return (
-		(idx>=0) && ((guint)idx<doc_array->len) && DOCS[idx]->is_valid
+		(idx>=0) && ((guint)idx<documents_array->len) && DOCS[idx]->is_valid
 	) ? gtk_notebook_page_num(NOTEBOOK, GTK_WIDGET(DOCS[idx]->sci)):-1;
 }
 
@@ -73,8 +73,8 @@ static gint doc_idx_to_tab_idx(gint idx)
 
 /* Returns the filename of the specified document, or NULL on bad index */
 static const gchar* doc_idx_to_filename(gint idx) {
-	 if ( (idx >= 0 ) && ( ((guint)idx) < doc_array->len ) ) { 
-		GeanyDocument *doc=g_ptr_array_index(doc_array, idx);
+	 if ( (idx >= 0 ) && ( ((guint)idx) < documents_array->len ) ) { 
+		GeanyDocument *doc=g_ptr_array_index(documents_array, idx);
 		if (doc) { return doc->file_name?doc->file_name:GEANY_STRING_UNTITLED; }
 	}
 	return NULL;
@@ -92,7 +92,7 @@ static gint glspi_activate(lua_State* L)
 			if (idx<0) { /* Negative number refers to (absolute) GtkNotebook index */
 				idx=(0-idx)-1;
 				if (idx>=gtk_notebook_get_n_pages(NOTEBOOK)) { idx=-1;}
-			} else { /* A positive number refers to the doc_array index */
+			} else { /* A positive number refers to the documents_array index */
 				idx=doc_idx_to_tab_idx(idx-1);
 			}
 			
@@ -119,7 +119,7 @@ static gint glspi_activate(lua_State* L)
 static gint documents_closure(lua_State *L)
 {
 	gint idx=lua_tonumber(L, lua_upvalueindex(1));
-	int max=doc_array->len;
+	int max=documents_array->len;
 	do { 
 		/* Find next valid index, skipping invalid (closed)  files */
 		idx++; 
@@ -174,7 +174,7 @@ static gint glspi_documents(lua_State *L)
 static gint glspi_count(lua_State* L)
 {
 	guint i, n=0;
-	for (i=0; i<doc_array->len; i++) {
+	for (i=0; i<documents_array->len; i++) {
 		if (DOCS[i]->is_valid){n++;}
 	}
 	push_number(L,n);
@@ -227,10 +227,10 @@ static gint glspi_open(lua_State* L)
 	if (!fn) {
 		status=p_document->reload_file(DOCS[idx],NULL) ? idx : -1;
 	} else {
-		guint len=doc_array->len;
+		guint len=documents_array->len;
 		GeanyDocument*doc=p_document->open_file(fn,FALSE,NULL,NULL);
 		status=doc?doc->index:-1;
-		if ( (status>=0) && (len==doc_array->len))
+		if ( (status>=0) && (len==documents_array->len))
 		{ 
 			/* if len doesn't change, it means we are reloading an already open file */
 			/* ntrel: actually, len can stay the same when reusing invalid document slots. */
@@ -312,7 +312,7 @@ static gint glspi_fileinfo(lua_State* L)
 	SetTableStr("linker",   BuildCmdStr(linker));
 	SetTableStr("exec",     BuildCmdStr(run_cmd));
 	SetTableStr("exec2",    BuildCmdStr(run_cmd2));
-	SetTableNum("ftid", GPOINTER_TO_INT(doc->file_type?doc->file_type->id:GEANY_FILETYPES_ALL));
+	SetTableNum("ftid", GPOINTER_TO_INT(doc->file_type?doc->file_type->id:GEANY_FILETYPES_NONE));
 	SetTableStr("encoding", StrField(doc,encoding));
 	SetTableBool("bom",doc->has_bom);
 	SetTableBool("changed",doc->changed);

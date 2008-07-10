@@ -1,3 +1,6 @@
+July 10, 2008 (ntrel)
+  Convert doc_array usage to documents_array.
+
 July 2, 2008 (ntrel)
   Update to use document pointers.
   Update MY_GEANY_API_VER now we use p_document->close().
