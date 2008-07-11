@@ -1,6 +1,7 @@
 July 11, 2008 (ntrel)
   Use plugin_init(), plugin_cleanup().
   Add macro for main_widgets, fix project access.
+  Require Lua >= 5.1, not 5.1.2.
 
 July 10, 2008 (ntrel)
   Convert doc_array usage to documents_array.
