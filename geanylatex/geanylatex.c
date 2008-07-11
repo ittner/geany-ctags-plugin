@@ -126,7 +126,7 @@ insert_label_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpoin
 	GtkWidget *table = NULL;
 
 	dialog = gtk_dialog_new_with_buttons(_("Insert label"),
-					     GTK_WINDOW(main_widgets->window),
+					     GTK_WINDOW(geany->main_widgets->window),
 					     GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
 					     GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
 					     NULL);
@@ -170,7 +170,7 @@ insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointe
 	GtkWidget *radio2 = NULL;
 
 	dialog = gtk_dialog_new_with_buttons(_("Insert reference"),
-					     GTK_WINDOW(main_widgets->window),
+					     GTK_WINDOW(geany->main_widgets->window),
 					     GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
 					     GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
 					     NULL);
@@ -558,7 +558,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 
 	// Buidling the wizard-dialog and showing it
 	dialog = gtk_dialog_new_with_buttons(_("LaTeX-Wizard"),
-					     GTK_WINDOW(main_widgets->window),
+					     GTK_WINDOW(geany->main_widgets->window),
 					     GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
 					     GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
 					     NULL);
@@ -812,7 +812,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	tooltips = gtk_tooltips_new();
 
 	menu_latex = gtk_menu_item_new_with_mnemonic(_("_LaTeX"));
-	gtk_container_add(GTK_CONTAINER(main_widgets->tools_menu), menu_latex);
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_latex);
 	g_signal_connect((gpointer) menu_latex, "activate", G_CALLBACK(update_menu_items), NULL);
 
 	menu_latex_menu = gtk_menu_new();
