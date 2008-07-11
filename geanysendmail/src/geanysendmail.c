@@ -164,7 +164,7 @@ void show_icon()
 	GtkIconSize size = geany_data->toolbar_prefs->icon_size;
 
 	int number_of_icons = 0;
-	number_of_icons = gtk_toolbar_get_n_items(GTK_TOOLBAR(main_widgets->toolbar));
+	number_of_icons = gtk_toolbar_get_n_items(GTK_TOOLBAR(geany->main_widgets->toolbar));
 
 	mailbutton_pb = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
 					"mail-message-new", size, ICON_LOOKUP_MODE, NULL);
@@ -180,31 +180,31 @@ void show_icon()
 
 	separator = (GtkWidget*) gtk_separator_tool_item_new();
 	gtk_widget_show (separator);
-	gtk_toolbar_insert(GTK_TOOLBAR(main_widgets->toolbar), GTK_TOOL_ITEM(separator), number_of_icons - 2);
+	gtk_toolbar_insert(GTK_TOOLBAR(geany->main_widgets->toolbar), GTK_TOOL_ITEM(separator), number_of_icons - 2);
 
 	mailbutton = (GtkWidget*) gtk_tool_button_new (icon, "Mail");
-	gtk_toolbar_insert(GTK_TOOLBAR(main_widgets->toolbar), GTK_TOOL_ITEM(mailbutton), number_of_icons - 1);
+	gtk_toolbar_insert(GTK_TOOLBAR(geany->main_widgets->toolbar), GTK_TOOL_ITEM(mailbutton), number_of_icons - 1);
 	g_signal_connect (G_OBJECT(mailbutton), "clicked", G_CALLBACK(send_as_attachment), NULL);
 	gtk_widget_show_all (mailbutton);
 	
 	separator2 = (GtkWidget*) gtk_separator_tool_item_new();
 	gtk_widget_show (separator2);
-	gtk_toolbar_insert(GTK_TOOLBAR(main_widgets->toolbar), GTK_TOOL_ITEM(separator2), number_of_icons);
+	gtk_toolbar_insert(GTK_TOOLBAR(geany->main_widgets->toolbar), GTK_TOOL_ITEM(separator2), number_of_icons);
 }
 
 void cleanup_icon()
 {
 	if (mailbutton != NULL)
 	{
-		gtk_container_remove(GTK_CONTAINER (main_widgets->toolbar), mailbutton);
+		gtk_container_remove(GTK_CONTAINER (geany->main_widgets->toolbar), mailbutton);
 	}
 	if (separator != NULL)
 	{
-		gtk_container_remove(GTK_CONTAINER (main_widgets->toolbar), separator);
+		gtk_container_remove(GTK_CONTAINER (geany->main_widgets->toolbar), separator);
 	}
 	if (separator2 != NULL)
 	{
-		gtk_container_remove(GTK_CONTAINER (main_widgets->toolbar), separator2);
+		gtk_container_remove(GTK_CONTAINER (geany->main_widgets->toolbar), separator2);
 	}
 }
 
@@ -321,7 +321,7 @@ void plugin_init(GeanyData G_GNUC_UNUSED *data)
 
 	locale_init();
 
-	config_file = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
+	config_file = g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
 		"geanysendmail", G_DIR_SEPARATOR_S, "mail.conf", NULL);
 
 	// Initialising options from config file
@@ -343,7 +343,7 @@ void plugin_init(GeanyData G_GNUC_UNUSED *data)
 	// Build up menu
 
 	menu_mail = gtk_image_menu_item_new_with_mnemonic(_("_Mail"));
-	gtk_container_add(GTK_CONTAINER(main_widgets->tools_menu), menu_mail);
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_mail);
 
 	menu_mail_submenu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_mail), menu_mail_submenu);

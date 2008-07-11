@@ -1,3 +1,8 @@
+2008-07-11  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Make plugin compile with Geany svn r2767.
+
+
 2008-06-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Update of used plugin API to v71.
