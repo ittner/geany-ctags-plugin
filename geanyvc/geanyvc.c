@@ -349,7 +349,7 @@ show_output(const gchar * std_output, const gchar * name, const gchar * force_en
 		else
 		{
 			p_sci->set_text(doc->sci, std_output);
-			book = GTK_NOTEBOOK(main_widgets->notebook);
+			book = GTK_NOTEBOOK(geany->main_widgets->notebook);
 			page = gtk_notebook_page_num(book, GTK_WIDGET(doc->sci));
 			gtk_notebook_set_current_page(book, page);
 		}
@@ -635,19 +635,21 @@ vcdiff_project_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpo
 	const VC_RECORD *vc;
 	GeanyDocument *doc;
 
+	GeanyProject *project = geany->app->project;
+
 	doc = p_document->get_current();
 
-	g_return_if_fail(project != NULL && NZV(project->base_path));
+	g_return_if_fail(geany->app->project != NULL && NZV(geany->app->project->base_path));
 
 	if (doc && doc->changed && doc->file_name != NULL)
 	{
 		p_document->save_file(doc, FALSE);
 	}
 
-	vc = find_vc(project->base_path);
+	vc = find_vc(geany->app->project->base_path);
 	g_return_if_fail(vc);
 
-	execute_command(vc, &text, NULL, project->base_path, VC_COMMAND_DIFF_DIR, NULL, NULL);
+	execute_command(vc, &text, NULL, geany->app->project->base_path, VC_COMMAND_DIFF_DIR, NULL, NULL);
 	if (text)
 	{
 		name = g_strconcat(project->name, ".vc.diff", NULL);
@@ -741,13 +743,14 @@ vclog_project_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpoi
 {
 	gchar *text = NULL;
 	const VC_RECORD *vc;
+	GeanyProject *project = geany->app->project;
+	
+	g_return_if_fail(project != NULL && NZV(geany->app->project->base_path));
 
-	g_return_if_fail(project != NULL && NZV(project->base_path));
-
-	vc = find_vc(project->base_path);
+	vc = find_vc(geany->app->project->base_path);
 	g_return_if_fail(vc);
 
-	execute_command(vc, &text, NULL, project->base_path, VC_COMMAND_LOG_DIR, NULL, NULL);
+	execute_command(vc, &text, NULL, geany->app->project->base_path, VC_COMMAND_LOG_DIR, NULL, NULL);
 	if (text)
 	{
 		show_output(text, "*VC-LOG*", NULL);
@@ -808,7 +811,7 @@ command_with_question_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNU
 
 	if (ask)
 	{
-		dialog = gtk_message_dialog_new(GTK_WINDOW(main_widgets->window),
+		dialog = gtk_message_dialog_new(GTK_WINDOW(geany->main_widgets->window),
 						GTK_DIALOG_DESTROY_WITH_PARENT,
 						GTK_MESSAGE_QUESTION,
 						GTK_BUTTONS_YES_NO, question, doc->file_name);
@@ -872,7 +875,7 @@ vcremove_activated(GtkMenuItem * menuitem, gpointer gdata)
 	{
 		p_document->
 			remove_page(gtk_notebook_get_current_page
-				    (GTK_NOTEBOOK(main_widgets->notebook)));
+				    (GTK_NOTEBOOK(geany->main_widgets->notebook)));
 	}
 }
 
@@ -1405,6 +1408,8 @@ static void
 update_menu_items()
 {
 	GeanyDocument *doc;
+	GeanyProject *project = geany->app->project;
+	
 	gboolean have_file;
 	gboolean p_have_vc = FALSE;
 	gboolean d_have_vc = FALSE;
@@ -1426,8 +1431,8 @@ update_menu_items()
 		g_free(dir);
 	}
 
-	if (project != NULL && NZV(project->base_path) &&
-	    find_cmd_env(VC_COMMAND_DIFF_DIR, TRUE, project->base_path))
+	if (project != NULL && NZV(geany->app->project->base_path) &&
+	    find_cmd_env(VC_COMMAND_DIFF_DIR, TRUE, geany->app->project->base_path))
 		p_have_vc = TRUE;
 
 	gtk_widget_set_sensitive(menu_vc_diff_file, f_have_vc);
@@ -1775,7 +1780,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	GtkWidget *menu_vc_menu = NULL;
 	GtkTooltips *tooltips = NULL;
 
-	config_file = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
+	config_file = g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
 				  "VC", G_DIR_SEPARATOR_S, "VC.conf", NULL);
 
 	load_config();
@@ -1784,7 +1789,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	tooltips = gtk_tooltips_new();
 
 	menu_vc = gtk_image_menu_item_new_with_mnemonic(_("_VC"));
-	gtk_container_add(GTK_CONTAINER(main_widgets->tools_menu), menu_vc);
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_vc);
 
 	g_signal_connect((gpointer) menu_vc, "activate", G_CALLBACK(update_menu_items), NULL);
 
