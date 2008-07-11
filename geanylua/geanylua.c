@@ -128,7 +128,7 @@ static GeanyData *geany_data=NULL;
 
 
 PLUGIN_EXPORT
-void init(GeanyData *data)
+void plugin_init(GeanyData *data)
 {
 	gchar *libname=NULL;
 	geany_data=data;
@@ -188,7 +188,7 @@ void configure(GtkWidget *parent)
 
 
 PLUGIN_EXPORT
-void cleanup(void)
+void plugin_cleanup(void)
 {
 	if (glspi_cleanup) { glspi_cleanup(); }
 	if (libgeanylua) { g_module_close(libgeanylua); }

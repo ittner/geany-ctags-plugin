@@ -1,3 +1,6 @@
+July 11, 2008 (ntrel)
+  Use plugin_init(), plugin_cleanup().
+
 July 10, 2008 (ntrel)
   Convert doc_array usage to documents_array.
 
