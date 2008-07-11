@@ -56,6 +56,8 @@ static gint glspi_template(lua_State* L)
 
 static gint glspi_project(lua_State* L)
 {
+	GeanyProject *project = geany->app->project;
+	
 	if (project) {
 		lua_newtable(L);
 		SetTableStr("name", project->name);
@@ -92,7 +94,7 @@ static gint glspi_appinfo(lua_State* L)
 	glspi_tools(L);
 	lua_rawset(L,1);
 
-	if (project) {
+	if (geany->app->project) {
 		lua_pushstring(L,"project");
 		glspi_project(L);
 		lua_rawset(L,1);

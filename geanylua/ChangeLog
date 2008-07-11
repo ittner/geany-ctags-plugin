@@ -1,5 +1,6 @@
 July 11, 2008 (ntrel)
   Use plugin_init(), plugin_cleanup().
+  Add macro for main_widgets, fix project access.
 
 July 10, 2008 (ntrel)
   Convert doc_array usage to documents_array.

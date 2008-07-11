@@ -24,6 +24,7 @@
 #include "ui_utils.h"
 
 #include "pluginmacros.h"
+#define main_widgets	geany->main_widgets
 
 #include "glspi_ver.h"
 
