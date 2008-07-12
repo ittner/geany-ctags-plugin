@@ -44,7 +44,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(71)
+PLUGIN_VERSION_CHECK(75)
 
 PLUGIN_SET_INFO(_("Instant Save"), _("Save instantly new files without an explicit Save As dialog."),
 	"0.2", "Enrico Tröger")
@@ -151,7 +151,7 @@ static void on_configure_response(GtkDialog *dialog, gint response, gpointer use
 void plugin_init(GeanyData *data)
 {
 	GKeyFile *config = g_key_file_new();
-	config_file = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
+	config_file = g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
 		"instantsave", G_DIR_SEPARATOR_S, "instantsave.conf", NULL);
 
 	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
