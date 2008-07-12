@@ -76,6 +76,12 @@ plugins = [
 		 [ 'geanylatex/latexencodings.c', 'geanylatex/geanylatex.c', 'geanylatex/letters.c' ],
 		 [ 'geanylatex' ], # include dirs
 		 '0.2-dev'),
+	Plugin('geanylua',
+		 [ 'geanylua/geanylua.c', 'geanylua/glspi_init.c', 'geanylua/glspi_app.c',
+		   'geanylua/glspi_dlg.c', 'geanylua/glspi_doc.c', 'geanylua/glspi_kfile.c',
+		   'geanylua/glspi_run.c', 'geanylua/glspi_sci.c', 'geanylua/gsdlg_lua.c' ],
+		 [ 'geanylua' ], # include dirs
+		 '0.7.0', [ [ 'lua', '5.1', True ] ]),
 	Plugin('geanyprj',
 		 [ 'geanyprj/src/geanyprj.c', 'geanyprj/src/menu.c', 'geanyprj/src/project.c',
 		   'geanyprj/src/sidebar.c', 'geanyprj/src/utils.c', 'geanyprj/src/xproject.c' ],
