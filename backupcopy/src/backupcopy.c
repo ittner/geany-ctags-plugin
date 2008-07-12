@@ -47,7 +47,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(71)
+PLUGIN_VERSION_CHECK(75)
 
 PLUGIN_SET_INFO(_("Backup Copy"), _("Creates a backup of the current file when saving"),
 	"0.2", "Enrico Tröger")
@@ -246,7 +246,7 @@ void plugin_init(GeanyData *data)
 {
 	GKeyFile *config = g_key_file_new();
 	gchar *tmp;
-	config_file = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
+	config_file = g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
 		"backupcopy", G_DIR_SEPARATOR_S, "backupcopy.conf", NULL);
 
 	backup_dir = NULL;
