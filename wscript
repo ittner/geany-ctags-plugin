@@ -132,8 +132,8 @@ def configure(conf):
 
 
 	conf.check_tool('compiler_cc intltool')
-	conf.check_pkg('gtk+-2.0', destvar='GTK', vnum='2.6.0')
-	conf.check_pkg('geany', destvar='GEANY', vnum='0.15')
+	conf.check_pkg('gtk+-2.0', destvar='GTK', vnum='2.6.0', mandatory=True)
+	conf.check_pkg('geany', destvar='GEANY', vnum='0.15', mandatory=True)
 
 	enabled_plugins = []
 	if Params.g_options.enable_plugins:
@@ -160,7 +160,7 @@ def configure(conf):
 	# write a config.h for each plugin
 	for p in plugins:
 		if p.name in enabled_plugins:
-			if p.name == 'geanyvc' and conf.env['HAVE_GTKSPELL_2_0']:
+			if p.name == 'geanyvc' and conf.env['HAVE_GTKSPELL_2_0'] == 1:
 				# hack for GeanyVC
 				conf.define('USE_GTKSPELL', 1);
 			conf.define('VERSION', p.version, 1)
