@@ -54,7 +54,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(74)
+PLUGIN_VERSION_CHECK(75)
 PLUGIN_SET_INFO(_("Spell Check"), _("Checks the spelling of the current document."), "0.2",
 			_("The Geany developer team"))
 
@@ -326,6 +326,7 @@ static gint process_line(GeanyDocument *doc, gint line_number, const gchar *line
 	/* split line into words */
 	while ((c = g_utf8_get_char_validated(line, -1)) != (gunichar) -1 && c != 0)
 	{
+		/* if (! g_unichar_isspace(c) && ! g_unichar_ispunct(c) && c != '\'') */
 		if (g_unichar_isalpha(c) || c == '\'')
 		{
 			/* part of a word */
@@ -436,7 +437,7 @@ static gboolean on_key_release(GtkWidget *widget, GdkEventKey *ev, gpointer user
 
 	doc = p_document->get_current();
 	/* bail out if we don't have a document or if we are not in the editor widget */
-	focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets->window));
+	focusw = gtk_window_get_focus(GTK_WINDOW(geany->main_widgets->window));
 	if (doc == NULL || focusw != GTK_WIDGET(doc->sci))
 		return FALSE;
 
@@ -629,12 +630,12 @@ static void create_dicts_array()
 static void create_edit_menu()
 {
 	sc->edit_menu = gtk_image_menu_item_new_from_stock(GTK_STOCK_SPELL_CHECK, NULL);
-	gtk_container_add(GTK_CONTAINER(main_widgets->editor_menu), sc->edit_menu);
-	gtk_menu_reorder_child(GTK_MENU(main_widgets->editor_menu), sc->edit_menu, 0);
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), sc->edit_menu);
+	gtk_menu_reorder_child(GTK_MENU(geany->main_widgets->editor_menu), sc->edit_menu, 0);
 
 	sc->edit_menu_sep = gtk_separator_menu_item_new();
-	gtk_container_add(GTK_CONTAINER(main_widgets->editor_menu), sc->edit_menu_sep);
-	gtk_menu_reorder_child(GTK_MENU(main_widgets->editor_menu), sc->edit_menu_sep, 1);
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), sc->edit_menu_sep);
+	gtk_menu_reorder_child(GTK_MENU(geany->main_widgets->editor_menu), sc->edit_menu_sep, 1);
 
 	gtk_widget_show_all(sc->edit_menu);
 }
@@ -646,7 +647,7 @@ static GtkWidget *create_menu()
 	guint i;
 
 	sp_item = gtk_menu_item_new_with_mnemonic(_("_Spell Check"));
-	gtk_container_add(GTK_CONTAINER(main_widgets->tools_menu), sp_item);
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), sp_item);
 
 	menu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(sp_item), menu);
@@ -711,7 +712,7 @@ void plugin_init(GeanyData *data)
 	plugin_fields->menu_item = sp_item;
 	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
 
-	sc->signal_id = g_signal_connect(main_widgets->window,
+	sc->signal_id = g_signal_connect(geany->main_widgets->window,
 		"key-release-event", G_CALLBACK(on_key_release), NULL);
 
 	/* setup keybindings */
@@ -781,7 +782,7 @@ void plugin_cleanup(void)
 	}
 	g_ptr_array_free(sc->dicts, TRUE);
 
-	g_signal_handler_disconnect(main_widgets->window, sc->signal_id);
+	g_signal_handler_disconnect(geany->main_widgets->window, sc->signal_id);
 
 	gtk_widget_destroy(sc->edit_menu);
 	gtk_widget_destroy(sc->edit_menu_sep);
