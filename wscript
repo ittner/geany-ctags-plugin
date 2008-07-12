@@ -32,11 +32,11 @@ If you need additional checks for header files, functions in libraries or
 need to check for library packages (using pkg-config), please ask Enrico
 before committing changes. Thanks.
 
-Requires WAF SVN r3624 (or later) and Python 2.4 (or later).
+Requires WAF SVN r3976 (or later) and Python 2.4 (or later).
 """
 
 
-import Params, Configure, Runner
+import Build, Configure, Options, Runner, Utils
 import sys, os, subprocess
 
 
@@ -136,8 +136,8 @@ def configure(conf):
 	conf.check_pkg('geany', destvar='GEANY', vnum='0.15', mandatory=True)
 
 	enabled_plugins = []
-	if Params.g_options.enable_plugins:
-		for p_name in Params.g_options.enable_plugins.split(','):
+	if Options.options.enable_plugins:
+		for p_name in Options.options.enable_plugins.split(','):
 			enabled_plugins.append(p_name.strip())
 	else:
 		for p in plugins:
@@ -151,7 +151,7 @@ def configure(conf):
 					if l[2]:
 						enabled_plugins.remove(p.name)
 
-	conf_define_from_opt('LIBDIR', Params.g_options.libdir, conf.env['PREFIX'] + '/lib')
+	conf_define_from_opt('LIBDIR', Options.options.libdir, conf.env['PREFIX'] + '/lib')
 
 	svn_rev = conf_get_svn_rev()
 	conf.define('ENABLE_NLS', 1)
@@ -168,7 +168,7 @@ def configure(conf):
 			conf.define('GETTEXT_PACKAGE', p.name, 1)
 			conf.write_config_header(os.path.join(p.name, 'config.h'))
 
-	Params.pprint('BLUE', 'Summary:')
+	Utils.pprint('BLUE', 'Summary:')
 	print_message('Install Geany Plugins ' + VERSION + ' in', conf.env['PREFIX'])
 	print_message('Using GTK version', conf_get_pkg_ver('gtk+-2.0'))
 	print_message('Using Geany version', conf_get_pkg_ver('geany'))
@@ -228,22 +228,22 @@ def build(bld):
 
 
 def init():
-	if Params.g_options.list_plugins:
-		Params.pprint('GREEN', \
+	if Options.options.list_plugins:
+		Utils.pprint('GREEN', \
 			'The following targets can be chosen with the --enable-plugins option:')
 		for p in plugins:
 			print p.name,
-		Params.pprint('GREEN', \
+		Utils.pprint('GREEN', \
 	'\nTo compile only "%(1)s" and "%(2)s", use "./waf configure --enable-plugins=%(1)s,%(2)s".' % \
 			{ '1' : plugins[0].name, '2' : plugins[1].name } )
 		sys.exit(0)
 
 
 def shutdown():
-	if Params.g_options.update_po:
+	if Options.options.update_po:
 		# the following code is based on code from midori's WAF script, thanks
 		for p in plugins:
-			if not p.name in Params.g_build.env['enabled_plugins']:
+			if not p.name in Build.bld.env['enabled_plugins']:
 				continue;
 			dir = os.path.join(p.name, 'po')
 			os.chdir(dir)
@@ -255,12 +255,12 @@ def shutdown():
 				subprocess.call(['intltool-update', '--pot'])
 				size_new = os.stat(p.name + '.pot').st_size
 				if size_new != size_old:
-					Params.pprint('CYAN', 'Updated POT file for %s.' % p.name)
+					Utils.pprint('CYAN', 'Updated POT file for %s.' % p.name)
 					launch('intltool-update -r', 'Updating translations for %s' % p.name, 'CYAN')
 				else:
-					Params.pprint('CYAN', 'POT file is up to date for %s.' % p.name)
+					Utils.pprint('CYAN', 'POT file is up to date for %s.' % p.name)
 			except:
-				Params.pprint('RED', 'Failed to generate pot file for %s.' % p.name)
+				Utils.pprint('RED', 'Failed to generate pot file for %s.' % p.name)
 			os.chdir(os.path.join('..', '..'))
 
 
@@ -268,21 +268,20 @@ def shutdown():
 # Simple function to execute a command and print its exit status
 def launch(command, status, success_color='GREEN'):
 	ret = 0
-	Params.pprint(success_color, status)
+	Utils.pprint(success_color, status)
 	try:
 		ret = subprocess.call(command.split())
 	except:
 		ret = 1
 
 	if ret != 0:
-		Params.pprint('RED', status + ' failed')
+		Utils.pprint('RED', status + ' failed')
 
 	return ret
 
 
 def print_message(msg, result, color = 'GREEN'):
-	Configure.g_maxlen = max(Configure.g_maxlen, len(msg))
-	print "%s :" % msg.ljust(Configure.g_maxlen),
-	Params.pprint(color, result)
-	Runner.print_log(msg, '\n\n')
-
+    Configure.line_just = max(Configure.line_just, len(msg))
+    print "%s :" % msg.ljust(Configure.line_just),
+    Utils.pprint(color, result)
+    Runner.print_log(msg, '\n\n')
