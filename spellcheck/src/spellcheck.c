@@ -681,7 +681,7 @@ void plugin_init(GeanyData *data)
 
 	sc = g_new0(SpellCheck, 1);
 
-	sc->config_file = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
+	sc->config_file = g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
 		"spellcheck", G_DIR_SEPARATOR_S, "spellcheck.conf", NULL);
 
 	g_key_file_load_from_file(config, sc->config_file, G_KEY_FILE_NONE, NULL);
