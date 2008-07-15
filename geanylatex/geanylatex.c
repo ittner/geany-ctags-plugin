@@ -26,6 +26,7 @@
 #include "support.h"
 #include "plugindata.h"
 #include "document.h"
+#include "editor.h"
 #include "filetypes.h"
 #include "templates.h"
 #include "utils.h"
@@ -46,7 +47,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(71)
+PLUGIN_VERSION_CHECK(78)
 PLUGIN_SET_INFO(_("LaTeX"), _("Plugin to make Geany better support LaTeX"), "0.2-dev",
 	    "Frank Lanitz <frank@frank.uvena.de>")
 
@@ -98,8 +99,8 @@ insert_string(gchar *string)
 
 	if (doc != NULL)
 	{
-		gint pos = p_sci->get_current_position(doc->sci);
-		p_sci->insert_text(doc->sci, pos, string);
+		gint pos = p_sci->get_current_position(doc->editor->sci);
+		p_sci->insert_text(doc->editor->sci, pos, string);
 	}
 }
 
