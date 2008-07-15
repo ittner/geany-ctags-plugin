@@ -12,6 +12,7 @@
 #define NEED_FAIL_ARG_TYPE
 #include "glspi.h"
 
+#include "editor.h"
 #include "templates.h"
 
 
@@ -580,9 +581,9 @@ static gint glspi_keygrab(lua_State* L)
 	}
 
 	if (prompt && doc && doc->is_valid ) {
-		gint fvl=sci_send_message(doc->sci,SCI_GETFIRSTVISIBLELINE, 0,0);
-		gint pos=p_sci->get_position_from_line(doc->sci, fvl+1);
-		sci_send_message(doc->sci,SCI_CALLTIPSHOW,pos+3, (gint)prompt);
+		gint fvl=sci_send_message(doc->editor->sci,SCI_GETFIRSTVISIBLELINE, 0,0);
+		gint pos=p_sci->get_position_from_line(doc->editor->sci, fvl+1);
+		sci_send_message(doc->editor->sci,SCI_CALLTIPSHOW,pos+3, (gint)prompt);
 	}
 	gdk_window_add_filter(main_widgets->window->window, keygrab_cb, &km);
 	do {
@@ -596,7 +597,7 @@ static gint glspi_keygrab(lua_State* L)
 
 	gdk_window_remove_filter(main_widgets->window->window, keygrab_cb, &km);
 	if (prompt && doc && doc->is_valid) {
-	p_sci->send_command(doc->sci, SCI_CALLTIPCANCEL);
+	p_sci->send_command(doc->editor->sci, SCI_CALLTIPCANCEL);
 	}
 	km.group=0; /* reset the hijacked flag before passing to GDK */
 	lua_pushstring(L, gdk_keyval_name(gdk_keymap_lookup_key(NULL, &km)));

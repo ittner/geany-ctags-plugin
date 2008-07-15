@@ -7,6 +7,8 @@
 #define NEED_FAIL_ARG_TYPES
 #include "glspi.h"
 
+#include "editor.h"
+
 
 
 #define DOCS ((GeanyDocument**)(documents_array->pdata))
@@ -66,7 +68,7 @@ static gint doc_idx_to_tab_idx(gint idx)
 {
 	return (
 		(idx>=0) && ((guint)idx<documents_array->len) && DOCS[idx]->is_valid
-	) ? gtk_notebook_page_num(NOTEBOOK, GTK_WIDGET(DOCS[idx]->sci)):-1;
+	) ? gtk_notebook_page_num(NOTEBOOK, GTK_WIDGET(DOCS[idx]->editor->sci)):-1;
 }
 
 

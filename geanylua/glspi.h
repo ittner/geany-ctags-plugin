@@ -59,7 +59,7 @@
 
 #define DOC_REQUIRED \
 	GeanyDocument *doc = p_document->get_current();\
-	if (!(doc && doc->sci)) {return 0;}
+	if (!(doc && doc->is_valid)) {return 0;}
 
 
 #define SetTableValue(name,value,pusher) \
