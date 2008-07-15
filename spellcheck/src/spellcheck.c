@@ -54,7 +54,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(75)
+PLUGIN_VERSION_CHECK(78)
 PLUGIN_SET_INFO(_("Spell Check"), _("Checks the spelling of the current document."), "0.2",
 			_("The Geany developer team"))
 
@@ -138,8 +138,8 @@ static void clear_indicators_on_range(GeanyDocument *doc, gint start, gint len)
 
 	if (len > 0)
 	{
-		p_sci->send_message(doc->sci, SCI_STARTSTYLING, start, INDIC2_MASK);
-		p_sci->send_message(doc->sci, SCI_SETSTYLING, len, 0);
+		p_sci->send_message(doc->editor->sci, SCI_STARTSTYLING, start, INDIC2_MASK);
+		p_sci->send_message(doc->editor->sci, SCI_SETSTYLING, len, 0);
 	}
 }
 
@@ -150,8 +150,8 @@ static void clear_indicators_on_line(GeanyDocument *doc, gint line_number)
 
 	g_return_if_fail(doc != NULL);
 
-	start_pos = p_sci->get_position_from_line(doc->sci, line_number);
-	length = p_sci->get_line_length(doc->sci, line_number);
+	start_pos = p_sci->get_position_from_line(doc->editor->sci, line_number);
+	length = p_sci->get_line_length(doc->editor->sci, line_number);
 
 	clear_indicators_on_range(doc, start_pos, length);
 }
@@ -169,14 +169,16 @@ static void on_menu_suggestion_item_activate(GtkMenuItem *menuitem, gpointer gda
 		return;
 	}
 
-	startword = p_sci->send_message(clickinfo.doc->sci, SCI_WORDSTARTPOSITION, clickinfo.pos, 0);
-	endword = p_sci->send_message(clickinfo.doc->sci, SCI_WORDENDPOSITION, clickinfo.pos, 0);
+	startword = p_sci->send_message(
+		clickinfo.doc->editor->sci, SCI_WORDSTARTPOSITION, clickinfo.pos, 0);
+	endword = p_sci->send_message(
+		clickinfo.doc->editor->sci, SCI_WORDENDPOSITION, clickinfo.pos, 0);
 
 	if (startword != endword)
 	{
-		p_sci->set_selection_start(clickinfo.doc->sci, startword);
-		p_sci->set_selection_end(clickinfo.doc->sci, endword);
-		p_sci->replace_sel(clickinfo.doc->sci, sugg);
+		p_sci->set_selection_start(clickinfo.doc->editor->sci, startword);
+		p_sci->set_selection_end(clickinfo.doc->editor->sci, endword);
+		p_sci->replace_sel(clickinfo.doc->editor->sci, sugg);
 
 		clear_indicators_on_range(clickinfo.doc, startword, endword - startword);
 	}
@@ -192,8 +194,10 @@ static void on_menu_addword_item_activate(GtkMenuItem *menuitem, gpointer gdata)
 
 	enchant_dict_add_to_pwl(sc->dict, clickinfo.word, -1);
 
-	startword = p_sci->send_message(clickinfo.doc->sci, SCI_WORDSTARTPOSITION, clickinfo.pos, 0);
-	endword = p_sci->send_message(clickinfo.doc->sci, SCI_WORDENDPOSITION, clickinfo.pos, 0);
+	startword = p_sci->send_message(
+		clickinfo.doc->editor->sci, SCI_WORDSTARTPOSITION, clickinfo.pos, 0);
+	endword = p_sci->send_message(
+		clickinfo.doc->editor->sci, SCI_WORDENDPOSITION, clickinfo.pos, 0);
 	if (startword != endword)
 	{
 		clear_indicators_on_range(clickinfo.doc, startword, endword - startword);
@@ -302,7 +306,7 @@ static gint check_word(GeanyDocument *doc, gint line_number, GString *str, gint 
 			g_string_append_c(str, ' ');
 		}
 
-		p_editor->set_indicator(doc, end_pos - strlen(word), end_pos);
+		p_editor->set_indicator(doc->editor, end_pos - strlen(word), end_pos);
 		if (sc->use_msgwin)
 			p_msgwindow->msg_add(COLOR_RED, line_number + 1, doc, "%s", str->str);
 
@@ -322,7 +326,7 @@ static gint process_line(GeanyDocument *doc, gint line_number, const gchar *line
 	GString *str = g_string_sized_new(256);
 	gint suggestions_found = 0;
 
-	end_pos = p_sci->get_position_from_line(doc->sci, line_number);
+	end_pos = p_sci->get_position_from_line(doc->editor->sci, line_number);
 	/* split line into words */
 	while ((c = g_utf8_get_char_validated(line, -1)) != (gunichar) -1 && c != 0)
 	{
@@ -360,10 +364,12 @@ static void check_document(GeanyDocument *doc)
 
 	enchant_dict_describe(sc->dict, dict_describe, &dict_string);
 
-	if (p_sci->can_copy(doc->sci))
+	if (p_sci->can_copy(doc->editor->sci))
 	{
-		first_line = p_sci->get_line_from_position(doc->sci, p_sci->get_selection_start(doc->sci));
-		last_line = p_sci->get_line_from_position(doc->sci, p_sci->get_selection_end(doc->sci));
+		first_line = p_sci->get_line_from_position(
+			doc->editor->sci, p_sci->get_selection_start(doc->editor->sci));
+		last_line = p_sci->get_line_from_position(
+			doc->editor->sci, p_sci->get_selection_end(doc->editor->sci));
 
 		if (sc->use_msgwin)
 			p_msgwindow->msg_add(COLOR_BLUE, -1, NULL,
@@ -373,7 +379,7 @@ static void check_document(GeanyDocument *doc)
 	else
 	{
 		first_line = 0;
-		last_line = p_sci->get_line_count(doc->sci);
+		last_line = p_sci->get_line_count(doc->editor->sci);
 		if (sc->use_msgwin)
 			p_msgwindow->msg_add(COLOR_BLUE, -1, NULL, _("Checking file \"%s\" (using %s):"),
 				DOC_FILENAME(doc), dict_string);
@@ -382,7 +388,7 @@ static void check_document(GeanyDocument *doc)
 
 	for (i = first_line; i < last_line; i++)
 	{
-		line = p_sci->get_line(doc->sci, i);
+		line = p_sci->get_line(doc->editor->sci, i);
 
 		suggestions_found += process_line(doc, i, line);
 
@@ -405,7 +411,7 @@ static void broker_init_failed()
 
 static void perform_check(GeanyDocument *doc)
 {
-	p_editor->clear_indicators(doc);
+	p_editor->clear_indicators(doc->editor);
 	if (sc->use_msgwin)
 	{
 		p_msgwindow->clear_tab(MSG_MESSAGE);
@@ -438,19 +444,19 @@ static gboolean on_key_release(GtkWidget *widget, GdkEventKey *ev, gpointer user
 	doc = p_document->get_current();
 	/* bail out if we don't have a document or if we are not in the editor widget */
 	focusw = gtk_window_get_focus(GTK_WINDOW(geany->main_widgets->window));
-	if (doc == NULL || focusw != GTK_WIDGET(doc->sci))
+	if (doc == NULL || focusw != GTK_WIDGET(doc->editor->sci))
 		return FALSE;
 
 	if (ev->keyval == '\r' &&
-		p_sci->send_message(doc->sci, SCI_GETEOLMODE, 0, 0) == SC_EOL_CRLF)
+		p_sci->send_message(doc->editor->sci, SCI_GETEOLMODE, 0, 0) == SC_EOL_CRLF)
 	{	/* prevent double line checking */
 		return FALSE;
 	}
 
-	line_number = p_sci->get_current_line(doc->sci);
+	line_number = p_sci->get_current_line(doc->editor->sci);
 	if (ev->keyval == '\n' || ev->keyval == '\r')
 		line_number--; /* check previous line if we start a new one */
-	line = p_sci->get_line(doc->sci, line_number);
+	line = p_sci->get_line(doc->editor->sci, line_number);
 
 	clear_indicators_on_line(doc, line_number);
 	if (process_line(doc, line_number, line) != 0)
