@@ -32,6 +32,7 @@
 #include "support.h"
 #include "plugindata.h"
 #include "document.h"
+#include "editor.h"
 #include "filetypes.h"
 #include "utils.h"
 #include "ui_utils.h"
@@ -55,7 +56,7 @@ GeanyData *geany_data;
 GeanyFunctions *geany_functions;
 
 
-PLUGIN_VERSION_CHECK(71);
+PLUGIN_VERSION_CHECK(78);
 PLUGIN_SET_INFO(_("VC"), _("Interface to different Version Control systems."), VERSION,
 		_("Yura Siamashka <yurand2@gmail.com>,\nFrank Lanitz <frank@frank.uvena.de>"));
 
@@ -348,9 +349,9 @@ show_output(const gchar * std_output, const gchar * name, const gchar * force_en
 		}
 		else
 		{
-			p_sci->set_text(doc->sci, std_output);
+			p_sci->set_text(doc->editor->sci, std_output);
 			book = GTK_NOTEBOOK(geany->main_widgets->notebook);
-			page = gtk_notebook_page_num(book, GTK_WIDGET(doc->sci));
+			page = gtk_notebook_page_num(book, GTK_WIDGET(doc->editor->sci));
 			gtk_notebook_set_current_page(book, page);
 		}
 		p_document->set_text_changed(doc, set_changed_flag);
