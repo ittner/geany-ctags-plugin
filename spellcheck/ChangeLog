@@ -1,3 +1,17 @@
+2008-07-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/spellcheck.c:
+   Note: Don't use this revision for productive use!
+   Experimental changes in word retrieval to work better with complex
+   Unicode characters like in Hindi.
+   Use Scintilla's messages for finding word start and end positions
+   instead of my own variant which didn't work well in Hindi.
+   Add a temporary option to switch between Geany's word retrieval
+   method when showing the editor menu or use an alternative one
+   (only for testing).
+   This code is still in testing and should be considered as WIP.
+
+
 2008-07-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/spellcheck.c:
