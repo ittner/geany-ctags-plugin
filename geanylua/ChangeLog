@@ -1,5 +1,6 @@
 July 17, 2008 (ntrel)
   Fix use of old app macro.
+  Fix segfault in last commit in glspi_init() (oops).
 
 July 15, 2008 (ntrel)
   Fix for GeanyEditor changes.

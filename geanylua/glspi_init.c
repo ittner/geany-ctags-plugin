@@ -434,7 +434,7 @@ static void build_menu(void)
 PLUGIN_EXPORT
 void glspi_init (GeanyData *data, GeanyFunctions *functions, KeyBindingGroup *kg)
 {
-	GeanyApp *app = geany->app;
+	GeanyApp *app = data->app;
 	
 	glspi_geany_data = data;
 	glspi_geany_functions = functions;
