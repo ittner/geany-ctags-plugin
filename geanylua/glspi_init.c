@@ -108,7 +108,7 @@ static void hotkey_cleanup(void)
 
 
 #define KEYFILE_FAIL(msg) \
-if (app->debug_mode) { \
+if (geany->app->debug_mode) { \
 	g_printerr("%s: %s\n", PLUGIN_NAME, msg); \
 } \
 g_error_free(err); \
@@ -177,13 +177,13 @@ static void hotkey_init(void)
 						key,mod,KG->keys[i].name,KG->keys[i].label,NULL);
 			}
 		} else {
-			if (app->debug_mode) {
+			if (geany->app->debug_mode) {
 				g_printerr("%s: %s\n", PLUGIN_NAME, err->message);
 			}
 			g_error_free(err);
 		}
 	} else {
-		if (app->debug_mode) {
+		if (geany->app->debug_mode) {
 			g_printerr("%s:  File not found %s\n", PLUGIN_NAME, hotkeys_cfg);
 		}
 	}
@@ -434,6 +434,8 @@ static void build_menu(void)
 PLUGIN_EXPORT
 void glspi_init (GeanyData *data, GeanyFunctions *functions, KeyBindingGroup *kg)
 {
+	GeanyApp *app = geany->app;
+	
 	glspi_geany_data = data;
 	glspi_geany_functions = functions;
 

@@ -81,6 +81,8 @@ static gchar *glspi_script_dir = NULL;
 
 static gint glspi_appinfo(lua_State* L)
 {
+	GeanyApp *app = geany->app;
+	
 	lua_newtable(L);
 	SetTableBool("debug", app->debug_mode);
 	SetTableStr("configdir", app->configdir);
@@ -95,7 +97,7 @@ static gint glspi_appinfo(lua_State* L)
 	glspi_tools(L);
 	lua_rawset(L,1);
 
-	if (geany->app->project) {
+	if (app->project) {
 		lua_pushstring(L,"project");
 		glspi_project(L);
 		lua_rawset(L,1);
