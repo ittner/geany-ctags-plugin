@@ -87,8 +87,12 @@ install-plugin: .libs/$(PLUGIN_FILENAME)
 
 
 install-scripts:
-	$(MKDIR_P) $(DATA_DEST_DIR)
-	cp -R ./examples $(DATA_DEST_DIR)
+	$(MKDIR_P) $(DATA_DEST_DIR)/examples
+	DIRS=`find examples -maxdepth 1 -mindepth 1 -type d -not -name .svn`; \
+	for DIR in $$DIRS; do \
+		$(MKDIR_P) $(DATA_DEST_DIR)/$$DIR; \
+		cp $$DIR/*.lua $(DATA_DEST_DIR)/$$DIR; \
+	done
 
 
 install-docs:
