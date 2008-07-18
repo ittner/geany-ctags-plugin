@@ -81,6 +81,7 @@ plugins = [
 		   'geanylua/glspi_dlg.c', 'geanylua/glspi_doc.c', 'geanylua/glspi_kfile.c',
 		   'geanylua/glspi_run.c', 'geanylua/glspi_sci.c', 'geanylua/gsdlg_lua.c' ],
 		 [ 'geanylua' ], # include dirs
+		 # maybe you need to modify the package name of Lua, try one of these: lua5.1 lua51 lua-5.1
 		 '0.7.0', [ [ 'lua', '5.1', True ] ]),
 	Plugin('geanyprj',
 		 [ 'geanyprj/src/geanyprj.c', 'geanyprj/src/menu.c', 'geanyprj/src/project.c',
@@ -146,8 +147,10 @@ def configure(conf):
 		for p_name in Options.options.enable_plugins.split(','):
 			enabled_plugins.append(p_name.strip())
 	else:
+		skipped_plugins = Options.options.skip_plugins.split(',')
 		for p in plugins:
-			enabled_plugins.append(p.name)
+				if not p.name in skipped_plugins:
+					enabled_plugins.append(p.name)
 
 	# check for plugin deps
 	for p in plugins:
@@ -207,7 +210,14 @@ def set_options(opt):
 		opt.add_option('--enable-plugins', action='store', default='',
 			help='plugins to be built [plugins in CSV format, e.g. "%(1)s,%(2)s"]' % \
 			{ '1' : plugins[0].name, '2' : plugins[1].name }, dest='enable_plugins')
+		opt.add_option('--skip-plugins', action='store', default='',
+			help='plugins which should not be built, ignored when --enable-plugins is set, same format as --enable-plugins' % \
+			{ '1' : plugins[0].name, '2' : plugins[1].name }, dest='skip_plugins')
 
+#~ future code
+#~ def error_handler(self, tsk):
+	#~ print "haha, %r failed" % tsk
+	#~ self.error = 0
 
 def build(bld):
 	for p in plugins:
@@ -226,6 +236,8 @@ def build(bld):
 		obj.uselib		            = libs
 		obj.inst_var				= 'LIBDIR'
 		obj.inst_dir				= '/geany/'
+		# if we are compiling more than one plugin, allow some of to fail
+		#~ Runner.Parallel.error_handler = error_handler
 
 		if os.path.exists(os.path.join(p.name, 'po')):
 			obj		    = bld.new_task_gen('intltool_po')
