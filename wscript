@@ -77,9 +77,7 @@ plugins = [
 		 [ 'geanylatex' ], # include dirs
 		 '0.2-dev'),
 	Plugin('geanylua',
-		 [ 'geanylua/geanylua.c', 'geanylua/glspi_init.c', 'geanylua/glspi_app.c',
-		   'geanylua/glspi_dlg.c', 'geanylua/glspi_doc.c', 'geanylua/glspi_kfile.c',
-		   'geanylua/glspi_run.c', 'geanylua/glspi_sci.c', 'geanylua/gsdlg_lua.c' ],
+		 [ 'geanylua/geanylua.c' ], # the other source files are listed in build_lua()
 		 [ 'geanylua' ], # include dirs
 		 # maybe you need to modify the package name of Lua, try one of these: lua5.1 lua51 lua-5.1
 		 '0.7.0', [ [ 'lua', '5.1', True ] ]),
@@ -228,6 +226,9 @@ def build(bld):
 		for l in p.libs:   # add plugin specific libs
 			libs += ' %s' % l[0].upper()
 
+		if p.name == 'geanylua':
+			build_lua(bld, p, libs) # build additional lib for the lua plugin
+
 		obj					        = bld.new_task_gen('cc', 'shlib')
 		obj.source			        = p.sources
 		obj.includes				= p.includes
@@ -243,6 +244,24 @@ def build(bld):
 			obj		    = bld.new_task_gen('intltool_po')
 			obj.podir   = os.path.join(p.name, 'po')
 			obj.appname = p.name
+
+
+
+
+def build_lua(bld, p, libs):
+	lua_sources = [ 'geanylua/glspi_init.c', 'geanylua/glspi_app.c', 'geanylua/glspi_dlg.c',
+					'geanylua/glspi_doc.c', 'geanylua/glspi_kfile.c', 'geanylua/glspi_run.c',
+					'geanylua/glspi_sci.c', 'geanylua/gsdlg_lua.c' ]
+
+	obj					        = bld.new_task_gen('cc', 'shlib')
+	obj.source			        = lua_sources
+	obj.includes				= p.includes
+	obj.env['shlib_PATTERN']    = '%s.so'
+	obj.target			        = 'libgeanylua'
+	obj.uselib		            = libs
+	obj.inst_var				= 'DATADIR'
+	obj.inst_dir				= '/geany/plugins/geanylua'
+
 
 
 def init():
