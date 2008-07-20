@@ -551,11 +551,9 @@ static void locale_init(void)
 static const gchar *get_default_lang(void)
 {
 	const gchar *lang = g_getenv("LANG");
-	if (lang != NULL)
+	if (NZV(lang))
 	{
-		if (g_strncasecmp(lang, "C", 1) == 0)
-			lang = "en";
-		else if (lang[0] == 0)
+		if (g_ascii_strncasecmp(lang, "C", 1) == 0)
 			lang = "en";
 	}
 	else
