@@ -66,7 +66,6 @@ typedef struct
 	gchar *default_language;
 	gboolean use_msgwin;
 	gboolean check_while_typing;
-	gboolean use_geanys_current_word;
 	gulong signal_id;
 	GPtrArray *dicts;
 	GtkWidget *edit_menu;
@@ -207,41 +206,11 @@ static void on_menu_addword_item_activate(GtkMenuItem *menuitem, gpointer gdata)
 }
 
 
-/* This is a temporary replacement for Geany's editor_find_current_word() which is not yet
- * as good as it should be in reading Unicode words */
-static gchar *get_current_word(GeanyDocument *doc, gint pos_start)
-{
-	gint wstart, wend;
-	gchar *word;
-	gchar c;
-
-	g_message("use internal word retrieval");
-
-	wstart = p_sci->send_message(doc->editor->sci, SCI_WORDSTARTPOSITION, pos_start, TRUE);
-	wend = p_sci->send_message(doc->editor->sci, SCI_WORDENDPOSITION, wstart, FALSE);
-	if (wstart == wend)
-		return NULL;
-	c = p_sci->get_char_at(doc->editor->sci, wstart);
-
-	word = g_malloc0(wend - wstart + 1);
-	/* hopefully it's enough to check for these both */
-	if (ispunct(c) || isspace(c))
-	{
-		return NULL;
-	}
-
-	p_sci->get_text_range(doc->editor->sci, wstart, wend, word);
-
-	return word;
-}
-
-
 static void on_update_editor_menu(GObject *obj, const gchar *word, gint pos,
 								  GeanyDocument *doc, gpointer user_data)
 {
 	gsize n_suggs, i;
 	gchar **tmp_suggs;
-	gchar *current_word;
 
 	g_return_if_fail(doc != NULL && doc->is_valid);
 
@@ -249,15 +218,10 @@ static void on_update_editor_menu(GObject *obj, const gchar *word, gint pos,
 	gtk_widget_hide(sc->edit_menu);
 	gtk_widget_hide(sc->edit_menu_sep);
 
-	if (sc->use_geanys_current_word)
-		current_word = g_strdup(word);
-	else
-		current_word = get_current_word(doc, pos);
-
-	if (! NZV(current_word) || enchant_dict_check(sc->dict, current_word, -1) == 0)
+	if (! NZV(word) || enchant_dict_check(sc->dict, word, -1) == 0)
 		return;
 
-	tmp_suggs = enchant_dict_suggest(sc->dict, current_word, -1, &n_suggs);
+	tmp_suggs = enchant_dict_suggest(sc->dict, word, -1, &n_suggs);
 
 	if (tmp_suggs != NULL)
 	{
@@ -266,8 +230,7 @@ static void on_update_editor_menu(GObject *obj, const gchar *word, gint pos,
 
 		clickinfo.pos = pos;
 		clickinfo.doc = doc;
-		//~ setptr(clickinfo.word, g_strdup(word));
-		setptr(clickinfo.word, current_word);
+		setptr(clickinfo.word, g_strdup(word));
 
 		if (GTK_IS_WIDGET(sc->edit_menu_sub))
 			gtk_widget_destroy(sc->edit_menu_sub);
@@ -293,7 +256,7 @@ static void on_update_editor_menu(GObject *obj, const gchar *word, gint pos,
 
 		image = gtk_image_new_from_stock(GTK_STOCK_ADD, GTK_ICON_SIZE_MENU);
 
-		label = g_strdup_printf(_("Add \"%s\" to Dictionary"), current_word);
+		label = g_strdup_printf(_("Add \"%s\" to Dictionary"), word);
 		menu_item = gtk_image_menu_item_new_with_label(label);
 		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item), image);
 		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
@@ -361,42 +324,6 @@ static gint check_word(GeanyDocument *doc, gint line_number, const gchar *word,
 }
 
 
-#if 0
-static gint process_line(GeanyDocument *doc, gint line_number, const gchar *line)
-{
-	gint end_pos, char_len;
-	gunichar c;
-	GString *str = g_string_sized_new(256);
-	gint suggestions_found = 0;
-
-	end_pos = p_sci->get_position_from_line(doc->editor->sci, line_number);
-	/* split line into words */
-	while ((c = g_utf8_get_char_validated(line, -1)) != (gunichar) -1 && c != 0)
-	{
-		/* if (! g_unichar_isspace(c) && ! g_unichar_ispunct(c) && c != '\'') */
-		if (g_unichar_isalpha(c) || c == '\'')
-		{
-			/* part of a word */
-			g_string_append_unichar(str, c);
-		}
-		else if (str->len > 0)
-		{
-			g_string_append_c(str, '\0');
-			suggestions_found += check_word(doc, line_number, str->str, -1, end_pos);
-		}
-
-		/* calculate byte len of c and add skip these in line */
-		char_len = g_unichar_to_utf8(c, NULL);
-		line += char_len;
-		end_pos += char_len;
-	}
-	g_string_free(str, TRUE);
-
-	return suggestions_found;
-}
-
-#else
-
 static gint process_line(GeanyDocument *doc, gint line_number, const gchar *line)
 {
 	gint pos_start, pos_end;
@@ -437,7 +364,6 @@ static gint process_line(GeanyDocument *doc, gint line_number, const gchar *line
 	g_string_free(str, TRUE);
 	return suggestions_found;
 }
-#endif
 
 
 static void check_document(GeanyDocument *doc)
@@ -683,14 +609,10 @@ static void on_configure_response(GtkDialog *dialog, gint response, gpointer use
 		sc->use_msgwin = (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 			g_object_get_data(G_OBJECT(dialog), "check_msgwin"))));
 
-		sc->use_geanys_current_word = (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-			g_object_get_data(G_OBJECT(dialog), "check_current_word"))));
-
 		g_key_file_load_from_file(config, sc->config_file, G_KEY_FILE_NONE, NULL);
 		g_key_file_set_string(config, "spellcheck", "language", sc->default_language);
 		g_key_file_set_boolean(config, "spellcheck", "check_while_typing", sc->check_while_typing);
 		g_key_file_set_boolean(config, "spellcheck", "use_msgwin", sc->use_msgwin);
-		g_key_file_set_boolean(config, "spellcheck", "use_geanys_current_word", sc->use_geanys_current_word);
 
 		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && p_utils->mkdir(config_dir, TRUE) != 0)
 		{
@@ -789,7 +711,6 @@ void plugin_init(GeanyData *data)
 	sc->check_while_typing = p_utils->get_setting_boolean(config,
 		"spellcheck", "check_while_typing", FALSE);
 	sc->use_msgwin = p_utils->get_setting_boolean(config, "spellcheck", "use_msgwin", FALSE);
-	sc->use_geanys_current_word = p_utils->get_setting_boolean(config, "spellcheck", "use_geanys_current_word", TRUE);
 	g_key_file_free(config);
 
 	locale_init();
@@ -823,7 +744,7 @@ void plugin_init(GeanyData *data)
 
 GtkWidget *plugin_configure(GtkDialog *dialog)
 {
-	GtkWidget *label, *vbox, *combo, *check_type, *check_msgwin, *check_current_word;
+	GtkWidget *label, *vbox, *combo, *check_type, *check_msgwin;
 	guint i;
 
 	vbox = gtk_vbox_new(FALSE, 6);
@@ -836,11 +757,6 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		_("Print misspelled words and suggestions in the messages window"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_msgwin), sc->use_msgwin);
 	gtk_box_pack_start(GTK_BOX(vbox), check_msgwin, FALSE, FALSE, 3);
-
-	check_current_word = gtk_check_button_new_with_label(
-		_("In the right-click menu, retrieve the current word from Geany?"));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_current_word), sc->use_geanys_current_word);
-	gtk_box_pack_start(GTK_BOX(vbox), check_current_word, FALSE, FALSE, 3);
 
 	label = gtk_label_new(_("Language to use for the spell check:"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
@@ -865,7 +781,6 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	g_object_set_data(G_OBJECT(dialog), "combo", combo);
 	g_object_set_data(G_OBJECT(dialog), "check_type", check_type);
 	g_object_set_data(G_OBJECT(dialog), "check_msgwin", check_msgwin);
-	g_object_set_data(G_OBJECT(dialog), "check_current_word", check_current_word);
 	g_signal_connect(dialog, "response", G_CALLBACK(on_configure_response), NULL);
 
 	gtk_widget_show_all(vbox);
