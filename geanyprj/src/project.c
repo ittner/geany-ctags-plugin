@@ -75,7 +75,7 @@ project_filter_python(const gchar * file)
 static gboolean
 project_filter_all(const gchar * file)
 {
-	if (p_filetypes->detect_from_filename(file)->id != GEANY_FILETYPES_ALL)
+	if (p_filetypes->detect_from_filename(file)->id != GEANY_FILETYPES_NONE)
 		return TRUE;
 	return FALSE;
 }
@@ -231,6 +231,8 @@ geany_project_set_path(struct GeanyPrj *prj, const gchar * path)
 void
 geany_project_set_name(struct GeanyPrj *prj, const gchar * name)
 {
+	GeanyProject *project = geany->app->project;
+
 	if (prj->name)
 		g_free(prj->name);
 	prj->name = g_strdup(name);
@@ -273,6 +275,7 @@ geany_project_set_regenerate(struct GeanyPrj *prj, gboolean val)
 void
 geany_project_set_description(struct GeanyPrj *prj, const gchar * description)
 {
+	GeanyProject *project = geany->app->project;
 	if (prj->description)
 		g_free(prj->description);
 	prj->description = g_strdup(description);
@@ -291,6 +294,8 @@ geany_project_set_description(struct GeanyPrj *prj, const gchar * description)
 void
 geany_project_set_base_path(struct GeanyPrj *prj, const gchar * base_path)
 {
+	GeanyProject *project = geany->app->project;
+
 	if (prj->base_path)
 		g_free(prj->base_path);
 
@@ -317,6 +322,8 @@ geany_project_set_base_path(struct GeanyPrj *prj, const gchar * base_path)
 void
 geany_project_set_run_cmd(struct GeanyPrj *prj, const gchar * run_cmd)
 {
+	GeanyProject *project = geany->app->project;
+
 	if (prj->run_cmd)
 		g_free(prj->run_cmd);
 	prj->run_cmd = g_strdup(run_cmd);

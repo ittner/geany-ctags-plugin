@@ -78,7 +78,7 @@ build_properties_dialog(gboolean properties)
 	GtkWidget *bbox;
 	GtkWidget *label;
 	GtkTooltips *tooltips =
-		GTK_TOOLTIPS(p_support->lookup_widget(main_widgets->window, "tooltips"));
+		GTK_TOOLTIPS(p_support->lookup_widget(geany->main_widgets->window, "tooltips"));
 	PropertyDialogElements *e;
 	gchar *dir = NULL;
 	gchar *basename = NULL;
@@ -103,7 +103,7 @@ build_properties_dialog(gboolean properties)
 	{
 		e->dialog =
 			gtk_dialog_new_with_buttons(_("Project Preferences"),
-						    GTK_WINDOW(main_widgets->window),
+						    GTK_WINDOW(geany->main_widgets->window),
 						    GTK_DIALOG_DESTROY_WITH_PARENT,
 						    GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 						    GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
@@ -112,7 +112,7 @@ build_properties_dialog(gboolean properties)
 	{
 		e->dialog =
 			gtk_dialog_new_with_buttons(_("New Project"),
-						    GTK_WINDOW(main_widgets->window),
+						    GTK_WINDOW(geany->main_widgets->window),
 						    GTK_DIALOG_DESTROY_WITH_PARENT,
 						    GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 
@@ -383,7 +383,7 @@ tools_menu_init()
 	tooltips = gtk_tooltips_new();
 
 	menu_prj = gtk_image_menu_item_new_with_mnemonic(_("_Project"));
-	gtk_container_add(GTK_CONTAINER(main_widgets->tools_menu), menu_prj);
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_prj);
 
 	g_signal_connect((gpointer) menu_prj, "activate", G_CALLBACK(update_menu_items), NULL);
 

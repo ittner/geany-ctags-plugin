@@ -61,6 +61,8 @@ remove_tag(G_GNUC_UNUSED gpointer key, gpointer value, G_GNUC_UNUSED gpointer us
 void
 xproject_close(gboolean cache)
 {
+	GeanyProject *project = geany->app->project;
+
 	debug("%s\n", __FUNCTION__);
 	g_return_if_fail(project != NULL);
 
@@ -96,6 +98,8 @@ xproject_close(gboolean cache)
 void
 xproject_open(const gchar * path)
 {
+	GeanyProject *project = geany->app->project;
+
 	guint i;
 	struct GeanyPrj *p = NULL;
 	debug("%s\n", __FUNCTION__);

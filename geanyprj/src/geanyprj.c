@@ -50,6 +50,8 @@ reload_project()
 	gchar *dir;
 	gchar *proj;
 	GeanyDocument *doc;
+	GeanyProject *project = geany->app->project;
+
 
 	debug("%s\n", __FUNCTION__);
 
@@ -117,7 +119,7 @@ on_doc_activate(G_GNUC_UNUSED GObject * obj, G_GNUC_UNUSED GeanyDocument * doc,
 	reload_project();
 }
 
-GeanyCallback geany_callbacks[] = {
+PluginCallback plugin_callbacks[] = {
 	{"document-open", (GCallback) & on_doc_open, TRUE, NULL},
 	{"document-save", (GCallback) & on_doc_save, TRUE, NULL},
 	{"document-activate", (GCallback) & on_doc_activate, TRUE, NULL},
@@ -129,7 +131,7 @@ void
 plugin_init(G_GNUC_UNUSED GeanyData * data)
 {
 	GtkWidget *prj =
-		p_support->lookup_widget(GTK_WIDGET(main_widgets->window), "menu_project1");
+		p_support->lookup_widget(GTK_WIDGET(geany->main_widgets->window), "menu_project1");
 	tools_menu_init();
 
 	gtk_widget_set_child_visible(prj, FALSE);
@@ -144,8 +146,9 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 void
 plugin_cleanup()
 {
+	GeanyProject *project = geany->app->project;
 	GtkWidget *prj =
-		p_support->lookup_widget(GTK_WIDGET(main_widgets->window), "menu_project1");
+		p_support->lookup_widget(GTK_WIDGET(geany->main_widgets->window), "menu_project1");
 	gtk_widget_set_child_visible(prj, TRUE);
 	gtk_widget_set_size_request(prj, -1, -1);
 
