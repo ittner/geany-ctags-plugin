@@ -33,6 +33,7 @@
 #include "keybindings.h"
 #include "support.h"		/* for the _() translation macro (see also po/POTFILES.in) */
 #include "document.h"
+#include "editor.h"
 #include "filetypes.h"
 #include "ui_utils.h"
 #include "utils.h"
@@ -51,9 +52,9 @@ static GtkWidget *keyb1;
 static GtkWidget *keyb2;
 
 
-/* Check that Geany supports plugin API version 52 or later, and check
+/* Check that Geany supports plugin API version 71 or later, and check
  * for binary compatibility. */
-PLUGIN_VERSION_CHECK(71)
+PLUGIN_VERSION_CHECK(78)
 /* All plugins must set name, description, version and author. */
 	PLUGIN_SET_INFO(_("Doc"), _("Call documentation viewer on current symbol."), VERSION,
 		_("Yura Siamshka <yurand2@gmail.com>"));
@@ -99,20 +100,20 @@ current_word()
 	doc = p_document->get_current();
 	g_return_val_if_fail(doc != NULL && doc->file_name != NULL, NULL);
 
-	text_len = p_sci->get_selected_text_length(doc->sci);
+	text_len = p_sci->get_selected_text_length(doc->editor->sci);
 	if (text_len > 1)
 	{
 		txt = g_malloc(text_len + 1);
-		p_sci->get_selected_text(doc->sci, txt);
+		p_sci->get_selected_text(doc->editor->sci, txt);
 		return txt;
 	}
 
-	pos = p_sci->get_current_position(doc->sci);
+	pos = p_sci->get_current_position(doc->editor->sci);
 	if (pos > 0)
 		pos--;
 
 	cstart = pos;
-	c = p_sci->get_char_at(doc->sci, cstart);
+	c = p_sci->get_char_at(doc->editor->sci, cstart);
 
 	if (!word_check_left(c))
 		return NULL;
@@ -121,25 +122,25 @@ current_word()
 	{
 		cstart--;
 		if (cstart >= 0)
-			c = p_sci->get_char_at(doc->sci, cstart);
+			c = p_sci->get_char_at(doc->editor->sci, cstart);
 		else
 			break;
 	}
 	cstart++;
 
 	cend = pos;
-	c = p_sci->get_char_at(doc->sci, cend);
-	while (word_check_right(c) && cend < p_sci->get_length(doc->sci))
+	c = p_sci->get_char_at(doc->editor->sci, cend);
+	while (word_check_right(c) && cend < p_sci->get_length(doc->editor->sci))
 	{
 		cend++;
-		c = p_sci->get_char_at(doc->sci, cend);
+		c = p_sci->get_char_at(doc->editor->sci, cend);
 	}
 
 	if (cstart == cend)
 		return NULL;
 	txt = g_malloc0(cend - cstart + 1);
 
-	p_sci->get_text_range(doc->sci, cstart, cend, txt);
+	p_sci->get_text_range(doc->editor->sci, cstart, cend, txt);
 	return txt;
 }
 
@@ -164,9 +165,9 @@ show_output(const gchar * std_output, const gchar * name, const gchar * force_en
 		}
 		else
 		{
-			p_sci->set_text(doc->sci, std_output);
-			book = GTK_NOTEBOOK(main_widgets->notebook);
-			page = gtk_notebook_page_num(book, GTK_WIDGET(doc->sci));
+			p_sci->set_text(doc->editor->sci, std_output);
+			book = GTK_NOTEBOOK(geany->main_widgets->notebook);
+			page = gtk_notebook_page_num(book, GTK_WIDGET(doc->editor->sci));
 			gtk_notebook_set_current_page(book, page);
 		}
 		p_document->set_text_changed(doc, FALSE);
@@ -314,7 +315,7 @@ create_Interactive(void)
 	GtkWidget *dialog_vbox1;
 	GtkWidget *entry_word;
 	GtkWidget *dialog = gtk_dialog_new_with_buttons("Document interactive",
-							GTK_WINDOW(main_widgets->window),
+							GTK_WINDOW(geany->main_widgets->window),
 							GTK_DIALOG_MODAL |
 							GTK_DIALOG_DESTROY_WITH_PARENT,
 							GTK_STOCK_OK,

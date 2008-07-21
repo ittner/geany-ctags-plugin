@@ -65,7 +65,7 @@ static gchar *config_file = NULL;
 void
 config_init()
 {
-	config_file = g_build_filename(app->configdir, "plugins", "geanydoc", NULL);
+	config_file = g_build_filename(geany->app->configdir, "plugins", "geanydoc", NULL);
 	p_utils->mkdir(config_file, TRUE);
 
 	setptr(config_file, g_build_filename(config_file, "geanydoc.conf", NULL));
