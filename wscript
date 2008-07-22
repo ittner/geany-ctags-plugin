@@ -159,6 +159,8 @@ def configure(conf):
 						enabled_plugins.remove(p.name)
 
 	conf_define_from_opt('LIBDIR', Options.options.libdir, conf.env['PREFIX'] + '/lib')
+	# get and define Geany's libdir for use as plugin binary installation dir
+	conf.define('GEANY_LIBDIR', conf.pkgconfig_fetch_variable('geany', 'libdir'), 1)
 
 	svn_rev = conf_get_svn_rev()
 	conf.define('ENABLE_NLS', 1)
@@ -235,7 +237,7 @@ def build(bld):
 		obj.env['shlib_PATTERN']    = '%s.so'
 		obj.target			        = p.name
 		obj.uselib		            = libs
-		obj.inst_var				= 'LIBDIR'
+		obj.inst_var				= 'GEANY_LIBDIR'
 		obj.inst_dir				= '/geany/'
 		# if we are compiling more than one plugin, allow some of to fail
 		#~ Runner.Parallel.error_handler = error_handler
