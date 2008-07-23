@@ -458,8 +458,8 @@ create_sidebar()
 	gtk_container_add(GTK_CONTAINER(file_view_vbox), scrollwin);
 
 	gtk_widget_show_all(file_view_vbox);
-	gtk_notebook_append_page(GTK_NOTEBOOK(geany->main_widgets->sidebar_notebook), file_view_vbox,
-				 gtk_label_new(_("Project")));
+	gtk_notebook_append_page(GTK_NOTEBOOK(geany->main_widgets->sidebar_notebook),
+				 file_view_vbox, gtk_label_new(_("Project")));
 }
 
 void

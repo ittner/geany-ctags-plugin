@@ -61,21 +61,21 @@ remove_tag(G_GNUC_UNUSED gpointer key, gpointer value, G_GNUC_UNUSED gpointer us
 void
 xproject_close(gboolean cache)
 {
-	GeanyProject *project = geany->app->project;
-
 	debug("%s\n", __FUNCTION__);
-	g_return_if_fail(project != NULL);
 
-	p_ui->set_statusbar(TRUE, _("Project \"%s\" closed."), project->name);
+	if (!geany->app->project)
+		return;
 
-	g_free(project->name);
-	g_free(project->description);
-	g_free(project->file_name);
-	g_free(project->base_path);
-	g_free(project->run_cmd);
+	p_ui->set_statusbar(TRUE, _("Project \"%s\" closed."), geany->app->project->name);
 
-	g_free(project);
-	project = NULL;
+	g_free(geany->app->project->name);
+	g_free(geany->app->project->description);
+	g_free(geany->app->project->file_name);
+	g_free(geany->app->project->base_path);
+	g_free(geany->app->project->run_cmd);
+
+	g_free(geany->app->project);
+	geany->app->project = NULL;
 
 	if (!g_current_project)
 		return;
@@ -98,8 +98,6 @@ xproject_close(gboolean cache)
 void
 xproject_open(const gchar * path)
 {
-	GeanyProject *project = geany->app->project;
-
 	guint i;
 	struct GeanyPrj *p = NULL;
 	debug("%s\n", __FUNCTION__);
@@ -121,13 +119,13 @@ xproject_open(const gchar * path)
 
 	p_ui->set_statusbar(TRUE, _("Project \"%s\" opened."), p->name);
 
-	project = g_new0(struct GeanyProject, 1);
-	project->type = PROJECT_TYPE;
-	project->name = g_strdup(p->name);
-	project->description = g_strdup(p->description);
-	project->base_path = g_strdup(p->base_path);
-	project->run_cmd = g_strdup(p->run_cmd);
-	project->make_in_base_path = TRUE;
+	geany->app->project = g_new0(struct GeanyProject, 1);
+	geany->app->project->type = PROJECT_TYPE;
+	geany->app->project->name = g_strdup(p->name);
+	geany->app->project->description = g_strdup(p->description);
+	geany->app->project->base_path = g_strdup(p->base_path);
+	geany->app->project->run_cmd = g_strdup(p->run_cmd);
+	geany->app->project->make_in_base_path = TRUE;
 
 	g_hash_table_foreach(p->tags, add_tag, NULL);
 
