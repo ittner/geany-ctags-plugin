@@ -40,7 +40,6 @@ PLUGIN_VERSION_CHECK(78);
 PLUGIN_SET_INFO(_("Project"), _("Alternative project support."), VERSION,
 		_("Yura Siamashka <yurand2@gmail.com>"));
 
-PluginFields *plugin_fields;
 GeanyData *geany_data;
 GeanyFunctions *geany_functions;
 
