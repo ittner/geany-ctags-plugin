@@ -36,7 +36,7 @@
 
 #include "geanyprj.h"
 
-PLUGIN_VERSION_CHECK(78);
+PLUGIN_VERSION_CHECK(82);
 PLUGIN_SET_INFO(_("Project"), _("Alternative project support."), VERSION,
 		_("Yura Siamashka <yurand2@gmail.com>"));
 

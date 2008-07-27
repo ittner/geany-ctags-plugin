@@ -50,8 +50,8 @@ const gchar *project_type_string[NEW_PROJECT_TYPE_SIZE] = {
 static gboolean
 project_filter_c_cpp(const gchar * file)
 {
-	if (p_filetypes->detect_from_filename(file)->id == GEANY_FILETYPES_C ||
-	    p_filetypes->detect_from_filename(file)->id == GEANY_FILETYPES_CPP)
+	if (p_filetypes->detect_from_file(file)->id == GEANY_FILETYPES_C ||
+	    p_filetypes->detect_from_file(file)->id == GEANY_FILETYPES_CPP)
 		return TRUE;
 	return FALSE;
 }
@@ -59,7 +59,7 @@ project_filter_c_cpp(const gchar * file)
 static gboolean
 project_filter_c(const gchar * file)
 {
-	if (p_filetypes->detect_from_filename(file)->id == GEANY_FILETYPES_C)
+	if (p_filetypes->detect_from_file(file)->id == GEANY_FILETYPES_C)
 		return TRUE;
 	return FALSE;
 }
@@ -67,7 +67,7 @@ project_filter_c(const gchar * file)
 static gboolean
 project_filter_python(const gchar * file)
 {
-	if (p_filetypes->detect_from_filename(file)->id == GEANY_FILETYPES_PYTHON)
+	if (p_filetypes->detect_from_file(file)->id == GEANY_FILETYPES_PYTHON)
 		return TRUE;
 	return FALSE;
 }
@@ -75,7 +75,7 @@ project_filter_python(const gchar * file)
 static gboolean
 project_filter_all(const gchar * file)
 {
-	if (p_filetypes->detect_from_filename(file)->id != GEANY_FILETYPES_NONE)
+	if (p_filetypes->detect_from_file(file)->id != GEANY_FILETYPES_NONE)
 		return TRUE;
 	return FALSE;
 }
@@ -178,7 +178,7 @@ geany_project_load(const gchar * path)
 			locale_filename = p_utils->get_locale_from_utf8(filename);
 			tm_obj = p_tm->source_file_new(locale_filename, FALSE,
 						       p_filetypes->
-						       detect_from_filename(filename)->name);
+						       detect_from_file(filename)->name);
 			g_free(locale_filename);
 			if (tm_obj)
 			{
@@ -356,7 +356,7 @@ geany_project_set_tags_from_list(struct GeanyPrj *prj, GSList * files)
 	{
 		locale_filename = p_utils->get_locale_from_utf8(tmp->data);
 		tm_obj = p_tm->source_file_new(locale_filename, FALSE,
-					       p_filetypes->detect_from_filename(tmp->data)->name);
+					       p_filetypes->detect_from_file(tmp->data)->name);
 		g_free(locale_filename);
 		if (tm_obj)
 		{
@@ -412,7 +412,7 @@ geany_project_add_file(struct GeanyPrj *prj, const gchar * path)
 
 	filename = p_utils->get_locale_from_utf8(path);
 	tm_obj = p_tm->source_file_new(filename, FALSE,
-				       p_filetypes->detect_from_filename(path)->name);
+				       p_filetypes->detect_from_file(path)->name);
 	g_free(filename);
 	if (tm_obj)
 	{
