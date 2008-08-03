@@ -773,14 +773,14 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 3);
 
 	combo = gtk_combo_box_new_text();
-/*
+
 	for (i = 0; i < sc->dicts->len; i++)
 	{
 		gtk_combo_box_append_text(GTK_COMBO_BOX(combo), g_ptr_array_index(sc->dicts, i));
 
 		if (p_utils->str_equal(g_ptr_array_index(sc->dicts, i), sc->default_language))
 			gtk_combo_box_set_active(GTK_COMBO_BOX(combo), i);
-	}*/
+	}
 	/* if the default language couldn't be selected, select the first available language */
 	if (gtk_combo_box_get_active(GTK_COMBO_BOX(combo)) == -1)
 		gtk_combo_box_set_active(GTK_COMBO_BOX(combo), 0);
