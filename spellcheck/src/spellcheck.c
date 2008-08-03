@@ -415,15 +415,6 @@ static void check_document(GeanyDocument *doc)
 }
 
 
-static void broker_init_failed()
-{
-	const gchar *err = enchant_broker_get_error(sc->broker);
-	p_dialogs->show_msgbox(GTK_MESSAGE_ERROR,
-		_("The Enchant library couldn't be initialized (%s)."),
-		(err != NULL) ? err : _("unknown error"));
-}
-
-
 static void perform_check(GeanyDocument *doc)
 {
 	p_editor->clear_indicators(doc->editor);
@@ -487,24 +478,43 @@ static gboolean on_key_release(GtkWidget *widget, GdkEventKey *ev, gpointer user
 }
 
 
+static void broker_init_failed()
+{
+	const gchar *err = enchant_broker_get_error(sc->broker);
+	p_dialogs->show_msgbox(GTK_MESSAGE_ERROR,
+		_("The Enchant library couldn't be initialized (%s)."),
+		(err != NULL) ? err : _("unknown error (maybe the chosen language is not available)"));
+}
+
+
 static void init_enchant_dict()
 {
-	/* Request new dict object */
+	/* Release a previous dict object */
 	if (sc->dict != NULL)
 		enchant_broker_free_dict(sc->broker, sc->dict);
 
+	/* Request new dict object */
 	sc->dict = enchant_broker_request_dict(sc->broker, sc->default_language);
 	if (sc->dict == NULL)
 	{
 		broker_init_failed();
-		return;
+		gtk_widget_set_sensitive(plugin_fields->menu_item, FALSE);
+	}
+	else
+	{
+		gtk_widget_set_sensitive(plugin_fields->menu_item, TRUE);
 	}
 }
 
 
 static void on_menu_item_activate(GtkMenuItem *menuitem, gpointer gdata)
 {
-	GeanyDocument *doc = p_document->get_current();
+	GeanyDocument *doc;
+
+	if (sc->dict == NULL)
+		return;
+
+	doc = p_document->get_current();
 
 	/* Another language was chosen from the menu item, so make it default for this session. */
     if (gdata != NULL)
@@ -551,6 +561,8 @@ static void locale_init(void)
 static const gchar *get_default_lang(void)
 {
 	const gchar *lang = g_getenv("LANG");
+	/** TODO check whether the returned lang is actually provided by enchant and
+	 *  choose something else if not */
 	if (NZV(lang))
 	{
 		if (g_ascii_strncasecmp(lang, "C", 1) == 0)
@@ -608,7 +620,8 @@ static void on_configure_response(GtkDialog *dialog, gint response, gpointer use
 			g_object_get_data(G_OBJECT(dialog), "check_msgwin"))));
 
 		g_key_file_load_from_file(config, sc->config_file, G_KEY_FILE_NONE, NULL);
-		g_key_file_set_string(config, "spellcheck", "language", sc->default_language);
+		if (sc->default_language != NULL) /* lang may be NULL */
+			g_key_file_set_string(config, "spellcheck", "language", sc->default_language);
 		g_key_file_set_boolean(config, "spellcheck", "check_while_typing", sc->check_while_typing);
 		g_key_file_set_boolean(config, "spellcheck", "use_msgwin", sc->use_msgwin);
 
@@ -660,12 +673,11 @@ static void create_edit_menu()
 }
 
 
-static GtkWidget *create_menu()
+static GtkWidget *create_menu(GtkWidget *sp_item)
 {
-	GtkWidget *sp_item, *menu, *subitem;
+	GtkWidget *menu, *subitem;
 	guint i;
 
-	sp_item = gtk_menu_item_new_with_mnemonic(_("_Spell Check"));
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), sp_item);
 
 	menu = gtk_menu_new();
@@ -713,6 +725,9 @@ void plugin_init(GeanyData *data)
 
 	locale_init();
 
+	plugin_fields->menu_item = sp_item = gtk_menu_item_new_with_mnemonic(_("_Spell Check"));
+	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
+
 	sc->broker = enchant_broker_init();
 	init_enchant_dict();
 
@@ -725,11 +740,8 @@ void plugin_init(GeanyData *data)
 	create_dicts_array();
 
 	create_edit_menu();
-	sp_item = create_menu();
+	sp_item = create_menu(sp_item);
 	gtk_widget_show_all(sp_item);
-
-	plugin_fields->menu_item = sp_item;
-	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
 
 	sc->signal_id = g_signal_connect(geany->main_widgets->window,
 		"key-release-event", G_CALLBACK(on_key_release), NULL);
@@ -761,14 +773,17 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 3);
 
 	combo = gtk_combo_box_new_text();
-
+/*
 	for (i = 0; i < sc->dicts->len; i++)
 	{
 		gtk_combo_box_append_text(GTK_COMBO_BOX(combo), g_ptr_array_index(sc->dicts, i));
 
 		if (p_utils->str_equal(g_ptr_array_index(sc->dicts, i), sc->default_language))
 			gtk_combo_box_set_active(GTK_COMBO_BOX(combo), i);
-	}
+	}*/
+	/* if the default language couldn't be selected, select the first available language */
+	if (gtk_combo_box_get_active(GTK_COMBO_BOX(combo)) == -1)
+		gtk_combo_box_set_active(GTK_COMBO_BOX(combo), 0);
 
 	if (sc->dicts->len > 20)
 		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo), 3);
