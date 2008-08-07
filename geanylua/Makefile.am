@@ -77,26 +77,26 @@ win32: all .libs/$(LIBRARY).dll .libs/$(PACKAGE).dll
 
 
 install-library: .libs/$(LIBRARY_FILENAME)
-	$(MKDIR_P) $(DATA_DEST_DIR)
+	$(mkdir_p) $(DATA_DEST_DIR)
 	$(INSTALL) $< $(DATA_DEST_DIR)
 
 
 install-plugin: .libs/$(PLUGIN_FILENAME)
-	$(MKDIR_P) $(PLUGIN_DEST_DIR)
+	$(mkdir_p) $(PLUGIN_DEST_DIR)
 	$(INSTALL) $< $(PLUGIN_DEST_DIR)
 
 
 install-scripts:
-	$(MKDIR_P) $(DATA_DEST_DIR)/examples
+	$(mkdir_p) $(DATA_DEST_DIR)/examples
 	DIRS=`find examples -maxdepth 1 -mindepth 1 -type d -not -name .svn`; \
 	for DIR in $$DIRS; do \
-		$(MKDIR_P) $(DATA_DEST_DIR)/$$DIR; \
+		$(mkdir_p) $(DATA_DEST_DIR)/$$DIR; \
 		cp $$DIR/*.lua $(DATA_DEST_DIR)/$$DIR; \
 	done
 
 
 install-docs:
-	$(MKDIR_P) $(DOC_DEST_DIR)
+	$(mkdir_p) $(DOC_DEST_DIR)
 	cp ./docs/*.html $(DOC_DEST_DIR)/.
 
 
