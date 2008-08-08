@@ -49,7 +49,7 @@ static struct {
 	gchar *on_proj_closed_script;
 	GSList *script_list;
 	GtkAccelGroup *acc_grp;
-	KeyBindingGroup *keybind_grp;
+	GeanyKeyGroup *keybind_grp;
 	gchar **keybind_scripts;
 } local_data;
 
@@ -155,7 +155,7 @@ static void hotkey_init(void)
 			}
 			g_strfreev(lines);
 			KG->count=n;
-			KG->keys=g_new0(KeyBinding,n);
+			KG->keys=g_new0(GeanyKeyBinding,n);
 			for (i=0; i<n; i++) {
 				if (KS[i]) {
 					gchar*p=NULL;
@@ -432,7 +432,7 @@ static void build_menu(void)
 
 /* Called by Geany to initialize the plugin */
 PLUGIN_EXPORT
-void glspi_init (GeanyData *data, GeanyFunctions *functions, KeyBindingGroup *kg)
+void glspi_init (GeanyData *data, GeanyFunctions *functions, GeanyKeyGroup *kg)
 {
 	GeanyApp *app = data->app;
 	

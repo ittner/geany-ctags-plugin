@@ -57,12 +57,12 @@ PLUGIN_EXPORT
 GeanyFunctions *geany_functions;
 
 PLUGIN_EXPORT
-KeyBindingGroup plugin_key_group[1];
+GeanyKeyGroup plugin_key_group[1];
 
 
 
 
-typedef void (*InitFunc) (GeanyData *data, GeanyFunctions *functions, KeyBindingGroup *kg);
+typedef void (*InitFunc) (GeanyData *data, GeanyFunctions *functions, GeanyKeyGroup *kg);
 typedef void (*ConfigFunc) (GtkWidget *parent);
 typedef void (*CleanupFunc) (void);
 

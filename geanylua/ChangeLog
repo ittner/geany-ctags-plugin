@@ -1,3 +1,6 @@
+August 8, 2008 (ntrel)
+  Fix to work with Geany API v86.
+
 August 7, 2008 (ntrel)
   Use $(mkdir_p) instead of $(MKDIR_P) in Makefile, so it works with 
   automake <= 1.96.
