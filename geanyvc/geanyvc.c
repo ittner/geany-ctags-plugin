@@ -1369,6 +1369,9 @@ vccommit_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 	}
 #endif
 
+	/* put the input focus to the commit message text view */
+	gtk_widget_grab_focus(messageView);
+
 	result = gtk_dialog_run(GTK_DIALOG(commit));
 	if (result == GTK_RESPONSE_APPLY)
 	{
