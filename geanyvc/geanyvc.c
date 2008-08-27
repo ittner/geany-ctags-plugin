@@ -56,7 +56,7 @@ GeanyData *geany_data;
 GeanyFunctions *geany_functions;
 
 
-PLUGIN_VERSION_CHECK(78);
+PLUGIN_VERSION_CHECK(89);
 PLUGIN_SET_INFO(_("VC"), _("Interface to different Version Control systems."), VERSION,
 		_("Yura Siamashka <yurand2@gmail.com>,\nFrank Lanitz <frank@frank.uvena.de>"));
 
@@ -1097,7 +1097,7 @@ static GdkColor *
 get_diff_color(G_GNUC_UNUSED GeanyDocument * doc, gint style)
 {
 	static GdkColor c = { 0, 0, 0, 0 };
-	const HighlightingStyle *s;
+	const GeanyLexerStyle *s;
 
 	s = p_highlighting->get_style(GEANY_FILETYPES_DIFF, style);
 	c.red = (s->foreground % 256) * 257;
