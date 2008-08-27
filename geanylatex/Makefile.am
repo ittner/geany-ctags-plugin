@@ -4,7 +4,7 @@
 noinst_HEADERS = makefile.win32
 
 lib_LTLIBRARIES = geanylatex.la
-geanylatex_la_SOURCES = geanylatex.c letters.c latexencodings.c
+geanylatex_la_SOURCES = geanylatex.c letters.c latexencodings.c latexencodings.h letters.h datatypes.h
 geanylatex_la_LDFLAGS = -module -avoid-version
 geanylatex_la_LIBADD  = @GEANY_LIBS@
 
