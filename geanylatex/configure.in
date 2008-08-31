@@ -52,10 +52,10 @@ po/Makefile.in
 ])
 
 echo "----------------------------------------"
-echo "Install geanylatex plugin binary in : ${libdir}"
-echo "Install geanylatex in               : ${prefix}"
-echo "Using Geany version                    : ${GEANY_VERSION}"
-echo "Using GTK version                      : ${GTK_VERSION}"
+echo "Install geanylatex plugin binary in   : ${libdir}"
+echo "Install geanylatex in                 : ${prefix}"
+echo "Using Geany version                   : ${GEANY_VERSION}"
+echo "Using GTK version                     : ${GTK_VERSION}"
 echo ""
 echo "Configuration is done OK."
 echo ""
