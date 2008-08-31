@@ -128,6 +128,7 @@ get_commit_files_svn(const gchar * dir)
 		}
 		else if (pstatus == FIRST_CHAR)
 		{
+			status = NULL;
 			if (*p == '?')
 				status = FILE_STATUS_UNKNOWN;
 			else if (*p == 'M')
@@ -136,6 +137,22 @@ get_commit_files_svn(const gchar * dir)
 				status = FILE_STATUS_DELETED;
 			else if (*p == 'A')
 				status = FILE_STATUS_ADDED;
+
+			if (!status || *(p + 1) != ' ')
+			{
+				// skip unknown status line
+				while (*p)
+				{
+					p++;
+					if (*p == '\n')
+					{
+						p++;
+						break;
+					}
+				}
+				pstatus = FIRST_CHAR;
+				continue;
+			}
 			pstatus = SKIP_SPACE;
 		}
 		else if (pstatus == SKIP_SPACE)

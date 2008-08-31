@@ -650,7 +650,8 @@ vcdiff_project_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpo
 	vc = find_vc(geany->app->project->base_path);
 	g_return_if_fail(vc);
 
-	execute_command(vc, &text, NULL, geany->app->project->base_path, VC_COMMAND_DIFF_DIR, NULL, NULL);
+	execute_command(vc, &text, NULL, geany->app->project->base_path, VC_COMMAND_DIFF_DIR, NULL,
+			NULL);
 	if (text)
 	{
 		name = g_strconcat(project->name, ".vc.diff", NULL);
@@ -745,13 +746,14 @@ vclog_project_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpoi
 	gchar *text = NULL;
 	const VC_RECORD *vc;
 	GeanyProject *project = geany->app->project;
-	
+
 	g_return_if_fail(project != NULL && NZV(geany->app->project->base_path));
 
 	vc = find_vc(geany->app->project->base_path);
 	g_return_if_fail(vc);
 
-	execute_command(vc, &text, NULL, geany->app->project->base_path, VC_COMMAND_LOG_DIR, NULL, NULL);
+	execute_command(vc, &text, NULL, geany->app->project->base_path, VC_COMMAND_LOG_DIR, NULL,
+			NULL);
 	if (text)
 	{
 		show_output(text, "*VC-LOG*", NULL);
@@ -1413,7 +1415,7 @@ update_menu_items()
 {
 	GeanyDocument *doc;
 	GeanyProject *project = geany->app->project;
-	
+
 	gboolean have_file;
 	gboolean p_have_vc = FALSE;
 	gboolean d_have_vc = FALSE;
@@ -1784,8 +1786,9 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	GtkWidget *menu_vc_menu = NULL;
 	GtkTooltips *tooltips = NULL;
 
-	config_file = g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
-				  "VC", G_DIR_SEPARATOR_S, "VC.conf", NULL);
+	config_file =
+		g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
+			    "VC", G_DIR_SEPARATOR_S, "VC.conf", NULL);
 
 	load_config();
 	registrate();
