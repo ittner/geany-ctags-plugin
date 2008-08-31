@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: geanysendmail\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-24 19:12+0200\n"
+"Project-Id-Version: geanysendmail 0.4svn\n"
+"Report-Msgid-Bugs-To: Geany-i18n team <geany-i18n@uvena.de>\n"
+"POT-Creation-Date: 2008-09-01 00:51+0200\n"
 "PO-Revision-Date: 2008-05-24 19:13+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team:  <frank@frank.uvena.de>\n"
@@ -43,50 +43,49 @@ msgstr "Bitte ein Mailprogramm angeben!"
 msgid "File have to be saved before sending."
 msgstr "Due Datei muss vor dem Senden gespeichert werden."
 
-#: src/geanysendmail.c:206
-msgid "Mail Configuration"
-msgstr "Maileinstellungen"
+#: src/geanysendmail.c:252
+msgid "Plugin configuration directory could not be created."
+msgstr "Konfigurationsdatei konnte nicht erstellt werden."
 
 #. add a label and a text entry to the dialog
-#: src/geanysendmail.c:214
+#: src/geanysendmail.c:277
 msgid "Path and options for the mail client:"
 msgstr "Pfad und Optionen für das Mailprogramm:"
 
-#: src/geanysendmail.c:222
+#: src/geanysendmail.c:285
 #, c-format
 msgid "Note: \\%f will be replaced by your filename."
 msgstr "Anmerkung: \\%f wird durch den Dateinamen ersetzt."
 
-#: src/geanysendmail.c:226
+#: src/geanysendmail.c:289
 msgid "Showing icon in toolbar (EXPERIMENTAL)"
 msgstr "Symbol in der Werkzeugliste anzeigen (Experimental)"
 
-#: src/geanysendmail.c:229
+#: src/geanysendmail.c:292
 msgid "Shows a icon in the toolbar to send file more easy."
 msgstr ""
 "Zeigt ein Symbol in der Werkzeugliste an, so dass eine Datei einfacher "
 "versendet werden kann."
 
-#: src/geanysendmail.c:271
-msgid "Plugin configuration directory could not be created."
-msgstr "Konfigurationsdatei konnte nicht erstellt werden."
-
-#: src/geanysendmail.c:294
+#: src/geanysendmail.c:316
 msgid "Send file by mail"
 msgstr "Per Mail senden"
 
 #. Build up menu
-#: src/geanysendmail.c:324
+#: src/geanysendmail.c:345
 msgid "_Mail"
 msgstr "_Mail"
 
-#: src/geanysendmail.c:330
+#: src/geanysendmail.c:351
 msgid "_Mail document"
 msgstr "_Dokument versenden"
 
-#: src/geanysendmail.c:333
+#: src/geanysendmail.c:354
 msgid ""
 "Sends the opened file as unzipped attachment by any mailer from your $PATH"
 msgstr ""
 "Sendet ein geöffnete Dokument als ungepackter Anhang unter Verwendung eines "
 "Mailprogrammes."
+
+#~ msgid "Mail Configuration"
+#~ msgstr "Maileinstellungen"

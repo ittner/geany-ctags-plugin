@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-20 14:55+0200\n"
+"POT-Creation-Date: 2008-09-01 00:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,72 +16,68 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/geanysendmail.c:40
+#: src/geanysendmail.c:47
 msgid "GeanySendMail"
 msgstr ""
 
-#: src/geanysendmail.c:40
+#: src/geanysendmail.c:47
 msgid ""
 "A little plugin to send the current file as attachment by user's favorite "
 "mailer"
 msgstr ""
 
-#: src/geanysendmail.c:91
+#: src/geanysendmail.c:125
 msgid "Filename placeholder not found. The executed command might have failed."
 msgstr ""
 
-#: src/geanysendmail.c:97
+#: src/geanysendmail.c:131
 msgid "Could not execute mailer. Please check your configuration."
 msgstr ""
 
-#: src/geanysendmail.c:106
-msgid "Please define a mailing tool first."
+#: src/geanysendmail.c:140
+msgid "Please define a mail client first."
 msgstr ""
 
-#: src/geanysendmail.c:111
+#: src/geanysendmail.c:145
 msgid "File have to be saved before sending."
 msgstr ""
 
-#: src/geanysendmail.c:173
-msgid "Mail Configuration"
+#: src/geanysendmail.c:252
+msgid "Plugin configuration directory could not be created."
 msgstr ""
 
 #. add a label and a text entry to the dialog
-#: src/geanysendmail.c:181
-msgid "Path and options for the mail programm:"
+#: src/geanysendmail.c:277
+msgid "Path and options for the mail client:"
 msgstr ""
 
-#: src/geanysendmail.c:189
+#: src/geanysendmail.c:285
 #, c-format
 msgid "Note: \\%f will be replaced by your filename."
 msgstr ""
 
-#: src/geanysendmail.c:193
+#: src/geanysendmail.c:289
 msgid "Showing icon in toolbar (EXPERIMENTAL)"
 msgstr ""
 
-#: src/geanysendmail.c:196
+#: src/geanysendmail.c:292
 msgid "Shows a icon in the toolbar to send file more easy."
 msgstr ""
 
-#: src/geanysendmail.c:238
-msgid "Plugin configuration directory could not be created."
-msgstr ""
-
-#: src/geanysendmail.c:261
+#: src/geanysendmail.c:316
 msgid "Send file by mail"
 msgstr ""
 
 #. Build up menu
-#: src/geanysendmail.c:289
+#: src/geanysendmail.c:345
 msgid "_Mail"
 msgstr ""
 
-#: src/geanysendmail.c:295
+#: src/geanysendmail.c:351
 msgid "_Mail document"
 msgstr ""
 
-#: src/geanysendmail.c:298
+#: src/geanysendmail.c:354
 msgid ""
 "Sends the opened file as unzipped attachment by any mailer from your $PATH"
 msgstr ""
