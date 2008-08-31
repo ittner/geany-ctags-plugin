@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(geanysendmail, 0.4git)
+AM_INIT_AUTOMAKE(geanysendmail, 0.4svn)
 
 AM_CONFIG_HEADER(config.h)
 

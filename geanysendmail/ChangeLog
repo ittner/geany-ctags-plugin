@@ -3,7 +3,8 @@
  * Build environment: Update of Makefiles to include icon.h into source
    package
  * Build environment: Added makefile for Windows (needs to be tested)
-
+ * configure.in: Update of version string
+ 
 
 2008-07-11  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
