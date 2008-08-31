@@ -1,0 +1,3 @@
+src/geanylatex.c
+src/latexencodings.c
+src/letters.c

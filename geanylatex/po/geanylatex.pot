@@ -1,0 +1,194 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-09-01 01:20+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/geanylatex.c:51
+msgid "LaTeX"
+msgstr ""
+
+#: src/geanylatex.c:51
+msgid "Plugin to make Geany better support LaTeX"
+msgstr ""
+
+#: src/geanylatex.c:129
+msgid "Insert label"
+msgstr ""
+
+#: src/geanylatex.c:142
+msgid "Label name:"
+msgstr ""
+
+#: src/geanylatex.c:173
+msgid "Insert reference"
+msgstr ""
+
+#: src/geanylatex.c:186
+msgid "Ref name:"
+msgstr ""
+
+#: src/geanylatex.c:196
+msgid "standard reference"
+msgstr ""
+
+#: src/geanylatex.c:201
+msgid "page reference"
+msgstr ""
+
+#: src/geanylatex.c:366
+msgid "More"
+msgstr ""
+
+#. Documentclass
+#: src/geanylatex.c:459
+msgid "Documentclass:"
+msgstr ""
+
+#: src/geanylatex.c:462
+msgid "Chooce the kind of document you want to write"
+msgstr ""
+
+#. Encoding
+#: src/geanylatex.c:475
+msgid "Encoding:"
+msgstr ""
+
+#: src/geanylatex.c:479
+msgid "Set the encoding for your new document"
+msgstr ""
+
+#. Scriptsize
+#: src/geanylatex.c:494
+msgid "Scriptsize:"
+msgstr ""
+
+#: src/geanylatex.c:497
+msgid "Set the default script size of your new document"
+msgstr ""
+
+#. Author
+#: src/geanylatex.c:510
+msgid "Author:"
+msgstr ""
+
+#: src/geanylatex.c:513
+msgid ""
+"Sets the entry of \\author command. In most cases here should stay your name"
+msgstr ""
+
+#. Date
+#: src/geanylatex.c:524
+msgid "Date:"
+msgstr ""
+
+#: src/geanylatex.c:527
+msgid ""
+"Sets the entry of the \\date command inside header of your newly created "
+"LaTeX-document. Keeping it at \\today is a good decision if you don't need "
+"any fixed date."
+msgstr ""
+
+#. Title of the new document
+#: src/geanylatex.c:534
+msgid "Title:"
+msgstr ""
+
+#: src/geanylatex.c:536
+msgid "Sets the title of your newly document."
+msgstr ""
+
+#. Papersize
+#: src/geanylatex.c:543
+msgid "Paper size:"
+msgstr ""
+
+#: src/geanylatex.c:546
+msgid "Chooce the paper format for the new created document"
+msgstr ""
+
+#. Buidling the wizard-dialog and showing it
+#: src/geanylatex.c:561
+msgid "LaTeX-Wizard"
+msgstr ""
+
+#: src/geanylatex.c:571
+msgid "Use KOMA-script classes if possible"
+msgstr ""
+
+#: src/geanylatex.c:574
+msgid ""
+"Uses the KOMA-script classes by Markus Kohm.\n"
+"Keep in mind: To compile your document these classes have to been installed "
+"before."
+msgstr ""
+
+#: src/geanylatex.c:580
+msgid "Use draft mode"
+msgstr ""
+
+#: src/geanylatex.c:582
+msgid ""
+"Set the draft flag inside new created documents to get documents with a "
+"number of debugging helpers"
+msgstr ""
+
+#: src/geanylatex.c:807
+msgid "Insert \\label"
+msgstr ""
+
+#: src/geanylatex.c:808
+msgid "Insert \\ref"
+msgstr ""
+
+#: src/geanylatex.c:809
+msgid "Run LaTeX-Wizard"
+msgstr ""
+
+#: src/geanylatex.c:815
+msgid "_LaTeX"
+msgstr ""
+
+#: src/geanylatex.c:822
+msgid "LaTeX-_Wizard"
+msgstr ""
+
+#: src/geanylatex.c:825
+msgid "Starts a Wizard to create easily LaTeX-dokuments"
+msgstr ""
+
+#: src/geanylatex.c:830
+msgid "Insert _Special Character"
+msgstr ""
+
+#: src/geanylatex.c:832
+msgid "Helps to use some not very common letters and signs"
+msgstr ""
+
+#: src/geanylatex.c:839
+msgid "Insert _Reference"
+msgstr ""
+
+#: src/geanylatex.c:841
+msgid "Inserting references to the document"
+msgstr ""
+
+#: src/geanylatex.c:845
+msgid "Insert _Label"
+msgstr ""
+
+#: src/geanylatex.c:847
+msgid "Helps at inserting labels to a docuemnt"
+msgstr ""

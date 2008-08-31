@@ -1,17 +1,17 @@
-## Makefile.am -- Process this file with automake to produce Makefile.in
-#SUBDIRS = tests
+SUBDIRS = src po
 
-noinst_HEADERS = makefile.win32
+EXTRA_DIST =				\
+	autogen.sh				\
+	makefile.win32			\
+	po/LINGUAS
 
-lib_LTLIBRARIES = geanylatex.la
-geanylatex_la_SOURCES = geanylatex.c letters.c latexencodings.c latexencodings.h letters.h datatypes.h
-geanylatex_la_LDFLAGS = -module -avoid-version
-geanylatex_la_LIBADD  = @GEANY_LIBS@
+dist-bzip2: distdir
+	BZIP2=$(BZIP2_ENV) $(AMTAR) --bzip2 -chof $(distdir).tar.bz2 $(distdir)
+	-rm -rf $(distdir)
 
-AM_CPPFLAGS = @GEANY_CFLAGS@ -DGEANY_DISABLE_DEPRECATED
+sign:
+	if test -f $(PACKAGE)-$(VERSION).tar.gz; then \
+		gpg --detach-sign --digest-algo SHA512 $(PACKAGE)-$(VERSION).tar.gz; fi
+	if test -f $(PACKAGE)-$(VERSION).tar.bz2; then \
+		gpg --detach-sign --digest-algo SHA512 $(PACKAGE)-$(VERSION).tar.bz2; fi
 
-GEANY_DIR = $(shell geany --print-prefix | grep lib)
-
-install: .libs/$(PACKAGE).so
-	mkdir -p $(DESTDIR)$(GEANY_DIR)/geany
-	cp $< $(DESTDIR)$(GEANY_DIR)/geany/

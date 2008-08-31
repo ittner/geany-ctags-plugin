@@ -1,8 +1,3 @@
-# Running make creates config.h then calls the sub makefiles.
-#
-# Other targets are:
-#	deps: delete the dependencies so they are regenerated on next make
-#	clean: clean all generated files
 #
 # localwin32.mk is an optional file to override make variables.
 # Use localwin32.mk instead of editing variables as it is included in sub
@@ -15,13 +10,15 @@ CC = gcc
 CP = copy
 RM = del
 PREFIX = C:\libs
+
 GEANY_SRC = c:\geany_svn
 TARGET = geanylatex.dll
 .SUFFIXES: .c .o
 -include localwin32.mk
 
+
 OBJS =	geanylatex.o
-INCLUDEDIRS=  -I.. \
+INCLUDEDIRS=  -I. \
               -I$(GEANY_SRC) \
               -I$(GEANY_SRC)\src \
               -I$(GEANY_SRC)\plugins \
@@ -35,7 +32,9 @@ INCLUDEDIRS=  -I.. \
               -I$(PREFIX)/include/glib-2.0 \
               -I$(PREFIX)/lib/glib-2.0/include \
               -I$(PREFIX)/include/gettext \
-              -I$(PREFIX)/include
+              -I$(PREFIX)/include \
+              -I$(ASPELL_PREFIX)/interfaces/cc
+              
 ALL_GTK_LIBS= \
 	-L"$(PREFIX)/lib" \
 	-lgtk-win32-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 \
@@ -46,12 +45,12 @@ CCFLAGS=-Wall -O2 -mms-bitfields -DHAVE_CONFIG_H
 all: $(TARGET)
 
 deps.mak:
-	$(CC) -MM $(CCFLAGS) $(INCLUDEDIRS) *.c >deps.mak
+	$(CC) -MM $(CCFLAGS) $(INCLUDEDIRS) src/*.c >deps.mak
 
-.c.o:
+spellcheck.o:
 	$(CC) $(CCFLAGS) $(INCLUDEDIRS) -c $<
 
-$(TARGET): $(OBJS) deps.mak
+$(TARGET): deps.mak $(OBJS)
 	$(CC) -shared $(OBJS) $(ALL_GTK_LIBS) -o $(TARGET)
 
 clean:
