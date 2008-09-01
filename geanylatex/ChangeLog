@@ -1,5 +1,10 @@
 2008-09-01  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
+ * src/geanylatex.c: Added support for l10n.
+
+
+2008-09-01  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
  * Ported build system of spellcheck plugin.
 
 
