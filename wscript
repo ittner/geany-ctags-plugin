@@ -32,7 +32,7 @@ If you need additional checks for header files, functions in libraries or
 need to check for library packages (using pkg-config), please ask Enrico
 before committing changes. Thanks.
 
-Requires WAF SVN r3976 (or later) and Python 2.4 (or later).
+Requires WAF SVN r4429 (or later) and Python 2.4 (or later).
 """
 
 
@@ -238,8 +238,7 @@ def build(bld):
 		obj.env['shlib_PATTERN']    = '%s.so'
 		obj.target			        = p.name
 		obj.uselib		            = libs
-		obj.inst_var				= 'GEANY_LIBDIR'
-		obj.inst_dir				= '/geany/'
+		obj.install_path			= '${GEANY_LIBDIR}/geany'
 		# if we are compiling more than one plugin, allow some of to fail
 		#~ Runner.Parallel.error_handler = error_handler
 
@@ -247,7 +246,6 @@ def build(bld):
 			obj		    = bld.new_task_gen('intltool_po')
 			obj.podir   = os.path.join(p.name, 'po')
 			obj.appname = p.name
-
 
 
 
@@ -262,8 +260,7 @@ def build_lua(bld, p, libs):
 	obj.env['shlib_PATTERN']    = '%s.so'
 	obj.target			        = 'libgeanylua'
 	obj.uselib		            = libs
-	obj.inst_var				= 'DATADIR'
-	obj.inst_dir				= '/geany/plugins/geanylua'
+	obj.install_path			= '${DATADIR}/geany/plugins/geanylua'
 
 
 
@@ -286,22 +283,25 @@ def shutdown():
 			if not p.name in Build.bld.env['enabled_plugins']:
 				continue;
 			dir = os.path.join(p.name, 'po')
-			os.chdir(dir)
 			try:
+				os.chdir(dir)
 				try:
-					size_old = os.stat(p.name + '.pot').st_size
+					try:
+						size_old = os.stat(p.name + '.pot').st_size
+					except:
+						size_old = 0
+					subprocess.call(['intltool-update', '--pot'])
+					size_new = os.stat(p.name + '.pot').st_size
+					if size_new != size_old:
+						Utils.pprint('CYAN', 'Updated POT file for %s.' % p.name)
+						launch('intltool-update -r', 'Updating translations for %s' % p.name, 'CYAN')
+					else:
+						Utils.pprint('CYAN', 'POT file is up to date for %s.' % p.name)
 				except:
-					size_old = 0
-				subprocess.call(['intltool-update', '--pot'])
-				size_new = os.stat(p.name + '.pot').st_size
-				if size_new != size_old:
-					Utils.pprint('CYAN', 'Updated POT file for %s.' % p.name)
-					launch('intltool-update -r', 'Updating translations for %s' % p.name, 'CYAN')
-				else:
-					Utils.pprint('CYAN', 'POT file is up to date for %s.' % p.name)
+					Utils.pprint('RED', 'Failed to generate pot file for %s.' % p.name)
+				os.chdir(os.path.join('..', '..'))
 			except:
-				Utils.pprint('RED', 'Failed to generate pot file for %s.' % p.name)
-			os.chdir(os.path.join('..', '..'))
+				pass
 
 
 
@@ -320,8 +320,15 @@ def launch(command, status, success_color='GREEN'):
 	return ret
 
 
+line_len = 0
+
 def print_message(msg, result, color = 'GREEN'):
-    Configure.line_just = max(Configure.line_just, len(msg))
-    print "%s :" % msg.ljust(Configure.line_just),
+    global line_len
+    if line_len == 0:
+        line_len = Configure.ConfigurationContext().line_just
+
+    line_len = max(line_len, len(msg))
+    print "%s :" % msg.ljust(line_len),
     Utils.pprint(color, result)
     Runner.print_log(msg, '\n\n')
+
