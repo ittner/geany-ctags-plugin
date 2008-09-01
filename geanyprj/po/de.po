@@ -1,0 +1,131 @@
+# German translations for PACKAGE package.
+# Copyright (C) 2008 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Enrico Tröger <enrico.troeger@uvena.de>, 2008.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: geanyprj 0.4\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-09-01 14:09+0200\n"
+"PO-Revision-Date: 2008-09-01 15:14+0100\n"
+"Last-Translator: Enrico Tröger <enrico.troeger@uvena.de>\n"
+"Language-Team: German <geany-i18n@uvena.de>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Language: German\n"
+
+#: ../src/geanyprj.c:40
+#: ../src/sidebar.c:462
+msgid "Project"
+msgstr "Projekt"
+
+#: ../src/geanyprj.c:40
+msgid "Alternative project support."
+msgstr "Alternative Projektunterstützung."
+
+#: ../src/geanyprj.c:41
+msgid "Yura Siamashka <yurand2@gmail.com>"
+msgstr "Yura Siamashka <yurand2@gmail.com>"
+
+#: ../src/menu.c:105
+msgid "Project Preferences"
+msgstr "Projekteigenschaften"
+
+#: ../src/menu.c:114
+#: ../src/menu.c:397
+#: ../src/sidebar.c:183
+msgid "New Project"
+msgstr "Neues Projekt"
+
+#: ../src/menu.c:123
+msgid "C_reate"
+msgstr "_Erstellen"
+
+#: ../src/menu.c:136
+msgid "Name:"
+msgstr "Name:"
+
+#: ../src/menu.c:145
+msgid "Location:"
+msgstr "Ort:"
+
+#: ../src/menu.c:160
+msgid "Choose Project Location"
+msgstr "Projektverzeichnis auswählen"
+
+#: ../src/menu.c:168
+msgid "Base path:"
+msgstr "Basisverzeichnis:"
+
+#: ../src/menu.c:173
+msgid "Base directory of all files that make up the project. This can be a new path, or an existing directory tree. You can use paths relative to the project filename."
+msgstr "Basisverzeichnis aller Dateien, die zu einem Projekt gehören. Es kann sowohl ein bereits existierender, als auch ein neu zu erstellendes Verzeichnis sein. Weiterhin kann es sowohl in relativer als auch absoluter Form eingegeben werden."
+
+#: ../src/menu.c:176
+msgid "Choose Project Base Path"
+msgstr "Projektbasisverzeichnisses auswählen"
+
+#: ../src/menu.c:183
+msgid "Generate file list on load"
+msgstr "Dateiliste beim Laden erzeugen"
+
+#: ../src/menu.c:185
+msgid "Automatically add files that match project type on project load automaticly. You can't manually add/remove files if you checked this option, since your modification will be lost on on next project load"
+msgstr "Fügt Dateien, die dem Projekt-Typ entsprechen, automatisch beim Laden hinzu dem Projekte hinzu. Manuelles Hinzufügen oder Löschen von Dateien ist dann nicht möglich, Änderungen würden beim nächsten Laden überschrieben werden."
+
+#: ../src/menu.c:193
+msgid "Type:"
+msgstr "Typ:"
+
+#: ../src/menu.c:231
+#, c-format
+msgid "Project file \"%s\" already exists"
+msgstr "Die Projektdatei »%s« existiert bereits."
+
+#: ../src/menu.c:385
+msgid "_Project"
+msgstr "_Projekt"
+
+#: ../src/menu.c:406
+#: ../src/sidebar.c:192
+msgid "Delete Project"
+msgstr "Projekt löschen"
+
+#: ../src/menu.c:417
+#: ../src/sidebar.c:205
+msgid "Add File"
+msgstr "Datei hinzufügen"
+
+#: ../src/menu.c:428
+#: ../src/sidebar.c:227
+msgid "Preferences"
+msgstr "Einstellungen"
+
+#: ../src/menu.c:439
+#: ../src/sidebar.c:240
+msgid "Find in Project"
+msgstr "Im Projekt suchen"
+
+#: ../src/sidebar.c:214
+msgid "Remove File"
+msgstr "Datei entfernen"
+
+#: ../src/sidebar.c:251
+msgid "H_ide Sidebar"
+msgstr "Seitenleiste _verstecken"
+
+#: ../src/xproject.c:69
+#, c-format
+msgid "Project \"%s\" closed."
+msgstr "Projekt »%s« geschlossen."
+
+#: ../src/xproject.c:120
+#, c-format
+msgid "Project \"%s\" opened."
+msgstr "Projekt »%s« geöffnet."
+
