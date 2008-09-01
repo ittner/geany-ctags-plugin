@@ -6,10 +6,10 @@
 <body style="margin:  32px 25% 24px 5%">
 <hr><h2>Lua scripting plugin for the Geany IDE</h2><hr>
 <p>
-This is a plugin for the <a href="http://geany.uvena.de/">Geany</a> IDE
+This is a plugin for the <a href="http://www.geany.org/">Geany</a> IDE
  to provide <a href="http://www.lua.org/">Lua</a> scripting.
 </p><p>
-To begin, you should install the plugin and the example scripts. Please 
+To begin, you should install the plugin and the example scripts. Please
 read the <tt> INSTALL </tt> file for more information.
 </p><p>
 The next time you start Geany, the plugin will look for a directory named <tt><b>geanylua</b></tt>
@@ -20,7 +20,7 @@ Any scripts found in this <tt>/plugins/geanylua/</tt> directory will appear in
 the <i style="font-family:sans-serif">Tools->Lua Scripts</i> menu in Geany.
 </p><p>
 You can create additional scripts yourself, but all script files must have
-names that end with the <tt><b>.lua</b></tt> file extension. &nbsp; 
+names that end with the <tt><b>.lua</b></tt> file extension. &nbsp;
 The menu labels are generated from the filenames like this:
 <ol>
   <li> The &nbsp;<tt><b>.lua</b></tt>&nbsp; filename extension is removed.
@@ -28,8 +28,8 @@ The menu labels are generated from the filenames like this:
        those three characters are stripped off. Since the list of filenames is
        scanned in alphanumeric order, this convention allows for arbitrary
        sorting. &nbsp; For example if you wanted "<tt>Zebra</tt>" to appear before "<tt>Apple</tt>"
-        you could name your files &nbsp; 
-       "<tt>01.Zebra.lua</tt>" &nbsp; and &nbsp; "<tt>02.Apple.lua</tt>"&nbsp;. 
+        you could name your files &nbsp;
+       "<tt>01.Zebra.lua</tt>" &nbsp; and &nbsp; "<tt>02.Apple.lua</tt>"&nbsp;.
   <li> If the resulting label <i>ends</i> with a trailing underscore, that underscore
        is removed, and replaced with an ellipsis (three dots). This notation is generally
        used to indicate to the user that the menu item invokes an additional dialog.
@@ -64,7 +64,7 @@ Currently, there are nine valid filenames for the event scripts:
 <dl compact>
  <dt><tt>init.lua &nbsp; </tt></dt><dd>      -- Runs when the plugin is loaded.</dd>
  <dt><tt>cleanup.lua &nbsp; </tt></dt><dd>      -- Runs when the plugin is unloaded.</dd>
- 
+
  <dt><tt>saved.lua &nbsp; </tt></dt><dd>      -- Runs when an open document is saved.</dd>
  <dt><tt>created.lua  &nbsp; </tt></dt><dd>    -- Runs when a new document is created.</dd>
  <dt><tt>opened.lua  &nbsp; </tt></dt><dd>     -- Runs when an existing file is opened.</dd>
