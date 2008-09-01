@@ -1,0 +1,31 @@
+# Belarusian translations for geanydbg package.
+msgid ""
+msgstr ""
+"Project-Id-Version: geanydbg 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-09-02 01:23+0300\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Language: Belarusian\n"
+"X-Poedit-Country: BELARUS\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#. All plugins must set name, description, version and author.
+#: ../src/dbg.c:59
+msgid "DBG"
+msgstr ""
+
+#: ../src/dbg.c:59
+msgid "Run external debugger."
+msgstr ""
+
+#: ../src/dbg.c:60
+msgid "Yura Siamshka <yurand2@gmail.com>"
+msgstr "Юра Сямашка <yurand2@gmail.com>"
+
+#: ../src/dbg.c:159
+msgid "Launch external debugger"
+msgstr ""
+
