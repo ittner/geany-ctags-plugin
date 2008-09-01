@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: spellcheck 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-15 18:36+0200\n"
-"PO-Revision-Date: 2008-05-15 17:26+0100\n"
+"POT-Creation-Date: 2008-09-01 14:09+0200\n"
+"PO-Revision-Date: 2008-09-01 14:23+0100\n"
 "Last-Translator: Enrico Tröger <enrico.troeger@uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
@@ -19,49 +19,78 @@ msgstr ""
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: src/spellcheck.c:51 src/spellcheck.c:332
+#: ../src/spellcheck.c:59
 msgid "Spell Check"
 msgstr "Rechtschreibprüfung"
 
-#: src/spellcheck.c:51
+#: ../src/spellcheck.c:59
 msgid "Checks the spelling of the current document."
 msgstr "Prüft die Rechtschreibung im aktuellen Dokument."
 
-#: src/spellcheck.c:52
+#: ../src/spellcheck.c:60
 msgid "The Geany developer team"
 msgstr "Das Geany-Entwickler-Team"
 
-#: src/spellcheck.c:112
+#: ../src/spellcheck.c:259
 #, c-format
-msgid "Checking file \"%s\" (lines %d to %d):"
-msgstr "Prüfe Datei »%s« (Zeilen %d bis %d):"
+msgid "Add \"%s\" to Dictionary"
+msgstr "»%s« zum Wörterbuch hinzufügen"
 
-#: src/spellcheck.c:119
-#, c-format
-msgid "Checking file \"%s\":"
-msgstr "Prüfe Datei »%s«"
-
-#: src/spellcheck.c:152
+#: ../src/spellcheck.c:302
 msgid "Try: "
 msgstr "Vorschlag: "
 
-#: src/spellcheck.c:168
+#: ../src/spellcheck.c:388
+#, c-format
+msgid "Checking file \"%s\" (lines %d to %d using %s):"
+msgstr "Prüfe Datei »%s« (Zeilen %d bis %d mit »%s«):"
+
+#: ../src/spellcheck.c:398
+#, c-format
+msgid "Checking file \"%s\" (using %s):"
+msgstr "Prüfe Datei »%s« (mit »%s«):"
+
+#: ../src/spellcheck.c:414
 msgid "The checked text is spelled correctly."
 msgstr "Der geprüfte Text ist fehlerfrei."
 
-#: src/spellcheck.c:312
+#: ../src/spellcheck.c:485
+#, c-format
+msgid "The Enchant library couldn't be initialized (%s)."
+msgstr "Die Enchant-Blibliothek konnte nicht initialisiert werden (%s)."
+
+#: ../src/spellcheck.c:486
+msgid "unknown error (maybe the chosen language is not available)"
+msgstr "unbekannter Fehler (möglicherweise ist die ausgewählte Sprache nicht verfügbar)."
+
+#: ../src/spellcheck.c:631
+msgid "Plugin configuration directory could not be created."
+msgstr "Das Konfigurationsverzeichnis für das Plugin konnte nicht erstellt werden."
+
+#: ../src/spellcheck.c:686
+msgid "Default"
+msgstr "Standard"
+
+#: ../src/spellcheck.c:728
 msgid "_Spell Check"
 msgstr "_Rechtschreibprüfung"
 
-#: src/spellcheck.c:322
+#: ../src/spellcheck.c:751
 msgid "Run Spell Check"
 msgstr "Rechtschreibprüfung ausführen"
 
-#: src/spellcheck.c:339
+#: ../src/spellcheck.c:762
+msgid "Check spelling while typing"
+msgstr "Beim Tippen Rechtschreibung überprüfen"
+
+#: ../src/spellcheck.c:767
+msgid "Print misspelled words and suggestions in the messages window"
+msgstr "Falsch geschriebene Wörter und Vorschläge im Meldungsfenster anzeigen"
+
+#: ../src/spellcheck.c:771
 msgid "Language to use for the spell check:"
 msgstr "Zu verwendende Sprache für die Prüfung:"
 
-#: src/spellcheck.c:371
-msgid "Plugin configuration directory could not be created."
-msgstr ""
-"Das Konfigurationsverzeichnis für das Plugin konnte nicht erstellt werden."
+#~ msgid "Checking file \"%s\":"
+#~ msgstr "Prüfe Datei »%s«"
+
