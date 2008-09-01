@@ -64,6 +64,10 @@ plugins = [
 		 [ 'backupcopy/src/backupcopy.c' ], # source files
 		 [ 'backupcopy', 'backupcopy/src' ], # include dirs
 		 '0.2'),
+	Plugin('geanydbg',
+		   [ 'geanydbg/src/dbg.c' ], # source files
+		   [ 'geanydbg', 'geanydbg/src' ], # include dirs
+		   '0.1'),
 	Plugin('geanysendmail',
 		   [ 'geanysendmail/src/geanysendmail.c' ], # source files
 		   [ 'geanysendmail', 'geanysendmail/src' ], # include dirs
