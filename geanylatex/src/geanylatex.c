@@ -400,7 +400,7 @@ show_output(const gchar * output, const gchar * name, const gint local_enc)
 {
 	GeanyDocument *doc = NULL;
 	GeanyFiletype *ft = p_filetypes->lookup_by_name("LaTeX");
-	
+
 	if (output)
 	{
 		doc = p_document->new_file(name, ft, output);
@@ -450,9 +450,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 	gboolean KOMA_active = TRUE;
 	gboolean draft_active = FALSE;
 
-	GtkTooltips *tooltip = NULL;
-
-	tooltip = gtk_tooltips_new();
+	GtkTooltips *tooltip = gtk_tooltips_new();
 
 	// Creating and formating table
 	table = gtk_table_new(2, 6, FALSE);
@@ -463,7 +461,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 	label_documentclass = gtk_label_new(_("Documentclass:"));
 	documentclass_combobox = gtk_combo_box_new_text();
 	gtk_tooltips_set_tip(tooltip, documentclass_combobox,
-		_("Chooce the kind of document you want to write"), NULL);
+		_("Choose the kind of document you want to write"), NULL);
 	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 0, "Book");
 	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 1, "Article");
 	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 2, "Report");
