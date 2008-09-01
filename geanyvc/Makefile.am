@@ -20,7 +20,7 @@ geanyvc_la_SOURCES = geanyvc.c externdiff.c vc_git.c vc_cvs.c vc_svn.c vc_svk.c 
 geanyvc_la_LDFLAGS = -module -avoid-version
 geanyvc_la_LIBADD  = @GEANY_LIBS@
 
-AM_CPPFLAGS = @GEANY_CFLAGS@ -DGEANY_DISABLE_DEPRECATED
+AM_CPPFLAGS = @GEANY_CFLAGS@ -DGEANY_DISABLE_DEPRECATED -DLOCALEDIR=\""$(localedir)"\"
 
 
 .PHONY: ChangeLog mrproper

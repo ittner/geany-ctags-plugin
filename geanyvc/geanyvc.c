@@ -2,7 +2,7 @@
  *      geanyvc.c - Plugin to geany light IDE to work with vc
  *
  *      Copyright 2007, 2008 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
- *      Copyright 2007 Enrico Tröger <enrico.troeger@uvena.de>
+ *      Copyright 2007, 2008 Enrico Tröger <enrico.troeger@uvena.de>
  *      Copyright 2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *      Copyright 2007, 2008 Yura Siamashka <yurand2@gmail.com>
  *
@@ -39,6 +39,10 @@
 #include "project.h"
 #include "prefs.h"
 #include "pluginmacros.h"
+
+#ifdef HAVE_LOCALE_H
+# include <locale.h>
+#endif
 
 #include "highlighting.h"
 #include "SciLexer.h"
@@ -1778,6 +1782,31 @@ registrate()
 	REGISTER_VC(HG, enable_hg);
 }
 
+static void locale_init(void)
+{
+#ifdef ENABLE_NLS
+	gchar *locale_dir = NULL;
+
+#ifdef HAVE_LOCALE_H
+	setlocale(LC_ALL, "");
+#endif
+
+#ifdef G_OS_WIN32
+	gchar *install_dir = g_win32_get_package_installation_directory("geany", NULL);
+	/* e.g. C:\Program Files\geany\lib\locale */
+	locale_dir = g_strconcat(install_dir, "\\share\\locale", NULL);
+	g_free(install_dir);
+#else
+	locale_dir = g_strdup(LOCALEDIR);
+#endif
+
+	bindtextdomain(GETTEXT_PACKAGE, locale_dir);
+	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+	textdomain(GETTEXT_PACKAGE);
+	g_free(locale_dir);
+#endif
+}
+
 /* Called by Geany to initialize the plugin */
 void
 plugin_init(G_GNUC_UNUSED GeanyData * data)
@@ -1792,6 +1821,8 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 
 	load_config();
 	registrate();
+
+	locale_init();
 
 	tooltips = gtk_tooltips_new();
 
