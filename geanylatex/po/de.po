@@ -1,88 +1,85 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: GeanyLaTeX\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-01 20:13+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
+"Language-Team: geany-118n <geany-118n@uvena.de>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
 
 #: src/geanylatex.c:55
 msgid "LaTeX"
-msgstr ""
+msgstr "LaTeX"
 
 #: src/geanylatex.c:55
 msgid "Plugin to make Geany better support LaTeX"
-msgstr ""
+msgstr "Plugin zum Verbessern des LaTeX-Support für Geany"
 
 #: src/geanylatex.c:133
 msgid "Insert label"
-msgstr ""
+msgstr "Lesezeichen einfügen"
 
 #: src/geanylatex.c:146
 msgid "Label name:"
-msgstr ""
+msgstr "Lesezeichenname:"
 
 #: src/geanylatex.c:177
 msgid "Insert reference"
-msgstr ""
+msgstr "Verweis einfügen"
 
 #: src/geanylatex.c:190
 msgid "Ref name:"
-msgstr ""
+msgstr "Lesezeichenname:"
 
 #: src/geanylatex.c:200
 msgid "standard reference"
-msgstr ""
+msgstr "Normaler Verweis"
 
 #: src/geanylatex.c:205
 msgid "page reference"
-msgstr ""
+msgstr "Verweis auf Seite"
 
 #: src/geanylatex.c:370
 msgid "More"
-msgstr ""
+msgstr "Weitere"
 
 #. Documentclass
 #: src/geanylatex.c:463
 msgid "Documentclass:"
-msgstr ""
+msgstr "Dokumentenklasse:"
 
 #: src/geanylatex.c:466
 msgid "Chooce the kind of document you want to write"
-msgstr ""
+msgstr "Art des Dokumentes"
 
 #. Encoding
 #: src/geanylatex.c:479
 msgid "Encoding:"
-msgstr ""
+msgstr "Zeichensatz:"
 
 #: src/geanylatex.c:483
 msgid "Set the encoding for your new document"
-msgstr ""
+msgstr "Zeichensatz für das neue Dokument"
 
 #. Scriptsize
 #: src/geanylatex.c:498
 msgid "Scriptsize:"
-msgstr ""
+msgstr "Schriftgröße:"
 
 #: src/geanylatex.c:501
 msgid "Set the default script size of your new document"
-msgstr ""
+msgstr "Setzt die Standardschriftgröße für das neue Dokument"
 
 #. Author
 #: src/geanylatex.c:514
 msgid "Author:"
-msgstr ""
+msgstr "Autor:"
 
 #: src/geanylatex.c:517
 msgid ""
@@ -92,7 +89,7 @@ msgstr ""
 #. Date
 #: src/geanylatex.c:528
 msgid "Date:"
-msgstr ""
+msgstr "Datum:"
 
 #: src/geanylatex.c:531
 msgid ""
@@ -104,7 +101,7 @@ msgstr ""
 #. Title of the new document
 #: src/geanylatex.c:538
 msgid "Title:"
-msgstr ""
+msgstr "Titel:"
 
 #: src/geanylatex.c:540
 msgid "Sets the title of your newly document."
@@ -113,7 +110,7 @@ msgstr ""
 #. Papersize
 #: src/geanylatex.c:547
 msgid "Paper size:"
-msgstr ""
+msgstr "Papiergröße:"
 
 #: src/geanylatex.c:550
 msgid "Chooce the paper format for the new created document"
@@ -122,11 +119,11 @@ msgstr ""
 #. Buidling the wizard-dialog and showing it
 #: src/geanylatex.c:565
 msgid "LaTeX-Wizard"
-msgstr ""
+msgstr "LaTeX-Assistent"
 
 #: src/geanylatex.c:575
 msgid "Use KOMA-script classes if possible"
-msgstr ""
+msgstr "Benutze KOMA-Skript wenn möglich"
 
 #: src/geanylatex.c:578
 msgid ""
@@ -137,7 +134,7 @@ msgstr ""
 
 #: src/geanylatex.c:584
 msgid "Use draft mode"
-msgstr ""
+msgstr "Entwurfsmodus benutzen"
 
 #: src/geanylatex.c:586
 msgid ""
@@ -147,23 +144,23 @@ msgstr ""
 
 #: src/geanylatex.c:836
 msgid "Insert \\label"
-msgstr ""
+msgstr "\\label einfügen"
 
 #: src/geanylatex.c:837
 msgid "Insert \\ref"
-msgstr ""
+msgstr "\\ref einfügen"
 
 #: src/geanylatex.c:838
 msgid "Run LaTeX-Wizard"
-msgstr ""
+msgstr "LaTeX-Assistent starten"
 
 #: src/geanylatex.c:846
 msgid "_LaTeX"
-msgstr ""
+msgstr "_LaTeX"
 
 #: src/geanylatex.c:853
 msgid "LaTeX-_Wizard"
-msgstr ""
+msgstr "LaTeX-_Assistent"
 
 #: src/geanylatex.c:856
 msgid "Starts a Wizard to create easily LaTeX-dokuments"
@@ -171,7 +168,7 @@ msgstr ""
 
 #: src/geanylatex.c:861
 msgid "Insert _Special Character"
-msgstr ""
+msgstr "_Sonderzeichen einfügen"
 
 #: src/geanylatex.c:863
 msgid "Helps to use some not very common letters and signs"
@@ -179,15 +176,15 @@ msgstr ""
 
 #: src/geanylatex.c:870
 msgid "Insert _Reference"
-msgstr ""
+msgstr "_Verweis einfügen"
 
 #: src/geanylatex.c:872
 msgid "Inserting references to the document"
-msgstr ""
+msgstr "Eine Referenz in das Dokument einfügen"
 
 #: src/geanylatex.c:876
 msgid "Insert _Label"
-msgstr ""
+msgstr "_Lesezeichen einfügen"
 
 #: src/geanylatex.c:878
 msgid "Helps at inserting labels to a docuemnt"
@@ -195,68 +192,68 @@ msgstr ""
 
 #: src/latexencodings.c:37
 msgid "UTF-8"
-msgstr ""
+msgstr "UTF-8"
 
 #: src/latexencodings.c:38
 msgid "US-ASCII"
-msgstr ""
+msgstr "US-ASCII"
 
 #: src/latexencodings.c:39
 msgid "ISO-8859-1 (Latin-1)"
-msgstr ""
+msgstr "ISO-8859-1 (Latin-1)"
 
 #: src/latexencodings.c:41
 msgid "ISO-8859-2 (Latin-2)"
-msgstr ""
+msgstr "ISO-8859-2 (Latin-2)"
 
 #: src/latexencodings.c:43
 msgid "ISO-8859-3 (Latin-3)"
-msgstr ""
+msgstr "ISO-8859-3 (Latin-3)"
 
 #: src/latexencodings.c:45
 msgid "ISO-8859-4 (Latin-4)"
-msgstr ""
+msgstr "ISO-8859-4 (Latin-4)"
 
 #: src/latexencodings.c:47
 msgid "ISO-8859-5 (Latin-5)"
-msgstr ""
+msgstr "ISO-8859-5 (Latin-5)"
 
 #: src/latexencodings.c:49
 msgid "ISO-8859-9 (Latin-9)"
-msgstr ""
+msgstr "ISO-8859-9 (Latin-9)"
 
 #: src/latexencodings.c:51
 msgid "ISO-8859-10 (Latin-10)"
-msgstr ""
+msgstr "ISO-8859-10 (Latin-10)"
 
 #: src/latexencodings.c:52
 msgid "IBM 850 code page"
-msgstr ""
+msgstr "IBM 850 code page"
 
 #: src/latexencodings.c:53
 msgid "IBM 852 code page"
-msgstr ""
+msgstr "IBM 852 code page"
 
 #: src/latexencodings.c:54 src/letters.c:41
 msgid "Misc"
-msgstr ""
+msgstr "Sonstiges"
 
 #: src/letters.c:39
 msgid "Greek letters"
-msgstr ""
+msgstr "Griechische Buchstaben"
 
 #: src/letters.c:40
 msgid "German umlauts"
-msgstr ""
+msgstr "Deutsche Umlaute"
 
 #: src/letters.c:42
 msgid "Arrow characters"
-msgstr ""
+msgstr "Pfeil-Symbole"
 
 #: src/letters.c:43
 msgid "Relational"
-msgstr ""
+msgstr "Relationale Operatoren"
 
 #: src/letters.c:44
 msgid "Binary operation"
-msgstr ""
+msgstr "Binäre Operatoren"
