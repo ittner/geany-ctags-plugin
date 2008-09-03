@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-01 00:51+0200\n"
+"POT-Creation-Date: 2008-09-02 01:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,7 +57,7 @@ msgid "Note: \\%f will be replaced by your filename."
 msgstr ""
 
 #: src/geanysendmail.c:289
-msgid "Showing icon in toolbar (EXPERIMENTAL)"
+msgid "Showing icon in toolbar"
 msgstr ""
 
 #: src/geanysendmail.c:292

@@ -286,7 +286,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	gtk_widget_show(label2);
 	gtk_misc_set_alignment(GTK_MISC(label2), 0, 0.5);
 
-	pref_widgets.checkbox_icon_to_toolbar = gtk_check_button_new_with_label(_("Showing icon in toolbar (EXPERIMENTAL)"));
+	pref_widgets.checkbox_icon_to_toolbar = gtk_check_button_new_with_label(_("Showing icon in toolbar"));
 	gtk_tooltips_set_tip(tooltip, pref_widgets.checkbox_icon_to_toolbar,
 			     _
 			     ("Shows a icon in the toolbar to send file more easy."),

@@ -1,8 +1,12 @@
+# German translations for GeanySendMail package.
+# Copyright (C) 2008 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 msgid ""
 msgstr ""
 "Project-Id-Version: geanysendmail 0.4svn\n"
-"Report-Msgid-Bugs-To: Geany-i18n team <geany-i18n@uvena.de>\n"
-"POT-Creation-Date: 2008-09-01 00:51+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-09-02 01:39+0200\n"
 "PO-Revision-Date: 2008-05-24 19:13+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team:  <frank@frank.uvena.de>\n"
@@ -58,8 +62,8 @@ msgid "Note: \\%f will be replaced by your filename."
 msgstr "Anmerkung: \\%f wird durch den Dateinamen ersetzt."
 
 #: src/geanysendmail.c:289
-msgid "Showing icon in toolbar (EXPERIMENTAL)"
-msgstr "Symbol in der Werkzeugliste anzeigen (Experimental)"
+msgid "Showing icon in toolbar"
+msgstr "Symbol in der Werkzeugliste anzeigen"
 
 #: src/geanysendmail.c:292
 msgid "Shows a icon in the toolbar to send file more easy."
