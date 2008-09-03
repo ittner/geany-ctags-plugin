@@ -1,8 +1,6 @@
 TODO
 ----
 
- * Support for i18n
- * Buildsupport for Win32
+ * Buildsupport for Win32 (Needs some testing)
  * Support for Inline-mailing (embedded text inside mail)
  * Send mail directly (only UNIX like systems)
- 
