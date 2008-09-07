@@ -65,13 +65,21 @@ plugins = [
 		 [ 'backupcopy', 'backupcopy/src' ], # include dirs
 		 '0.2'),
 	Plugin('geanydbg',
-		   [ 'geanydbg/src/dbg.c' ], # source files
-		   [ 'geanydbg', 'geanydbg/src' ], # include dirs
-		   '0.1'),
+		 [ 'geanydbg/src/dbg.c' ], # source files
+		 [ 'geanydbg', 'geanydbg/src' ], # include dirs
+		 '0.1'),
+	Plugin('geanydebug',
+		 map(lambda x: "geanydebug/src/" + x, ['gdb-io-break.c',
+		   'gdb-io-envir.c', 'gdb-io-frame.c', 'gdb-io-read.c', 'gdb-io-run.c',
+		   'gdb-io-stack.c', 'gdb-lex.c', 'gdb-ui-break.c', 'gdb-ui-envir.c',
+		   'gdb-ui-frame.c',  'gdb-ui-locn.c', 'gdb-ui-main.c',
+		   'geanydebug.c']), # source files
+		 [ 'geanydebug', 'geanydebug/src' ], # include dirs
+		 '0.1'),
 	Plugin('geanysendmail',
-		   [ 'geanysendmail/src/geanysendmail.c' ], # source files
-		   [ 'geanysendmail', 'geanysendmail/src' ], # include dirs
-		   '0.4svn'),
+		 [ 'geanysendmail/src/geanysendmail.c' ], # source files
+		 [ 'geanysendmail', 'geanysendmail/src' ], # include dirs
+		 '0.4svn'),
 	Plugin('geanydoc',
 		 [ 'geanydoc/src/config.c', 'geanydoc/src/geanydoc.c' ], # source files
 		 [ 'geanydoc', 'geanydoc/src' ], # include dirs
