@@ -1,0 +1,48 @@
+
+This is a plugin to provide integrated debugging from Geany using the GNU
+debugger (gdb). It was developed and tested on openSUSE-10.3 with GDB-6.7.50.
+Other recent versions of GDB will probably work, but operating systems other
+than Linux-PC will not work, at least not without some considerable hacking.
+
+There is no real documentation, but if you hover your mouse over the buttons
+in the "Debug" sidebar panel in Geany the tooltips should give you some idea
+of what to do next. There are also a few "rough draft" notes below:
+
+Most of the console output from GDB is sent to the "Compiler" message window
+in Geany, and you can send standard commands to GDB using the "Console" entry
+on the debug sidebar. This should be used with caution, since GDB's machine
+interface and console interface don't always play well together.
+
+Also note that the plugin sets its own internal breakpoint #1 to grab the
+program's PID on startup, so any user-specified breakpoint numbers begin
+at #2, and if you manually delete the #1 breakpoint it will likely cause
+you some problems.
+
+Whenever the target program hits a breakpoint or encounters a segfault etc.
+it will try to open the appropriate source file and jump to the correct line.
+
+To examine the state of the program's variables, you can click on the "Stack"
+button in the debug sidebar. Note that the interaction between the plugin and
+the debugger can sometimes be quite slow, so please be patient when waiting
+for the dialogs to open.
+
+The "Add breakpoint", "Add watchpoint", and "Run to" dialogs will try to
+suggest some values based on your current position in whatever file you
+have open in Geany, but if you don't like the choice, just click the "Clear"
+button and type in whatever you please.
+
+The plugin tries to enable only the buttons that are relevant to the current
+state, but ocassionally it might end up getting things wrong. If this happens,
+you should be able to click the "Unload" button and everything will be reset.
+
+If you try to unload the plugin using the plugin manager while it has a
+program loaded, the plugin manager might appear to hang for a few seconds,
+while GDB tries to shut down. Again, just be patient, but note that it is
+much better use the "Unload" button in the debug sidebar before trying to
+disable the plugin.
+
+There also seems to be some conflict with the GeanyLua plugin, if you have
+any ~/.geany/plugins/events/ scripts. ( The GeanyLua author tells me it is
+a problem with that plugin, and it will be fixed in the 0.6.2 release. :-)
+
+
