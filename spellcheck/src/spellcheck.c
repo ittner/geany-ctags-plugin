@@ -345,6 +345,10 @@ static gint check_word(GeanyDocument *doc, gint line_number, const gchar *word,
 	gchar **suggs;
 	GString *str = g_string_sized_new(256);
 
+	/* ignore numbers or words starting with digits */
+	if (isdigit(*word))
+		return 0;
+
 	/* early out if the word is spelled correctly */
 	if (enchant_dict_check(sc->dict, word, -1) == 0)
 		return 0;
@@ -618,7 +622,9 @@ static const gchar *get_default_lang(void)
 {
 	const gchar *lang = g_getenv("LANG");
 	/** TODO check whether the returned lang is actually provided by enchant and
-	 *  choose something else if not */
+	 *  choose something else if not
+	 *  N.B. this is not really possible/reasonable with enchant < 1.4.3 because of a
+	 *  bug in the Zemberek provider which always reports it has the requested dict */
 	if (NZV(lang))
 	{
 		if (g_ascii_strncasecmp(lang, "C", 1) == 0)
@@ -789,7 +795,8 @@ void plugin_init(GeanyData *data)
 
 	locale_init();
 
-	plugin_fields->menu_item = sp_item = gtk_menu_item_new_with_mnemonic(_("_Spell Check"));
+	plugin_fields->menu_item = sp_item =
+		gtk_image_menu_item_new_from_stock("gtk-spell-check", NULL);
 	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
 
 	toolbar_update();

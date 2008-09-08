@@ -3,6 +3,9 @@
  * src/spellcheck.c:
    Add toolbar button to quickly enable/disable the
    'check while typing' setting (closes #2062239).
+   Do not check numbers and words starting with digits.
+   Use the 'gtk-spell-check' GTK stock icon for the main menu
+   item in the Tools menu.
 
 
 2008-08-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
