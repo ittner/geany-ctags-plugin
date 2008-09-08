@@ -55,7 +55,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(78)
+PLUGIN_VERSION_CHECK(91)
 PLUGIN_SET_INFO(_("Spell Check"), _("Checks the spelling of the current document."), "0.2",
 			_("The Geany developer team"))
 
@@ -66,11 +66,13 @@ typedef struct
 	gchar *default_language;
 	gboolean use_msgwin;
 	gboolean check_while_typing;
+	gboolean show_toolbar_item;
 	gulong signal_id;
 	GPtrArray *dicts;
 	GtkWidget *edit_menu;
 	GtkWidget *edit_menu_sep;
 	GtkWidget *edit_menu_sub;
+	GtkToolItem *toolbar_button;
 	EnchantBroker *broker;
 	EnchantDict *dict;
 } SpellCheck;
@@ -88,6 +90,11 @@ typedef struct
 	gchar *word;
 } SpellClickInfo;
 static SpellClickInfo clickinfo;
+
+
+/* Flag to indicate that a callback function will be triggered by generating the appropiate event
+ * but the callback should be ignored. */
+static gboolean ignore_sc_callback = FALSE;
 
 
 static void on_update_editor_menu(GObject *obj, const gchar *word, gint pos,
@@ -131,6 +138,55 @@ static void set_up_aspell_prefix(AspellConfig *config)
 	RegCloseKey(hkey);
 }
 #endif
+
+
+static void toolbar_item_toggled_cb(GtkToggleToolButton *button, gpointer user_data)
+{
+	if (ignore_sc_callback)
+		return;
+
+	sc->check_while_typing = gtk_toggle_tool_button_get_active(button);
+
+	p_ui->set_statusbar(FALSE, _("Spell checking while typing is now %s"),
+		(sc->check_while_typing) ? _("enabled") : _("disabled"));
+}
+
+
+static void toolbar_update(void)
+{
+	/* toolbar item is not requested, so remove the item if it exists */
+	if (! sc->show_toolbar_item)
+	{
+		if (sc->toolbar_button != NULL)
+		{
+			gtk_widget_destroy(GTK_WIDGET(sc->toolbar_button));
+			sc->toolbar_button = NULL;
+		}
+	}
+	else
+	{
+		if (sc->toolbar_button == NULL)
+		{
+			gint pos = p_ui->get_toolbar_insert_position();
+
+			sc->toolbar_button = gtk_toggle_tool_button_new_from_stock("gtk-spell-check");
+	#if GTK_CHECK_VERSION(2, 12, 0)
+			gtk_widget_set_tooltip_text(GTK_WIDGET(sc->toolbar_button),
+				_("Toggle spell check while typing."));
+	#endif
+			gtk_widget_show(GTK_WIDGET(sc->toolbar_button));
+			gtk_toolbar_insert(GTK_TOOLBAR(geany->main_widgets->toolbar), sc->toolbar_button, pos);
+
+			g_signal_connect(sc->toolbar_button, "toggled",
+				G_CALLBACK(toolbar_item_toggled_cb), NULL);
+		}
+
+		ignore_sc_callback = TRUE;
+		gtk_toggle_tool_button_set_active(
+			GTK_TOGGLE_TOOL_BUTTON(sc->toolbar_button), sc->check_while_typing);
+		ignore_sc_callback = FALSE;
+	}
+}
 
 
 static void clear_indicators_on_range(GeanyDocument *doc, gint start, gint len)
@@ -619,11 +675,17 @@ static void on_configure_response(GtkDialog *dialog, gint response, gpointer use
 		sc->use_msgwin = (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 			g_object_get_data(G_OBJECT(dialog), "check_msgwin"))));
 
+		sc->show_toolbar_item = (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
+			g_object_get_data(G_OBJECT(dialog), "check_toolbar"))));
+
 		g_key_file_load_from_file(config, sc->config_file, G_KEY_FILE_NONE, NULL);
 		if (sc->default_language != NULL) /* lang may be NULL */
 			g_key_file_set_string(config, "spellcheck", "language", sc->default_language);
 		g_key_file_set_boolean(config, "spellcheck", "check_while_typing", sc->check_while_typing);
 		g_key_file_set_boolean(config, "spellcheck", "use_msgwin", sc->use_msgwin);
+		g_key_file_set_boolean(config, "spellcheck", "show_toolbar_item", sc->show_toolbar_item);
+
+		toolbar_update();
 
 		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && p_utils->mkdir(config_dir, TRUE) != 0)
 		{
@@ -720,6 +782,8 @@ void plugin_init(GeanyData *data)
 		"spellcheck", "language", get_default_lang());
 	sc->check_while_typing = p_utils->get_setting_boolean(config,
 		"spellcheck", "check_while_typing", FALSE);
+	sc->show_toolbar_item = p_utils->get_setting_boolean(config,
+		"spellcheck", "show_toolbar_item", TRUE);
 	sc->use_msgwin = p_utils->get_setting_boolean(config, "spellcheck", "use_msgwin", FALSE);
 	g_key_file_free(config);
 
@@ -727,6 +791,8 @@ void plugin_init(GeanyData *data)
 
 	plugin_fields->menu_item = sp_item = gtk_menu_item_new_with_mnemonic(_("_Spell Check"));
 	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
+
+	toolbar_update();
 
 	sc->broker = enchant_broker_init();
 	init_enchant_dict();
@@ -754,7 +820,7 @@ void plugin_init(GeanyData *data)
 
 GtkWidget *plugin_configure(GtkDialog *dialog)
 {
-	GtkWidget *label, *vbox, *combo, *check_type, *check_msgwin;
+	GtkWidget *label, *vbox, *combo, *check_type, *check_msgwin, *check_toolbar;
 	guint i;
 
 	vbox = gtk_vbox_new(FALSE, 6);
@@ -762,6 +828,10 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	check_type = gtk_check_button_new_with_label(_("Check spelling while typing"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_type), sc->check_while_typing);
 	gtk_box_pack_start(GTK_BOX(vbox), check_type, FALSE, FALSE, 6);
+
+	check_toolbar = gtk_check_button_new_with_label(_("Show toolbar item to toggle spell checking"));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_toolbar), sc->show_toolbar_item);
+	gtk_box_pack_start(GTK_BOX(vbox), check_toolbar, FALSE, FALSE, 3);
 
 	check_msgwin = gtk_check_button_new_with_label(
 		_("Print misspelled words and suggestions in the messages window"));
@@ -794,6 +864,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	g_object_set_data(G_OBJECT(dialog), "combo", combo);
 	g_object_set_data(G_OBJECT(dialog), "check_type", check_type);
 	g_object_set_data(G_OBJECT(dialog), "check_msgwin", check_msgwin);
+	g_object_set_data(G_OBJECT(dialog), "check_toolbar", check_toolbar);
 	g_signal_connect(dialog, "response", G_CALLBACK(on_configure_response), NULL);
 
 	gtk_widget_show_all(vbox);
@@ -820,6 +891,8 @@ void plugin_cleanup(void)
 
 	gtk_widget_destroy(sc->edit_menu);
 	gtk_widget_destroy(sc->edit_menu_sep);
+	if (sc->toolbar_button != NULL)
+		gtk_widget_destroy(GTK_WIDGET(sc->toolbar_button));
 
 	enchant_broker_free_dict(sc->broker, sc->dict);
 	enchant_broker_free(sc->broker);
