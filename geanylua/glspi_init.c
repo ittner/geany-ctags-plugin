@@ -250,10 +250,10 @@ static void on_proj_save(GObject *obj, GKeyFile *config, gpointer user_data)
 
 
 
-static void on_proj_close(GObject *obj, GKeyFile *config, gpointer user_data)
+static void on_proj_close(GObject *obj, gpointer user_data)
 {
 	if (g_file_test(local_data.on_proj_closed_script,G_FILE_TEST_IS_REGULAR)) {
-		glspi_run_script(local_data.on_proj_closed_script,0,config, SD);
+		glspi_run_script(local_data.on_proj_closed_script,0, NULL, SD);
 	}
 }
 
