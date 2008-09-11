@@ -197,16 +197,18 @@ static void hotkey_init(void)
 extern void glspi_set_sci_cmd_hash(gboolean create);
 extern void glspi_set_key_cmd_hash(gboolean create);
 
-static void on_doc_new(GObject *obj, gint idx, gpointer user_data)
+static void on_doc_new(GObject *obj, GeanyDocument *doc, gpointer user_data)
 {
+	gint idx = doc->index;
 	if (g_file_test(local_data.on_created_script,G_FILE_TEST_IS_REGULAR)) {
 		glspi_run_script(local_data.on_created_script,idx+1, NULL, SD);
 	}
 }
 
 
-static void on_doc_save(GObject *obj, gint idx, gpointer user_data)
+static void on_doc_save(GObject *obj, GeanyDocument *doc, gpointer user_data)
 {
+	gint idx = doc->index;
 	if (g_file_test(local_data.on_saved_script,G_FILE_TEST_IS_REGULAR)) {
 		glspi_run_script(local_data.on_saved_script,idx+1, NULL, SD);
 	}
@@ -214,8 +216,9 @@ static void on_doc_save(GObject *obj, gint idx, gpointer user_data)
 
 
 
-static void on_doc_open(GObject *obj, gint idx, gpointer user_data)
+static void on_doc_open(GObject *obj, GeanyDocument *doc, gpointer user_data)
 {
+	gint idx = doc->index;
 	if (g_file_test(local_data.on_opened_script,G_FILE_TEST_IS_REGULAR)) {
 		glspi_run_script(local_data.on_opened_script,idx+1, NULL, SD);
 	}
@@ -223,8 +226,9 @@ static void on_doc_open(GObject *obj, gint idx, gpointer user_data)
 
 
 
-static void on_doc_activate(GObject *obj, gint idx, gpointer user_data)
+static void on_doc_activate(GObject *obj, GeanyDocument *doc, gpointer user_data)
 {
+	gint idx = doc->index;
 	if (g_file_test(local_data.on_activated_script,G_FILE_TEST_IS_REGULAR)) {
 		glspi_run_script(local_data.on_activated_script,idx+1, NULL, SD);
 	}
