@@ -55,7 +55,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(91)
+PLUGIN_VERSION_CHECK(94)
 PLUGIN_SET_INFO(_("Spell Check"), _("Checks the spelling of the current document."), "0.2",
 			_("The Geany developer team"))
 
@@ -195,8 +195,7 @@ static void clear_indicators_on_range(GeanyDocument *doc, gint start, gint len)
 
 	if (len > 0)
 	{
-		p_sci->send_message(doc->editor->sci, SCI_STARTSTYLING, start, INDIC2_MASK);
-		p_sci->send_message(doc->editor->sci, SCI_SETSTYLING, len, 0);
+		p_sci->indic_clear(doc->editor->sci, start, start + len);
 	}
 }
 
@@ -436,7 +435,7 @@ static void check_document(GeanyDocument *doc)
 
 	enchant_dict_describe(sc->dict, dict_describe, &dict_string);
 
-	if (p_sci->can_copy(doc->editor->sci))
+	if (p_sci->has_selection(doc->editor->sci))
 	{
 		first_line = p_sci->get_line_from_position(
 			doc->editor->sci, p_sci->get_selection_start(doc->editor->sci));
