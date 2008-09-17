@@ -532,7 +532,7 @@ static gint glspi_match(lua_State* L)
 		if ( !lua_isnumber(L,1) ) {return FAIL_NUMERIC_ARG(1);}
 		pos=lua_tonumber(L,1);
 	}
-	push_number(L,p_sci->find_bracematch(doc->editor->sci,pos));
+	push_number(L,p_sci->find_matching_brace(doc->editor->sci,pos));
 	return 1;
 }
 
@@ -707,7 +707,7 @@ static gint glspi_scintilla(lua_State* L)
 			lparam=lua_toboolean(L,3);
 			break;
 		case SLT_TEXTRANGE: return FAIL_API;
-		case SLT_STRINGRESULT: 
+		case SLT_STRINGRESULT:
 			if ((he->msgid==SCI_GETTEXT)&&(wparam==0)) {
 				wparam=sci_send_message(doc->editor->sci, SCI_GETLENGTH, 0,0);
 			}
@@ -749,7 +749,7 @@ static gint glspi_scintilla(lua_State* L)
 			}
 			return 1;
 		case SLT_BOOL:
-			lua_pushboolean(L, sci_send_message(doc->editor->sci, he->msgid, wparam, lparam));		
+			lua_pushboolean(L, sci_send_message(doc->editor->sci, he->msgid, wparam, lparam));
 			return 1;
 		default:return FAIL_API;
 	}
@@ -797,7 +797,7 @@ static gint glspi_find(lua_State* L)
 				lua_pushfstring(L, _("Error in module \"%s\" at function %s():\n"
 					" invalid table in argument #%d:\n"
 					"  unknown flag \"%s\" for element #%d\n "),
-					LUA_MODULE_NAME, &__FUNCTION__[6], 4, 
+					LUA_MODULE_NAME, &__FUNCTION__[6], 4,
 					(strlen(flagname)>64)?_("<too large to display>"):flagname, i);
 				lua_error(L);
 			}
@@ -812,7 +812,7 @@ static gint glspi_find(lua_State* L)
 		return 2;
 	} else {
 		g_free(ttf.lpstrText);
-		return 0;	
+		return 0;
 	}
 }
 
