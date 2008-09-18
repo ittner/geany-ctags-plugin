@@ -1,3 +1,9 @@
+2008-09-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/spellcheck.c:
+   Update to Geany API 95.
+
+
 2008-09-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/spellcheck.c:

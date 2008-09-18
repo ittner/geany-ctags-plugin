@@ -55,7 +55,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(94)
+PLUGIN_VERSION_CHECK(95)
 PLUGIN_SET_INFO(_("Spell Check"), _("Checks the spelling of the current document."), "0.2",
 			_("The Geany developer team"))
 
@@ -195,7 +195,7 @@ static void clear_indicators_on_range(GeanyDocument *doc, gint start, gint len)
 
 	if (len > 0)
 	{
-		p_sci->indic_clear(doc->editor->sci, start, start + len);
+		p_sci->indicator_clear(doc->editor->sci, start, start + len);
 	}
 }
 
