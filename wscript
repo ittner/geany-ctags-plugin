@@ -100,8 +100,9 @@ plugins = [
 		 [ 'geanyprj', 'geanyprj/src' ], # include dirs
 		 '0.4'),
 	Plugin('geanyvc',
-		 [ 'geanyvc/geanyvc.c', 'geanyvc/externdiff.c', 'geanyvc/vc_git.c', 'geanyvc/vc_cvs.c',
-		   'geanyvc/vc_svn.c', 'geanyvc/vc_svk.c', 'geanyvc/vc_bzr.c', 'geanyvc/vc_hg.c' ],
+		 [ 'geanyvc/geanyvc.c', 'geanyvc/utils.c', 'geanyvc/externdiff.c',
+		   'geanyvc/vc_git.c', 'geanyvc/vc_cvs.c', 'geanyvc/vc_svn.c',
+		   'geanyvc/vc_svk.c', 'geanyvc/vc_bzr.c', 'geanyvc/vc_hg.c' ],
 		 [ 'geanyvc' ], # include dirs
 		 '0.4', [ [ 'gtkspell-2.0', '2.0', False ] ]),
 	Plugin('instantsave',
