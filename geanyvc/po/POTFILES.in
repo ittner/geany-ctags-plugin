@@ -6,3 +6,4 @@ vc_git.c
 vc_hg.c
 vc_svk.c
 vc_svn.c
+utils.c

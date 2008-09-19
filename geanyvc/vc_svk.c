@@ -35,30 +35,84 @@
 extern GeanyData *geany_data;
 
 
-static const gchar *SVK_CMD_DIFF_FILE[] = { "svk", "diff", FILENAME, NULL };
-static const gchar *SVK_CMD_DIFF_DIR[] = { "svk", "diff", DIRNAME, NULL };
-static const gchar *SVK_CMD_REVERT_FILE[] = { "svk", "revert", BASE_FILENAME, NULL };
+static const gchar *SVK_CMD_DIFF_FILE[] = { "svk", "diff", ABS_FILENAME, NULL };
+static const gchar *SVK_CMD_DIFF_DIR[] = { "svk", "diff", ABS_DIRNAME, NULL };
+static const gchar *SVK_CMD_REVERT_FILE[] = { "svk", "revert", BASENAME, NULL };
 static const gchar *SVK_CMD_STATUS[] = { "svk", "status", NULL };
-static const gchar *SVK_CMD_ADD[] = { "svk", "add", BASE_FILENAME, NULL };
-static const gchar *SVK_CMD_REMOVE[] = { "svk", "remove", BASE_FILENAME, NULL };
-static const gchar *SVK_CMD_LOG_FILE[] = { "svk", "log", BASE_FILENAME, NULL };
-static const gchar *SVK_CMD_LOG_DIR[] = { "svk", "log", DIRNAME, NULL };
+static const gchar *SVK_CMD_ADD[] = { "svk", "add", BASENAME, NULL };
+static const gchar *SVK_CMD_REMOVE[] = { "svk", "remove", BASENAME, NULL };
+static const gchar *SVK_CMD_LOG_FILE[] = { "svk", "log", BASENAME, NULL };
+static const gchar *SVK_CMD_LOG_DIR[] = { "svk", "log", ABS_DIRNAME, NULL };
 static const gchar *SVK_CMD_COMMIT[] = { "svk", "commit", "-m", MESSAGE, FILE_LIST, NULL };
-static const gchar *SVK_CMD_BLAME[] = { "svk", "blame", BASE_FILENAME, NULL };
-static const gchar *SVK_CMD_SHOW[] = { "svk", "cat", BASE_FILENAME, NULL };
+static const gchar *SVK_CMD_BLAME[] = { "svk", "blame", BASENAME, NULL };
+static const gchar *SVK_CMD_SHOW[] = { "svk", "cat", BASENAME, NULL };
 
-static void *SVK_COMMANDS[] = { SVK_CMD_DIFF_FILE,
-	SVK_CMD_DIFF_DIR,
-	SVK_CMD_REVERT_FILE,
-	SVK_CMD_STATUS,
-	SVK_CMD_ADD,
-	SVK_CMD_REMOVE,
-	SVK_CMD_LOG_FILE,
-	SVK_CMD_LOG_DIR,
-	SVK_CMD_COMMIT,
-	SVK_CMD_BLAME,
-	SVK_CMD_SHOW
+
+static const VC_COMMAND commands[] = {
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = SVK_CMD_DIFF_FILE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = SVK_CMD_DIFF_DIR,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = SVK_CMD_REVERT_FILE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = SVK_CMD_STATUS,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = SVK_CMD_ADD,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = SVK_CMD_REMOVE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = SVK_CMD_LOG_FILE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = SVK_CMD_LOG_DIR,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = SVK_CMD_COMMIT,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = SVK_CMD_BLAME,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = SVK_CMD_SHOW,
+	 .env = NULL,
+	 .function = NULL}
 };
+
+
+static gchar *
+get_base_dir(const gchar * path)
+{
+	// NOT IMPLEMENTED
+	return NULL;
+}
 
 static gboolean
 in_vc_svk(const gchar * filename)
@@ -72,8 +126,9 @@ in_vc_svk(const gchar * filename)
 
 	if (g_file_test(filename, G_FILE_TEST_IS_DIR))
 	{
-		exit_code = execute_custom_command((const gchar **) argv, NULL, NULL, NULL,
-						   filename, NULL, NULL);
+		exit_code =
+			execute_custom_command(filename, (const gchar **) argv, NULL, NULL, NULL,
+					       filename, NULL, NULL);
 
 	}
 	else
@@ -83,7 +138,7 @@ in_vc_svk(const gchar * filename)
 
 		argv[2] = base_name;
 
-		exit_code = execute_custom_command((const gchar **) argv, NULL, NULL, NULL,
+		exit_code = execute_custom_command(dir, (const gchar **) argv, NULL, NULL, NULL,
 						   dir, NULL, NULL);
 
 		g_free(dir);
@@ -120,7 +175,7 @@ get_commit_files_svk(const gchar * dir)
 	gchar *filename;
 	const char *argv[] = { "svk", "status", NULL };
 
-	execute_custom_command(argv, NULL, &txt, NULL, dir, NULL, NULL);
+	execute_custom_command(dir, argv, NULL, &txt, NULL, dir, NULL, NULL);
 	if (!NZV(txt))
 		return NULL;
 	p = txt;
@@ -194,5 +249,10 @@ get_commit_files_svk(const gchar * dir)
 	return ret;
 }
 
-
-VC_RECORD VC_SVK = { SVK_COMMANDS, NO_ENV, "svk", in_vc_svk, get_commit_files_svk };
+VC_RECORD VC_SVK = {
+	.commands = commands,
+	.program = "svk",
+	.get_base_dir = get_base_dir,
+	.in_vc = in_vc_svk,
+	.get_commit_files = get_commit_files_svk,
+};

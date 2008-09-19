@@ -81,6 +81,7 @@ AM_CONDITIONAL(UNITTESTS, false)
 AC_OUTPUT([
 Makefile
 po/Makefile.in
+tests/Makefile
 ])
 
 echo "----------------------------------------"

@@ -38,20 +38,47 @@ enum
 	VC_COMMAND_COUNT
 };
 
-#define P_DIRNAME "*<?geanyvcDIRNAME>*"
-#define P_FILENAME "*<?geanyvcFILENAME>*"
-#define P_BASE_FILENAME "*<?geanyvcBASE_FILENAME>*"
+/*
+ * VC_COMMAND_STARTDIR_BASE - command strat dir will be VC base directory
+ * VC_COMMAND_STARTDIR_FILE - command start dir will be taken as basename
+ *                            of file, or directory itself if file is
+ *                            directory
+ */
+enum
+{
+	VC_COMMAND_STARTDIR_BASE,
+	VC_COMMAND_STARTDIR_FILE
+};
+
+#define P_ABS_DIRNAME "*<?geanyvcDIRNAME>*"
+#define P_ABS_FILENAME "*<?geanyvcFILENAME>*"
+#define P_BASENAME "*<?geanyvcBASE_FILENAME>*"
 
 /* The addresses of these strings act as enums, their contents are not used. */
-extern const gchar DIRNAME[];
-extern const gchar FILENAME[];
+
+
+/* absolute path dirname of file */
+extern const gchar ABS_DIRNAME[];
+/* absolute path filename of file */
+extern const gchar ABS_FILENAME[];
+
+/* path to directory from base vc directory */
+extern const gchar BASE_DIRNAME[];
+/* path to file from base vc directory */
 extern const gchar BASE_FILENAME[];
+
+/* basename of file */
+extern const gchar BASENAME[];
+/* list with absolute file names*/
 extern const gchar FILE_LIST[];
+/* message */
 extern const gchar MESSAGE[];
+
+
+
 
 /* this string is used when action require to run several commands */
 extern const gchar CMD_SEPARATOR[];
-extern const gchar CMD_FUNCTION[];
 
 extern const gchar FILE_STATUS_MODIFIED[];
 extern const gchar FILE_STATUS_ADDED[];
@@ -59,17 +86,26 @@ extern const gchar FILE_STATUS_DELETED[];
 extern const gchar FILE_STATUS_UNKNOWN[];
 
 gint
-execute_custom_command(const gchar ** argv, const gchar ** env, gchar ** std_out, gchar ** std_err,
-		       const gchar * filename, GSList * list, const gchar * message);
+execute_custom_command(const gchar * dir, const gchar ** argv, const gchar ** env, gchar ** std_out,
+		       gchar ** std_err, const gchar * filename, GSList * list,
+		       const gchar * message);
 
 gboolean find_dir(const gchar * filename, const char *find, gboolean recursive);
 gchar *find_subdir_path(const gchar * filename, const gchar * subdir);
 
+typedef struct _VC_COMMAND
+{
+	gint startdir;
+	const gchar **command;
+	const gchar **env;
+	  gint(*function) (gchar **, gchar **, const gchar *, GSList *, const gchar *);
+} VC_COMMAND;
+
 typedef struct _VC_RECORD
 {
-	void **commands;
-	void **envs;
+	const VC_COMMAND *commands;
 	const gchar *program;
+	gchar *(*get_base_dir) (const gchar * path);
 	  gboolean(*in_vc) (const gchar * path);	// check if file in VC
 	GSList *(*get_commit_files) (const gchar * dir);
 } VC_RECORD;
@@ -85,10 +121,16 @@ typedef struct _CommitItem
 
 /* Blank functions and values */
 GSList *get_commit_files_null(const gchar * dir);
-extern void *NO_ENV[];
+extern const gchar *NO_ENV[];
 
 /* External diff viewer */
 const gchar *get_external_diff_viewer();
 void vc_external_diff(const gchar * src, const gchar * dest);
+
+/* utils.c */
+gchar *normpath(const gchar * filename);
+gchar *get_full_path(const gchar * location, const gchar * path);
+gchar *get_relative_path(const gchar * location, const gchar * path);
+
 
 #endif // __GEANYVC_HEADER__

@@ -35,31 +35,84 @@
 extern GeanyData *geany_data;
 
 
-static const gchar *SVN_CMD_DIFF_FILE[] = { "svn", "diff", "--non-interactive", FILENAME, NULL };
-static const gchar *SVN_CMD_DIFF_DIR[] = { "svn", "diff", "--non-interactive", DIRNAME, NULL };
-static const gchar *SVN_CMD_REVERT_FILE[] = { "svn", "revert", BASE_FILENAME, NULL };
+static const gchar *SVN_CMD_DIFF_FILE[] =
+	{ "svn", "diff", "--non-interactive", BASE_FILENAME, NULL };
+static const gchar *SVN_CMD_DIFF_DIR[] = { "svn", "diff", "--non-interactive", BASE_DIRNAME, NULL };
+static const gchar *SVN_CMD_REVERT_FILE[] = { "svn", "revert", BASENAME, NULL };
 static const gchar *SVN_CMD_STATUS[] = { "svn", "status", NULL };
-static const gchar *SVN_CMD_ADD[] = { "svn", "add", BASE_FILENAME, NULL };
-static const gchar *SVN_CMD_REMOVE[] = { "svn", "rm", BASE_FILENAME, NULL };
-static const gchar *SVN_CMD_LOG_FILE[] = { "svn", "log", BASE_FILENAME, NULL };
-static const gchar *SVN_CMD_LOG_DIR[] = { "svn", "log", DIRNAME, NULL };
+static const gchar *SVN_CMD_ADD[] = { "svn", "add", BASENAME, NULL };
+static const gchar *SVN_CMD_REMOVE[] = { "svn", "rm", BASENAME, NULL };
+static const gchar *SVN_CMD_LOG_FILE[] = { "svn", "log", BASENAME, NULL };
+static const gchar *SVN_CMD_LOG_DIR[] = { "svn", "log", ABS_DIRNAME, NULL };
 static const gchar *SVN_CMD_COMMIT[] =
 	{ "svn", "commit", "--non-interactive", "-m", MESSAGE, FILE_LIST, NULL };
-static const gchar *SVN_CMD_BLAME[] = { "svn", "blame", BASE_FILENAME, NULL };
-static const gchar *SVN_CMD_SHOW[] = { "svn", "cat", BASE_FILENAME, NULL };
+static const gchar *SVN_CMD_BLAME[] = { "svn", "blame", BASENAME, NULL };
+static const gchar *SVN_CMD_SHOW[] = { "svn", "cat", BASENAME, NULL };
 
-static void *SVN_COMMANDS[] = { SVN_CMD_DIFF_FILE,
-	SVN_CMD_DIFF_DIR,
-	SVN_CMD_REVERT_FILE,
-	SVN_CMD_STATUS,
-	SVN_CMD_ADD,
-	SVN_CMD_REMOVE,
-	SVN_CMD_LOG_FILE,
-	SVN_CMD_LOG_DIR,
-	SVN_CMD_COMMIT,
-	SVN_CMD_BLAME,
-	SVN_CMD_SHOW
+static const VC_COMMAND commands[] = {
+	{
+	 .startdir = VC_COMMAND_STARTDIR_BASE,
+	 .command = SVN_CMD_DIFF_FILE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_BASE,
+	 .command = SVN_CMD_DIFF_DIR,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = SVN_CMD_REVERT_FILE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = SVN_CMD_STATUS,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = SVN_CMD_ADD,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = SVN_CMD_REMOVE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = SVN_CMD_LOG_FILE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = SVN_CMD_LOG_DIR,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = SVN_CMD_COMMIT,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = SVN_CMD_BLAME,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = SVN_CMD_SHOW,
+	 .env = NULL,
+	 .function = NULL}
 };
+
+static gchar *
+get_base_dir(const gchar * path)
+{
+	// NOT IMPLEMENTED
+	return find_subdir_path(path, ".svn");
+}
 
 static gboolean
 in_vc_svn(const gchar * filename)
@@ -81,7 +134,7 @@ in_vc_svn(const gchar * filename)
 	base_name = g_path_get_basename(filename);
 	argv[3] = base_name;
 
-	exit_code = execute_custom_command((const gchar **) argv, NULL, &std_output, NULL,
+	exit_code = execute_custom_command(dir, (const gchar **) argv, NULL, &std_output, NULL,
 					   dir, NULL, NULL);
 	if (NZV(std_output))
 	{
@@ -116,7 +169,7 @@ get_commit_files_svn(const gchar * dir)
 	gchar *filename;
 	const char *argv[] = { "svn", "status", NULL };
 
-	execute_custom_command(argv, NULL, &txt, NULL, dir, NULL, NULL);
+	execute_custom_command(dir, argv, NULL, &txt, NULL, dir, NULL, NULL);
 	if (!NZV(txt))
 		return NULL;
 	p = txt;
@@ -190,4 +243,10 @@ get_commit_files_svn(const gchar * dir)
 	return ret;
 }
 
-VC_RECORD VC_SVN = { SVN_COMMANDS, NO_ENV, "svn", in_vc_svn, get_commit_files_svn };
+VC_RECORD VC_SVN = {
+	.commands = commands,
+	.program = "svn",
+	.get_base_dir = get_base_dir,
+	.in_vc = in_vc_svn,
+	.get_commit_files = get_commit_files_svn,
+};

@@ -40,19 +40,71 @@ static const gchar *CVS_CMD_LOG_FILE[] = { "cvs", "log", BASE_FILENAME, NULL };
 static const gchar *CVS_CMD_LOG_DIR[] = { "cvs", "log", NULL };
 static const gchar *CVS_CMD_COMMIT[] = { "cvs", NULL };
 static const gchar *CVS_CMD_BLAME[] = { "cvs", "annotate", BASE_FILENAME, NULL };
+static const gchar *CVS_CMD_SHOW[] = { "cvs", NULL };
 
-static void *CVS_COMMANDS[VC_COMMAND_COUNT] = { CVS_CMD_DIFF_FILE,
-	CVS_CMD_DIFF_DIR,
-	CVS_CMD_REVERT_FILE,
-	CVS_CMD_STATUS,
-	CVS_CMD_ADD,
-	CVS_CMD_REMOVE,
-	CVS_CMD_LOG_FILE,
-	CVS_CMD_LOG_DIR,
-	CVS_CMD_COMMIT,
-	CVS_CMD_BLAME,
-	NULL
+static const VC_COMMAND commands[] = {
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = CVS_CMD_DIFF_FILE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = CVS_CMD_DIFF_DIR,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = CVS_CMD_REVERT_FILE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = CVS_CMD_STATUS,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = CVS_CMD_ADD,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = CVS_CMD_REMOVE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = CVS_CMD_LOG_FILE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = CVS_CMD_LOG_DIR,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = CVS_CMD_COMMIT,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = CVS_CMD_BLAME,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = CVS_CMD_SHOW,
+	 .env = NULL,
+	 .function = NULL}
 };
+
+static gchar *
+get_base_dir(const gchar * path)
+{
+	return find_subdir_path(path, "CVS");
+}
 
 static gboolean
 in_vc_cvs(const gchar * filename)
@@ -60,5 +112,10 @@ in_vc_cvs(const gchar * filename)
 	return find_dir(filename, "CVS", FALSE);
 }
 
-
-VC_RECORD VC_CVS = { CVS_COMMANDS, NO_ENV, "cvs", in_vc_cvs, get_commit_files_null };
+VC_RECORD VC_CVS = {
+	.commands = commands,
+	.program = "cvs",
+	.get_base_dir = get_base_dir,
+	.in_vc = in_vc_cvs,
+	.get_commit_files = get_commit_files_null,
+};

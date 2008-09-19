@@ -86,11 +86,23 @@ static gchar *lang;
 static GSList *VC = NULL;
 
 /* The addresses of these strings act as enums, their contents are not used. */
-const gchar DIRNAME[] = "*DIRNAME*";
-const gchar FILENAME[] = "*FILENAME*";
+/* absolute path dirname of file */
+const gchar ABS_DIRNAME[] = "*ABS_DIRNAME*";
+/* absolute path filename of file */
+const gchar ABS_FILENAME[] = "*ABS_FILENAME*";;
+
+/* path to directory from base vc directory */
+const gchar BASE_DIRNAME[] = "*BASE_DIRNAME*";
+/* path to file from base vc directory */
 const gchar BASE_FILENAME[] = "*BASE_FILENAME*";
+
+/* basename of file */
+const gchar BASENAME[] = "*BASENAME*";
+/* list with absolute file names*/
 const gchar FILE_LIST[] = "*FILE_LIST*";
+/* message */
 const gchar MESSAGE[] = "*MESSAGE*";
+
 
 /* this string is used when action require to run several commands */
 const gchar CMD_SEPARATOR[] = "*CMD-SEPARATOR*";
@@ -101,8 +113,6 @@ const gchar FILE_STATUS_MODIFIED[] = "Modified";
 const gchar FILE_STATUS_ADDED[] = "Added";
 const gchar FILE_STATUS_DELETED[] = "Deleted";
 const gchar FILE_STATUS_UNKNOWN[] = "Unknown";
-
-void *NO_ENV[] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
 
 static void registrate();
 
@@ -238,35 +248,36 @@ find_cmd_env(gint cmd_type, gboolean cmd, const gchar * filename)
 	if (vc)
 	{
 		if (cmd)
-			return vc->commands[cmd_type];
+			return vc->commands[cmd_type].command;
 		else
-			return vc->envs[cmd_type];
+			return vc->commands[cmd_type].env;
 	}
 	return NULL;
 }
 
 /* Get list of commands for given command spec*/
 static GSList *
-get_cmd(const gchar ** argv, const gchar * filename, GSList * filelist, const gchar * message)
+get_cmd(const gchar ** argv, const gchar * dir, const gchar * filename, GSList * filelist,
+	const gchar * message)
 {
 	gint i, j;
 	gint len = 0;
 	gchar **ret;
-	gchar *dir;
+	gchar *abs_dir;
 	gchar *base_filename;
+	gchar *base_dirname;
+	gchar *basename;
 	GSList *head = NULL;
 	GSList *tmp;
 	GString *repl;
 
 	if (g_file_test(filename, G_FILE_TEST_IS_DIR))
-	{
-		dir = g_strdup(filename);
-	}
+		abs_dir = g_strdup(filename);
 	else
-	{
-		dir = g_path_get_dirname(filename);
-	}
-	base_filename = g_path_get_basename(filename);
+		abs_dir = g_path_get_dirname(filename);
+	basename = g_path_get_basename(filename);
+	base_filename = get_relative_path(dir, filename);
+	base_dirname = get_relative_path(dir, abs_dir);
 
 	while (1)
 	{
@@ -294,17 +305,25 @@ get_cmd(const gchar ** argv, const gchar * filename, GSList * filelist, const gc
 			j = -1;
 			head = g_slist_append(head, ret);
 		}
-		else if (argv[i] == DIRNAME)
+		else if (argv[i] == ABS_DIRNAME)
 		{
-			ret[j] = p_utils->get_locale_from_utf8(dir);
+			ret[j] = p_utils->get_locale_from_utf8(abs_dir);
 		}
-		else if (argv[i] == FILENAME)
+		else if (argv[i] == ABS_FILENAME)
 		{
 			ret[j] = p_utils->get_locale_from_utf8(filename);
+		}
+		else if (argv[i] == BASE_DIRNAME)
+		{
+			ret[j] = p_utils->get_locale_from_utf8(base_dirname);
 		}
 		else if (argv[i] == BASE_FILENAME)
 		{
 			ret[j] = p_utils->get_locale_from_utf8(base_filename);
+		}
+		else if (argv[i] == BASENAME)
+		{
+			ret[j] = p_utils->get_locale_from_utf8(basename);
 		}
 		else if (argv[i] == FILE_LIST)
 		{
@@ -322,15 +341,17 @@ get_cmd(const gchar ** argv, const gchar * filename, GSList * filelist, const gc
 		else
 		{
 			repl = g_string_new(argv[i]);
-			p_utils->string_replace_all(repl, P_DIRNAME, dir);
-			p_utils->string_replace_all(repl, P_FILENAME, filename);
-			p_utils->string_replace_all(repl, P_BASE_FILENAME, base_filename);
+			p_utils->string_replace_all(repl, P_ABS_DIRNAME, abs_dir);
+			p_utils->string_replace_all(repl, P_ABS_FILENAME, filename);
+			p_utils->string_replace_all(repl, P_BASENAME, basename);
 			ret[j] = g_string_free(repl, FALSE);
 			setptr(ret[j], p_utils->get_locale_from_utf8(ret[j]));
 		}
 	}
-	g_free(dir);
+	g_free(abs_dir);
+	g_free(base_dirname);
 	g_free(base_filename);
+	g_free(basename);
 	return head;
 }
 
@@ -371,6 +392,7 @@ show_output(const gchar * std_output, const gchar * name, const gchar * force_en
 /*
  * Execute command by command spec, return std_out std_err
  *
+ * @dir - start directory of command
  * @argv - command spec
  * @env - envirounment
  * @std_out - if not NULL here will be returned standard output converted to utf8 of last command in spec
@@ -382,15 +404,16 @@ show_output(const gchar * std_output, const gchar * name, const gchar * force_en
  * @return - exit code of last command in spec
  */
 gint
-execute_custom_command(const gchar ** argv, const gchar ** env, gchar ** std_out, gchar ** std_err,
-		       const gchar * filename, GSList * list, const gchar * message)
+execute_custom_command(const gchar * dir, const gchar ** argv, const gchar ** env, gchar ** std_out,
+		       gchar ** std_err, const gchar * filename, GSList * list,
+		       const gchar * message)
 {
 	gint exit_code;
-	gchar *dir;
 	GString *tmp;
 	GSList *cur;
-	GSList *largv = get_cmd(argv, filename, list, message);
+	GSList *largv = get_cmd(argv, dir, filename, list, message);
 	GError *error = NULL;
+	printf("%s\n", __FUNCTION__);
 
 	if (std_out)
 		*std_out = NULL;
@@ -400,15 +423,6 @@ execute_custom_command(const gchar ** argv, const gchar ** env, gchar ** std_out
 	if (!largv)
 	{
 		return 0;
-	}
-
-	if (g_file_test(filename, G_FILE_TEST_IS_DIR))
-	{
-		dir = g_strdup(filename);
-	}
-	else
-	{
-		dir = g_path_get_dirname(filename);
 	}
 
 	for (cur = largv; cur != NULL; cur = g_slist_next(cur))
@@ -479,7 +493,6 @@ execute_custom_command(const gchar ** argv, const gchar ** env, gchar ** std_out
 		}
 		g_strfreev(cur->data);
 	}
-	g_free(dir);
 	g_slist_free(largv);
 	return exit_code;
 }
@@ -488,20 +501,39 @@ gint
 execute_command(const VC_RECORD * vc, gchar ** std_out, gchar ** std_err, const gchar * filename,
 		gint cmd, GSList * list, const gchar * message)
 {
+	gchar *dir;
+	gint ret;
+
 	if (std_out)
 		*std_out = NULL;
 	if (std_err)
 		*std_err = NULL;
 
-	if (((gchar **) vc->commands[cmd])[0] == CMD_FUNCTION)
+	if (vc->commands[cmd].function)
 	{
-		typedef gint(*cmd_function) (gchar **, gchar **, const gchar *, GSList *,
-					     const gchar *);
-		return ((cmd_function *) vc->commands[cmd])[1] (std_out, std_err, filename, list,
-								message);
+		return vc->commands[cmd].function(std_out, std_err, filename, list, message);
 	}
-	return execute_custom_command(vc->commands[cmd], vc->envs[cmd], std_out, std_err, filename,
-				      list, message);
+
+	if (vc->commands[cmd].startdir == VC_COMMAND_STARTDIR_FILE)
+	{
+		if (g_file_test(filename, G_FILE_TEST_IS_DIR))
+			dir = g_strdup(filename);
+		else
+			dir = g_path_get_dirname(filename);
+	}
+	else if (vc->commands[cmd].startdir == VC_COMMAND_STARTDIR_BASE)
+	{
+		dir = vc->get_base_dir(filename);
+	}
+	else
+	{
+		fprintf(stderr, "geanyvc: unknown startdir type: %d\n", vc->commands[cmd].startdir);
+	}
+
+	ret = execute_custom_command(dir, vc->commands[cmd].command, vc->commands[cmd].env, std_out,
+				     std_err, filename, list, message);
+	g_free(dir);
+	return ret;
 }
 
 /* Callback if menu item for a single file was activated */
@@ -631,35 +663,38 @@ vcdiff_dir_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointe
 }
 
 
-/* Callback if menu item for the current project was activated */
+/* Callback if menu item for the base directory was activated */
 static void
-vcdiff_project_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata)
+vcdiff_basedir_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata)
 {
 	gchar *text = NULL;
 	gchar *name;
+	gchar *basedir;
+	gchar *base_name;
 	const VC_RECORD *vc;
 	GeanyDocument *doc;
 
-	GeanyProject *project = geany->app->project;
-
 	doc = p_document->get_current();
-
-	g_return_if_fail(geany->app->project != NULL && NZV(geany->app->project->base_path));
+	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
 	if (doc && doc->changed && doc->file_name != NULL)
 	{
 		p_document->save_file(doc, FALSE);
 	}
 
-	vc = find_vc(geany->app->project->base_path);
+	vc = find_vc(doc->file_name);
 	g_return_if_fail(vc);
 
-	execute_command(vc, &text, NULL, geany->app->project->base_path, VC_COMMAND_DIFF_DIR, NULL,
-			NULL);
+	basedir = vc->get_base_dir(doc->file_name);
+	g_return_if_fail(basedir);
+
+	execute_command(vc, &text, NULL, basedir, VC_COMMAND_DIFF_DIR, NULL, NULL);
 	if (text)
 	{
-		name = g_strconcat(project->name, ".vc.diff", NULL);
+		base_name = g_path_get_dirname(doc->file_name);
+		name = g_strconcat(base_name, ".vc.diff", NULL);
 		show_output(text, name, NULL);
+		g_free(base_name);
 		g_free(text);
 		g_free(name);
 	}
@@ -667,6 +702,7 @@ vcdiff_project_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpo
 	{
 		p_ui->set_statusbar(FALSE, _("No changes were made."));
 	}
+	g_free(basedir);
 }
 
 static void
@@ -745,24 +781,29 @@ vclog_dir_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer
 }
 
 static void
-vclog_project_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata)
+vclog_basedir_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata)
 {
 	gchar *text = NULL;
 	const VC_RECORD *vc;
-	GeanyProject *project = geany->app->project;
+	GeanyDocument *doc;
+	gchar *basedir;
 
-	g_return_if_fail(project != NULL && NZV(geany->app->project->base_path));
+	doc = p_document->get_current();
+	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
-	vc = find_vc(geany->app->project->base_path);
+	vc = find_vc(doc->file_name);
 	g_return_if_fail(vc);
 
-	execute_command(vc, &text, NULL, geany->app->project->base_path, VC_COMMAND_LOG_DIR, NULL,
-			NULL);
+	basedir = vc->get_base_dir(doc->file_name);
+	g_return_if_fail(basedir);
+
+	execute_command(vc, &text, NULL, basedir, VC_COMMAND_LOG_DIR, NULL, NULL);
 	if (text)
 	{
 		show_output(text, "*VC-LOG*", NULL);
 		g_free(text);
 	}
+	g_free(basedir);
 }
 
 /* Show status from the current directory */
@@ -1403,11 +1444,11 @@ vccommit_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 
 static GtkWidget *menu_vc_diff_file = NULL;
 static GtkWidget *menu_vc_diff_dir = NULL;
-static GtkWidget *menu_vc_diff_project = NULL;
+static GtkWidget *menu_vc_diff_basedir = NULL;
 static GtkWidget *menu_vc_blame = NULL;
 static GtkWidget *menu_vc_log_file = NULL;
 static GtkWidget *menu_vc_log_dir = NULL;
-static GtkWidget *menu_vc_log_project = NULL;
+static GtkWidget *menu_vc_log_basedir = NULL;
 static GtkWidget *menu_vc_status = NULL;
 static GtkWidget *menu_vc_revert_file = NULL;
 static GtkWidget *menu_vc_add_file = NULL;
@@ -1418,10 +1459,8 @@ static void
 update_menu_items()
 {
 	GeanyDocument *doc;
-	GeanyProject *project = geany->app->project;
 
 	gboolean have_file;
-	gboolean p_have_vc = FALSE;
 	gboolean d_have_vc = FALSE;
 	gboolean f_have_vc = FALSE;
 
@@ -1441,19 +1480,15 @@ update_menu_items()
 		g_free(dir);
 	}
 
-	if (project != NULL && NZV(geany->app->project->base_path) &&
-	    find_cmd_env(VC_COMMAND_DIFF_DIR, TRUE, geany->app->project->base_path))
-		p_have_vc = TRUE;
-
 	gtk_widget_set_sensitive(menu_vc_diff_file, f_have_vc);
 	gtk_widget_set_sensitive(menu_vc_diff_dir, d_have_vc);
-	gtk_widget_set_sensitive(menu_vc_diff_project, p_have_vc);
+	gtk_widget_set_sensitive(menu_vc_diff_basedir, d_have_vc);
 
 	gtk_widget_set_sensitive(menu_vc_blame, f_have_vc);
 
 	gtk_widget_set_sensitive(menu_vc_log_file, f_have_vc);
 	gtk_widget_set_sensitive(menu_vc_log_dir, d_have_vc);
-	gtk_widget_set_sensitive(menu_vc_log_project, p_have_vc);
+	gtk_widget_set_sensitive(menu_vc_log_basedir, d_have_vc);
 
 	gtk_widget_set_sensitive(menu_vc_status, d_have_vc);
 
@@ -1782,7 +1817,8 @@ registrate()
 	REGISTER_VC(HG, enable_hg);
 }
 
-static void locale_init(void)
+static void
+locale_init(void)
 {
 #ifdef ENABLE_NLS
 	gchar *locale_dir = NULL;
@@ -1853,13 +1889,13 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 			 G_CALLBACK(vcdiff_dir_activated), NULL);
 
 	// Project
-	menu_vc_diff_project = gtk_menu_item_new_with_mnemonic(_("Diff From Current Project"));
-	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_diff_project);
-	gtk_tooltips_set_tip(tooltips, menu_vc_diff_project,
-			     _("Make a diff from the current project's base path"), NULL);
+	menu_vc_diff_basedir = gtk_menu_item_new_with_mnemonic(_("Diff From Base Directory"));
+	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_diff_basedir);
+	gtk_tooltips_set_tip(tooltips, menu_vc_diff_basedir,
+			     _("Make a diff from the top VC directory"), NULL);
 
-	g_signal_connect((gpointer) menu_vc_diff_project, "activate",
-			 G_CALLBACK(vcdiff_project_activated), NULL);
+	g_signal_connect((gpointer) menu_vc_diff_basedir, "activate",
+			 G_CALLBACK(vcdiff_basedir_activated), NULL);
 
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), gtk_separator_menu_item_new());
 
@@ -1891,13 +1927,13 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	g_signal_connect((gpointer) menu_vc_log_dir, "activate",
 			 G_CALLBACK(vclog_dir_activated), NULL);
 
-	menu_vc_log_project = gtk_menu_item_new_with_mnemonic(_("Log Of Current Project"));
-	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_log_project);
-	gtk_tooltips_set_tip(tooltips, menu_vc_log_project,
-			     _("Shows the log of the current project"), NULL);
+	menu_vc_log_basedir = gtk_menu_item_new_with_mnemonic(_("Log Of Base Directory"));
+	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_log_basedir);
+	gtk_tooltips_set_tip(tooltips, menu_vc_log_basedir,
+			     _("Shows the log of the top VC directory"), NULL);
 
-	g_signal_connect((gpointer) menu_vc_log_project, "activate",
-			 G_CALLBACK(vclog_project_activated), NULL);
+	g_signal_connect((gpointer) menu_vc_log_basedir, "activate",
+			 G_CALLBACK(vclog_basedir_activated), NULL);
 
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), gtk_separator_menu_item_new());
 

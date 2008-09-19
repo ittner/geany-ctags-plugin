@@ -35,30 +35,82 @@
 extern GeanyData *geany_data;
 
 
-static const gchar *BZR_CMD_DIFF_FILE[] = { "bzr", "diff", BASE_FILENAME, NULL };
-static const gchar *BZR_CMD_DIFF_DIR[] = { "bzr", "diff", DIRNAME, NULL };
-static const gchar *BZR_CMD_REVERT_FILE[] = { "bzr", "revert", BASE_FILENAME, NULL };
+static const gchar *BZR_CMD_DIFF_FILE[] = { "bzr", "diff", BASENAME, NULL };
+static const gchar *BZR_CMD_DIFF_DIR[] = { "bzr", "diff", ABS_DIRNAME, NULL };
+static const gchar *BZR_CMD_REVERT_FILE[] = { "bzr", "revert", BASENAME, NULL };
 static const gchar *BZR_CMD_STATUS[] = { "bzr", "status", NULL };
-static const gchar *BZR_CMD_ADD[] = { "bzr", "add", BASE_FILENAME, NULL };
-static const gchar *BZR_CMD_REMOVE[] = { "bzr", "remove", BASE_FILENAME, NULL };
-static const gchar *BZR_CMD_LOG_FILE[] = { "bzr", "log", BASE_FILENAME, NULL };
-static const gchar *BZR_CMD_LOG_DIR[] = { "bzr", "log", DIRNAME, NULL };
+static const gchar *BZR_CMD_ADD[] = { "bzr", "add", BASENAME, NULL };
+static const gchar *BZR_CMD_REMOVE[] = { "bzr", "remove", BASENAME, NULL };
+static const gchar *BZR_CMD_LOG_FILE[] = { "bzr", "log", BASENAME, NULL };
+static const gchar *BZR_CMD_LOG_DIR[] = { "bzr", "log", ABS_DIRNAME, NULL };
 static const gchar *BZR_CMD_COMMIT[] = { "bzr", "commit", "-m", MESSAGE, FILE_LIST, NULL };
-static const gchar *BZR_CMD_BLAME[] = { "bzr", "blame", "--all", "--long", BASE_FILENAME, NULL };
-static const gchar *BZR_CMD_SHOW[] = { "bzr", "cat", BASE_FILENAME, NULL };
+static const gchar *BZR_CMD_BLAME[] = { "bzr", "blame", "--all", "--long", BASENAME, NULL };
+static const gchar *BZR_CMD_SHOW[] = { "bzr", "cat", BASENAME, NULL };
 
-static void *BZR_COMMANDS[VC_COMMAND_COUNT] = { BZR_CMD_DIFF_FILE,
-	BZR_CMD_DIFF_DIR,
-	BZR_CMD_REVERT_FILE,
-	BZR_CMD_STATUS,
-	BZR_CMD_ADD,
-	BZR_CMD_REMOVE,
-	BZR_CMD_LOG_FILE,
-	BZR_CMD_LOG_DIR,
-	BZR_CMD_COMMIT,
-	BZR_CMD_BLAME,
-	BZR_CMD_SHOW
+static const VC_COMMAND commands[] = {
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = BZR_CMD_DIFF_FILE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = BZR_CMD_DIFF_DIR,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = BZR_CMD_REVERT_FILE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = BZR_CMD_STATUS,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = BZR_CMD_ADD,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = BZR_CMD_REMOVE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = BZR_CMD_LOG_FILE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = BZR_CMD_LOG_DIR,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = BZR_CMD_COMMIT,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = BZR_CMD_BLAME,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = BZR_CMD_SHOW,
+	 .env = NULL,
+	 .function = NULL}
 };
+
+
+static gchar *
+get_base_dir(const gchar * path)
+{
+	return find_subdir_path(path, ".bzr");
+}
 
 static gboolean
 in_vc_bzr(const gchar * filename)
@@ -80,7 +132,7 @@ in_vc_bzr(const gchar * filename)
 	base_name = g_path_get_basename(filename);
 	argv[2] = base_name;
 
-	exit_code = execute_custom_command((const gchar **) argv, NULL, &std_output, NULL,
+	exit_code = execute_custom_command(dir, (const gchar **) argv, NULL, &std_output, NULL,
 					   dir, NULL, NULL);
 
 	if (NZV(std_output))
@@ -123,7 +175,7 @@ get_commit_files_bzr(const gchar * dir)
 
 	g_return_val_if_fail(base_dir, NULL);
 
-	execute_custom_command(argv, NULL, &txt, NULL, base_dir, NULL, NULL);
+	execute_custom_command(base_dir, argv, NULL, &txt, NULL, base_dir, NULL, NULL);
 	if (!NZV(txt))
 	{
 		g_free(base_dir);
@@ -207,4 +259,10 @@ get_commit_files_bzr(const gchar * dir)
 	return ret;
 }
 
-VC_RECORD VC_BZR = { BZR_COMMANDS, NO_ENV, "bzr", in_vc_bzr, get_commit_files_bzr };
+VC_RECORD VC_BZR = {
+	.commands = commands,
+	.program = "bzr",
+	.get_base_dir = get_base_dir,
+	.in_vc = in_vc_bzr,
+	.get_commit_files = get_commit_files_bzr,
+};

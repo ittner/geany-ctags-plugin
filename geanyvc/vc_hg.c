@@ -35,30 +35,81 @@
 extern GeanyData *geany_data;
 
 
-static const gchar *HG_CMD_DIFF_FILE[] = { "hg", "diff", FILENAME, NULL };
-static const gchar *HG_CMD_DIFF_DIR[] = { "hg", "diff", DIRNAME, NULL };
-static const gchar *HG_CMD_REVERT_FILE[] = { "hg", "revert", BASE_FILENAME, NULL };
+static const gchar *HG_CMD_DIFF_FILE[] = { "hg", "diff", ABS_FILENAME, NULL };
+static const gchar *HG_CMD_DIFF_DIR[] = { "hg", "diff", ABS_DIRNAME, NULL };
+static const gchar *HG_CMD_REVERT_FILE[] = { "hg", "revert", BASENAME, NULL };
 static const gchar *HG_CMD_STATUS[] = { "hg", "status", NULL };
-static const gchar *HG_CMD_ADD[] = { "hg", "add", BASE_FILENAME, NULL };
-static const gchar *HG_CMD_REMOVE[] = { "hg", "remove", BASE_FILENAME, NULL };
-static const gchar *HG_CMD_LOG_FILE[] = { "hg", "log", BASE_FILENAME, NULL };
-static const gchar *HG_CMD_LOG_DIR[] = { "hg", "log", DIRNAME, NULL };
+static const gchar *HG_CMD_ADD[] = { "hg", "add", BASENAME, NULL };
+static const gchar *HG_CMD_REMOVE[] = { "hg", "remove", BASENAME, NULL };
+static const gchar *HG_CMD_LOG_FILE[] = { "hg", "log", BASENAME, NULL };
+static const gchar *HG_CMD_LOG_DIR[] = { "hg", "log", ABS_DIRNAME, NULL };
 static const gchar *HG_CMD_COMMIT[] = { "hg", "commit", "-m", MESSAGE, FILE_LIST, NULL };
-static const gchar *HG_CMD_BLAME[] = { "hg", "annotate", BASE_FILENAME, NULL };
-static const gchar *HG_CMD_SHOW[] = { "hg", "cat", BASE_FILENAME, NULL };
+static const gchar *HG_CMD_BLAME[] = { "hg", "annotate", BASENAME, NULL };
+static const gchar *HG_CMD_SHOW[] = { "hg", "cat", BASENAME, NULL };
 
-static void *HG_COMMANDS[] = { HG_CMD_DIFF_FILE,
-	HG_CMD_DIFF_DIR,
-	HG_CMD_REVERT_FILE,
-	HG_CMD_STATUS,
-	HG_CMD_ADD,
-	HG_CMD_REMOVE,
-	HG_CMD_LOG_FILE,
-	HG_CMD_LOG_DIR,
-	HG_CMD_COMMIT,
-	HG_CMD_BLAME,
-	HG_CMD_SHOW
+static const VC_COMMAND commands[] = {
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = HG_CMD_DIFF_FILE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = HG_CMD_DIFF_DIR,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = HG_CMD_REVERT_FILE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = HG_CMD_STATUS,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = HG_CMD_ADD,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = HG_CMD_REMOVE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = HG_CMD_LOG_FILE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = HG_CMD_LOG_DIR,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = HG_CMD_COMMIT,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = HG_CMD_BLAME,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = HG_CMD_SHOW,
+	 .env = NULL,
+	 .function = NULL}
 };
+
+static gchar *
+get_base_dir(const gchar * path)
+{
+	return find_subdir_path(path, ".hg");
+}
 
 static gboolean
 in_vc_hg(const gchar * filename)
@@ -80,7 +131,7 @@ in_vc_hg(const gchar * filename)
 	base_name = g_path_get_basename(filename);
 	argv[3] = base_name;
 
-	exit_code = execute_custom_command((const gchar **) argv, NULL, &std_output, NULL,
+	exit_code = execute_custom_command(dir, (const gchar **) argv, NULL, &std_output, NULL,
 					   dir, NULL, NULL);
 	if (NZV(std_output))
 	{
@@ -119,7 +170,7 @@ get_commit_files_hg(const gchar * dir)
 
 	g_return_val_if_fail(base_dir, NULL);
 
-	execute_custom_command(argv, NULL, &txt, NULL, base_dir, NULL, NULL);
+	execute_custom_command(base_dir, argv, NULL, &txt, NULL, base_dir, NULL, NULL);
 	if (!NZV(txt))
 	{
 		g_free(base_dir);
@@ -181,4 +232,10 @@ get_commit_files_hg(const gchar * dir)
 	return ret;
 }
 
-VC_RECORD VC_HG = { HG_COMMANDS, NO_ENV, "hg", in_vc_hg, get_commit_files_hg };
+VC_RECORD VC_HG = {
+	.commands = commands,
+	.program = "hg",
+	.get_base_dir = get_base_dir,
+	.in_vc = in_vc_hg,
+	.get_commit_files = get_commit_files_hg,
+};
