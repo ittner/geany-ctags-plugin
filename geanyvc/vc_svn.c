@@ -110,8 +110,54 @@ static const VC_COMMAND commands[] = {
 static gchar *
 get_base_dir(const gchar * path)
 {
-	// NOT IMPLEMENTED
-	return find_subdir_path(path, ".svn");
+	gchar *test_dir;
+	gchar *base;
+	gchar *base_prev = NULL;
+
+	if (g_file_test(path, G_FILE_TEST_IS_DIR))
+		base = g_strdup(path);
+	else
+		base = g_path_get_dirname(path);
+
+	do
+	{
+		test_dir = g_build_filename(base, ".svn", NULL);
+		if (!g_file_test(test_dir, G_FILE_TEST_IS_DIR))
+		{
+			g_free(test_dir);
+			break;
+		}
+		g_free(test_dir);
+		g_free(base_prev);
+		base_prev = base;
+		base = g_path_get_dirname(base);
+
+		// check for svn layout
+		test_dir = g_build_filename(base, "trunk", NULL);
+		if (!g_file_test(test_dir, G_FILE_TEST_IS_DIR))
+		{
+			g_free(test_dir);
+			continue;
+		}
+		setptr(test_dir, g_build_filename(base, "branches", NULL));
+		if (!g_file_test(test_dir, G_FILE_TEST_IS_DIR))
+		{
+			g_free(test_dir);
+			continue;
+		}
+		setptr(test_dir, g_build_filename(base, "tags", NULL));
+		if (!g_file_test(test_dir, G_FILE_TEST_IS_DIR))
+		{
+			g_free(test_dir);
+			continue;
+		}
+		g_free(test_dir);
+		break;
+	}
+	while (strcmp(base, base_prev) != 0);
+
+	g_free(base);
+	return base_prev;
 }
 
 static gboolean

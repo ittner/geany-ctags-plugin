@@ -19,6 +19,8 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <string.h>
+
 #include "geany.h"
 #include "support.h"
 #include "plugindata.h"
@@ -103,7 +105,32 @@ static const VC_COMMAND commands[] = {
 static gchar *
 get_base_dir(const gchar * path)
 {
-	return find_subdir_path(path, "CVS");
+	gchar *test_dir;
+	gchar *base;
+	gchar *base_prev = NULL;
+
+	if (g_file_test(path, G_FILE_TEST_IS_DIR))
+		base = g_strdup(path);
+	else
+		base = g_path_get_dirname(path);
+
+	do
+	{
+		test_dir = g_build_filename(base, "CVS", NULL);
+		if (!g_file_test(test_dir, G_FILE_TEST_IS_DIR))
+		{
+			g_free(test_dir);
+			break;
+		}
+		g_free(test_dir);
+		g_free(base_prev);
+		base_prev = base;
+		base = g_path_get_dirname(base);
+	}
+	while (strcmp(base, base_prev) != 0);
+
+	g_free(base);
+	return base_prev;
 }
 
 static gboolean

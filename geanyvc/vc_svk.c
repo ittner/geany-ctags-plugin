@@ -111,7 +111,7 @@ static gchar *
 get_base_dir(const gchar * path)
 {
 	// NOT IMPLEMENTED
-	return NULL;
+	return g_path_get_dirname(path);
 }
 
 static gboolean
