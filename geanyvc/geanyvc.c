@@ -36,7 +36,6 @@
 #include "filetypes.h"
 #include "utils.h"
 #include "ui_utils.h"
-#include "project.h"
 #include "prefs.h"
 #include "pluginmacros.h"
 
@@ -1888,7 +1887,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	g_signal_connect((gpointer) menu_vc_diff_dir, "activate",
 			 G_CALLBACK(vcdiff_dir_activated), NULL);
 
-	// Project
+	// Base directory
 	menu_vc_diff_basedir = gtk_menu_item_new_with_mnemonic(_("Diff From Base Directory"));
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_diff_basedir);
 	gtk_tooltips_set_tip(tooltips, menu_vc_diff_basedir,

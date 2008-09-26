@@ -27,7 +27,6 @@
 #include "document.h"
 #include "filetypes.h"
 #include "utils.h"
-#include "project.h"
 #include "pluginmacros.h"
 
 #include "geanyvc.h"
