@@ -59,7 +59,7 @@ PLUGIN_KEY_GROUP(sendmail, COUNT_KB)
 static gchar *config_file = NULL;
 static gchar *mailer = NULL;
 static gchar *address = NULL;
-gboolean icon_in_toolbar = FALSE;	
+gboolean icon_in_toolbar = FALSE;
 gboolean use_address_dialog = FALSE;
 /* Needed global to remove from toolbar again */
 GtkWidget *mailbutton = NULL;
@@ -103,8 +103,8 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
 	GError	*error = NULL;
 	GString	*cmd_str = NULL;
 	GtkWidget	*dialog = NULL;
-	GtkWidget 	*label = NULL; 
-	GtkWidget 	*entry = NULL; 
+	GtkWidget 	*label = NULL;
+	GtkWidget 	*entry = NULL;
 	GtkWidget	*vbox = NULL;
 	GKeyFile 	*config = g_key_file_new();
 	gchar 		*config_dir = g_path_get_dirname(config_file);
@@ -129,18 +129,18 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
 		{
 			locale_filename = p_utils->get_locale_from_utf8(doc->file_name);
 			cmd_str = g_string_new(mailer);
-			
+
 			if (use_address_dialog == TRUE)
 			{
 				gint tmp;
-				
+
  				dialog = gtk_dialog_new_with_buttons(_("Recipient's Address"),
  					GTK_WINDOW(geany->main_widgets->window), GTK_DIALOG_DESTROY_WITH_PARENT,
  					GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
  				vbox = p_ui->dialog_vbox_new(GTK_DIALOG(dialog));
  				gtk_widget_set_name(dialog, "GeanyDialog");
  				gtk_box_set_spacing(GTK_BOX(vbox), 10);
- 
+
  				label = gtk_label_new(_("Enter the recipient's e-mail address:"));
  				gtk_widget_show(label);
  				gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
@@ -148,24 +148,24 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
  				gtk_widget_show(entry);
  				if (address != NULL)
  					gtk_entry_set_text(GTK_ENTRY(entry), address);
-	 
+
  				gtk_container_add(GTK_CONTAINER(vbox), label);
  				gtk_container_add(GTK_CONTAINER(vbox), entry);
  				gtk_widget_show(vbox);
-			
+
  				tmp = gtk_dialog_run(GTK_DIALOG(dialog));
-			
+
  				if (tmp == GTK_RESPONSE_ACCEPT)
  				{
 					g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
-				
+
 					if (address != NULL)
 						g_free(address);
  					address = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry)));
-			
+
  					g_key_file_set_string(config, "tools", "address", address);
  				}
-								
+
 				if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && p_utils->mkdir(config_dir, TRUE) != 0)
  				{
  					p_dialogs->show_msgbox(GTK_MESSAGE_ERROR,
@@ -181,14 +181,14 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
  					g_free(config_dir);
  				}
  			}
-			
+
 			if (! p_utils->string_replace_all(cmd_str, "%f", locale_filename))
 				p_ui->set_statusbar(FALSE, _("Filename placeholder not found. The executed command might have failed."));
- 			
+
 			if (use_address_dialog == TRUE && address != NULL)
 				if (! p_utils->string_replace_all(cmd_str, "%r", address))
  					p_ui->set_statusbar(FALSE, _("Recipient address placeholder not found. The executed command might have failed."));
-				
+
 			command = g_string_free(cmd_str, FALSE);
 			g_spawn_command_line_async(command, &error);
 			if (error != NULL)
@@ -199,7 +199,7 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
 
 			g_free(locale_filename);
 			g_free(command);
-			
+
 			gtk_widget_destroy(dialog);
 		}
 		else
@@ -253,7 +253,7 @@ void show_icon()
 	gtk_toolbar_insert(GTK_TOOLBAR(geany->main_widgets->toolbar), GTK_TOOL_ITEM(mailbutton), number_of_icons - 1);
 	g_signal_connect (G_OBJECT(mailbutton), "clicked", G_CALLBACK(send_as_attachment), NULL);
 	gtk_widget_show_all (mailbutton);
-	
+
 	separator2 = (GtkWidget*) gtk_separator_tool_item_new();
 	gtk_widget_show (separator2);
 	gtk_toolbar_insert(GTK_TOOLBAR(geany->main_widgets->toolbar), GTK_TOOL_ITEM(separator2), number_of_icons);
@@ -309,12 +309,12 @@ on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
 		{
 			icon_in_toolbar = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.checkbox_icon_to_toolbar));
 		}
-		
+
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.checkbox_use_addressdialog)) == TRUE)
 			use_address_dialog = TRUE;
 		else
 			use_address_dialog = FALSE;
-			
+
 		g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 		g_key_file_set_string(config, "tools", "mailer", mailer);
 		g_key_file_set_boolean(config, "tools", "address_usage", use_address_dialog);
@@ -345,7 +345,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	tooltip = gtk_tooltips_new();
 
 	vbox = gtk_vbox_new(FALSE, 6);
-	
+
 	/* add a label and a text entry to the dialog */
 	label1 = gtk_label_new(_("Path and options for the mail client:"));
 	gtk_widget_show(label1);
@@ -369,7 +369,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 			     NULL);
 	gtk_button_set_focus_on_click(GTK_BUTTON(pref_widgets.checkbox_icon_to_toolbar), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pref_widgets.checkbox_icon_to_toolbar), icon_in_toolbar);
-	gtk_widget_show(pref_widgets.checkbox_icon_to_toolbar); 
+	gtk_widget_show(pref_widgets.checkbox_icon_to_toolbar);
 
 	pref_widgets.checkbox_use_addressdialog = gtk_check_button_new_with_label(_("Using dialog for entering email address of recipients"));
 	/*gtk_tooltips_set_tip(tooltip, checkbox_use_addressdialog,
@@ -378,15 +378,15 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 			     NULL);*/
 	gtk_button_set_focus_on_click(GTK_BUTTON(pref_widgets.checkbox_use_addressdialog), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pref_widgets.checkbox_use_addressdialog), use_address_dialog);
-	gtk_widget_show(pref_widgets.checkbox_use_addressdialog); 
-	
+	gtk_widget_show(pref_widgets.checkbox_use_addressdialog);
+
 	gtk_container_add(GTK_CONTAINER(vbox), label1);
 	gtk_container_add(GTK_CONTAINER(vbox), pref_widgets.entry);
 	gtk_container_add(GTK_CONTAINER(vbox), label2);
 	gtk_box_pack_start(GTK_BOX(vbox), pref_widgets.checkbox_icon_to_toolbar, TRUE, FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(vbox), pref_widgets.checkbox_use_addressdialog, TRUE, FALSE, 2);
 
-		
+
 	gtk_widget_show(vbox);
 
 	g_signal_connect(dialog, "response", G_CALLBACK(on_configure_response), NULL);
