@@ -132,6 +132,8 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
 			
 			if (use_address_dialog == TRUE)
 			{
+				gint tmp;
+				
  				dialog = gtk_dialog_new_with_buttons(_("Recipient's Address"),
  					GTK_WINDOW(geany->main_widgets->window), GTK_DIALOG_DESTROY_WITH_PARENT,
  					GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
@@ -151,7 +153,7 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
  				gtk_container_add(GTK_CONTAINER(vbox), entry);
  				gtk_widget_show(vbox);
 			
- 				gint tmp = gtk_dialog_run(GTK_DIALOG(dialog));
+ 				tmp = gtk_dialog_run(GTK_DIALOG(dialog));
 			
  				if (tmp == GTK_RESPONSE_ACCEPT)
  				{
@@ -338,8 +340,6 @@ on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
 GtkWidget *plugin_configure(GtkDialog *dialog)
 {
 	GtkWidget	*label1, *label2, *vbox;
-	GtkWidget	*address_option = NULL;
-	gint 		tmp;
 	GtkTooltips *tooltip = NULL;
 
 	tooltip = gtk_tooltips_new();
