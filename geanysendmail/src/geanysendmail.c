@@ -200,7 +200,8 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
 			g_free(locale_filename);
 			g_free(command);
 
-			gtk_widget_destroy(dialog);
+			if (dialog != NULL)
+				gtk_widget_destroy(dialog);
 		}
 		else
 		{
