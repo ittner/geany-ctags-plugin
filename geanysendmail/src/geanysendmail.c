@@ -142,7 +142,7 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
 	}
 	else
 	{
-		p_ui->set_statusbar(FALSE, _("File have to be saved before sending."));
+		p_ui->set_statusbar(FALSE, _("File has to be saved before sending."));
 	}
 }
 
