@@ -3,7 +3,7 @@
  *
  *      Copyright 2007, 2008 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
  * 		Copyright 2007 Enrico Tröger <enrico.troeger@uvena.de>
- *		Copyright 2007,2008 Nick Treleaven <nick.treleaven@btinternet.com>
+ *		Copyright 2007, 2008 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -23,12 +23,12 @@
 /* A little plugin to send a document as attachment using the preferred mail client */
 
 #include "geany.h"
+#include "ui_utils.h"
 #include "support.h"
 #include "plugindata.h"
 #include "document.h"
 #include "filetypes.h"
 #include "utils.h"
-#include "ui_utils.h"
 #include "keybindings.h"
 #include "icon.h"
 #include "pluginmacros.h"
@@ -58,7 +58,9 @@ PLUGIN_KEY_GROUP(sendmail, COUNT_KB)
 
 static gchar *config_file = NULL;
 static gchar *mailer = NULL;
+static gchar *address = NULL;
 gboolean icon_in_toolbar = FALSE;	
+gboolean use_address_dialog = FALSE;
 /* Needed global to remove from toolbar again */
 GtkWidget *mailbutton = NULL;
 GtkWidget *separator = NULL;
@@ -100,6 +102,13 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
 	gchar	*command = NULL;
 	GError	*error = NULL;
 	GString	*cmd_str = NULL;
+	GtkWidget	*dialog = NULL;
+	GtkWidget 	*label = NULL; 
+	GtkWidget 	*entry = NULL; 
+	GtkWidget	*vbox = NULL;
+	GKeyFile 	*config = g_key_file_new();
+	gchar 		*config_dir = g_path_get_dirname(config_file);
+	gchar 		*data;
 
 
 	doc = p_document->get_current();
@@ -120,10 +129,64 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
 		{
 			locale_filename = p_utils->get_locale_from_utf8(doc->file_name);
 			cmd_str = g_string_new(mailer);
-
+			
+			if (use_address_dialog == TRUE)
+			{
+ 				dialog = gtk_dialog_new_with_buttons(_("Recipient's Address"),
+ 					GTK_WINDOW(geany->main_widgets->window), GTK_DIALOG_DESTROY_WITH_PARENT,
+ 					GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+ 				vbox = p_ui->dialog_vbox_new(GTK_DIALOG(dialog));
+ 				gtk_widget_set_name(dialog, "GeanyDialog");
+ 				gtk_box_set_spacing(GTK_BOX(vbox), 10);
+ 
+ 				label = gtk_label_new(_("Enter the recipient's e-mail address:"));
+ 				gtk_widget_show(label);
+ 				gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+ 				entry = gtk_entry_new();
+ 				gtk_widget_show(entry);
+ 				if (address != NULL)
+ 					gtk_entry_set_text(GTK_ENTRY(entry), address);
+	 
+ 				gtk_container_add(GTK_CONTAINER(vbox), label);
+ 				gtk_container_add(GTK_CONTAINER(vbox), entry);
+ 				gtk_widget_show(vbox);
+			
+ 				gint tmp = gtk_dialog_run(GTK_DIALOG(dialog));
+			
+ 				if (tmp == GTK_RESPONSE_ACCEPT)
+ 				{
+					g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
+				
+					if (address != NULL)
+						g_free(address);
+ 					address = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry)));
+			
+ 					g_key_file_set_string(config, "tools", "address", address);
+ 				}
+								
+				if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && p_utils->mkdir(config_dir, TRUE) != 0)
+ 				{
+ 					p_dialogs->show_msgbox(GTK_MESSAGE_ERROR,
+ 						_("Plugin configuration directory could not be created."));
+ 				}
+ 				else
+ 				{
+ 					// write config to file
+ 					data = g_key_file_to_data(config, NULL, NULL);
+ 					p_utils->write_file(config_file, data);
+					g_free(data);
+					g_key_file_free(config);
+ 					g_free(config_dir);
+ 				}
+ 			}
+			
 			if (! p_utils->string_replace_all(cmd_str, "%f", locale_filename))
 				p_ui->set_statusbar(FALSE, _("Filename placeholder not found. The executed command might have failed."));
-
+ 			
+			if (use_address_dialog == TRUE && address != NULL)
+				if (! p_utils->string_replace_all(cmd_str, "%r", address))
+ 					p_ui->set_statusbar(FALSE, _("Recipient address placeholder not found. The executed command might have failed."));
+				
 			command = g_string_free(cmd_str, FALSE);
 			g_spawn_command_line_async(command, &error);
 			if (error != NULL)
@@ -134,6 +197,8 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
 
 			g_free(locale_filename);
 			g_free(command);
+			
+			gtk_widget_destroy(dialog);
 		}
 		else
 		{
@@ -213,6 +278,7 @@ static struct
 {
 	GtkWidget *entry;
 	GtkWidget *checkbox_icon_to_toolbar;
+	GtkWidget *checkbox_use_addressdialog;
 }
 pref_widgets;
 
@@ -241,9 +307,15 @@ on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
 		{
 			icon_in_toolbar = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.checkbox_icon_to_toolbar));
 		}
+		
+		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.checkbox_use_addressdialog)) == TRUE)
+			use_address_dialog = TRUE;
+		else
+			use_address_dialog = FALSE;
 			
 		g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 		g_key_file_set_string(config, "tools", "mailer", mailer);
+		g_key_file_set_boolean(config, "tools", "address_usage", use_address_dialog);
 		g_key_file_set_boolean(config, "icon", "show_icon", icon_in_toolbar);
 
 		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && p_utils->mkdir(config_dir, TRUE) != 0)
@@ -266,6 +338,7 @@ on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
 GtkWidget *plugin_configure(GtkDialog *dialog)
 {
 	GtkWidget	*label1, *label2, *vbox;
+	GtkWidget	*address_option = NULL;
 	gint 		tmp;
 	GtkTooltips *tooltip = NULL;
 
@@ -282,7 +355,10 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	if (mailer != NULL)
 		gtk_entry_set_text(GTK_ENTRY(pref_widgets.entry), mailer);
 
-	label2 = gtk_label_new(_("Note: \%f will be replaced by your filename."));
+	label2 = gtk_label_new(_("Note: \n\t\%f will be replaced by your file.\
+	\n\t\%r will be replaced the recipient's email address. \
+	\n\tAs an example you can use:\
+	\n\tsylpheed --attach \%f --compose \%r"));
 	gtk_widget_show(label2);
 	gtk_misc_set_alignment(GTK_MISC(label2), 0, 0.5);
 
@@ -294,11 +370,22 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	gtk_button_set_focus_on_click(GTK_BUTTON(pref_widgets.checkbox_icon_to_toolbar), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pref_widgets.checkbox_icon_to_toolbar), icon_in_toolbar);
 	gtk_widget_show(pref_widgets.checkbox_icon_to_toolbar); 
+
+	pref_widgets.checkbox_use_addressdialog = gtk_check_button_new_with_label(_("Using dialog for entering email address of recipients"));
+	/*gtk_tooltips_set_tip(tooltip, checkbox_use_addressdialog,
+			     _
+			     ("Shows a icon in the toolbar to send file more easy."),
+			     NULL);*/
+	gtk_button_set_focus_on_click(GTK_BUTTON(pref_widgets.checkbox_use_addressdialog), FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pref_widgets.checkbox_use_addressdialog), use_address_dialog);
+	gtk_widget_show(pref_widgets.checkbox_use_addressdialog); 
 	
 	gtk_container_add(GTK_CONTAINER(vbox), label1);
 	gtk_container_add(GTK_CONTAINER(vbox), pref_widgets.entry);
 	gtk_container_add(GTK_CONTAINER(vbox), label2);
 	gtk_box_pack_start(GTK_BOX(vbox), pref_widgets.checkbox_icon_to_toolbar, TRUE, FALSE, 2);
+	gtk_box_pack_start(GTK_BOX(vbox), pref_widgets.checkbox_use_addressdialog, TRUE, FALSE, 2);
+
 		
 	gtk_widget_show(vbox);
 
@@ -327,6 +414,8 @@ void plugin_init(GeanyData G_GNUC_UNUSED *data)
 	// Initialising options from config file
 	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 	mailer = g_key_file_get_string(config, "tools", "mailer", NULL);
+	address = g_key_file_get_string(config, "tools", "address", NULL);
+	use_address_dialog = g_key_file_get_boolean(config, "tools", "address_usage", NULL);
 	icon_in_toolbar = g_key_file_get_boolean(config, "icon", "show_icon", NULL);
 
 	g_key_file_free(config);
@@ -368,5 +457,6 @@ void plugin_cleanup()
 	gtk_widget_destroy(plugin_fields->menu_item);
 	cleanup_icon();
 	g_free(mailer);
+	g_free(address);
 	g_free(config_file);
 }

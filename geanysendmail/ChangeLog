@@ -1,3 +1,9 @@
+2008-09-25  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Added a patch by Timothy Boronczyk to support creating a mail with 
+   recipients email. Thanks for it.
+
+
 2008-09-01  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Build environment: Update of Makefiles to include icon.h into source
