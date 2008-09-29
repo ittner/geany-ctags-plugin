@@ -459,6 +459,7 @@ void plugin_cleanup()
 	gtk_widget_destroy(plugin_fields->menu_item);
 	cleanup_icon();
 	g_free(mailer);
-	g_free(address);
+	if (address != NULL)
+		g_free(address);
 	g_free(config_file);
 }
