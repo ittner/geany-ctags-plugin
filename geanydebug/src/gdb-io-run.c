@@ -346,7 +346,7 @@ start_xterm(gchar * term_cmd)
 		while (ms <= 10000);
 		if (ms > 10000)
 		{
-			gdbio_error_func("Timeout waitng for TTY name.\n");
+			gdbio_error_func("Timeout waiting for TTY name.\n");
 			kill_xterm();
 		}
 	}
