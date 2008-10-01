@@ -130,7 +130,7 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
 			locale_filename = p_utils->get_locale_from_utf8(doc->file_name);
 			cmd_str = g_string_new(mailer);
 
-			if (use_address_dialog == TRUE)
+			if ((use_address_dialog == TRUE) && (g_strrstr(mailer, "%r") != NULL))
 			{
 				gint tmp;
 
