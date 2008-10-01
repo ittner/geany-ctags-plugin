@@ -185,8 +185,13 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
 				p_ui->set_statusbar(FALSE, _("Filename placeholder not found. The executed command might have failed."));
 
 			if (use_address_dialog == TRUE && address != NULL)
+			{
 				if (! p_utils->string_replace_all(cmd_str, "%r", address))
  					p_ui->set_statusbar(FALSE, _("Recipient address placeholder not found. The executed command might have failed."));
+			}
+			else
+				/* Removes %r if option was not activ but was included into command */
+				p_utils->string_replace_all(cmd_str, "%r", NULL);
 
 			command = g_string_free(cmd_str, FALSE);
 			g_spawn_command_line_async(command, &error);
