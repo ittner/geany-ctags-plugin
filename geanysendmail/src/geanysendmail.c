@@ -159,8 +159,7 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
  				{
 					g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 
-					if (address != NULL)
-						g_free(address);
+					g_free(address);
  					address = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry)));
 
  					g_key_file_set_string(config, "tools", "address", address);
@@ -459,7 +458,6 @@ void plugin_cleanup()
 	gtk_widget_destroy(plugin_fields->menu_item);
 	cleanup_icon();
 	g_free(mailer);
-	if (address != NULL)
-		g_free(address);
+	g_free(address);
 	g_free(config_file);
 }
