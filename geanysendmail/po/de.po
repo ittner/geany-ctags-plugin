@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geanysendmail 0.4svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-02 01:39+0200\n"
+"POT-Creation-Date: 2008-10-02 01:02+0200\n"
 "PO-Revision-Date: 2008-05-24 19:13+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team:  <frank@frank.uvena.de>\n"
@@ -29,67 +29,99 @@ msgstr ""
 "Ein Plugin zum Senden einer Datei als Anhang unter Verwendung eines "
 "Mailprogrammes."
 
-#: src/geanysendmail.c:125
+#: src/geanysendmail.c:137
+msgid "Recipient's Address"
+msgstr "Emailadresse des Empfängers"
+
+#: src/geanysendmail.c:144
+msgid "Enter the recipient's e-mail address:"
+msgstr "Emailadresse des Empfängers:"
+
+#: src/geanysendmail.c:171 src/geanysendmail.c:331
+msgid "Plugin configuration directory could not be created."
+msgstr "Konfigurationsdatei konnte nicht erstellt werden."
+
+#: src/geanysendmail.c:185
 msgid "Filename placeholder not found. The executed command might have failed."
 msgstr ""
 "Konnte den Platzhalter für den Dateinamen (\\%s) nicht finden. Das "
 "angegebene Kommando könnte nicht korrekt ausgeführt worden sein."
 
-#: src/geanysendmail.c:131
+#: src/geanysendmail.c:190
+#, fuzzy
+msgid ""
+"Recipient address placeholder not found. The executed command might have "
+"failed."
+msgstr ""
+"Konnte den Platzhalter für den Mailempfänger (\\%r) nicht finden. Das "
+"angegebene Kommando könnte nicht korrekt ausgeführt worden sein."
+
+#: src/geanysendmail.c:200
 msgid "Could not execute mailer. Please check your configuration."
 msgstr "Konnte das Mailprogramm nicht aufrufen. Ist die Konfiguration korrekt?"
 
-#: src/geanysendmail.c:140
+#: src/geanysendmail.c:212
 msgid "Please define a mail client first."
 msgstr "Bitte ein Mailprogramm angeben!"
 
-#: src/geanysendmail.c:145
-msgid "File have to be saved before sending."
-msgstr "Due Datei muss vor dem Senden gespeichert werden."
-
-#: src/geanysendmail.c:252
-msgid "Plugin configuration directory could not be created."
-msgstr "Konfigurationsdatei konnte nicht erstellt werden."
+#: src/geanysendmail.c:217
+msgid "File has to be saved before sending."
+msgstr "Die Datei muss vor dem Senden gespeichert werden."
 
 #. add a label and a text entry to the dialog
-#: src/geanysendmail.c:277
+#: src/geanysendmail.c:355
 msgid "Path and options for the mail client:"
 msgstr "Pfad und Optionen für das Mailprogramm:"
 
-#: src/geanysendmail.c:285
-#, c-format
-msgid "Note: \\%f will be replaced by your filename."
-msgstr "Anmerkung: \\%f wird durch den Dateinamen ersetzt."
+#: src/geanysendmail.c:363
+msgid ""
+"Note: \n"
+"\t\\%f will be replaced by your file.\t\n"
+"\t\\%r will be replaced the recipient's email address. \t\n"
+"\tAs an example you can use:\t\n"
+"\tsylpheed --attach \\%f --compose \\%r"
+msgstr "Anmerkung: \n"
+"\t\\%f wird mit der zu sendenden Datei ersetzt.\t\n"
+"\t\\%r wird mit der Emailadresse des Empfängers ersetzt.\t\n"
+"\tEin Beispiel könnte sein:\t\n"
+"\tsylpheed --attach \\%f --compose \\%r"
 
-#: src/geanysendmail.c:289
+#: src/geanysendmail.c:371
 msgid "Showing icon in toolbar"
 msgstr "Symbol in der Werkzeugliste anzeigen"
 
-#: src/geanysendmail.c:292
+#: src/geanysendmail.c:374
 msgid "Shows a icon in the toolbar to send file more easy."
 msgstr ""
 "Zeigt ein Symbol in der Werkzeugliste an, so dass eine Datei einfacher "
 "versendet werden kann."
 
-#: src/geanysendmail.c:316
+#: src/geanysendmail.c:380
+msgid "Using dialog for entering email address of recipients"
+msgstr "Zeigt einen Dialog zum Eingeben der Emailadresse des Empfängers der zu sendenden Datei"
+
+#: src/geanysendmail.c:409
 msgid "Send file by mail"
 msgstr "Per Mail senden"
 
 #. Build up menu
-#: src/geanysendmail.c:345
+#: src/geanysendmail.c:440
 msgid "_Mail"
 msgstr "_Mail"
 
-#: src/geanysendmail.c:351
+#: src/geanysendmail.c:446
 msgid "_Mail document"
 msgstr "_Dokument versenden"
 
-#: src/geanysendmail.c:354
+#: src/geanysendmail.c:449
 msgid ""
 "Sends the opened file as unzipped attachment by any mailer from your $PATH"
 msgstr ""
 "Sendet ein geöffnete Dokument als ungepackter Anhang unter Verwendung eines "
 "Mailprogrammes."
+
+#~ msgid "Note: \\%f will be replaced by your filename."
+#~ msgstr "Anmerkung: \\%f wird durch den Dateinamen ersetzt."
 
 #~ msgid "Mail Configuration"
 #~ msgstr "Maileinstellungen"
