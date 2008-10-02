@@ -361,9 +361,9 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		gtk_entry_set_text(GTK_ENTRY(pref_widgets.entry), mailer);
 
 	label2 = gtk_label_new(_("Note: \n\t\%f will be replaced by your file.\
-	\n\t\%r will be replaced the recipient's email address. \
-	\n\tAs an example you can use:\
-	\n\tsylpheed --attach \%f --compose \%r"));
+		\n\t\%r will be replaced the recipient's email address.\
+		\n\tAs an example you can use:\
+		\n\tsylpheed --attach \%f --compose \%r"));
 	gtk_label_set_selectable(GTK_LABEL(label2), TRUE);
 	gtk_widget_show(label2);
 	gtk_misc_set_alignment(GTK_MISC(label2), 0, 0.5);

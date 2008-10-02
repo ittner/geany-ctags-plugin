@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geanysendmail 0.4svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-02 01:02+0200\n"
+"POT-Creation-Date: 2008-10-03 01:18+0200\n"
 "PO-Revision-Date: 2008-05-24 19:13+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team:  <frank@frank.uvena.de>\n"
@@ -65,6 +65,7 @@ msgid "Please define a mail client first."
 msgstr "Bitte ein Mailprogramm angeben!"
 
 #: src/geanysendmail.c:217
+#, fuzzy
 msgid "File has to be saved before sending."
 msgstr "Die Datei muss vor dem Senden gespeichert werden."
 
@@ -74,13 +75,15 @@ msgid "Path and options for the mail client:"
 msgstr "Pfad und Optionen für das Mailprogramm:"
 
 #: src/geanysendmail.c:363
+#, fuzzy
 msgid ""
 "Note: \n"
-"\t\\%f will be replaced by your file.\t\n"
-"\t\\%r will be replaced the recipient's email address. \t\n"
-"\tAs an example you can use:\t\n"
+"\t\\%f will be replaced by your file.\t\t\n"
+"\t\\%r will be replaced the recipient's email address.\t\t\n"
+"\tAs an example you can use:\t\t\n"
 "\tsylpheed --attach \\%f --compose \\%r"
-msgstr "Anmerkung: \n"
+msgstr ""
+"Anmerkung: \n"
 "\t\\%f wird mit der zu sendenden Datei ersetzt.\t\n"
 "\t\\%r wird mit der Emailadresse des Empfängers ersetzt.\t\n"
 "\tEin Beispiel könnte sein:\t\n"
@@ -98,7 +101,9 @@ msgstr ""
 
 #: src/geanysendmail.c:380
 msgid "Using dialog for entering email address of recipients"
-msgstr "Zeigt einen Dialog zum Eingeben der Emailadresse des Empfängers der zu sendenden Datei"
+msgstr ""
+"Zeigt einen Dialog zum Eingeben der Emailadresse des Empfängers der zu "
+"sendenden Datei"
 
 #: src/geanysendmail.c:409
 msgid "Send file by mail"
