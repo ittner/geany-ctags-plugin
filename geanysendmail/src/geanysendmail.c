@@ -2,8 +2,9 @@
  *      geanysendmail.c
  *
  *      Copyright 2007, 2008 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
- * 		Copyright 2007 Enrico Tröger <enrico.troeger@uvena.de>
- *		Copyright 2007, 2008 Nick Treleaven <nick.treleaven@btinternet.com>
+ *      Copyright 2007 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007, 2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2008 Timothy Boronczyk <tboronczyk(at)gmail(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
