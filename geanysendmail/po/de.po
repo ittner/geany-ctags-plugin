@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geanysendmail 0.4svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-03 01:18+0200\n"
+"POT-Creation-Date: 2008-10-03 14:23+0200\n"
 "PO-Revision-Date: 2008-05-24 19:13+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team:  <frank@frank.uvena.de>\n"
@@ -37,7 +37,7 @@ msgstr "Emailadresse des Empfängers"
 msgid "Enter the recipient's e-mail address:"
 msgstr "Emailadresse des Empfängers:"
 
-#: src/geanysendmail.c:171 src/geanysendmail.c:331
+#: src/geanysendmail.c:171 src/geanysendmail.c:333
 msgid "Plugin configuration directory could not be created."
 msgstr "Konfigurationsdatei konnte nicht erstellt werden."
 
@@ -56,32 +56,34 @@ msgstr ""
 "Konnte den Platzhalter für den Mailempfänger (\\%r) nicht finden. Das "
 "angegebene Kommando könnte nicht korrekt ausgeführt worden sein."
 
-#: src/geanysendmail.c:200
+#: src/geanysendmail.c:202
 msgid "Could not execute mailer. Please check your configuration."
 msgstr "Konnte das Mailprogramm nicht aufrufen. Ist die Konfiguration korrekt?"
 
-#: src/geanysendmail.c:212
+#: src/geanysendmail.c:214
 msgid "Please define a mail client first."
 msgstr "Bitte ein Mailprogramm angeben!"
 
-#: src/geanysendmail.c:217
+#: src/geanysendmail.c:219
 #, fuzzy
 msgid "File has to be saved before sending."
 msgstr "Die Datei muss vor dem Senden gespeichert werden."
 
 #. add a label and a text entry to the dialog
-#: src/geanysendmail.c:355
+#: src/geanysendmail.c:357
 msgid "Path and options for the mail client:"
 msgstr "Pfad und Optionen für das Mailprogramm:"
 
-#: src/geanysendmail.c:363
+#: src/geanysendmail.c:365
 #, fuzzy
 msgid ""
 "Note: \n"
-"\t\\%f will be replaced by your file.\t\t\n"
-"\t\\%r will be replaced the recipient's email address.\t\t\n"
-"\tAs an example you can use:\t\t\n"
-"\tsylpheed --attach \\%f --compose \\%r"
+"\t\\%f will be replaced by your file.\n"
+"\t\\%r will be replaced by recipient's email address.\n"
+"\t\\%b will be replaced by basename of a file\n"
+"\tExamples:\n"
+"\tsylpheed --attach \\%f --compose \\%r\n"
+"\tmutt -s \"Sending \\%f\" -a \\%f \\%r"
 msgstr ""
 "Anmerkung: \n"
 "\t\\%f wird mit der zu sendenden Datei ersetzt.\t\n"
@@ -89,36 +91,36 @@ msgstr ""
 "\tEin Beispiel könnte sein:\t\n"
 "\tsylpheed --attach \\%f --compose \\%r"
 
-#: src/geanysendmail.c:371
+#: src/geanysendmail.c:375
 msgid "Showing icon in toolbar"
 msgstr "Symbol in der Werkzeugliste anzeigen"
 
-#: src/geanysendmail.c:374
+#: src/geanysendmail.c:378
 msgid "Shows a icon in the toolbar to send file more easy."
 msgstr ""
 "Zeigt ein Symbol in der Werkzeugliste an, so dass eine Datei einfacher "
 "versendet werden kann."
 
-#: src/geanysendmail.c:380
+#: src/geanysendmail.c:384
 msgid "Using dialog for entering email address of recipients"
 msgstr ""
 "Zeigt einen Dialog zum Eingeben der Emailadresse des Empfängers der zu "
 "sendenden Datei"
 
-#: src/geanysendmail.c:409
+#: src/geanysendmail.c:413
 msgid "Send file by mail"
 msgstr "Per Mail senden"
 
 #. Build up menu
-#: src/geanysendmail.c:440
+#: src/geanysendmail.c:444
 msgid "_Mail"
 msgstr "_Mail"
 
-#: src/geanysendmail.c:446
+#: src/geanysendmail.c:450
 msgid "_Mail document"
 msgstr "_Dokument versenden"
 
-#: src/geanysendmail.c:449
+#: src/geanysendmail.c:453
 msgid ""
 "Sends the opened file as unzipped attachment by any mailer from your $PATH"
 msgstr ""

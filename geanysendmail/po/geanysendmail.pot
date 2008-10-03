@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-03 01:18+0200\n"
+"POT-Creation-Date: 2008-10-03 14:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,7 +34,7 @@ msgstr ""
 msgid "Enter the recipient's e-mail address:"
 msgstr ""
 
-#: src/geanysendmail.c:171 src/geanysendmail.c:331
+#: src/geanysendmail.c:171 src/geanysendmail.c:333
 msgid "Plugin configuration directory could not be created."
 msgstr ""
 
@@ -48,58 +48,60 @@ msgid ""
 "failed."
 msgstr ""
 
-#: src/geanysendmail.c:200
+#: src/geanysendmail.c:202
 msgid "Could not execute mailer. Please check your configuration."
 msgstr ""
 
-#: src/geanysendmail.c:212
+#: src/geanysendmail.c:214
 msgid "Please define a mail client first."
 msgstr ""
 
-#: src/geanysendmail.c:217
+#: src/geanysendmail.c:219
 msgid "File has to be saved before sending."
 msgstr ""
 
 #. add a label and a text entry to the dialog
-#: src/geanysendmail.c:355
+#: src/geanysendmail.c:357
 msgid "Path and options for the mail client:"
 msgstr ""
 
-#: src/geanysendmail.c:363
+#: src/geanysendmail.c:365
 msgid ""
 "Note: \n"
-"\t\\%f will be replaced by your file.\t\t\n"
-"\t\\%r will be replaced the recipient's email address.\t\t\n"
-"\tAs an example you can use:\t\t\n"
-"\tsylpheed --attach \\%f --compose \\%r"
+"\t\\%f will be replaced by your file.\n"
+"\t\\%r will be replaced by recipient's email address.\n"
+"\t\\%b will be replaced by basename of a file\n"
+"\tExamples:\n"
+"\tsylpheed --attach \\%f --compose \\%r\n"
+"\tmutt -s \"Sending \\%f\" -a \\%f \\%r"
 msgstr ""
 
-#: src/geanysendmail.c:371
+#: src/geanysendmail.c:375
 msgid "Showing icon in toolbar"
 msgstr ""
 
-#: src/geanysendmail.c:374
+#: src/geanysendmail.c:378
 msgid "Shows a icon in the toolbar to send file more easy."
 msgstr ""
 
-#: src/geanysendmail.c:380
+#: src/geanysendmail.c:384
 msgid "Using dialog for entering email address of recipients"
 msgstr ""
 
-#: src/geanysendmail.c:409
+#: src/geanysendmail.c:413
 msgid "Send file by mail"
 msgstr ""
 
 #. Build up menu
-#: src/geanysendmail.c:440
+#: src/geanysendmail.c:444
 msgid "_Mail"
 msgstr ""
 
-#: src/geanysendmail.c:446
+#: src/geanysendmail.c:450
 msgid "_Mail document"
 msgstr ""
 
-#: src/geanysendmail.c:449
+#: src/geanysendmail.c:453
 msgid ""
 "Sends the opened file as unzipped attachment by any mailer from your $PATH"
 msgstr ""

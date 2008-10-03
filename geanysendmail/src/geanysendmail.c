@@ -193,6 +193,8 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
 				/* Removes %r if option was not activ but was included into command */
 				p_utils->string_replace_all(cmd_str, "%r", NULL);
 
+			p_utils->string_replace_all(cmd_str, "%b", g_path_get_basename(locale_filename));
+
 			command = g_string_free(cmd_str, FALSE);
 			g_spawn_command_line_async(command, &error);
 			if (error != NULL)
@@ -360,10 +362,12 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	if (mailer != NULL)
 		gtk_entry_set_text(GTK_ENTRY(pref_widgets.entry), mailer);
 
-	label2 = gtk_label_new(_("Note: \n\t\%f will be replaced by your file.\
-		\n\t\%r will be replaced the recipient's email address.\
-		\n\tAs an example you can use:\
-		\n\tsylpheed --attach \%f --compose \%r"));
+	label2 = gtk_label_new(_("Note: \n\t\%f will be replaced by your file."\
+		"\n\t\%r will be replaced by recipient's email address."\
+		"\n\t\%b will be replaced by basename of a file"\
+		"\n\tExamples:"\
+		"\n\tsylpheed --attach \%f --compose \%r"\
+		"\n\tmutt -s \"Sending \%f\" -a \%f \%r"));
 	gtk_label_set_selectable(GTK_LABEL(label2), TRUE);
 	gtk_widget_show(label2);
 	gtk_misc_set_alignment(GTK_MISC(label2), 0, 0.5);
