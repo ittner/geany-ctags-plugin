@@ -32,7 +32,7 @@ If you need additional checks for header files, functions in libraries or
 need to check for library packages (using pkg-config), please ask Enrico
 before committing changes. Thanks.
 
-Requires WAF SVN r4429 (or later) and Python 2.4 (or later).
+Requires WAF 1.5 (SVN r4661 or later) and Python 2.4 (or later).
 """
 
 
@@ -44,7 +44,7 @@ APPNAME = 'geany-plugins'
 VERSION = '0.1'
 
 srcdir = '.'
-blddir = 'build'
+blddir = '_build_'
 
 
 class Plugin:
@@ -60,10 +60,6 @@ class Plugin:
 
 # add a new element for your plugin
 plugins = [
-	Plugin('backupcopy',
-		 [ 'backupcopy/src/backupcopy.c' ], # source files
-		 [ 'backupcopy', 'backupcopy/src' ], # include dirs
-		 '0.2'),
 	Plugin('geanydbg',
 		 [ 'geanydbg/src/dbg.c' ], # source files
 		 [ 'geanydbg', 'geanydbg/src' ], # include dirs
@@ -105,10 +101,6 @@ plugins = [
 		   'geanyvc/vc_svk.c', 'geanyvc/vc_bzr.c', 'geanyvc/vc_hg.c' ],
 		 [ 'geanyvc' ], # include dirs
 		 '0.4', [ [ 'gtkspell-2.0', '2.0', False ] ]),
-	Plugin('instantsave',
-		 [ 'instantsave/src/instantsave.c' ], # source files
-		 [ 'instantsave', 'instantsave/src/' ], # include dirs
-		 '0.2'),
 	Plugin('spellcheck',
 		 [ 'spellcheck/src/spellcheck.c' ], # source files
 		 [ 'spellcheck', 'spellcheck/src' ], # include dirs
@@ -119,27 +111,33 @@ plugins = [
 
 def configure(conf):
 	def conf_get_svn_rev():
-		try:
-			p = subprocess.Popen(['svn', 'info', '--non-interactive'], stdout=subprocess.PIPE, \
-					stderr=subprocess.STDOUT, close_fds=False, env={'LANG' : 'C'})
-			stdout = p.communicate()[0]
-
-			if p.returncode == 0:
+		# try GIT
+		if os.path.exists('.git'):
+			cmds = [ 'git svn find-rev HEAD 2>/dev/null',
+					 'git svn find-rev origin/trunk 2>/dev/null',
+					 'git svn find-rev trunk 2>/dev/null',
+					 'git svn find-rev master 2>/dev/null' ]
+			for c in cmds:
+				try:
+					stdout = Utils.cmd_output(c)
+					if stdout:
+						return stdout.strip()
+				except:
+					pass
+		# try SVN
+		elif os.path.exists('.svn'):
+			try:
+				stdout = Utils.cmd_output('svn info --non-interactive', {'LANG' : 'C'})
 				lines = stdout.splitlines(True)
 				for line in lines:
 					if line.startswith('Last Changed Rev'):
 						key, value = line.split(': ', 1)
 						return value.strip()
-			return '-1'
-		except:
-			return '-1'
-
-	def conf_get_pkg_ver(pkgname):
-		ret = os.popen('PKG_CONFIG_PATH=$PKG_CONFIG_PATH pkg-config --modversion %s' % pkgname).read().strip()
-		if ret:
-			return ret
+			except:
+				pass
 		else:
-			return '(unknown)'
+			pass
+		return '-1'
 
 	def conf_define_from_opt(define_name, opt_name, default_value, quote=1):
 		if opt_name:
@@ -151,8 +149,14 @@ def configure(conf):
 
 
 	conf.check_tool('compiler_cc intltool')
-	conf.check_pkg('gtk+-2.0', destvar='GTK', vnum='2.6.0', mandatory=True)
-	conf.check_pkg('geany', destvar='GEANY', vnum='0.15', mandatory=True)
+
+	conf.check_cfg(package='gtk+-2.0', atleast_version='2.6.0', uselib_store='GTK', mandatory=True)
+	conf.check_cfg(package='gtk+-2.0', args='--cflags --libs', uselib_store='GTK')
+	conf.check_cfg(package='geany', atleast_version='0.15', mandatory=True)
+	conf.check_cfg(package='geany', args='--cflags --libs')
+
+	gtk_version = conf.check_cfg(modversion='gtk+-2.0') or 'Unknown'
+	geany_version = conf.check_cfg(modversion='geany') or 'Unknown'
 
 	enabled_plugins = []
 	if Options.options.enable_plugins:
@@ -168,13 +172,21 @@ def configure(conf):
 	for p in plugins:
 		if p.name in enabled_plugins:
 			for l in p.libs:
-				if not conf.check_pkg(l[0], destvar=l[0].upper(), vnum=l[1], mandatory=False):
+				uselib = Utils.quote_define_name(l[0])
+				conf.check_cfg(package=l[0], uselib_store=uselib, atleast_version=l[1])
+				if not conf.env['HAVE_%s' % uselib] == 1:
 					if l[2]:
 						enabled_plugins.remove(p.name)
+				else:
+					conf.check_cfg(package=l[0], args='--cflags --libs', uselib_store=uselib)
 
 	conf_define_from_opt('LIBDIR', Options.options.libdir, conf.env['PREFIX'] + '/lib')
 	# get and define Geany's libdir for use as plugin binary installation dir
-	conf.define('GEANY_LIBDIR', conf.pkgconfig_fetch_variable('geany', 'libdir'), 1)
+	libdir = conf.check_cfg(package='geany', args='--variable=libdir')
+	if libdir:
+		conf.define('GEANY_LIBDIR', libdir.strip(), 1)
+	else:
+		conf.define('GEANY_LIBDIR', conf.env['LIBDIR'], 1)
 
 	svn_rev = conf_get_svn_rev()
 	conf.define('ENABLE_NLS', 1)
@@ -193,9 +205,8 @@ def configure(conf):
 
 	Utils.pprint('BLUE', 'Summary:')
 	print_message('Install Geany Plugins ' + VERSION + ' in', conf.env['PREFIX'])
-	print_message('Using GTK version', conf_get_pkg_ver('gtk+-2.0'))
-	print_message('Using Geany version', conf_get_pkg_ver('geany'))
-	print_message('Using Enchant version', conf_get_pkg_ver('enchant'))
+	print_message('Using GTK version', gtk_version)
+	print_message('Using Geany version', geany_version)
 	if svn_rev != '-1':
 		print_message('Compiling Subversion revision', svn_rev)
 		conf.env.append_value('CCFLAGS', '-g -O0') # -DGEANY_DISABLE_DEPRECATED')
@@ -240,7 +251,7 @@ def build(bld):
 
 		libs = 'GTK GEANY' # common for all plugins
 		for l in p.libs:   # add plugin specific libs
-			libs += ' %s' % l[0].upper()
+			libs += ' %s' % Utils.quote_define_name(l[0])
 
 		if p.name == 'geanylua':
 			build_lua(bld, p, libs) # build additional lib for the lua plugin
