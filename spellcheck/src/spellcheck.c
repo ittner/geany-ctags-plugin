@@ -50,12 +50,13 @@
 #include "pluginmacros.h"
 
 
+GeanyPlugin		*geany_plugin;
 PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(95)
+PLUGIN_VERSION_CHECK(99)
 PLUGIN_SET_INFO(_("Spell Check"), _("Checks the spelling of the current document."), "0.2",
 			_("The Geany developer team"))
 
@@ -167,15 +168,13 @@ static void toolbar_update(void)
 	{
 		if (sc->toolbar_button == NULL)
 		{
-			gint pos = p_ui->get_toolbar_insert_position();
-
 			sc->toolbar_button = gtk_toggle_tool_button_new_from_stock("gtk-spell-check");
 	#if GTK_CHECK_VERSION(2, 12, 0)
 			gtk_widget_set_tooltip_text(GTK_WIDGET(sc->toolbar_button),
 				_("Toggle spell check while typing."));
 	#endif
 			gtk_widget_show(GTK_WIDGET(sc->toolbar_button));
-			gtk_toolbar_insert(GTK_TOOLBAR(geany->main_widgets->toolbar), sc->toolbar_button, pos);
+			p_plugin->add_toolbar_item(geany_plugin, sc->toolbar_button);
 
 			g_signal_connect(sc->toolbar_button, "toggled",
 				G_CALLBACK(toolbar_item_toggled_cb), NULL);
