@@ -38,12 +38,12 @@
 # include <locale.h>
 #endif
 
-PluginInfo		*plugin_info;
+GeanyPlugin		*geany_plugin;
 PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
-PLUGIN_VERSION_CHECK(71)
+PLUGIN_VERSION_CHECK(99)
 
 PLUGIN_SET_INFO(_("GeanySendMail"), _("A little plugin to send the current \
 file as attachment by user's favorite mailer"), "0.4svn", "Frank Lanitz <frank@frank.uvena.de>")
@@ -64,8 +64,6 @@ gboolean icon_in_toolbar = FALSE;
 gboolean use_address_dialog = FALSE;
 /* Needed global to remove from toolbar again */
 GtkWidget *mailbutton = NULL;
-GtkWidget *separator = NULL;
-GtkWidget *separator2 = NULL;
 
 
 static void locale_init(void)
@@ -238,9 +236,6 @@ void show_icon()
 	GtkWidget *icon = NULL;
 	GtkIconSize size = geany_data->toolbar_prefs->icon_size;
 
-	int number_of_icons = 0;
-	number_of_icons = gtk_toolbar_get_n_items(GTK_TOOLBAR(geany->main_widgets->toolbar));
-
 	mailbutton_pb = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
 					"mail-message-new", size, ICON_LOOKUP_MODE, NULL);
 
@@ -253,18 +248,10 @@ void show_icon()
 	icon = gtk_image_new_from_pixbuf(mailbutton_pb);
 	g_object_unref(mailbutton_pb);
 
-	separator = (GtkWidget*) gtk_separator_tool_item_new();
-	gtk_widget_show (separator);
-	gtk_toolbar_insert(GTK_TOOLBAR(geany->main_widgets->toolbar), GTK_TOOL_ITEM(separator), number_of_icons - 2);
-
 	mailbutton = (GtkWidget*) gtk_tool_button_new (icon, "Mail");
-	gtk_toolbar_insert(GTK_TOOLBAR(geany->main_widgets->toolbar), GTK_TOOL_ITEM(mailbutton), number_of_icons - 1);
+	p_plugin->add_toolbar_item(geany_plugin, GTK_TOOL_ITEM(mailbutton));
 	g_signal_connect (G_OBJECT(mailbutton), "clicked", G_CALLBACK(send_as_attachment), NULL);
 	gtk_widget_show_all (mailbutton);
-
-	separator2 = (GtkWidget*) gtk_separator_tool_item_new();
-	gtk_widget_show (separator2);
-	gtk_toolbar_insert(GTK_TOOLBAR(geany->main_widgets->toolbar), GTK_TOOL_ITEM(separator2), number_of_icons);
 }
 
 void cleanup_icon()
@@ -272,14 +259,6 @@ void cleanup_icon()
 	if (mailbutton != NULL)
 	{
 		gtk_container_remove(GTK_CONTAINER (geany->main_widgets->toolbar), mailbutton);
-	}
-	if (separator != NULL)
-	{
-		gtk_container_remove(GTK_CONTAINER (geany->main_widgets->toolbar), separator);
-	}
-	if (separator2 != NULL)
-	{
-		gtk_container_remove(GTK_CONTAINER (geany->main_widgets->toolbar), separator2);
 	}
 }
 
