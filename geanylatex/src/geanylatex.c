@@ -765,28 +765,9 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 static void
 update_menu_items()
 {
-	GeanyDocument *doc = NULL;
-	gboolean have_file;
-
-	doc = p_document->get_current();
-	have_file = doc && doc->file_name && g_path_is_absolute(doc->file_name);
-
 	p_ui->add_document_sensitive(menu_latex_menu_special_char);
 	p_ui->add_document_sensitive(menu_latex_ref);
 	p_ui->add_document_sensitive(menu_latex_label);
-
-/*	if (have_file)
-	{
-		gtk_widget_set_sensitive(menu_latex_menu_special_char, TRUE);
-		gtk_widget_set_sensitive(menu_latex_ref, TRUE);
-		gtk_widget_set_sensitive(menu_latex_label, TRUE);
-	}
-	else
-	{
-		gtk_widget_set_sensitive(menu_latex_menu_special_char, FALSE);
-		gtk_widget_set_sensitive(menu_latex_ref, FALSE);
-		gtk_widget_set_sensitive(menu_latex_label, FALSE);
-	}*/
 
 	gtk_widget_set_sensitive(menu_latex_wizzard, TRUE);
 
