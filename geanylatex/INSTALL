@@ -1,26 +1,15 @@
 These installation instructions are written for a Linux system.
 
-At the time of this writing, building the plugin requires a recent SVN checkout
-of the Geany sources (r2350).
+At the time of this writing, building the plugin requires a recent SVN
+checkout of the Geany sources (Geany Plugin API v100 or svn r3084+).
 
-In order to build the plugin, the makefile needs to know where it can find
-the Geany header files - you can do this by calling configure with with-geany-src
-option for instance:
+You need for compliling the plugin the Geany header files installed.
+For configuring and installing just run
 
  % configure
  % make
  % make install
 
-The "make install" command copies geanylatex.so to your personal ~/.geany/plugins/
-directory, so you don't need to be root to install. ( If you are logged in as
-root when you install, it will only put the files in /root/.geany/plugins/
-which might not be what you expected! )
-
-If you actually do want everyone on the system to be able to access to the
-same copy of the plugin, you can manually copy the plugin to the system-wide
-plugins directory.
-( That would probably be /usr/local/lib/geany/ or maybe /usr/lib/geany/ )
-
-There is no "make uninstall" target, so if you want to remove the plugin,
-just delete the "geanylatex.so" from your plugins directory. By now, no
-other files were created directly by the plugin.
+If you want to install geanyLaTeX to another directory, you should run
+configure with --prefix=/path/to/dir option. make install will install
+all files to your new target.
