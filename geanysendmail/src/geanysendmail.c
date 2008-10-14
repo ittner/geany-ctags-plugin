@@ -39,11 +39,10 @@
 #endif
 
 GeanyPlugin		*geany_plugin;
-PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
-PLUGIN_VERSION_CHECK(99)
+PLUGIN_VERSION_CHECK(100)
 
 PLUGIN_SET_INFO(_("GeanySendMail"), _("A little plugin to send the current \
 file as attachment by user's favorite mailer"), "0.4svn", "Frank Lanitz <frank@frank.uvena.de>")
@@ -64,6 +63,7 @@ gboolean icon_in_toolbar = FALSE;
 gboolean use_address_dialog = FALSE;
 /* Needed global to remove from toolbar again */
 GtkWidget *mailbutton = NULL;
+static GtkWidget *main_menu_item = NULL;
 
 
 static void locale_init(void)
@@ -250,6 +250,7 @@ void show_icon()
 
 	mailbutton = (GtkWidget*) gtk_tool_button_new (icon, "Mail");
 	p_plugin->add_toolbar_item(geany_plugin, GTK_TOOL_ITEM(mailbutton));
+	p_ui->add_document_sensitive(mailbutton);
 	g_signal_connect (G_OBJECT(mailbutton), "clicked", G_CALLBACK(send_as_attachment), NULL);
 	gtk_widget_show_all (mailbutton);
 }
@@ -412,8 +413,6 @@ void plugin_init(GeanyData G_GNUC_UNUSED *data)
 
 	tooltips = gtk_tooltips_new();
 
-	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
-
 	if (icon_in_toolbar == TRUE)
 	{
 		show_icon();
@@ -438,13 +437,14 @@ void plugin_init(GeanyData G_GNUC_UNUSED *data)
 		0, 0, "send_file_as_attachment", kb_label, menu_mail_attachment);
 
 	gtk_widget_show_all(menu_mail);
-	plugin_fields->menu_item = menu_mail;
+	p_ui->add_document_sensitive(menu_mail);
+	main_menu_item = menu_mail;
 }
 
 
 void plugin_cleanup()
 {
-	gtk_widget_destroy(plugin_fields->menu_item);
+	gtk_widget_destroy(main_menu_item);
 	cleanup_icon();
 	g_free(mailer);
 	g_free(address);
