@@ -248,7 +248,7 @@ void show_icon()
 	icon = gtk_image_new_from_pixbuf(mailbutton_pb);
 	g_object_unref(mailbutton_pb);
 
-	mailbutton = (GtkWidget*) gtk_tool_button_new (icon, "Mail");
+	mailbutton = (GtkWidget*) gtk_tool_button_new (icon, _("Mail"));
 	p_plugin->add_toolbar_item(geany_plugin, GTK_TOOL_ITEM(mailbutton));
 	p_ui->add_document_sensitive(mailbutton);
 	g_signal_connect (G_OBJECT(mailbutton), "clicked", G_CALLBACK(send_as_attachment), NULL);
