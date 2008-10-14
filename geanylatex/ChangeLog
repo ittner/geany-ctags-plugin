@@ -1,3 +1,8 @@
+2008-10-14  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Updated to Geany Plugin API v100 (add_document_sensitive())
+
+
 2008-09-01  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * src/geanylatex.c: Added support for l10n.

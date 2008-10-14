@@ -45,13 +45,12 @@
 
 typedef void (*SubMenuCallback) (G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata);
 
-PluginInfo		*plugin_info;
-PluginFields	*plugin_fields;
+GeanyPlugin		*geany_plugin;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
+PLUGIN_VERSION_CHECK(100)
 
-PLUGIN_VERSION_CHECK(78)
 PLUGIN_SET_INFO(_("LaTeX"), _("Plugin to make Geany better support LaTeX"), "0.2-dev",
 	    "Frank Lanitz <frank@frank.uvena.de>")
 
@@ -62,6 +61,9 @@ GtkWidget *menu_latex_menu_special_char = NULL;
 GtkWidget *menu_latex_menu_special_char_submenu = NULL;
 GtkWidget *menu_latex_ref = NULL;
 GtkWidget *menu_latex_label = NULL;
+
+static GtkWidget *main_menu_item = NULL;
+
 
 /* Doing some basic keybinding stuff */
 enum
@@ -769,7 +771,11 @@ update_menu_items()
 	doc = p_document->get_current();
 	have_file = doc && doc->file_name && g_path_is_absolute(doc->file_name);
 
-	if (have_file)
+	p_ui->add_document_sensitive(menu_latex_menu_special_char);
+	p_ui->add_document_sensitive(menu_latex_ref);
+	p_ui->add_document_sensitive(menu_latex_label);
+
+/*	if (have_file)
 	{
 		gtk_widget_set_sensitive(menu_latex_menu_special_char, TRUE);
 		gtk_widget_set_sensitive(menu_latex_ref, TRUE);
@@ -780,7 +786,7 @@ update_menu_items()
 		gtk_widget_set_sensitive(menu_latex_menu_special_char, FALSE);
 		gtk_widget_set_sensitive(menu_latex_ref, FALSE);
 		gtk_widget_set_sensitive(menu_latex_label, FALSE);
-	}
+	}*/
 
 	gtk_widget_set_sensitive(menu_latex_wizzard, TRUE);
 
@@ -885,11 +891,11 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	p_keybindings->set_item(plugin_key_group, LATEX_INSERT_REF_KB, kbref_insert,
 	0, 0, "insert_latex_ref", kblabel_insert_ref, menu_latex_wizzard);
 	gtk_widget_show_all(menu_latex);
-	plugin_fields->menu_item = menu_latex;
+	main_menu_item = menu_latex;
 }
 
 void
 plugin_cleanup()
 {
-	gtk_widget_destroy(plugin_fields->menu_item);
+	gtk_widget_destroy(main_menu_item);
 }
