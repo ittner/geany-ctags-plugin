@@ -762,17 +762,6 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 	gtk_widget_destroy(dialog);
 }
 
-static void
-update_menu_items()
-{
-	p_ui->add_document_sensitive(menu_latex_menu_special_char);
-	p_ui->add_document_sensitive(menu_latex_ref);
-	p_ui->add_document_sensitive(menu_latex_label);
-
-	gtk_widget_set_sensitive(menu_latex_wizzard, TRUE);
-
-}
-
 static void kblabel_insert(G_GNUC_UNUSED guint key_id)
 {
 	insert_label_activated(NULL, NULL);
@@ -830,7 +819,6 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 
 	menu_latex = gtk_menu_item_new_with_mnemonic(_("_LaTeX"));
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_latex);
-	g_signal_connect((gpointer) menu_latex, "activate", G_CALLBACK(update_menu_items), NULL);
 
 	menu_latex_menu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_latex), menu_latex_menu);
@@ -871,6 +859,12 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	0, 0, "insert_latex_label", kblabel_insert_label, menu_latex_wizzard);
 	p_keybindings->set_item(plugin_key_group, LATEX_INSERT_REF_KB, kbref_insert,
 	0, 0, "insert_latex_ref", kblabel_insert_ref, menu_latex_wizzard);
+
+	p_ui->add_document_sensitive(menu_latex_menu_special_char);
+	p_ui->add_document_sensitive(menu_latex_ref);
+	p_ui->add_document_sensitive(menu_latex_label);
+
+	gtk_widget_set_sensitive(menu_latex_wizzard, TRUE);
 	gtk_widget_show_all(menu_latex);
 	main_menu_item = menu_latex;
 }
