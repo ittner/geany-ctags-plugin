@@ -51,12 +51,11 @@
 
 
 GeanyPlugin		*geany_plugin;
-PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(99)
+PLUGIN_VERSION_CHECK(100)
 PLUGIN_SET_INFO(_("Spell Check"), _("Checks the spelling of the current document."), "0.2",
 			_("The Geany developer team"))
 
@@ -70,6 +69,7 @@ typedef struct
 	gboolean show_toolbar_item;
 	gulong signal_id;
 	GPtrArray *dicts;
+	GtkWidget *menu_item;
 	GtkWidget *edit_menu;
 	GtkWidget *edit_menu_sep;
 	GtkWidget *edit_menu_sub;
@@ -175,6 +175,7 @@ static void toolbar_update(void)
 	#endif
 			gtk_widget_show(GTK_WIDGET(sc->toolbar_button));
 			p_plugin->add_toolbar_item(geany_plugin, sc->toolbar_button);
+			p_ui->add_document_sensitive(GTK_WIDGET(sc->toolbar_button));
 
 			g_signal_connect(sc->toolbar_button, "toggled",
 				G_CALLBACK(toolbar_item_toggled_cb), NULL);
@@ -556,11 +557,11 @@ static void init_enchant_dict()
 	if (sc->dict == NULL)
 	{
 		broker_init_failed();
-		gtk_widget_set_sensitive(plugin_fields->menu_item, FALSE);
+		gtk_widget_set_sensitive(sc->menu_item, FALSE);
 	}
 	else
 	{
-		gtk_widget_set_sensitive(plugin_fields->menu_item, TRUE);
+		gtk_widget_set_sensitive(sc->menu_item, TRUE);
 	}
 }
 
@@ -793,9 +794,8 @@ void plugin_init(GeanyData *data)
 
 	locale_init();
 
-	plugin_fields->menu_item = sp_item =
-		gtk_image_menu_item_new_from_stock("gtk-spell-check", NULL);
-	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
+	sc->menu_item = gtk_image_menu_item_new_from_stock("gtk-spell-check", NULL);
+	p_ui->add_document_sensitive(sc->menu_item);
 
 	toolbar_update();
 
@@ -811,7 +811,7 @@ void plugin_init(GeanyData *data)
 	create_dicts_array();
 
 	create_edit_menu();
-	sp_item = create_menu(sp_item);
+	sp_item = create_menu(sc->menu_item);
 	gtk_widget_show_all(sp_item);
 
 	sc->signal_id = g_signal_connect(geany->main_widgets->window,
@@ -904,6 +904,6 @@ void plugin_cleanup(void)
 
 	g_free(sc->default_language);
 	g_free(sc->config_file);
+	gtk_widget_destroy(sc->menu_item);
 	g_free(sc);
-	gtk_widget_destroy(plugin_fields->menu_item);
 }
