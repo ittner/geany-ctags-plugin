@@ -32,7 +32,7 @@ If you need additional checks for header files, functions in libraries or
 need to check for library packages (using pkg-config), please ask Enrico
 before committing changes. Thanks.
 
-Requires WAF 1.5 (SVN r4661 or later) and Python 2.4 (or later).
+Requires WAF 1.5 (SVN r4695 or later) and Python 2.4 (or later).
 """
 
 
@@ -204,14 +204,14 @@ def configure(conf):
 			conf.write_config_header(os.path.join(p.name, 'config.h'))
 
 	Utils.pprint('BLUE', 'Summary:')
-	print_message('Install Geany Plugins ' + VERSION + ' in', conf.env['PREFIX'])
-	print_message('Using GTK version', gtk_version)
-	print_message('Using Geany version', geany_version)
+	print_message(conf, 'Install Geany Plugins ' + VERSION + ' in', conf.env['PREFIX'])
+	print_message(conf, 'Using GTK version', gtk_version)
+	print_message(conf, 'Using Geany version', geany_version)
 	if svn_rev != '-1':
-		print_message('Compiling Subversion revision', svn_rev)
+		print_message(conf, 'Compiling Subversion revision', svn_rev)
 		conf.env.append_value('CCFLAGS', '-g -O0') # -DGEANY_DISABLE_DEPRECATED')
 
-	print_message('Plugins to compile', ' '.join(enabled_plugins))
+	print_message(conf, 'Plugins to compile', ' '.join(enabled_plugins))
 
 	conf.env.append_value('enabled_plugins', enabled_plugins)
 	conf.env.append_value('CCFLAGS', '-DHAVE_CONFIG_H')
@@ -344,15 +344,7 @@ def launch(command, status, success_color='GREEN'):
 	return ret
 
 
-line_len = 0
-
-def print_message(msg, result, color = 'GREEN'):
-    global line_len
-    if line_len == 0:
-        line_len = Configure.ConfigurationContext().line_just
-
-    line_len = max(line_len, len(msg))
-    print "%s :" % msg.ljust(line_len),
-    Utils.pprint(color, result)
-    Runner.print_log(msg, '\n\n')
+def print_message(conf, msg, result, color = 'GREEN'):
+	conf.check_message_1(msg)
+	conf.check_message_2(result, color)
 
