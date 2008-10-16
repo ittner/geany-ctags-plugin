@@ -1,3 +1,10 @@
+2008-10-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/spellcheck.c:
+   Test whether stored language is (still) available in enchant and fall
+   back to the first supported language if not.
+
+
 2008-10-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/spellcheck.c:

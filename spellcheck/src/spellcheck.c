@@ -93,7 +93,7 @@ typedef struct
 static SpellClickInfo clickinfo;
 
 
-/* Flag to indicate that a callback function will be triggered by generating the appropiate event
+/* Flag to indicate that a callback function will be triggered by generating the appropriate event
  * but the callback should be ignored. */
 static gboolean ignore_sc_callback = FALSE;
 
@@ -537,7 +537,7 @@ static gboolean on_key_release(GtkWidget *widget, GdkEventKey *ev, gpointer user
 }
 
 
-static void broker_init_failed()
+static void broker_init_failed(void)
 {
 	const gchar *err = enchant_broker_get_error(sc->broker);
 	p_dialogs->show_msgbox(GTK_MESSAGE_ERROR,
@@ -546,14 +546,44 @@ static void broker_init_failed()
 }
 
 
-static void init_enchant_dict()
+static void dict_compare(gpointer data, gpointer user_data)
 {
+	gboolean *supported = user_data;
+
+	if (p_utils->str_equal(sc->default_language, data))
+		*supported = TRUE;
+}
+
+
+static gboolean check_default_lang(void)
+{
+	gboolean supported = FALSE;
+
+	g_ptr_array_foreach(sc->dicts, dict_compare, &supported);
+
+	return supported;
+}
+
+
+static void init_enchant_dict(void)
+{
+	gchar *lang = sc->default_language;
+
 	/* Release a previous dict object */
 	if (sc->dict != NULL)
 		enchant_broker_free_dict(sc->broker, sc->dict);
 
+	/* Check if the stored default dictionary is (still) avaiable, fall back to the first
+	 * one in the list if not */
+	if (! check_default_lang())
+	{
+		lang = g_ptr_array_index(sc->dicts, 0);
+		g_warning("Stored language ('%s') could not be loaded. Falling back to '%s'",
+			sc->default_language, lang);
+	}
+
 	/* Request new dict object */
-	sc->dict = enchant_broker_request_dict(sc->broker, sc->default_language);
+	sc->dict = enchant_broker_request_dict(sc->broker, lang);
 	if (sc->dict == NULL)
 	{
 		broker_init_failed();
@@ -620,10 +650,6 @@ static void locale_init(void)
 static const gchar *get_default_lang(void)
 {
 	const gchar *lang = g_getenv("LANG");
-	/** TODO check whether the returned lang is actually provided by enchant and
-	 *  choose something else if not
-	 *  N.B. this is not really possible/reasonable with enchant < 1.4.3 because of a
-	 *  bug in the Zemberek provider which always reports it has the requested dict */
 	if (NZV(lang))
 	{
 		if (g_ascii_strncasecmp(lang, "C", 1) == 0)
@@ -716,7 +742,7 @@ static gint sort_dicts(gconstpointer a, gconstpointer b)
 }
 
 
-static void create_dicts_array()
+static void create_dicts_array(void)
 {
 	sc->dicts = g_ptr_array_new();
 
@@ -726,7 +752,7 @@ static void create_dicts_array()
 }
 
 
-static void create_edit_menu()
+static void create_edit_menu(void)
 {
 	sc->edit_menu = gtk_image_menu_item_new_from_stock(GTK_STOCK_SPELL_CHECK, NULL);
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), sc->edit_menu);
@@ -800,6 +826,7 @@ void plugin_init(GeanyData *data)
 	toolbar_update();
 
 	sc->broker = enchant_broker_init();
+	create_dicts_array();
 	init_enchant_dict();
 
 	for (i = 0; i < MAX_MENU_SUGGESTIONS; i++)
@@ -807,8 +834,6 @@ void plugin_init(GeanyData *data)
 		clickinfo.suggs[i] = NULL;
 	}
 	clickinfo.word = NULL;
-
-	create_dicts_array();
 
 	create_edit_menu();
 	sp_item = create_menu(sc->menu_item);
