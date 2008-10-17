@@ -4,6 +4,9 @@
    src/scplugin.h, src/gui.h, src/speller.h, src/Makefile.am,
    po/POTFILES.in:
    Split spellcheck.c into three source files.
+ * README:
+   Add some notes about known problems, especially with the
+   Zemberek provider.
 
 
 2008-10-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

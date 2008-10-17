@@ -40,7 +40,7 @@ Development Code
 
 Get the code from:
 
-	svn checkout http://geany-plugins.svn.sourceforge.net/svnroot/geany-plugins/trunk/spellcheck
+    svn checkout http://geany-plugins.svn.sourceforge.net/svnroot/geany-plugins/trunk/spellcheck
 
 
 Requirements
@@ -56,8 +56,8 @@ And obviously, you will need have Geany installed. If you have Geany installed
 from the sources, you should be ready to go.
 If you used a preprared package e.g. from your distribution you probably need
 to install an additional package, this might be called geany-dev or geany-devel.
-Please note that in order to compile and use this plugin, you need a current SVN
-version of Geany, at least SVN >= 2715.
+Please note that in order to compile and use this plugin, you need Geany 0.15
+or later.
 
 Furthermore you need, of course, a C compiler and the Make tool.
 The GNU versions of these tools are recommended.
@@ -83,6 +83,33 @@ After installed successfully, load the plugin in Geany's plugin manager
 and a new menu item in the Tools menu will appear. Alternatively, you can
 assign a keyboard shortcut in Geany's preferences dialog to perform a
 spell check.
+
+
+Known issues
+------------
+ * Spell checking with some languages like Hindi might be incorrect, i.e. some
+   words are incorrectly marked as correctly spelled or marked incorrectly
+   as misspelled.
+ * Crashes of Geany when loading the Spell Check plugin after it was unloaded.
+   This can happen when you are using a dictionary from the Zemberek provider
+   of Enchant (mostly Turkish dictionaries).
+   It can also happen when you tried to use a non-existing
+   dictionary and the Zemberek provider is installed on your system.
+   To avoid these crashes you have the following options:
+
+     * Do not load the plugin after it was unloaded, restart Geany first
+     * Do not use any of the dictionaries provided by the Zemberek provider
+     * Update your Enchant version at least to 1.4.3 (once it is released)
+     * Uninstall the Zemberek provider
+
+  Background:
+              These crashes are all related to the Zemberek provider in Enchant.
+              In version 1.4.2 and prior of Enchant, this provider/backend always
+              claimed to support any given invalid dictionary name and so it was
+              active and caused these crashes on load after unload of the plugin.
+              This provider is DBus-based and uses the GObject type
+              registration system which is not really capable of being unloaded and
+              loaded again.
 
 
 License
