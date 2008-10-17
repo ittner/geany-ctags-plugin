@@ -1,3 +1,5 @@
 # List of source files containing translatable strings.
 
-src/spellcheck.c
+src/scplugin.c
+src/gui.c
+src/speller.c

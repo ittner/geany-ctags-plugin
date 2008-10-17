@@ -1,3 +1,11 @@
+2008-10-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/spellcheck.c, src/scplugin.c, src/gui.c, src/speller.c,
+   src/scplugin.h, src/gui.h, src/speller.h, src/Makefile.am,
+   po/POTFILES.in:
+   Split spellcheck.c into three source files.
+
+
 2008-10-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/spellcheck.c:
