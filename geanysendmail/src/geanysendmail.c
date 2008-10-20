@@ -347,8 +347,8 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		"\n\t\%r will be replaced by recipient's email address."\
 		"\n\t\%b will be replaced by basename of a file"\
 		"\n\tExamples:"\
-		"\n\tsylpheed --attach \%f --compose \%r"\
-		"\n\tmutt -s \"Sending \%f\" -a \%f \%r"));
+		"\n\tsylpheed --attach \"\%f\" --compose \"\%r\""\
+		"\n\tmutt -s \"Sending \'\%b\'\" -a \"\%f\" \"\%r\""));
 	gtk_label_set_selectable(GTK_LABEL(label2), TRUE);
 	gtk_widget_show(label2);
 	gtk_misc_set_alignment(GTK_MISC(label2), 0, 0.5);

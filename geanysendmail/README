@@ -75,8 +75,8 @@ be replaced by foo.baa.
 Depending on how you like to use, you can combine all of the place
 holders to build up your command. It is possible to use one placeholder
 several time. Examples could be:
-	sylpheed --attach %f --compose %r
-	mutt -s "Sending %f" -a %f %r
+	sylpheed --attach "%f" --compose "%r"
+	mutt -s "Sending '%b'" -a "%f" "%r"
 
 
 Development
@@ -97,7 +97,13 @@ as GeanySendMail by the copyright owner.
 Kown issues
 -----------
 
-No known issues at time of release.
+During installation it might happen, that the plugin wants to install the
+files for localisation to \usr\local as a prefix. This can be avoided by
+adding --prefix="/new/path" to your configure/autogen.sh call.
+
+On Windows system you may will also have some trouble with quoting of
+placeholders. Please ask your local Windows geek for help in case some
+problems are occuring with it.
 
 For more recent information all reported issues will be tracked at
 http://sourceforge.net/tracker/?group_id=222729
