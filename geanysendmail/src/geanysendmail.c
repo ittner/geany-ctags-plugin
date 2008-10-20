@@ -394,8 +394,6 @@ void plugin_init(GeanyData G_GNUC_UNUSED *data)
 	gchar *kb_label = _("Send file by mail");
 
 	GtkWidget *menu_mail = NULL;
-	GtkWidget *menu_mail_submenu = NULL;
-	GtkWidget *menu_mail_attachment = NULL;
 
 	locale_init();
 
