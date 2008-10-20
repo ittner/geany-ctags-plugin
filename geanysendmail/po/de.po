@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geanysendmail 0.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-20 21:01+0200\n"
+"POT-Creation-Date: 2008-10-20 22:01+0200\n"
 "PO-Revision-Date: 2008-05-24 19:13+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team:  <frank@frank.uvena.de>\n"
@@ -83,16 +83,16 @@ msgid ""
 "\t\\%r will be replaced by recipient's email address.\n"
 "\t\\%b will be replaced by basename of a file\n"
 "\tExamples:\n"
-"\tsylpheed --attach \\%f --compose \\%r\n"
-"\tmutt -s \"Sending \\%f\" -a \\%f \\%r"
+"\tsylpheed --attach \"\\%f\" --compose \"\\%r\"\n"
+"\tmutt -s \"Sending '\\%b'\" -a \"\\%f\" \"\\%r\""
 msgstr ""
 "Anmerkung: \n"
 "\t\\%f wird mit der zu sendenden Datei ersetzt.\t\n"
 "\t\\%r wird mit der Emailadresse des Empfängers ersetzt.\t\n"
 "\t\\%b wird mit dem reinen Dateinamen der zu sendenen Datei ersetzt.\n"
 "\tEin Beispiel könnte sein:\t\n"
-"\tsylpheed --attach \\%f --compose \\%r\n"
-"\tmutt -s \"Sending \\%f\" -a \\%f \\%r"
+"\tsylpheed --attach \"\\%f\" --compose \"\\%r\"\n"
+"\tmutt -s \"Sending '\\%b'\" -a \"\\%f\" \"\\%r\""
 
 #: src/geanysendmail.c:356
 msgid "Showing icon in toolbar"
@@ -114,21 +114,20 @@ msgstr ""
 msgid "Send file by mail"
 msgstr "Per Mail senden"
 
-#. Build up menu
-#: src/geanysendmail.c:423
-msgid "_Mail"
-msgstr "_Mail"
-
-#: src/geanysendmail.c:429
+#. Build up menu entry
+#: src/geanysendmail.c:420
 msgid "_Mail document"
 msgstr "_Dokument versenden"
 
-#: src/geanysendmail.c:432
+#: src/geanysendmail.c:423
 msgid ""
 "Sends the opened file as unzipped attachment by any mailer from your $PATH"
 msgstr ""
 "Sendet ein geöffnete Dokument als ungepackter Anhang unter Verwendung eines "
 "Mailprogrammes."
+
+#~ msgid "_Mail"
+#~ msgstr "_Mail"
 
 #~ msgid "Note: \\%f will be replaced by your filename."
 #~ msgstr "Anmerkung: \\%f wird durch den Dateinamen ersetzt."
