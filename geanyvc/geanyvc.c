@@ -412,7 +412,6 @@ execute_custom_command(const gchar * dir, const gchar ** argv, const gchar ** en
 	GSList *cur;
 	GSList *largv = get_cmd(argv, dir, filename, list, message);
 	GError *error = NULL;
-	printf("%s\n", __FUNCTION__);
 
 	if (std_out)
 		*std_out = NULL;
