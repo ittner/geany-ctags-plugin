@@ -1,7 +1,7 @@
 These installation instructions are written for a Linux system.
 
 At the time of this writing, building the plugin requires a recent SVN checkout
-of the Geany sources (API version 49; ~svn r2380+).
+of the Geany sources (API version 100, Geany v0.15+).
 
 To compile and install just follow the typical three steps:
 
@@ -12,12 +12,5 @@ To compile and install just follow the typical three steps:
 The plugin will be installed into your $prefix/lib/geany of your Geany
 installation. This should be in most cases /usr/ or /usr/local. So you will
 need in most cases to run make install under root. If you don't want to
-install it global, but on your own home dir, just copy
-$sources/.libs/geansendmail.so to your ~/.geany/plugins or any other directory
-you use for geany configuration files.
-
-There is no "make uninstall" target, so if you want to remove the plugin,
-just delete the "geanysendmail.so" from your plugins directory and/or
-$prefix/lib/geany/.
-
-
+install it global, but on your own home dir, just --prefix option for configure.
+Please check README for more detailed information.
