@@ -98,6 +98,7 @@ static const gchar *GIT_CMD_REMOVE[] =
 static const gchar *GIT_CMD_LOG_FILE[] = { "git", "log", "--", BASENAME, NULL };
 static const gchar *GIT_CMD_LOG_DIR[] = { "git", "log", NULL };
 static const gchar *GIT_CMD_BLAME[] = { "git", "blame", "--", BASENAME, NULL };
+static const gchar *GIT_CMD_UPDATE[] = { "git", "pull", NULL };
 
 static const gchar *GIT_ENV_DIFF_FILE[] = { "PAGER=cat", NULL };
 static const gchar *GIT_ENV_DIFF_DIR[] = { "PAGER=cat", NULL };
@@ -108,6 +109,7 @@ static const gchar *GIT_ENV_REMOVE[] = { "PAGER=cat", NULL };
 static const gchar *GIT_ENV_LOG_FILE[] = { "PAGER=cat", NULL };
 static const gchar *GIT_ENV_LOG_DIR[] = { "PAGER=cat", NULL };
 static const gchar *GIT_ENV_BLAME[] = { "PAGER=cat", NULL };
+static const gchar *GIT_ENV_UPDATE[] = { "PAGER=cat", NULL };
 
 static const VC_COMMAND commands[] = {
 	{
@@ -164,7 +166,12 @@ static const VC_COMMAND commands[] = {
 	 .startdir = VC_COMMAND_STARTDIR_FILE,
 	 .command = NULL,
 	 .env = GIT_ENV_SHOW,
-	 .function = git_show}
+	 .function = git_show},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_BASE,
+	 .command = GIT_CMD_UPDATE,
+	 .env = GIT_ENV_UPDATE,
+	 .function = NULL}
 };
 
 static gboolean

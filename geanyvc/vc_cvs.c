@@ -42,6 +42,7 @@ static const gchar *CVS_CMD_LOG_DIR[] = { "cvs", "log", NULL };
 static const gchar *CVS_CMD_COMMIT[] = { "cvs", NULL };
 static const gchar *CVS_CMD_BLAME[] = { "cvs", "annotate", BASE_FILENAME, NULL };
 static const gchar *CVS_CMD_SHOW[] = { "cvs", NULL };
+static const gchar *CVS_CMD_UPDATE[] = { "cvs", "up", "-d", NULL };
 
 static const VC_COMMAND commands[] = {
 	{
@@ -97,6 +98,11 @@ static const VC_COMMAND commands[] = {
 	{
 	 .startdir = VC_COMMAND_STARTDIR_FILE,
 	 .command = CVS_CMD_SHOW,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_BASE,
+	 .command = CVS_CMD_UPDATE,
 	 .env = NULL,
 	 .function = NULL}
 };

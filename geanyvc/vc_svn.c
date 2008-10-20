@@ -47,6 +47,7 @@ static const gchar *SVN_CMD_COMMIT[] =
 	{ "svn", "commit", "--non-interactive", "-m", MESSAGE, FILE_LIST, NULL };
 static const gchar *SVN_CMD_BLAME[] = { "svn", "blame", BASENAME, NULL };
 static const gchar *SVN_CMD_SHOW[] = { "svn", "cat", BASENAME, NULL };
+static const gchar *SVN_CMD_UPDATE[] = { "svn", "up", NULL };
 
 static const VC_COMMAND commands[] = {
 	{
@@ -102,6 +103,11 @@ static const VC_COMMAND commands[] = {
 	{
 	 .startdir = VC_COMMAND_STARTDIR_FILE,
 	 .command = SVN_CMD_SHOW,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_BASE,
+	 .command = SVN_CMD_UPDATE,
 	 .env = NULL,
 	 .function = NULL}
 };

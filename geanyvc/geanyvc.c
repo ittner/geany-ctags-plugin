@@ -838,10 +838,8 @@ vcstatus_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 }
 
 static gboolean
-command_with_question_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata,
-				gint cmd, const gchar * question, gboolean ask)
+command_with_question_activated(gchar ** text, gint cmd, const gchar * question, gboolean ask)
 {
-	gchar *text;
 	GtkWidget *dialog;
 	gint result;
 	gchar *dir;
@@ -876,18 +874,14 @@ command_with_question_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNU
 		vc = find_vc(dir);
 		g_return_val_if_fail(vc, FALSE);
 
-		execute_command(vc, &text, NULL, doc->file_name, cmd, NULL, NULL);
-		if (text)
-		{
-			g_free(text);
-		}
+		execute_command(vc, text, NULL, doc->file_name, cmd, NULL, NULL);
 		g_free(dir);
 	}
 	return (result == GTK_RESPONSE_YES) ? TRUE : FALSE;
 }
 
 static void
-vcrevert_activated(GtkMenuItem * menuitem, gpointer gdata)
+vcrevert_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata)
 {
 	gboolean ret;
 	GeanyDocument *doc;
@@ -895,8 +889,8 @@ vcrevert_activated(GtkMenuItem * menuitem, gpointer gdata)
 	doc = p_document->get_current();
 	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
-	ret = command_with_question_activated(menuitem, gdata, VC_COMMAND_REVERT_FILE,
-					      _("Do you really want to revert: %s"), TRUE);
+	ret = command_with_question_activated(NULL, VC_COMMAND_REVERT_FILE,
+					      _("Do you really want to revert: %s?"), TRUE);
 	if (ret)
 	{
 		p_document->reload_file(doc, NULL);
@@ -905,24 +899,51 @@ vcrevert_activated(GtkMenuItem * menuitem, gpointer gdata)
 
 
 static void
-vcadd_activated(GtkMenuItem * menuitem, gpointer gdata)
+vcadd_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata)
 {
-	command_with_question_activated(menuitem, gdata, VC_COMMAND_ADD,
-					_("Do you really want to add: %s"), set_add_confirmation);
+	command_with_question_activated(NULL, VC_COMMAND_ADD,
+					_("Do you really want to add: %s?"), set_add_confirmation);
 }
 
 static void
-vcremove_activated(GtkMenuItem * menuitem, gpointer gdata)
+vcremove_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata)
 {
 	gboolean ret;
 
-	ret = command_with_question_activated(menuitem, gdata, VC_COMMAND_REMOVE,
-					      _("Do you really want to remove: %s"), TRUE);
+	ret = command_with_question_activated(NULL, VC_COMMAND_REMOVE,
+					      _("Do you really want to remove: %s?"), TRUE);
 	if (ret)
 	{
 		p_document->
 			remove_page(gtk_notebook_get_current_page
 				    (GTK_NOTEBOOK(geany->main_widgets->notebook)));
+	}
+}
+
+static void
+vcupdate_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata)
+{
+	gchar *text = NULL;
+	GeanyDocument *doc;
+	gboolean ret;
+
+	doc = p_document->get_current();
+	g_return_if_fail(doc != NULL && doc->file_name != NULL);
+
+	if (doc->changed)
+	{
+		p_document->save_file(doc, FALSE);
+	}
+
+	ret = command_with_question_activated(&text, VC_COMMAND_UPDATE,
+					      _("Do you really want to update?"),
+					      set_add_confirmation);
+	if (ret)
+	{
+		if (NZV(text))
+			show_output(text, "*VC-UPDATE*", NULL);
+		if (text)
+			g_free(text);
 	}
 }
 
@@ -1452,6 +1473,7 @@ static GtkWidget *menu_vc_status = NULL;
 static GtkWidget *menu_vc_revert_file = NULL;
 static GtkWidget *menu_vc_add_file = NULL;
 static GtkWidget *menu_vc_remove_file = NULL;
+static GtkWidget *menu_vc_update = NULL;
 static GtkWidget *menu_vc_commit = NULL;
 
 static void
@@ -1496,6 +1518,7 @@ update_menu_items()
 	gtk_widget_set_sensitive(menu_vc_remove_file, f_have_vc);
 	gtk_widget_set_sensitive(menu_vc_add_file, d_have_vc && !f_have_vc);
 
+	gtk_widget_set_sensitive(menu_vc_update, d_have_vc);
 	gtk_widget_set_sensitive(menu_vc_commit, d_have_vc);
 }
 
@@ -1975,6 +1998,14 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 			 G_CALLBACK(vcremove_activated), NULL);
 
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), gtk_separator_menu_item_new());
+
+	// Update
+	menu_vc_update = gtk_menu_item_new_with_mnemonic(_("Update"));
+	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_update);
+	gtk_tooltips_set_tip(tooltips, menu_vc_update, _("Update from remote repositary."), NULL);
+
+	g_signal_connect((gpointer) menu_vc_update, "activate",
+			 G_CALLBACK(vcupdate_activated), NULL);
 
 	// Commit
 	menu_vc_commit = gtk_menu_item_new_with_mnemonic(_("_Commit"));

@@ -45,6 +45,7 @@ static const gchar *HG_CMD_LOG_DIR[] = { "hg", "log", ABS_DIRNAME, NULL };
 static const gchar *HG_CMD_COMMIT[] = { "hg", "commit", "-m", MESSAGE, FILE_LIST, NULL };
 static const gchar *HG_CMD_BLAME[] = { "hg", "annotate", BASENAME, NULL };
 static const gchar *HG_CMD_SHOW[] = { "hg", "cat", BASENAME, NULL };
+static const gchar *HG_CMD_UPDATE[] = { "hg", "pull", CMD_SEPARATOR, "hg", "update", NULL };
 
 static const VC_COMMAND commands[] = {
 	{
@@ -100,6 +101,11 @@ static const VC_COMMAND commands[] = {
 	{
 	 .startdir = VC_COMMAND_STARTDIR_FILE,
 	 .command = HG_CMD_SHOW,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_BASE,
+	 .command = HG_CMD_UPDATE,
 	 .env = NULL,
 	 .function = NULL}
 };

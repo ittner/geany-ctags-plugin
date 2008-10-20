@@ -45,7 +45,7 @@ static const gchar *SVK_CMD_LOG_DIR[] = { "svk", "log", ABS_DIRNAME, NULL };
 static const gchar *SVK_CMD_COMMIT[] = { "svk", "commit", "-m", MESSAGE, FILE_LIST, NULL };
 static const gchar *SVK_CMD_BLAME[] = { "svk", "blame", BASENAME, NULL };
 static const gchar *SVK_CMD_SHOW[] = { "svk", "cat", BASENAME, NULL };
-
+static const gchar *SVK_CMD_UPDATE[] = { "svk", "up", NULL };
 
 static const VC_COMMAND commands[] = {
 	{
@@ -101,6 +101,11 @@ static const VC_COMMAND commands[] = {
 	{
 	 .startdir = VC_COMMAND_STARTDIR_FILE,
 	 .command = SVK_CMD_SHOW,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_BASE,
+	 .command = SVK_CMD_UPDATE,
 	 .env = NULL,
 	 .function = NULL}
 };

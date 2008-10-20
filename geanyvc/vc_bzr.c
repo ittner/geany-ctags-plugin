@@ -45,6 +45,7 @@ static const gchar *BZR_CMD_LOG_DIR[] = { "bzr", "log", ABS_DIRNAME, NULL };
 static const gchar *BZR_CMD_COMMIT[] = { "bzr", "commit", "-m", MESSAGE, FILE_LIST, NULL };
 static const gchar *BZR_CMD_BLAME[] = { "bzr", "blame", "--all", "--long", BASENAME, NULL };
 static const gchar *BZR_CMD_SHOW[] = { "bzr", "cat", BASENAME, NULL };
+static const gchar *BZR_CMD_UPDATE[] = { "bzr", "pull", NULL };
 
 static const VC_COMMAND commands[] = {
 	{
@@ -100,6 +101,11 @@ static const VC_COMMAND commands[] = {
 	{
 	 .startdir = VC_COMMAND_STARTDIR_FILE,
 	 .command = BZR_CMD_SHOW,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_BASE,
+	 .command = BZR_CMD_UPDATE,
 	 .env = NULL,
 	 .function = NULL}
 };
