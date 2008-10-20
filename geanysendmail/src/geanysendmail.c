@@ -418,23 +418,16 @@ void plugin_init(GeanyData G_GNUC_UNUSED *data)
 		show_icon();
 	}
 
-	// Build up menu
-
-	menu_mail = gtk_image_menu_item_new_with_mnemonic(_("_Mail"));
+	// Build up menu entry
+	menu_mail = gtk_menu_item_new_with_mnemonic(_("_Mail document"));
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_mail);
-
-	menu_mail_submenu = gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_mail), menu_mail_submenu);
-
-	menu_mail_attachment = gtk_menu_item_new_with_mnemonic(_("_Mail document"));
-	gtk_container_add(GTK_CONTAINER(menu_mail_submenu), menu_mail_attachment);
-	gtk_tooltips_set_tip(tooltips, menu_mail_attachment,
+	gtk_tooltips_set_tip(tooltips, menu_mail,
 			     _("Sends the opened file as unzipped attachment by any mailer from your $PATH"), NULL);
-	g_signal_connect(G_OBJECT(menu_mail_attachment), "activate", G_CALLBACK(send_as_attachment), NULL);
+	g_signal_connect(G_OBJECT(menu_mail), "activate", G_CALLBACK(send_as_attachment), NULL);
 
 	/* setup keybindings */
 	p_keybindings->set_item(plugin_key_group, SENDMAIL_KB, key_send_as_attachment,
-		0, 0, "send_file_as_attachment", kb_label, menu_mail_attachment);
+		0, 0, "send_file_as_attachment", kb_label, menu_mail);
 
 	gtk_widget_show_all(menu_mail);
 	p_ui->add_document_sensitive(menu_mail);
