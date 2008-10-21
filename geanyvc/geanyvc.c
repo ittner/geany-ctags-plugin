@@ -937,6 +937,8 @@ vcupdate_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 					      set_add_confirmation);
 	if (ret)
 	{
+		p_document->reload_file(doc, NULL);
+
 		if (NZV(text))
 			show_output(text, "*VC-UPDATE*", NULL);
 		if (text)
