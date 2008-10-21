@@ -443,7 +443,7 @@ execute_custom_command(const gchar * dir, const gchar ** argv, const gchar ** en
 		}
 		if (error)
 		{
-			fprintf(stderr, "geanyvc: s_spawn_sync error: %s\n", error->message);
+			g_warning("geanyvc: s_spawn_sync error: %s", error->message);
 			p_ui->set_statusbar(FALSE, _("geanyvc: s_spawn_sync error: %s"),
 					    error->message);
 			g_error_free(error);
@@ -525,7 +525,7 @@ execute_command(const VC_RECORD * vc, gchar ** std_out, gchar ** std_err, const 
 	}
 	else
 	{
-		fprintf(stderr, "geanyvc: unknown startdir type: %d\n", vc->commands[cmd].startdir);
+		g_warning("geanyvc: unknown startdir type: %d", vc->commands[cmd].startdir);
 	}
 
 	ret = execute_custom_command(dir, vc->commands[cmd].command, vc->commands[cmd].env, std_out,
@@ -579,10 +579,9 @@ vcdiff_file_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpoint
 
 			if (g_rename(localename, new) != 0)
 			{
-				fprintf(stderr,
-					_
-					("geanyvc: vcdiff_file_activated: Unable to rename '%s' to '%s'\n"),
-					localename, new);
+				g_warning(_
+					  ("geanyvc: vcdiff_file_activated: Unable to rename '%s' to '%s'"),
+					  localename, new);
 				goto end;
 			}
 
@@ -591,10 +590,9 @@ vcdiff_file_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpoint
 
 			if (g_rename(localename, old) != 0)
 			{
-				fprintf(stderr,
-					_
-					("geanyvc: vcdiff_file_activated: Unable to rename '%s' to '%s'\n"),
-					localename, old);
+				g_warning(_
+					  ("geanyvc: vcdiff_file_activated: Unable to rename '%s' to '%s'"),
+					  localename, old);
 				g_rename(new, localename);
 				goto end;
 			}
@@ -1031,7 +1029,7 @@ get_commit_diff_foreach(GtkTreeModel * model, G_GNUC_UNUSED GtkTreePath * path, 
 	}
 	else
 	{
-		fprintf(stderr, "error: geanyvc: get_commit_diff_foreach: empty diff output\n");
+		g_warning("error: geanyvc: get_commit_diff_foreach: empty diff output");
 	}
 	g_free(filename);
 	return FALSE;
