@@ -102,7 +102,7 @@ plugins = [
 		 [ 'geanyvc' ], # include dirs
 		 '0.4', [ [ 'gtkspell-2.0', '2.0', False ] ]),
 	Plugin('spellcheck',
-		 [ 'spellcheck/src/spellcheck.c' ], # source files
+		 [ 'spellcheck/src/gui.c', 'spellcheck/src/scplugin.c', 'spellcheck/src/speller.c' ], # source files
 		 [ 'spellcheck', 'spellcheck/src' ], # include dirs
 		 '0.2', [ [ 'enchant', '1.3', True ] ])
 ]
