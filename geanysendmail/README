@@ -8,7 +8,7 @@ About
 GeanySendMail is a little plugin to send a document as attachment
 using the preferred mail client from inside Geany. It is similar to
 the envelope symbol of most office tools and requires a mail client
-that is supporting external calls.
+that is supporting remote calls.
 
 
 Requirements
@@ -52,29 +52,29 @@ Usage
 
 After installed successfully, load the plugin in Geany's plugin manager
 and a new menu item in the Tools menu will appear. Before you can start
-you need to configure your mailing tool. This can be done inside the
-configuration dialog (details on it later). Also you can assign a
+you need to configure your mail client. This can be done in the
+configuration dialog (details on it later). You can also assign a
 keyboard shortcut in Geany's preferences dialog to send your document.
 
 
 Configuration
 -------------
 
-Inside configuration you can set up a command that is called by the
-plugin to communicate with your mail program. Depending on, what's
-your favorite mailer, the command will differ. A number of placeholder
+In the configuration dialog you can set up a command that is called by the
+plugin to communicate with your mail client. Depending on what's
+your favorite mailer, the command will differ. A number of placeholders
 are available for doing this:
 
 * %s: Will be replaced by the complete path of the file that should be send.
 * %r: Will be replaced by one or more recipient's email address that can
 be entered inside a separate dialog. (Please remember during input,
-what your MUA is expecting here)
+what your mail client is expecting here)
 * %b: Will be replace by the file name. For a file /tmp/foo.baa it will
 be replaced by foo.baa.
 
-Depending on how you like to use, you can combine all of the place
-holders to build up your command. It is possible to use one placeholder
-several time. Examples could be:
+Depending on how you like to use, you can combine all of the placeholders
+to build up your command. It is possible to use one placeholder
+several times. Examples could be:
 	sylpheed --attach "%f" --compose "%r"
 	mutt -s "Sending '%b'" -a "%f" "%r"
 
@@ -82,15 +82,15 @@ several time. Examples could be:
 Development
 -----------
 
-You can checkout the current source code form Subversion repository at
+You can checkout the current source code from the Subversion repository at
 Sourceforge.net. Get the code from:
 
 svn checkout
 http://geany-plugins.svn.sourceforge.net/svnroot/geany-plugins/trunk/geanysendmail
 
-If you want to create a patch, please respect License of GeanySendMail
+If you want to create a patch, please respect the license of GeanySendMail
 as well as interlectual property of third. Patches that should be
-included to default distribution must be licensed under same condition
+included to the default distribution must be licensed under the same conditions
 as GeanySendMail by the copyright owner.
 
 
@@ -98,10 +98,10 @@ Kown issues
 -----------
 
 During installation it might happen, that the plugin wants to install the
-files for localisation to \usr\local as a prefix. This can be avoided by
-adding --prefix="/new/path" to your configure/autogen.sh call.
+files for localization to /usr/local as a prefix. This can be avoided by
+adding --prefix="/new/path" when running configure/autogen.sh.
 
-On Windows system you may will also have some trouble with quoting of
+On Windows systemy you maybe also have some trouble with quoting of
 placeholders. Please ask your local Windows geek for help in case some
 problems are occuring with it.
 
@@ -124,8 +124,8 @@ able to get a copy by contacting the Free Software Foundation, Inc.,
 Bugs, questions, bugs, homepage
 ---------------------------------
 
-If you found any bug or want to provide a patch, please contact Frank
+If you found any bugs or want to provide a patch, please contact Frank
 Lanitz (frank(at)geany(dot)org). Please also do so, if you got any
-question and a visit of http://frank.uvena.de/en/Geany/geanysendmail
+questions and visiting http://frank.uvena.de/en/Geany/geanysendmail
 didn't help you to figure out the answer. Visiting the website is also
 a good start if you want to check for any update on this plugin.
