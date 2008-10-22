@@ -1,4 +1,4 @@
-.. |(version)| replace:: 0.2
+.. |(version)| replace:: 0.3
 
 ========
 geanydoc
@@ -15,7 +15,7 @@ It allow either place output of these commands in geany buffer \*DOC\* or just
 execute external program. Geanydoc is intended to be used for searching documentation
 API in different sources.
 
-In order to use it you need Geany >= 0.14 or svn version.
+In order to use it you need Geany >= 0.15 or svn version.
 
 Usage
 =====
@@ -73,7 +73,7 @@ the current code style. Run this script before commit.
 Download
 ========
 
-The current version is |(version)|, download it here http://users.cosmostv.by/yurand/geanydoc/geanydoc-0.2.tar.gz.
+The current version is |(version)|, download it here http://users.cosmostv.by/yurand/geanydoc/geanydoc-0.3.tar.gz.
 
 Up to date source code can be downloaded here::
 
@@ -92,7 +92,7 @@ A package for Arch Linux is available here: http://aur.archlinux.org/packages.ph
 Windows
 -------
 
-A windows installer is available here: http://users.cosmostv.by/yurand/geanydoc/geanydoc-0.2_setup.exe
+A windows installer is available here: http://users.cosmostv.by/yurand/geanydoc/geanydoc-0.3_setup.exe
 
 Author
 ======
