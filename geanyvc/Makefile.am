@@ -21,14 +21,3 @@ geanyvc_la_LDFLAGS = -module -avoid-version
 geanyvc_la_LIBADD  = @GEANY_LIBS@
 
 AM_CPPFLAGS = @GEANY_CFLAGS@ -DGEANY_DISABLE_DEPRECATED -DLOCALEDIR=\""$(localedir)"\"
-
-
-.PHONY: ChangeLog mrproper
-
-ChangeLog:
-	git log > ChangeLog
-
-mrproper:
-	git clean -d -x -f
-
-

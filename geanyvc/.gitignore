@@ -12,7 +12,6 @@ configure
 *.o
 *.la
 *.lo
-/ChangeLog
 libtool
 *.tar.gz
 stamp-h1
