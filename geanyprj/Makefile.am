@@ -12,11 +12,3 @@ DISTCLEANFILES =			\
 	intltool-extract		\
 	intltool-merge			\
 	intltool-update
-
-.PHONY: ChangeLog mrproper
-
-ChangeLog:
-	git log > ChangeLog
-
-mrproper:
-	git clean -d -x -f
