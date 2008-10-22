@@ -1,4 +1,4 @@
-.. |(version)| replace:: 0.3
+.. |(version)| replace:: 0.4
 
 =======
 geanyvc
@@ -32,8 +32,8 @@ Bazaar, GIT, Mercurial, Subversion, SVK::
  * revert file
  * add file
  * remove file
+ * update
  * commit
- * blame
 
 CVS::
 
@@ -45,6 +45,7 @@ CVS::
  * log project
  * status
  * revert file
+ * update
 
 Requirements
 ============
@@ -78,13 +79,24 @@ could cause a big number of sometimes annoying "Do you want to save"-dialogs.
 Shows a confirmation dialog on adding a new (created) file to VCS. If not set
 you will not see dialog "Do you want to add <file>?"
 
-* Enable CVS/GIT/Mercurial/SVN/SVK/Bazaar
+* Maximize commit dialog
+
+If this option is activated, commit dialog will fit the full size of your
+monitor. If it is not set commit dialog size will be 700x500.
+
+* Use external diff viewer
+
+If this option is activated and you have **meld**, **kompare**, **kdiff3**, 
+**diffuse** or **tkdiff** available from command line, one of these program 
+will be used to show differences for "Diff From Current File" command.
+
+* Enable CVS/GIT/SVN/SVK/Bazaar/Mercurial
 
 geanyvc detect if opened file is in version control by checking directories
 and executing commands from version control systems toolchain. These options
 disable checking for particular version control system. Disabling not
 required ones can speed up things. So it is recommended to activate svk only
-if you want to use it, since it is quiet slowly.
+if you want to use it, since it is quiet slow.
 
 License
 =======
