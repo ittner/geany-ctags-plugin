@@ -1,12 +1,13 @@
 # Contributor: Yura Siamashka <yurand2@gmail.com>
+
 pkgname=geanydoc
 pkgver=VERSION
 pkgrel=1
 pkgdesc="Plugin for Geany IDE that execute specified commands for the word at the cursor"
 arch=(i686 x86_64)
-url="http://users.cosmostv.by/yurand/geanydoc/"
+url="http://geany-plugins.sourceforge.net/geanydoc/"
 license=("GPL3")
-depends=('geany>=0.14')
+depends=('geany>=0.15')
 makedepends=()
 conflicts=()
 replaces=()
