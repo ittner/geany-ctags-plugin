@@ -89,7 +89,7 @@ svn checkout
 http://geany-plugins.svn.sourceforge.net/svnroot/geany-plugins/trunk/geanysendmail
 
 If you want to create a patch, please respect the license of GeanySendMail
-as well as interlectual property of third. Patches that should be
+as well as intellectual property of third. Patches that should be
 included to the default distribution must be licensed under the same conditions
 as GeanySendMail by the copyright owner.
 
@@ -101,9 +101,10 @@ During installation it might happen, that the plugin wants to install the
 files for localization to /usr/local as a prefix. This can be avoided by
 adding --prefix="/new/path" when running configure/autogen.sh.
 
-On Windows systemy you maybe also have some trouble with quoting of
-placeholders. Please ask your local Windows geek for help in case some
-problems are occuring with it.
+In case you are working with white spaces either in your path names,
+file names or at mail addresses (e.g. for separating two addresses) you
+should keep care of proper quoting since %s, %b and %r will be replaced
+without any quotes.
 
 For more recent information all reported issues will be tracked at
 http://sourceforge.net/tracker/?group_id=222729
