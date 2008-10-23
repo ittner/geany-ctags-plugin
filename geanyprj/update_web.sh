@@ -10,5 +10,5 @@ fi
 PLUGIN=`pwd | xargs basename`
 
 rst2html.py README > index.html
-scp index.html ${USERNAME}@shell.sourceforge.net:/home/groups/g/ge/geany-plugins/htdocs/${PLUGIN}
+scp index.html ${USERNAME}@web.sourceforge.net:/home/groups/g/ge/geany-plugins/htdocs/${PLUGIN}
 rm index.html

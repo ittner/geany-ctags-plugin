@@ -4,9 +4,9 @@ pkgver=VERSION
 pkgrel=1
 pkgdesc="Alternative project management plugin for Geany IDE"
 arch=(i686 x86_64)
-url="http://users.cosmostv.by/yurand/geanyprj/"
+url="http://geany-plugins.sourceforge.net/geanyprj/"
 license=("GPL3")
-depends=('geany>=0.14')
+depends=('geany>=0.15')
 makedepends=()
 conflicts=()
 replaces=()

@@ -1,4 +1,4 @@
-.. |(version)| replace:: 0.3
+.. |(version)| replace:: 0.4
 
 ========
 geanyprj
@@ -75,16 +75,16 @@ Example of usage
 
 Lets see plugin work at Geany source code example:
 
-1) Download geany-0.13.tar.gz (http://prdownloads.sourceforge.net/geany/geany-0.13.tar.gz?download)
+1) Download geany-0.15.tar.gz (http://prdownloads.sourceforge.net/geany/geany-0.15.tar.gz?download)
 
-2) Unpack it somewhere, for example in ~/src/geany-0.13
+2) Unpack it somewhere, for example in ~/src/geany-0.15
 
-3) Open ~/src/geany-0.13/configure.in
+3) Open ~/src/geany-0.15/configure.in
 
 4) Click "Tools->Project->New Project", and click "Create" button
 
- This will create and save .geanyprj file in ~/src/geany-0.13. From now, every time you
- open file from ~/src/geany-0.13 dirrectory or it's subdirrectory .geanyprj will be opened.
+ This will create and save .geanyprj file in ~/src/geany-0.15. From now, every time you
+ open file from ~/src/geany-0.15 dirrectory or it's subdirrectory .geanyprj will be opened.
  So next time you don't have to create or open project manually.
 
 5) Open any geany source code code file
@@ -127,7 +127,7 @@ the current code style. Run this script before commit.
 Download
 ========
 
-The current version is |(version)|, download it here http://users.cosmostv.by/yurand/geanyprj/geanyprj-0.3.tar.gz
+The current version is |(version)|, download it here http://users.cosmostv.by/yurand/geanyprj/geanyprj-0.4.tar.gz
 
 Up to date source code can be downloaded here::
 
@@ -146,7 +146,7 @@ A package for Arch Linux is available here: http://aur.archlinux.org/packages.ph
 Windows
 -------
 
-A windows installer is available here: http://users.cosmostv.by/yurand/geanyprj/geanyprj-0.3_setup.exe
+A windows installer is available here: http://users.cosmostv.by/yurand/geanyprj/geanyprj-0.4_setup.exe
 
 2007-2008 by Yura Siamashka
 yurand2(at)gmail(dot)com

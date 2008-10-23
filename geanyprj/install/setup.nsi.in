@@ -21,7 +21,7 @@ LicenseData ../COPYING
 Function .onInit
   ReadRegStr $R0 "HKLM" "Software\Microsoft\Windows\CurrentVersion\Uninstall\Geany" "UninstallString"
   StrCmp $R0 "" warning
-    ${StrRep} $INSTDIR $R0 "uninst.exe" "plugins"
+    ${StrRep} $INSTDIR $R0 "uninst.exe" "lib"
     goto done
   warning:
    	MessageBox MB_OK|MB_ICONEXCLAMATION "You need install geany first."
