@@ -8,6 +8,7 @@ SRC_URI="http://users.cosmostv.by/yurand/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
+IUSE=""
 KEYWORDS="~amd64 ~x86"
 
 RDEPEND=">=dev-util/geany-0.15"
