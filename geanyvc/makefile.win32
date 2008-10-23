@@ -20,7 +20,7 @@ TARGET = geanyvc.dll
 .SUFFIXES: .c .o
 -include localwin32.mk
 
-OBJS =	geanyvc.o vc_cvs.o vc_svk.o vc_svn.o vc_git.o vc_bzr.o vc_hg.o
+OBJS =	externdiff.o geanyvc.o utils.o vc_cvs.o vc_svk.o vc_svn.o vc_git.o vc_bzr.o vc_hg.o
 INCLUDEDIRS=  -I. -I.. \
               -I$(GEANY_SRC) \
               -I$(GEANY_SRC)/src \

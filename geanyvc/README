@@ -14,6 +14,8 @@ version-control systems inside Geany IDE. Only small subset of vc is
 implemented, but, hey, you don't need anything besides diff, log, status,
 revert and commit most time.
 
+In order to use it you need Geany 0.15.
+
 Features
 ========
 
@@ -130,7 +132,7 @@ the current code style. Run this script before commit.
 Download
 ========
 
-The current version is |(version)|, download it here http://users.cosmostv.by/yurand/geanyvc/geanyvc-0.3.tar.gz
+The current version is |(version)|, download it here http://users.cosmostv.by/yurand/geanyvc/geanyvc-0.4.tar.gz
 
 Up to date source code can be downloaded here::
 
@@ -156,7 +158,7 @@ To install geanyvc, just run the following command::
 Windows
 -------
 
-A windows installer is available here: http://users.cosmostv.by/yurand/geanyvc/geanyvc-0.3_setup.exe
+A windows installer is available here: http://users.cosmostv.by/yurand/geanyvc/geanyvc-0.4_setup.exe
 
 --
 2007-2008 by Yura Siamashka and Frank Lanitz
