@@ -65,6 +65,8 @@ gint speller_check_word(GeanyDocument *doc, gint line_number, const gchar *word,
 	gchar **suggs;
 	GString *str = g_string_sized_new(256);
 
+	g_return_val_if_fail(speller_dict != NULL, 0);
+
 	/* ignore numbers or words starting with digits */
 	if (isdigit(*word))
 		return 0;
@@ -154,6 +156,8 @@ void speller_check_document(GeanyDocument *doc)
 	gchar *dict_string = NULL;
 	gint suggestions_found = 0;
 
+	g_return_if_fail(speller_dict != NULL);
+
 	enchant_dict_describe(speller_dict, dict_describe, &dict_string);
 
 	if (p_sci->has_selection(doc->editor->sci))
@@ -235,9 +239,14 @@ void speller_reinit_enchant_dict(void)
 	 * one in the list if not */
 	if (! check_default_lang())
 	{
-		lang = g_ptr_array_index(sc->dicts, 0);
-		g_warning("Stored language ('%s') could not be loaded. Falling back to '%s'",
-			sc->default_language, lang);
+		if (sc->dicts->len > 0)
+		{
+			lang = g_ptr_array_index(sc->dicts, 0);
+			g_warning("Stored language ('%s') could not be loaded. Falling back to '%s'",
+				sc->default_language, lang);
+		}
+		else
+			g_warning("Stored language ('%s') could not be loaded.", sc->default_language);
 	}
 
 	/* Request new dict object */
@@ -313,6 +322,8 @@ static void create_dicts_array(void)
 
 void speller_dict_free_string_list(gchar **tmp_suggs)
 {
+	g_return_if_fail(speller_dict != NULL);
+
 	enchant_dict_free_string_list(speller_dict, tmp_suggs);
 }
 
@@ -325,12 +336,16 @@ void speller_add_word(const gchar *word)
 
 gboolean speller_dict_check(const gchar *word)
 {
+	g_return_val_if_fail(speller_dict != NULL, FALSE);
+
 	return enchant_dict_check(speller_dict, word, -1);
 }
 
 
 gchar **speller_dict_suggest(const gchar *word, gsize *n_suggs)
 {
+	g_return_val_if_fail(speller_dict != NULL, NULL);
+
 	return enchant_dict_suggest(speller_dict, word, -1, n_suggs);
 }
 
@@ -347,6 +362,7 @@ void speller_init(void)
 
 void speller_free(void)
 {
-	enchant_broker_free_dict(speller_broker, speller_dict);
+	if (speller_dict != NULL)
+		enchant_broker_free_dict(speller_broker, speller_dict);
 	enchant_broker_free(speller_broker);
 }

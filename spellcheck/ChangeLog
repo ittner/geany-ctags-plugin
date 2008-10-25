@@ -1,3 +1,10 @@
+2008-10-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/speller.c:
+   Add some error checking and prevent crashes if Enchant doesn't
+   provide any dictionaries.
+
+
 2008-10-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/spellcheck.c, src/scplugin.c, src/gui.c, src/speller.c,
