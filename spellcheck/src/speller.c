@@ -57,15 +57,15 @@ static void dict_describe(const gchar* const lang, const gchar* const name,
 }
 
 
-gint speller_check_word(GeanyDocument *doc, gint line_number, const gchar *word,
+static gint speller_check_word(GeanyDocument *doc, gint line_number, const gchar *word,
 					    gint start_pos, gint end_pos)
 {
-	gsize j;
 	gsize n_suggs = 0;
-	gchar **suggs;
-	GString *str;
 
 	g_return_val_if_fail(speller_dict != NULL, 0);
+
+	if (! NZV(word))
+		return 0;
 
 	/* ignore numbers or words starting with digits */
 	if (isdigit(*word))
@@ -75,33 +75,39 @@ gint speller_check_word(GeanyDocument *doc, gint line_number, const gchar *word,
 	if (enchant_dict_check(speller_dict, word, -1) == 0)
 		return 0;
 
-	str = g_string_sized_new(256);
-	suggs = enchant_dict_suggest(speller_dict, word, -1, &n_suggs);
+	if (start_pos == -1)
+		start_pos = end_pos - strlen(word);
 
-	if (suggs != NULL)
+	p_editor->set_indicator(doc->editor, start_pos, end_pos);
+
+	if (sc->use_msgwin)
 	{
-		g_string_append_printf(str, "line %d: %s | ",  line_number + 1, word);
+		gsize j;
+		gchar **suggs;
+		GString *str;
 
-		g_string_append(str, _("Try: "));
-
-		/* Now find the misspellings in the line, limit suggestions to a maximum of 15 (for now) */
-		for (j = 0; j < MIN(n_suggs, 15); j++)
+		str = g_string_sized_new(256);
+		suggs = enchant_dict_suggest(speller_dict, word, -1, &n_suggs);
+		if (suggs != NULL)
 		{
-			g_string_append(str, suggs[j]);
-			g_string_append_c(str, ' ');
-		}
+			g_string_append_printf(str, "line %d: %s | ",  line_number + 1, word);
 
-		if (start_pos == -1)
-			start_pos = end_pos - strlen(word);
+			g_string_append(str, _("Try: "));
 
-		p_editor->set_indicator(doc->editor, start_pos, end_pos);
-		if (sc->use_msgwin)
+			/* Now find the misspellings in the line, limit suggestions to a maximum of 15 (for now) */
+			for (j = 0; j < MIN(n_suggs, 15); j++)
+			{
+				g_string_append(str, suggs[j]);
+				g_string_append_c(str, ' ');
+			}
+
 			p_msgwindow->msg_add(COLOR_RED, line_number + 1, doc, "%s", str->str);
 
-		if (suggs != NULL && n_suggs)
-			enchant_dict_free_string_list(speller_dict, suggs);
+			if (suggs != NULL && n_suggs > 0)
+				enchant_dict_free_string_list(speller_dict, suggs);
+		}
+		g_string_free(str, TRUE);
 	}
-	g_string_free(str, TRUE);
 
 	return n_suggs;
 }
@@ -194,7 +200,6 @@ void speller_check_document(GeanyDocument *doc)
 
 		g_free(line);
 	}
-
 	if (suggestions_found == 0 && sc->use_msgwin)
 		p_msgwindow->msg_add(COLOR_BLUE, -1, NULL, _("The checked text is spelled correctly."));
 }

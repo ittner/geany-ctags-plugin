@@ -4,6 +4,9 @@
    Add some error checking and prevent crashes if Enchant doesn't
    provide any dictionaries.
    Plug a little memory leak.
+   If showing suggestions in the messages window is disabled, don't
+   check for suggestions at all, this heavily reduces the time needed
+   for a full document check.
  * src/gui.c:
    Ignore numbers when updating the editor menu.
    Rename the editor menu item to 'Spelling Suggestions'.
