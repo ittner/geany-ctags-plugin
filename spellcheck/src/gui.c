@@ -27,6 +27,7 @@
 #include "support.h"
 
 #include <ctype.h>
+#include <string.h>
 
 #include "plugindata.h"
 
@@ -111,17 +112,6 @@ void gui_toolbar_update(void)
 }
 
 
-static void clear_indicators_on_range(GeanyDocument *doc, gint start, gint len)
-{
-	g_return_if_fail(doc != NULL);
-
-	if (len > 0)
-	{
-		p_sci->indicator_clear(doc->editor->sci, start, start + len);
-	}
-}
-
-
 static void clear_indicators_on_line(GeanyDocument *doc, gint line_number)
 {
 	gint start_pos, length;
@@ -131,7 +121,7 @@ static void clear_indicators_on_line(GeanyDocument *doc, gint line_number)
 	start_pos = p_sci->get_position_from_line(doc->editor->sci, line_number);
 	length = p_sci->get_line_length(doc->editor->sci, line_number);
 
-	clear_indicators_on_range(doc, start_pos, length);
+	p_sci->indicator_clear(doc->editor->sci, start_pos, length);
 }
 
 
@@ -158,29 +148,44 @@ static void menu_suggestion_item_activate_cb(GtkMenuItem *menuitem, gpointer gda
 		p_sci->set_selection_end(clickinfo.doc->editor->sci, endword);
 		p_sci->replace_sel(clickinfo.doc->editor->sci, sugg);
 
-		clear_indicators_on_range(clickinfo.doc, startword, endword - startword);
+		p_sci->indicator_clear(clickinfo.doc->editor->sci, startword, endword - startword);
 	}
 }
 
 
 static void on_menu_addword_item_activate(GtkMenuItem *menuitem, gpointer gdata)
 {
-	gint startword, endword;
+	gint startword, endword, i, doc_len;
+	ScintillaObject *sci;
+	GString *str;
 
 	if (clickinfo.doc == NULL || clickinfo.word == NULL || clickinfo.pos == -1)
 		return;
 
-	/** TODO re-check the whole document */
 	speller_add_word(clickinfo.word);
 
-	startword = p_sci->send_message(
-		clickinfo.doc->editor->sci, SCI_WORDSTARTPOSITION, clickinfo.pos, 0);
-	endword = p_sci->send_message(
-		clickinfo.doc->editor->sci, SCI_WORDENDPOSITION, clickinfo.pos, 0);
-	if (startword != endword)
+	/* Remove all indicators on the added word */
+	sci = clickinfo.doc->editor->sci;
+	str = g_string_sized_new(256);
+	doc_len = p_sci->get_length(sci);
+	for (i = 0; i < doc_len; i++)
 	{
-		clear_indicators_on_range(clickinfo.doc, startword, endword - startword);
+		startword = p_sci->send_message(sci, SCI_INDICATORSTART, 0, i);
+		if (startword >= 0)
+		{
+			endword = p_sci->send_message(sci, SCI_INDICATOREND, 0, startword);
+
+			if (str->len < (guint)(endword - startword + 1))
+				str = g_string_set_size(str, endword - startword + 1);
+			p_sci->get_text_range(sci, startword, endword, str->str);
+
+			if (strncmp(str->str, clickinfo.word, str->len) == 0)
+				p_sci->indicator_clear(sci, startword, endword - startword);
+
+			i = endword + 1;
+		}
 	}
+	g_string_free(str, TRUE);
 }
 
 
