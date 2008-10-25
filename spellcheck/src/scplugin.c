@@ -68,6 +68,7 @@ SpellClickInfo clickinfo;
 enum
 {
 	KB_SPELL_CHECK,
+	KB_SPELL_TOOGLE_TYPING,
 	KB_COUNT
 };
 PLUGIN_KEY_GROUP(spellcheck, KB_COUNT)
@@ -222,8 +223,11 @@ void plugin_init(GeanyData *data)
 		"key-release-event", G_CALLBACK(gui_key_release_cb), NULL);
 
 	/* setup keybindings */
-	p_keybindings->set_item(plugin_key_group, KB_SPELL_CHECK, gui_kb_activate_cb,
+	p_keybindings->set_item(plugin_key_group, KB_SPELL_CHECK, gui_kb_run_activate_cb,
 		0, 0, "spell_check", _("Run Spell Check"), NULL);
+	p_keybindings->set_item(plugin_key_group, KB_SPELL_TOOGLE_TYPING,
+		gui_kb_toggle_typing_activate_cb, 0, 0, "spell_toggle_typing",
+		_("Toggle Check While Typing"), NULL);
 }
 
 

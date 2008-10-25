@@ -64,6 +64,15 @@ void gui_perform_check(GeanyDocument *doc)
 }
 
 
+static void print_typing_changed_message(void)
+{
+	if (sc->check_while_typing)
+		p_ui->set_statusbar(FALSE, _("Spell checking while typing is now enabled"));
+	else
+		p_ui->set_statusbar(FALSE, _("Spell checking while typing is now disabled"));
+}
+
+
 static void toolbar_item_toggled_cb(GtkToggleToolButton *button, gpointer user_data)
 {
 	if (ignore_sc_callback)
@@ -71,8 +80,8 @@ static void toolbar_item_toggled_cb(GtkToggleToolButton *button, gpointer user_d
 
 	sc->check_while_typing = gtk_toggle_tool_button_get_active(button);
 
-	p_ui->set_statusbar(FALSE, _("Spell checking while typing is now %s"),
-		(sc->check_while_typing) ? _("enabled") : _("disabled"));
+	print_typing_changed_message();
+
 }
 
 
@@ -334,9 +343,19 @@ static void menu_item_activate_cb(GtkMenuItem *menuitem, gpointer gdata)
 }
 
 
-void gui_kb_activate_cb(guint key_id)
+void gui_kb_run_activate_cb(guint key_id)
 {
 	menu_item_activate_cb(NULL, NULL);
+}
+
+
+void gui_kb_toggle_typing_activate_cb(guint key_id)
+{
+	sc->check_while_typing = ! sc->check_while_typing;
+
+	print_typing_changed_message();
+
+	gui_toolbar_update();
 }
 
 

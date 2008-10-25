@@ -33,8 +33,9 @@ void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 
 gboolean gui_key_release_cb(GtkWidget *widget, GdkEventKey *ev, gpointer user_data);
 
-void gui_kb_activate_cb(guint key_id);
+void gui_kb_run_activate_cb(guint key_id);
 
+void gui_kb_toggle_typing_activate_cb(guint key_id);
 
 void gui_create_edit_menu(void);
 
