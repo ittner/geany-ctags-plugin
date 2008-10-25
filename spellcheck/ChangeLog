@@ -3,6 +3,10 @@
  * src/speller.c:
    Add some error checking and prevent crashes if Enchant doesn't
    provide any dictionaries.
+   Plug a little memory leak.
+ * src/gui.c:
+   Ignore numbers when updating the editor menu.
+   Rename the editor menu item to 'Spelling Suggestions'.
 
 
 2008-10-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

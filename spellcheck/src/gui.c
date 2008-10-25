@@ -26,6 +26,7 @@
 #include "geany.h"
 #include "support.h"
 
+#include <ctype.h>
 
 #include "plugindata.h"
 
@@ -195,6 +196,10 @@ void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 	gtk_widget_hide(sc->edit_menu);
 	gtk_widget_hide(sc->edit_menu_sep);
 
+	/* ignore numbers or words starting with digits */
+	if (isdigit(*word))
+		return;
+
 	if (! NZV(word) || speller_dict_check(word) == 0)
 		return;
 
@@ -332,7 +337,11 @@ void gui_kb_activate_cb(guint key_id)
 
 void gui_create_edit_menu(void)
 {
-	sc->edit_menu = gtk_image_menu_item_new_from_stock(GTK_STOCK_SPELL_CHECK, NULL);
+	GtkWidget *image;
+
+	image = gtk_image_new_from_stock(GTK_STOCK_SPELL_CHECK, GTK_ICON_SIZE_MENU);
+	sc->edit_menu = gtk_image_menu_item_new_with_label(_("Spelling Suggestions"));
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(sc->edit_menu), image);
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), sc->edit_menu);
 	gtk_menu_reorder_child(GTK_MENU(geany->main_widgets->editor_menu), sc->edit_menu, 0);
 

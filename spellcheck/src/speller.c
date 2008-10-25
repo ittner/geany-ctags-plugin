@@ -63,7 +63,7 @@ gint speller_check_word(GeanyDocument *doc, gint line_number, const gchar *word,
 	gsize j;
 	gsize n_suggs = 0;
 	gchar **suggs;
-	GString *str = g_string_sized_new(256);
+	GString *str;
 
 	g_return_val_if_fail(speller_dict != NULL, 0);
 
@@ -75,6 +75,7 @@ gint speller_check_word(GeanyDocument *doc, gint line_number, const gchar *word,
 	if (enchant_dict_check(speller_dict, word, -1) == 0)
 		return 0;
 
+	str = g_string_sized_new(256);
 	suggs = enchant_dict_suggest(speller_dict, word, -1, &n_suggs);
 
 	if (suggs != NULL)
