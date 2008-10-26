@@ -168,6 +168,11 @@ def configure(conf):
 				if not p.name in skipped_plugins:
 					enabled_plugins.append(p.name)
 
+	# remove enabled but not existent plugins
+	for p in plugins:
+		if p.name in enabled_plugins and not os.path.exists(p.name):
+			enabled_plugins.remove(p.name)
+
 	# check for plugin deps
 	for p in plugins:
 		if p.name in enabled_plugins:
