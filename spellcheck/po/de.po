@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: spellcheck 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-01 14:09+0200\n"
-"PO-Revision-Date: 2008-09-01 14:23+0100\n"
-"Last-Translator: Enrico Tröger <enrico.troeger@uvena.de>\n"
+"POT-Creation-Date: 2008-10-29 20:00+0100\n"
+"PO-Revision-Date: 2008-10-29 20:13+0100\n"
+"Last-Translator: Enrico Tröger <enrico@xfce.org>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -19,78 +19,109 @@ msgstr ""
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: ../src/spellcheck.c:59
+#: src/scplugin.c:58
 msgid "Spell Check"
 msgstr "Rechtschreibprüfung"
 
-#: ../src/spellcheck.c:59
+#: src/scplugin.c:58
 msgid "Checks the spelling of the current document."
 msgstr "Prüft die Rechtschreibung im aktuellen Dokument."
 
-#: ../src/spellcheck.c:60
+#: src/scplugin.c:59
 msgid "The Geany developer team"
 msgstr "Das Geany-Entwickler-Team"
 
-#: ../src/spellcheck.c:259
+#: src/scplugin.c:167
+msgid "Plugin configuration directory could not be created."
+msgstr ""
+"Das Konfigurationsverzeichnis für das Plugin konnte nicht erstellt werden."
+
+#: src/scplugin.c:230
+msgid "Run Spell Check"
+msgstr "Rechtschreibprüfung ausführen"
+
+#: src/scplugin.c:233
+msgid "Toggle Check While Typing"
+msgstr "'Rechtschreibung beim Tippen überprüfen' ein-/ausschalten"
+
+#: src/scplugin.c:244
+msgid "Check spelling while typing"
+msgstr "Beim Tippen Rechtschreibung überprüfen"
+
+#: src/scplugin.c:248
+msgid "Show toolbar item to toggle spell checking"
+msgstr ""
+"Zeige Symbol in der Werkzeugleiste um 'Rechtschreibung beim Tippen "
+"überprüfen' ein- und auszuschalten"
+
+#: src/scplugin.c:253
+msgid "Print misspelled words and suggestions in the messages window"
+msgstr "Falsch geschriebene Wörter und Vorschläge im Meldungsfenster anzeigen"
+
+#: src/scplugin.c:257
+msgid "Language to use for the spell check:"
+msgstr "Zu verwendende Sprache für die Prüfung:"
+
+#: src/gui.c:70
+msgid "Spell checking while typing is now enabled"
+msgstr "'Rechtschreibung beim Tippen überprüfen' ist nun eingeschaltet"
+
+#: src/gui.c:72
+msgid "Spell checking while typing is now disabled"
+msgstr "'Rechtschreibung beim Tippen überprüfen' ist nun ausgeschaltet"
+
+#: src/gui.c:106
+msgid "Toggle spell check while typing."
+msgstr "'Rechtschreibung beim Tippen überprüfen' ein-/ausschalten."
+
+#: src/gui.c:259
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "»%s« zum Wörterbuch hinzufügen"
 
-#: ../src/spellcheck.c:302
+#: src/gui.c:267
+msgid "Ignore All"
+msgstr "Alle ignorieren"
+
+#: src/gui.c:378
+msgid "Spelling Suggestions"
+msgstr "Rechtschreib-Vorschläge"
+
+#: src/gui.c:401
+msgid "Default"
+msgstr "Standard"
+
+#: src/speller.c:95
 msgid "Try: "
 msgstr "Vorschlag: "
 
-#: ../src/spellcheck.c:388
+#: src/speller.c:179
 #, c-format
 msgid "Checking file \"%s\" (lines %d to %d using %s):"
 msgstr "Prüfe Datei »%s« (Zeilen %d bis %d mit »%s«):"
 
-#: ../src/spellcheck.c:398
+#: src/speller.c:189
 #, c-format
 msgid "Checking file \"%s\" (using %s):"
 msgstr "Prüfe Datei »%s« (mit »%s«):"
 
-#: ../src/spellcheck.c:414
+#: src/speller.c:204
 msgid "The checked text is spelled correctly."
 msgstr "Der geprüfte Text ist fehlerfrei."
 
-#: ../src/spellcheck.c:485
+#: src/speller.c:212
 #, c-format
 msgid "The Enchant library couldn't be initialized (%s)."
 msgstr "Die Enchant-Blibliothek konnte nicht initialisiert werden (%s)."
 
-#: ../src/spellcheck.c:486
+#: src/speller.c:213
 msgid "unknown error (maybe the chosen language is not available)"
-msgstr "unbekannter Fehler (möglicherweise ist die ausgewählte Sprache nicht verfügbar)."
+msgstr ""
+"unbekannter Fehler (möglicherweise ist die ausgewählte Sprache nicht "
+"verfügbar)."
 
-#: ../src/spellcheck.c:631
-msgid "Plugin configuration directory could not be created."
-msgstr "Das Konfigurationsverzeichnis für das Plugin konnte nicht erstellt werden."
-
-#: ../src/spellcheck.c:686
-msgid "Default"
-msgstr "Standard"
-
-#: ../src/spellcheck.c:728
-msgid "_Spell Check"
-msgstr "_Rechtschreibprüfung"
-
-#: ../src/spellcheck.c:751
-msgid "Run Spell Check"
-msgstr "Rechtschreibprüfung ausführen"
-
-#: ../src/spellcheck.c:762
-msgid "Check spelling while typing"
-msgstr "Beim Tippen Rechtschreibung überprüfen"
-
-#: ../src/spellcheck.c:767
-msgid "Print misspelled words and suggestions in the messages window"
-msgstr "Falsch geschriebene Wörter und Vorschläge im Meldungsfenster anzeigen"
-
-#: ../src/spellcheck.c:771
-msgid "Language to use for the spell check:"
-msgstr "Zu verwendende Sprache für die Prüfung:"
+#~ msgid "_Spell Check"
+#~ msgstr "_Rechtschreibprüfung"
 
 #~ msgid "Checking file \"%s\":"
 #~ msgstr "Prüfe Datei »%s«"
-

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-15 18:36+0200\n"
+"POT-Creation-Date: 2008-10-29 20:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,48 +16,98 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/spellcheck.c:51 src/spellcheck.c:332
+#: src/scplugin.c:58
 msgid "Spell Check"
 msgstr ""
 
-#: src/spellcheck.c:51
+#: src/scplugin.c:58
 msgid "Checks the spelling of the current document."
 msgstr ""
 
-#: src/spellcheck.c:52
+#: src/scplugin.c:59
 msgid "The Geany developer team"
 msgstr ""
 
-#: src/spellcheck.c:112
-#, c-format
-msgid "Checking file \"%s\" (lines %d to %d):"
+#: src/scplugin.c:167
+msgid "Plugin configuration directory could not be created."
 msgstr ""
 
-#: src/spellcheck.c:119
-#, c-format
-msgid "Checking file \"%s\":"
-msgstr ""
-
-#: src/spellcheck.c:152
-msgid "Try: "
-msgstr ""
-
-#: src/spellcheck.c:168
-msgid "The checked text is spelled correctly."
-msgstr ""
-
-#: src/spellcheck.c:312
-msgid "_Spell Check"
-msgstr ""
-
-#: src/spellcheck.c:322
+#: src/scplugin.c:230
 msgid "Run Spell Check"
 msgstr ""
 
-#: src/spellcheck.c:339
+#: src/scplugin.c:233
+msgid "Toggle Check While Typing"
+msgstr ""
+
+#: src/scplugin.c:244
+msgid "Check spelling while typing"
+msgstr ""
+
+#: src/scplugin.c:248
+msgid "Show toolbar item to toggle spell checking"
+msgstr ""
+
+#: src/scplugin.c:253
+msgid "Print misspelled words and suggestions in the messages window"
+msgstr ""
+
+#: src/scplugin.c:257
 msgid "Language to use for the spell check:"
 msgstr ""
 
-#: src/spellcheck.c:371
-msgid "Plugin configuration directory could not be created."
+#: src/gui.c:70
+msgid "Spell checking while typing is now enabled"
+msgstr ""
+
+#: src/gui.c:72
+msgid "Spell checking while typing is now disabled"
+msgstr ""
+
+#: src/gui.c:106
+msgid "Toggle spell check while typing."
+msgstr ""
+
+#: src/gui.c:259
+#, c-format
+msgid "Add \"%s\" to Dictionary"
+msgstr ""
+
+#: src/gui.c:267
+msgid "Ignore All"
+msgstr ""
+
+#: src/gui.c:378
+msgid "Spelling Suggestions"
+msgstr ""
+
+#: src/gui.c:401
+msgid "Default"
+msgstr ""
+
+#: src/speller.c:95
+msgid "Try: "
+msgstr ""
+
+#: src/speller.c:179
+#, c-format
+msgid "Checking file \"%s\" (lines %d to %d using %s):"
+msgstr ""
+
+#: src/speller.c:189
+#, c-format
+msgid "Checking file \"%s\" (using %s):"
+msgstr ""
+
+#: src/speller.c:204
+msgid "The checked text is spelled correctly."
+msgstr ""
+
+#: src/speller.c:212
+#, c-format
+msgid "The Enchant library couldn't be initialized (%s)."
+msgstr ""
+
+#: src/speller.c:213
+msgid "unknown error (maybe the chosen language is not available)"
 msgstr ""
