@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GeanyLaTeX\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-01 20:13+0200\n"
+"POT-Creation-Date: 2008-10-29 20:27+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: geany-118n <geany-118n@uvena.de>\n"
@@ -13,39 +13,39 @@ msgstr ""
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: src/geanylatex.c:55
+#: src/geanylatex.c:54
 msgid "LaTeX"
 msgstr "LaTeX"
 
-#: src/geanylatex.c:55
+#: src/geanylatex.c:54
 msgid "Plugin to make Geany better support LaTeX"
 msgstr "Plugin zum Verbessern des LaTeX-Support für Geany"
 
-#: src/geanylatex.c:133
+#: src/geanylatex.c:135
 msgid "Insert label"
 msgstr "Lesezeichen einfügen"
 
-#: src/geanylatex.c:146
+#: src/geanylatex.c:148
 msgid "Label name:"
 msgstr "Lesezeichenname:"
 
-#: src/geanylatex.c:177
+#: src/geanylatex.c:179
 msgid "Insert reference"
 msgstr "Verweis einfügen"
 
-#: src/geanylatex.c:190
+#: src/geanylatex.c:192
 msgid "Ref name:"
 msgstr "Lesezeichenname:"
 
-#: src/geanylatex.c:200
+#: src/geanylatex.c:202
 msgid "standard reference"
 msgstr "Normaler Verweis"
 
-#: src/geanylatex.c:205
+#: src/geanylatex.c:207
 msgid "page reference"
 msgstr "Verweis auf Seite"
 
-#: src/geanylatex.c:370
+#: src/geanylatex.c:372
 msgid "More"
 msgstr "Weitere"
 
@@ -55,7 +55,7 @@ msgid "Documentclass:"
 msgstr "Dokumentenklasse:"
 
 #: src/geanylatex.c:466
-msgid "Chooce the kind of document you want to write"
+msgid "Choose the kind of document you want to write"
 msgstr "Art des Dokumentes"
 
 #. Encoding
@@ -85,6 +85,7 @@ msgstr "Autor:"
 msgid ""
 "Sets the entry of \\author command. In most cases here should stay your name"
 msgstr ""
+"Setzt den Eintrag für den \\author Befehl. Meist sollte hier Ihr Name stehen."
 
 #. Date
 #: src/geanylatex.c:528
@@ -97,6 +98,8 @@ msgid ""
 "LaTeX-document. Keeping it at \\today is a good decision if you don't need "
 "any fixed date."
 msgstr ""
+"Setzt den Eintrag für den \\date Befehl im Kopf des neuen Dokumentes. In den "
+"meisten Fällen sollte \\today eine gute Wahl sein."
 
 #. Title of the new document
 #: src/geanylatex.c:538
@@ -105,7 +108,7 @@ msgstr "Titel:"
 
 #: src/geanylatex.c:540
 msgid "Sets the title of your newly document."
-msgstr ""
+msgstr "Setzt den Titel für das neue Dokument."
 
 #. Papersize
 #: src/geanylatex.c:547
@@ -115,6 +118,8 @@ msgstr "Papiergröße:"
 #: src/geanylatex.c:550
 msgid "Chooce the paper format for the new created document"
 msgstr ""
+"Setzt das Papierformat als Argument der Dokumentenklasse für das neue "
+"Dokument"
 
 #. Buidling the wizard-dialog and showing it
 #: src/geanylatex.c:565
@@ -131,6 +136,8 @@ msgid ""
 "Keep in mind: To compile your document these classes have to been installed "
 "before."
 msgstr ""
+"Wenn diese Option aktiviert ist, werden die KOMA-Skript-Klassen von Markus "
+"Kohm genutzt. Sie müssen natürlich dafür installiert sein."
 
 #: src/geanylatex.c:584
 msgid "Use draft mode"
@@ -141,54 +148,56 @@ msgid ""
 "Set the draft flag inside new created documents to get documents with a "
 "number of debugging helpers"
 msgstr ""
+"Setzt die Option draft für die Dokumentenklasse um das neue Dokument mit "
+"einer Nummer von kleinen Korrekturhinweisen zu versehen."
 
-#: src/geanylatex.c:836
+#: src/geanylatex.c:810
 msgid "Insert \\label"
 msgstr "\\label einfügen"
 
-#: src/geanylatex.c:837
+#: src/geanylatex.c:811
 msgid "Insert \\ref"
 msgstr "\\ref einfügen"
 
-#: src/geanylatex.c:838
+#: src/geanylatex.c:812
 msgid "Run LaTeX-Wizard"
 msgstr "LaTeX-Assistent starten"
 
-#: src/geanylatex.c:846
+#: src/geanylatex.c:820
 msgid "_LaTeX"
 msgstr "_LaTeX"
 
-#: src/geanylatex.c:853
+#: src/geanylatex.c:826
 msgid "LaTeX-_Wizard"
 msgstr "LaTeX-_Assistent"
 
-#: src/geanylatex.c:856
+#: src/geanylatex.c:829
 msgid "Starts a Wizard to create easily LaTeX-dokuments"
-msgstr ""
+msgstr "Öffnen einen Assistenten, um einfach LaTeX-Dokumente zu erstellen."
 
-#: src/geanylatex.c:861
+#: src/geanylatex.c:834
 msgid "Insert _Special Character"
 msgstr "_Sonderzeichen einfügen"
 
-#: src/geanylatex.c:863
+#: src/geanylatex.c:836
 msgid "Helps to use some not very common letters and signs"
-msgstr ""
+msgstr "Unterstützt bei der Verwendung von seltenen Sonderzeichen"
 
-#: src/geanylatex.c:870
+#: src/geanylatex.c:843
 msgid "Insert _Reference"
 msgstr "_Verweis einfügen"
 
-#: src/geanylatex.c:872
+#: src/geanylatex.c:845
 msgid "Inserting references to the document"
 msgstr "Eine Referenz in das Dokument einfügen"
 
-#: src/geanylatex.c:876
+#: src/geanylatex.c:849
 msgid "Insert _Label"
 msgstr "_Lesezeichen einfügen"
 
-#: src/geanylatex.c:878
+#: src/geanylatex.c:851
 msgid "Helps at inserting labels to a docuemnt"
-msgstr ""
+msgstr "Untersützt bei dem Einfügen von Lesezeichen in ein Dokument"
 
 #: src/latexencodings.c:37
 msgid "UTF-8"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-01 20:13+0200\n"
+"POT-Creation-Date: 2008-10-29 20:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,39 +16,39 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/geanylatex.c:55
+#: src/geanylatex.c:54
 msgid "LaTeX"
 msgstr ""
 
-#: src/geanylatex.c:55
+#: src/geanylatex.c:54
 msgid "Plugin to make Geany better support LaTeX"
 msgstr ""
 
-#: src/geanylatex.c:133
+#: src/geanylatex.c:135
 msgid "Insert label"
 msgstr ""
 
-#: src/geanylatex.c:146
+#: src/geanylatex.c:148
 msgid "Label name:"
 msgstr ""
 
-#: src/geanylatex.c:177
+#: src/geanylatex.c:179
 msgid "Insert reference"
 msgstr ""
 
-#: src/geanylatex.c:190
+#: src/geanylatex.c:192
 msgid "Ref name:"
 msgstr ""
 
-#: src/geanylatex.c:200
+#: src/geanylatex.c:202
 msgid "standard reference"
 msgstr ""
 
-#: src/geanylatex.c:205
+#: src/geanylatex.c:207
 msgid "page reference"
 msgstr ""
 
-#: src/geanylatex.c:370
+#: src/geanylatex.c:372
 msgid "More"
 msgstr ""
 
@@ -58,7 +58,7 @@ msgid "Documentclass:"
 msgstr ""
 
 #: src/geanylatex.c:466
-msgid "Chooce the kind of document you want to write"
+msgid "Choose the kind of document you want to write"
 msgstr ""
 
 #. Encoding
@@ -145,51 +145,51 @@ msgid ""
 "number of debugging helpers"
 msgstr ""
 
-#: src/geanylatex.c:836
+#: src/geanylatex.c:810
 msgid "Insert \\label"
 msgstr ""
 
-#: src/geanylatex.c:837
+#: src/geanylatex.c:811
 msgid "Insert \\ref"
 msgstr ""
 
-#: src/geanylatex.c:838
+#: src/geanylatex.c:812
 msgid "Run LaTeX-Wizard"
 msgstr ""
 
-#: src/geanylatex.c:846
+#: src/geanylatex.c:820
 msgid "_LaTeX"
 msgstr ""
 
-#: src/geanylatex.c:853
+#: src/geanylatex.c:826
 msgid "LaTeX-_Wizard"
 msgstr ""
 
-#: src/geanylatex.c:856
+#: src/geanylatex.c:829
 msgid "Starts a Wizard to create easily LaTeX-dokuments"
 msgstr ""
 
-#: src/geanylatex.c:861
+#: src/geanylatex.c:834
 msgid "Insert _Special Character"
 msgstr ""
 
-#: src/geanylatex.c:863
+#: src/geanylatex.c:836
 msgid "Helps to use some not very common letters and signs"
 msgstr ""
 
-#: src/geanylatex.c:870
+#: src/geanylatex.c:843
 msgid "Insert _Reference"
 msgstr ""
 
-#: src/geanylatex.c:872
+#: src/geanylatex.c:845
 msgid "Inserting references to the document"
 msgstr ""
 
-#: src/geanylatex.c:876
+#: src/geanylatex.c:849
 msgid "Insert _Label"
 msgstr ""
 
-#: src/geanylatex.c:878
+#: src/geanylatex.c:851
 msgid "Helps at inserting labels to a docuemnt"
 msgstr ""
 
