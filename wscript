@@ -75,7 +75,7 @@ plugins = [
 	Plugin('geanysendmail',
 		 [ 'geanysendmail/src/geanysendmail.c' ], # source files
 		 [ 'geanysendmail', 'geanysendmail/src' ], # include dirs
-		 '0.4svn'),
+		 '0.5svn'),
 	Plugin('geanydoc',
 		 [ 'geanydoc/src/config.c', 'geanydoc/src/geanydoc.c' ], # source files
 		 [ 'geanydoc', 'geanydoc/src' ], # include dirs
@@ -84,7 +84,7 @@ plugins = [
 		 [ 'geanylatex/src/latexencodings.c', 'geanylatex/src/geanylatex.c',
 		   'geanylatex/src/letters.c' ],
 		 [ 'geanylatex' ], # include dirs
-		 '0.2svn'),
+		 '0.2'),
 	Plugin('geanylua',
 		 [ 'geanylua/geanylua.c' ], # the other source files are listed in build_lua()
 		 [ 'geanylua' ], # include dirs
