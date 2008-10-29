@@ -21,18 +21,18 @@ which can be used for the spell check.
 Downloads
 ---------
 
-Spellcheck 0.1
-^^^^^^^^^^^^^^
+Spell Check 0.2
+^^^^^^^^^^^^^^^
 
-http://geany-plugins.sourceforge.net/spellcheck/spellcheck-0.1.tar.bz2
+http://plugins.geany.org/spellcheck/spellcheck-0.2.tar.bz2
 
-http://geany-plugins.sourceforge.net/spellcheck/spellcheck-0.1.tar.bz2.sig (GPG-Signature)
+http://plugins.geany.org/spellcheck/spellcheck-0.2.tar.bz2.sig (GPG-Signature)
 
 or
 
-http://geany-plugins.sourceforge.net/spellcheck/spellcheck-0.1.tar.gz
+http://plugins.geany.org/spellcheck/spellcheck-0.2.tar.gz
 
-http://geany-plugins.sourceforge.net/spellcheck/spellcheck-0.1.tar.gz.sig (GPG-Signature)
+http://plugins.geany.org/spellcheck/spellcheck-0.2.tar.gz.sig (GPG-Signature)
 
 
 Development Code
@@ -114,7 +114,7 @@ Known issues
 
 License
 -------
-spellcheck is distributed under the terms of the GNU General Public License
+Spell Check is distributed under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2 of the
 License, or (at your option) any later version.  A copy of this license
 can be found in the file COPYING included with the source code of this

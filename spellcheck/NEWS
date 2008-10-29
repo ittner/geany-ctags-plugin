@@ -1,0 +1,24 @@
+Spell Check 0.2 (October 29, 2008)
+
+    * Use Enchant as spell check engine instead of Aspell.
+
+    * When adding words to the dictionary, remove all indicators on
+	  these words.
+    * Add keybinding to toggle the 'Check while typing' setting.
+    * Add toolbar button to quickly enable/disable the
+	  'check while typing' setting (#2062239).
+    * Do not check numbers and words starting with digits.
+    * Add option to enable/disable use of the messages window.
+    * Provide a submenu to the editor menu with suggestions for
+	  misspelled words and allow to add or ignore the word to the
+	  personal dictionary.
+    * Highlight only misspelled instead of whole the line.
+    * Add Tools->Spellcheck sub menu to easily change the language to
+	  use for spell checking.
+    * Add "check as you type" feature.
+
+
+Spell Check 0.1 (May 15, 2008)
+
+    * Initial 0.1 release of the Spell Check plugin with Aspell support.
+
