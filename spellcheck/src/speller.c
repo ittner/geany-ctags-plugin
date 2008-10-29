@@ -269,18 +269,26 @@ void speller_reinit_enchant_dict(void)
 }
 
 
-const gchar *speller_get_default_lang(void)
+gchar *speller_get_default_lang(void)
 {
 	const gchar *lang = g_getenv("LANG");
+	gchar *result = NULL;
+
 	if (NZV(lang))
 	{
-		if (g_ascii_strncasecmp(lang, "C", 1) == 0)
+		if (*lang == 'C' || *lang == 'c')
 			lang = "en";
+		else
+		{	/* if we have something like de_DE.UTF-8, strip everything from the period to the end */
+			gchar *period = strchr(lang, '.');
+			if (period != NULL)
+				result = g_strndup(lang, g_utf8_pointer_to_offset(lang, period));
+		}
 	}
 	else
 		lang = "en";
 
-	return lang;
+	return (result != NULL) ? result : g_strdup(lang);
 }
 
 

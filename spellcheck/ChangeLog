@@ -1,3 +1,10 @@
+2008-10-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/speller.c, src/speller.h, src/scplugin.c:
+   Improve the auto-detection of the user's language (handle locales
+   like 'de_DE.UTF-8' correctly).
+
+
 2008-10-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/speller.c:

@@ -184,7 +184,9 @@ void plugin_init(GeanyData *data)
 	GtkWidget *sp_item;
 	GKeyFile *config = g_key_file_new();
 	guint i;
+	gchar *default_lang;
 
+	default_lang = speller_get_default_lang();
 	sc = g_new0(SpellCheck, 1);
 
 	sc->config_file = g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
@@ -192,13 +194,14 @@ void plugin_init(GeanyData *data)
 
 	g_key_file_load_from_file(config, sc->config_file, G_KEY_FILE_NONE, NULL);
 	sc->default_language = p_utils->get_setting_string(config,
-		"spellcheck", "language", speller_get_default_lang());
+		"spellcheck", "language", default_lang);
 	sc->check_while_typing = p_utils->get_setting_boolean(config,
 		"spellcheck", "check_while_typing", FALSE);
 	sc->show_toolbar_item = p_utils->get_setting_boolean(config,
 		"spellcheck", "show_toolbar_item", TRUE);
 	sc->use_msgwin = p_utils->get_setting_boolean(config, "spellcheck", "use_msgwin", FALSE);
 	g_key_file_free(config);
+	g_free(default_lang);
 
 	locale_init();
 

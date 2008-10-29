@@ -33,7 +33,7 @@ void speller_check_document(GeanyDocument *doc);
 
 void speller_reinit_enchant_dict(void);
 
-const gchar *speller_get_default_lang(void);
+gchar *speller_get_default_lang(void);
 
 void speller_dict_free_string_list(gchar **tmp_suggs);
 
