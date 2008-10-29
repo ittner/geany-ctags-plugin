@@ -51,7 +51,7 @@ GeanyFunctions	*geany_functions;
 
 PLUGIN_VERSION_CHECK(100)
 
-PLUGIN_SET_INFO(_("LaTeX"), _("Plugin to make Geany better support LaTeX"), "0.2-dev",
+PLUGIN_SET_INFO(_("LaTeX"), _("Plugin to make Geany better support LaTeX"), "0.2",
 	    "Frank Lanitz <frank@frank.uvena.de>")
 
 GtkWidget *menu_latex = NULL;
