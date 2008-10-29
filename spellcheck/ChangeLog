@@ -3,6 +3,8 @@
  * src/speller.c, src/speller.h, src/scplugin.c:
    Improve the auto-detection of the user's language (handle locales
    like 'de_DE.UTF-8' correctly).
+ * src/gui.c:
+   Add 'Ignore All' menu item to the suggestions menu.
 
 
 2008-10-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

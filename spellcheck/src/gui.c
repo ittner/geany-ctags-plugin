@@ -167,11 +167,15 @@ static void on_menu_addword_item_activate(GtkMenuItem *menuitem, gpointer gdata)
 	gint startword, endword, i, doc_len;
 	ScintillaObject *sci;
 	GString *str;
+	gboolean ignore = GPOINTER_TO_INT(gdata);
 
 	if (clickinfo.doc == NULL || clickinfo.word == NULL || clickinfo.pos == -1)
 		return;
 
-	speller_add_word(clickinfo.word);
+	/* we either ignore the word, so we only remove all indicators or
+	 * we add the word to the personal dictionary */
+	if (! ignore)
+		speller_add_word(clickinfo.word);
 
 	/* Remove all indicators on the added word */
 	sci = clickinfo.doc->editor->sci;
@@ -257,7 +261,14 @@ void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item), image);
 		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
 		g_signal_connect((gpointer) menu_item, "activate",
-			G_CALLBACK(on_menu_addword_item_activate), NULL);
+			G_CALLBACK(on_menu_addword_item_activate), GPOINTER_TO_INT(0));
+
+		image = gtk_image_new_from_stock(GTK_STOCK_REMOVE, GTK_ICON_SIZE_MENU);
+		menu_item = gtk_image_menu_item_new_with_label(_("Ignore All"));
+		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item), image);
+		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
+		g_signal_connect((gpointer) menu_item, "activate",
+			G_CALLBACK(on_menu_addword_item_activate), GPOINTER_TO_INT(1));
 
 		gtk_widget_show(sc->edit_menu);
 		gtk_widget_show(sc->edit_menu_sep);
