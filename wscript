@@ -104,7 +104,7 @@ plugins = [
 	Plugin('spellcheck',
 		 [ 'spellcheck/src/gui.c', 'spellcheck/src/scplugin.c', 'spellcheck/src/speller.c' ], # source files
 		 [ 'spellcheck', 'spellcheck/src' ], # include dirs
-		 '0.2', [ [ 'enchant', '1.3', True ] ])
+		 '0.3', [ [ 'enchant', '1.3', True ] ])
 ]
 
 
