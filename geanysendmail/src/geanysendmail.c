@@ -42,7 +42,7 @@ GeanyPlugin		*geany_plugin;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
-PLUGIN_VERSION_CHECK(100)
+PLUGIN_VERSION_CHECK(104)
 
 PLUGIN_SET_INFO(_("GeanySendMail"), _("A little plugin to send the current \
 file as attachment by user's favorite mailer"), "0.4", "Frank Lanitz <frank@frank.uvena.de>")
@@ -64,33 +64,6 @@ gboolean use_address_dialog = FALSE;
 /* Needed global to remove from toolbar again */
 GtkWidget *mailbutton = NULL;
 static GtkWidget *main_menu_item = NULL;
-
-
-static void locale_init(void)
-{
-#ifdef ENABLE_NLS
-	gchar *locale_dir = NULL;
-
-#ifdef HAVE_LOCALE_H
-	setlocale(LC_ALL, "");
-#endif
-
-#ifdef G_OS_WIN32
-	gchar *install_dir = g_win32_get_package_installation_directory("geany", NULL);
-	/* e.g. C:\Program Files\geany\lib\locale */
-	locale_dir = g_strconcat(install_dir, "\\lib\\locale", NULL);
-	g_free(install_dir);
-#else
-	locale_dir = g_strdup(LOCALEDIR);
-#endif
-
-	bindtextdomain(GETTEXT_PACKAGE, locale_dir);
-	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-	textdomain(GETTEXT_PACKAGE);
-	g_free(locale_dir);
-#endif
-}
-
 
 /* Callback for sending file as attachment */
 static void
@@ -395,7 +368,7 @@ void plugin_init(GeanyData G_GNUC_UNUSED *data)
 
 	GtkWidget *menu_mail = NULL;
 
-	locale_init();
+	p_main->locale_init(LOCALEDIR, GETTEXT_PACKAGE);
 
 	config_file = g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
 		"geanysendmail", G_DIR_SEPARATOR_S, "mail.conf", NULL);
