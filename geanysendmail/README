@@ -1,5 +1,5 @@
 GeanySendMail Plugin
-(v0.4: 20.10.2008)
+(post 0.4:)
 
 
 About
@@ -24,7 +24,7 @@ installed from the sources, you should be ready to go. If you used a
 prepared package e.g. from your distribution you probably need to
 install an additional package, this might be called geany-dev or
 geany-devel. Please note that in order to compile and use this plugin,
-you need Geany 0.15 or later (Geany Plugin API v100 or higher).
+you need Geany 0.16svn or later (Geany Plugin API v104 or higher).
 
 Furthermore you need, of course, a C compiler and the Make tool. The
 GNU versions of these tools are recommended.
