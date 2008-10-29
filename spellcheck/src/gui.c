@@ -261,14 +261,14 @@ void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item), image);
 		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
 		g_signal_connect((gpointer) menu_item, "activate",
-			G_CALLBACK(on_menu_addword_item_activate), GPOINTER_TO_INT(0));
+			G_CALLBACK(on_menu_addword_item_activate), GINT_TO_POINTER(0));
 
 		image = gtk_image_new_from_stock(GTK_STOCK_REMOVE, GTK_ICON_SIZE_MENU);
 		menu_item = gtk_image_menu_item_new_with_label(_("Ignore All"));
 		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item), image);
 		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
 		g_signal_connect((gpointer) menu_item, "activate",
-			G_CALLBACK(on_menu_addword_item_activate), GPOINTER_TO_INT(1));
+			G_CALLBACK(on_menu_addword_item_activate), GINT_TO_POINTER(1));
 
 		gtk_widget_show(sc->edit_menu);
 		gtk_widget_show(sc->edit_menu_sep);
