@@ -1,0 +1,30 @@
+# German translations for geanydbg package.
+msgid ""
+msgstr ""
+"Project-Id-Version: geanydbg 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-10-29 22:06+0100\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#. All plugins must set name, description, version and author.
+#: ../src/dbg.c:57
+msgid "DBG"
+msgstr "DEG"
+
+#: ../src/dbg.c:57
+msgid "Run external debugger."
+msgstr "Führe externes Debuggingwerkzeug aus"
+
+#: ../src/dbg.c:58
+msgid "Yura Siamshka <yurand2@gmail.com>"
+msgstr "Yura Siamshka <yurand2@gmail.com>"
+
+#: ../src/dbg.c:157
+msgid "Launch external debugger"
+msgstr "Starte externes Debuggingwerkzeug"
