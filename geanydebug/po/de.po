@@ -1,0 +1,29 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: geanyDebug\n"
+"Report-Msgid-Bugs-To: geany-i18n@uvena.de\n"
+"POT-Creation-Date: 2008-11-02 23:47+0100\n"
+"PO-Revision-Date: 2008-11-02 23:47+0100\n"
+"Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
+"Language-Team: geany-i18n <geany-i18n@uvena.de>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../src/geanydebug.c:51
+msgid "Debugger"
+msgstr "Debugger"
+
+#: ../src/geanydebug.c:51
+msgid "Integrated debugging with GDB."
+msgstr "Debugging integriert in Geany"
+
+#: ../src/geanydebug.c:51
+msgid "Jeff Pohlmeyer"
+msgstr "Jeff Pohlmeyer"
+
+#: ../src/geanydebug.c:278
+msgid "Plugin configuration directory could not be created."
+msgstr "Plugin-Konfigurationsverzeichnis konnte nicht erstellt werden."
+
