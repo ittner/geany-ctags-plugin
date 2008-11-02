@@ -59,7 +59,7 @@ GeanyData *geany_data;
 GeanyFunctions *geany_functions;
 
 
-PLUGIN_VERSION_CHECK(89);
+PLUGIN_VERSION_CHECK(104);
 PLUGIN_SET_INFO(_("VC"), _("Interface to different Version Control systems."), VERSION,
 		_("Yura Siamashka <yurand2@gmail.com>,\nFrank Lanitz <frank@frank.uvena.de>"));
 
@@ -1838,32 +1838,6 @@ registrate()
 	REGISTER_VC(HG, enable_hg);
 }
 
-static void
-locale_init(void)
-{
-#ifdef ENABLE_NLS
-	gchar *locale_dir = NULL;
-
-#ifdef HAVE_LOCALE_H
-	setlocale(LC_ALL, "");
-#endif
-
-#ifdef G_OS_WIN32
-	gchar *install_dir = g_win32_get_package_installation_directory("geany", NULL);
-	/* e.g. C:\Program Files\geany\lib\locale */
-	locale_dir = g_strconcat(install_dir, "\\share\\locale", NULL);
-	g_free(install_dir);
-#else
-	locale_dir = g_strdup(LOCALEDIR);
-#endif
-
-	bindtextdomain(GETTEXT_PACKAGE, locale_dir);
-	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-	textdomain(GETTEXT_PACKAGE);
-	g_free(locale_dir);
-#endif
-}
-
 /* Called by Geany to initialize the plugin */
 void
 plugin_init(G_GNUC_UNUSED GeanyData * data)
@@ -1872,14 +1846,14 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	GtkWidget *menu_vc_menu = NULL;
 	GtkTooltips *tooltips = NULL;
 
+	p_main->locale_init(LOCALEDIR, GETTEXT_PACKAGE);
+
 	config_file =
 		g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
 			    "VC", G_DIR_SEPARATOR_S, "VC.conf", NULL);
 
 	load_config();
 	registrate();
-
-	locale_init();
 
 	tooltips = gtk_tooltips_new();
 
