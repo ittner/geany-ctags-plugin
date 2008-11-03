@@ -37,6 +37,7 @@
 #include "utils.h"
 #include "ui_utils.h"
 #include "prefs.h"
+#include "keybindings.h"
 #include "pluginmacros.h"
 
 #ifdef HAVE_LOCALE_H
@@ -114,6 +115,22 @@ const gchar FILE_STATUS_DELETED[] = "Deleted";
 const gchar FILE_STATUS_UNKNOWN[] = "Unknown";
 
 static void registrate();
+
+
+/* Doing some basic keybinding stuff */
+enum
+{
+	VC_DIFF_FILE,
+	VC_DIFF_DIR,
+	VC_DIFF_BASEDIR,
+	VC_COMMIT,
+	VC_STATUS,
+	VC_UPDATE,
+	VC_REVERT,
+	COUNT_KB
+};
+
+PLUGIN_KEY_GROUP(geanyvc, COUNT_KB)
 
 GSList *
 get_commit_files_null(G_GNUC_UNUSED const gchar * dir)
@@ -1521,6 +1538,43 @@ update_menu_items()
 	gtk_widget_set_sensitive(menu_vc_commit, d_have_vc);
 }
 
+
+static void kbdiff_file(G_GNUC_UNUSED guint key_id)
+{
+	vcdiff_file_activated(NULL, NULL);
+}
+
+static void kbdiff_dir(G_GNUC_UNUSED guint key_id)
+{
+	vcdiff_dir_activated(NULL, NULL);
+}
+
+static void kbdiff_basedir(G_GNUC_UNUSED guint key_id)
+{
+	vcdiff_basedir_activated(NULL, NULL);
+}
+
+static void kbstatus(G_GNUC_UNUSED guint key_id)
+{
+	vcstatus_activated(NULL, NULL);
+}
+
+static void kbcommit(G_GNUC_UNUSED guint key_id)
+{
+	vccommit_activated(NULL, NULL);
+}
+
+static void kbrevert(G_GNUC_UNUSED guint key_id)
+{
+	vcrevert_activated(NULL, NULL);
+}
+
+static void kbupdate(G_GNUC_UNUSED guint key_id)
+{
+	vcupdate_activated(NULL, NULL);
+}
+
+
 static struct
 {
 	GtkWidget *cb_changed_flag;
@@ -1990,8 +2044,25 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 
 	gtk_widget_show_all(menu_vc);
 
+	/* init keybindins */
+	p_keybindings->set_item(plugin_key_group, VC_DIFF_FILE, kbdiff_file,
+	0, 0, "vc_show_diff_of_file", "Show diff of file", menu_vc_diff_file);
+	p_keybindings->set_item(plugin_key_group, VC_DIFF_DIR, kbdiff_dir,
+	0, 0, "vc_show_diff_of_dir", "Show diff of diretory", menu_vc_diff_dir);
+	p_keybindings->set_item(plugin_key_group, VC_DIFF_BASEDIR, kbdiff_basedir,
+	0, 0, "vc_show_diff_of_basedir", "Show diff of basedir", menu_vc_diff_basedir);
+	p_keybindings->set_item(plugin_key_group, VC_COMMIT, kbcommit,
+	0, 0, "vc_commit", "Commit changes", menu_vc_commit);
+	p_keybindings->set_item(plugin_key_group, VC_STATUS, kbstatus,
+	0, 0, "vc_status", "Show status" , menu_vc_status);
+	p_keybindings->set_item(plugin_key_group, VC_REVERT, kbrevert,
+	0, 0, "vc_revert", "Revert changes", menu_vc_revert_file);
+	p_keybindings->set_item(plugin_key_group, VC_UPDATE, kbupdate,
+	0, 0, "vc_update", "Update file", menu_vc_update);
+
 	plugin_fields->menu_item = menu_vc;
 	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
+
 }
 
 
