@@ -206,6 +206,7 @@ def configure(conf):
 			conf.define('VERSION', p.version, 1)
 			conf.define('PACKAGE', p.name, 1)
 			conf.define('GETTEXT_PACKAGE', p.name, 1)
+			conf.define('PREFIX', conf.env['PREFIX'], 1)
 			conf.write_config_header(os.path.join(p.name, 'config.h'))
 
 	Utils.pprint('BLUE', 'Summary:')
@@ -261,6 +262,9 @@ def build(bld):
 		if p.name == 'geanylua':
 			build_lua(bld, p, libs) # build additional lib for the lua plugin
 
+		if p.name == 'geanydebug':
+			build_debug(bld, p, libs) # build additional binary for the debug plugin
+
 		obj					        = bld.new_task_gen('cc', 'shlib')
 		obj.source			        = p.sources
 		obj.includes				= p.includes
@@ -291,6 +295,13 @@ def build_lua(bld, p, libs):
 	obj.uselib		            = libs
 	obj.install_path			= '${DATADIR}/geany/plugins/geanylua'
 
+
+def build_debug(bld, p, libs):
+	obj					        = bld.new_task_gen('cc', 'program')
+	obj.source			        = [ 'geanydebug/src/ttyhelper.c' ]
+	obj.includes				= p.includes
+	obj.target			        = 'geanydebug_ttyhelper'
+	obj.uselib		            = libs
 
 
 def init():
