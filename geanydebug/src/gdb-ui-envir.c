@@ -173,8 +173,8 @@ gdbui_opts_dlg()
 						     GTK_WINDOW(gdbui_setup.main_window),
 						     GTK_DIALOG_MODAL |
 						     GTK_DIALOG_DESTROY_WITH_PARENT,
-						     GTK_STOCK_OK, GTK_RESPONSE_OK,
-						     GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+						     GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+						     GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
 
 	GtkBox *vbox = GTK_BOX(GTK_DIALOG(dlg)->vbox);
 	GtkWidget *hbox;
