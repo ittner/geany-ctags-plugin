@@ -320,7 +320,9 @@ plugin_init(GeanyData * data)
 	gdbui_setup.main_window = geany->main_widgets->window;
 
 	gdbio_setup.temp_dir = g_build_filename(geany->app->configdir, "plugins", unix_name, NULL);
-	gdbio_setup.tty_helper = g_build_filename(gdbio_setup.temp_dir, "ttyhelper", NULL);
+	/*gdbio_setup.tty_helper = g_build_filename(gdbio_setup.temp_dir, "geanydebug_ttyhelper", NULL);*/
+	/* the tty helper binary is installed in $prefix/bin, so use this path */
+	gdbio_setup.tty_helper = g_build_filename(PREFIX, "bin", "geanydebug_ttyhelper", NULL);
 	config_file = g_build_filename(gdbio_setup.temp_dir, "debugger.cfg", NULL);
 	gdbui_opts_init();
 	if (g_key_file_load_from_file(kf, config_file, G_KEY_FILE_NONE, NULL))

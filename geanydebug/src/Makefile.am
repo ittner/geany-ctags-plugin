@@ -21,8 +21,8 @@ geanydebug_la_SOURCES = gdb-io-break.c \
 geanydebug_la_LDFLAGS = -module -avoid-version
 geanydebug_la_LIBADD  = @GEANY_LIBS@  $(INTLLIBS)
 
-bin_PROGRAMS = ttyhelper
+bin_PROGRAMS = geanydebug_ttyhelper
 ttyhelper_SOURCES = ttyhelper.c
 
-AM_CFLAGS = @GEANY_CFLAGS@ -DLOCALEDIR=\""$(localedir)"\"
+AM_CFLAGS = @GEANY_CFLAGS@ -DLOCALEDIR=\""$(localedir)"\" -DPREFIX=\""$(prefix)"\"
 
