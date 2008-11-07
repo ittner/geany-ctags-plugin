@@ -22,8 +22,12 @@
  */
 
 
-
 #include "geany.h"
+
+#ifdef HAVE_LOCALE_H
+# include <locale.h>
+#endif
+
 #include "support.h"
 #include "prefs.h"
 #include "document.h"
@@ -49,16 +53,17 @@
 
 PLUGIN_VERSION_CHECK(78)
 PLUGIN_SET_INFO(_("Debugger"), _("Integrated debugging with GDB."), VERSION, _("Jeff Pohlmeyer"))
-     static GeanyData *geany_data;
-     GeanyFunctions *geany_functions;
 
-     static GtkNotebook *msgbook;
-     static GtkWidget *compwin;
-     static GtkWidget *frame;
-     static gchar *config_file;
+static GeanyData *geany_data;
+GeanyFunctions *geany_functions;
+
+static GtkNotebook *msgbook;
+static GtkWidget *compwin;
+static GtkWidget *frame;
+static gchar *config_file;
 
 
-     static void show_compwin()
+static void show_compwin()
 {
 	gint page = gtk_notebook_page_num(msgbook, compwin);
 	gtk_notebook_set_current_page(msgbook, page);
@@ -306,6 +311,32 @@ update_settings_cb()
 }
 
 
+static void locale_init(void)
+{
+#ifdef ENABLE_NLS
+	gchar *locale_dir = NULL;
+
+#ifdef HAVE_LOCALE_H
+	setlocale(LC_ALL, "");
+#endif
+
+#ifdef G_OS_WIN32
+	gchar *install_dir = g_win32_get_package_installation_directory("geany", NULL);
+	/* e.g. C:\Program Files\geany\lib\locale */
+	locale_dir = g_strconcat(install_dir, "\\share\\locale", NULL);
+	g_free(install_dir);
+#else
+	locale_dir = g_strdup(LOCALEDIR);
+#endif
+
+	bindtextdomain(GETTEXT_PACKAGE, locale_dir);
+	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+	textdomain(GETTEXT_PACKAGE);
+	g_free(locale_dir);
+#endif
+}
+
+
 #define GET_KEY_BOOL(k) { \
   gboolean tmp=g_key_file_get_boolean(kf,unix_name,#k"",&err); \
   if (err) { CLEAR() } else { gdbui_setup.options.k=tmp; } \
@@ -317,6 +348,9 @@ plugin_init(GeanyData * data)
 	GKeyFile *kf = g_key_file_new();
 	GError *err = NULL;
 	geany_data = data;
+
+	locale_init();
+
 	gdbui_setup.main_window = geany->main_widgets->window;
 
 	gdbio_setup.temp_dir = g_build_filename(geany->app->configdir, "plugins", unix_name, NULL);

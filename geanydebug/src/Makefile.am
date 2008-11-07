@@ -22,7 +22,7 @@ geanydebug_la_LDFLAGS = -module -avoid-version
 geanydebug_la_LIBADD  = @GEANY_LIBS@  $(INTLLIBS)
 
 bin_PROGRAMS = geanydebug_ttyhelper
-ttyhelper_SOURCES = ttyhelper.c
+geanydebug_ttyhelper_SOURCES = ttyhelper.c
 
 AM_CFLAGS = @GEANY_CFLAGS@ -DLOCALEDIR=\""$(localedir)"\" -DPREFIX=\""$(prefix)"\"
 

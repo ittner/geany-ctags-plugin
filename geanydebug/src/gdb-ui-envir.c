@@ -11,6 +11,7 @@
 #include <gtk/gtk.h>
 #include "gdb-io.h"
 #include "gdb-ui.h"
+#include "support.h"
 
 
 
@@ -79,7 +80,7 @@ fixup_path(const gchar * path)
 void
 gdbui_env_dlg(const GdbEnvironInfo * env)
 {
-	GtkWidget *dlg = gtk_dialog_new_with_buttons("Environment settings",
+	GtkWidget *dlg = gtk_dialog_new_with_buttons(_("Environment settings"),
 						     GTK_WINDOW(gdbui_setup.main_window),
 						     GTK_DIALOG_MODAL |
 						     GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -101,10 +102,10 @@ gdbui_env_dlg(const GdbEnvironInfo * env)
 	gtk_entry_set_text(GTK_ENTRY(args_box), env->args ? env->args : "");
 	gtk_entry_set_text(GTK_ENTRY(dirs_box), env->dirs ? env->dirs : "");
 
-	label(args_box, "\n Command-line arguments passed to target program:");
-	label(dirs_box, "\n Search path for source files:");
-	label(cwd_box, "\n Working directory for target program:");
-	label(path_box, "\n Search path for executables:");
+	label(args_box, _("\n Command-line arguments passed to target program:"));
+	label(dirs_box, _("\n Search path for source files:"));
+	label(cwd_box, _("\n Working directory for target program:"));
+	label(path_box, _("\n Search path for executables:"));
 
 	gtk_widget_show_all(dlg);
 	gtk_widget_set_usize(dlg, (gdk_screen_get_width(gdk_screen_get_default()) / 2) * 1, 0);
@@ -147,7 +148,7 @@ font_click(GtkButton * button, gpointer user_data)
 	gchar *fn = NULL;
 	gint resp;
 	fn = (gchar *) gtk_entry_get_text(GTK_ENTRY(user_data));
-	dlg = gtk_font_selection_dialog_new("Select Font");
+	dlg = gtk_font_selection_dialog_new(_("Select Font"));
 	if (fn && *fn)
 	{
 		gtk_font_selection_dialog_set_font_name(GTK_FONT_SELECTION_DIALOG(dlg), fn);
@@ -169,7 +170,7 @@ font_click(GtkButton * button, gpointer user_data)
 void
 gdbui_opts_dlg()
 {
-	GtkWidget *dlg = gtk_dialog_new_with_buttons("Preferences",
+	GtkWidget *dlg = gtk_dialog_new_with_buttons(_("Preferences"),
 						     GTK_WINDOW(gdbui_setup.main_window),
 						     GTK_DIALOG_MODAL |
 						     GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -185,15 +186,15 @@ gdbui_opts_dlg()
 	GtkWidget *font_box = gtk_entry_new();
 	GtkWidget *term_box = gtk_entry_new();
 #ifdef STANDALONE
-	GtkWidget *top_chk = gtk_check_button_new_with_label("Keep debug window on top.");
+	GtkWidget *top_chk = gtk_check_button_new_with_label(_("Keep debug window on top."));
 #endif
-	GtkWidget *tip_chk = gtk_check_button_new_with_label("Show tooltips.");
-	GtkWidget *ico_chk = gtk_check_button_new_with_label("Show icons.");
+	GtkWidget *tip_chk = gtk_check_button_new_with_label(_("Show tooltips."));
+	GtkWidget *ico_chk = gtk_check_button_new_with_label(_("Show icons."));
 
 	gtk_button_set_image(GTK_BUTTON(font_btn),
 			     gtk_image_new_from_stock(GTK_STOCK_SELECT_FONT, GTK_ICON_SIZE_BUTTON));
 
-	gtk_box_pack_start(vbox, newlabel("Font for source code listings:"), FALSE, FALSE, 2);
+	gtk_box_pack_start(vbox, newlabel(_("Font for source code listings:")), FALSE, FALSE, 2);
 	if (gdbui_setup.options.mono_font)
 	{
 		gtk_entry_set_text(GTK_ENTRY(font_box), gdbui_setup.options.mono_font);
@@ -205,7 +206,7 @@ gdbui_opts_dlg()
 	gtk_box_pack_start(GTK_BOX(hbox), font_btn, FALSE, FALSE, 0);
 
 	gtk_box_pack_start(vbox, gtk_hseparator_new(), FALSE, FALSE, 8);
-	gtk_box_pack_start(vbox, newlabel("Terminal program:"), FALSE, FALSE, 2);
+	gtk_box_pack_start(vbox, newlabel(_("Terminal program:")), FALSE, FALSE, 2);
 	gtk_box_pack_start(vbox, term_box, FALSE, FALSE, 0);
 	if (gdbui_setup.options.term_cmd)
 	{

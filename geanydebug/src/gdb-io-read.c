@@ -1,6 +1,6 @@
 /*
  *
- * gdb-io-read.c - Output reading functions for GDB wrapper library. 
+ * gdb-io-read.c - Output reading functions for GDB wrapper library.
  *
  * See the file "gdb-io.h" for license information.
  */
@@ -15,6 +15,7 @@
 #include <glib.h>
 
 #include "gdb-io-priv.h"
+#include "support.h"
 
 
 
@@ -228,7 +229,7 @@ gdbio_target_started(gint seq, gchar ** list, gchar * resp)
 {
 	if ((strncmp(resp, "^error", 6) == 0) && (!gdbio_get_target_pid()))
 	{
-		gdbio_error_func("Error starting target process!\n");
+		gdbio_error_func(_("Error starting target process!\n"));
 		gdbio_do_status(GdbFinished);
 	}
 	else
@@ -273,7 +274,7 @@ gdbio_parse_file_list(gint seq, gchar ** list, gchar * resp)
 	else
 	{
 		gdbio_error_func
-			("This executable does not appear to contain the required debugging information.");
+			(_("This executable does not appear to contain the required debugging information."));
 	}
 	if (h)
 		g_hash_table_destroy(h);
@@ -535,7 +536,7 @@ handle_results_hash(GHashTable * h, gchar * rectype, gchar ** list)
 				else
 				{
 					gdbio_info_func
-						("Program received signal %s (%s) at %s in function %s() at %s:%s",
+						(_("Program received signal %s (%s) at %s in function %s() at %s:%s"),
 						 signal_name, signal_meaning, addr, func, file,
 						 line);
 				}
@@ -586,7 +587,7 @@ handle_results_hash(GHashTable * h, gchar * rectype, gchar ** list)
 		if (reason_is("watchpoint-scope"))
 		{
 			HSTR(h, wpnum);
-			gdbio_info_func("Watchpoint #%s out of scope", wpnum ? wpnum : "?");
+			gdbio_info_func(_("Watchpoint #%s out of scope"), wpnum ? wpnum : "?");
 			gdbio_send_cmd("-exec-continue\n");
 			return do_step_func(h, reason);
 		}
@@ -595,9 +596,9 @@ handle_results_hash(GHashTable * h, gchar * rectype, gchar ** list)
 		{
 			HSTR(h, signal_name);
 			HSTR(h, signal_meaning);
-			gdbio_info_func("Program exited on signal %s (%s).\n",
+			gdbio_info_func(_("Program exited on signal %s (%s).\n"),
 					signal_name ? signal_name : "UNKNOWN",
-					signal_meaning ? signal_meaning : "Unknown signal");
+					signal_meaning ? signal_meaning : _("Unknown signal"));
 			gdbio_target_exited(signal_name);
 			return TRUE;
 		}
@@ -614,14 +615,14 @@ handle_results_hash(GHashTable * h, gchar * rectype, gchar ** list)
 					ec = -1;
 				}
 			}
-			gdbio_info_func("Program exited with code %d [%s]\n", ec,
-					exit_code ? exit_code : "(unknown)");
+			gdbio_info_func(_("Program exited with code %d [%s]\n"), ec,
+					exit_code ? exit_code : _("(unknown)"));
 			gdbio_target_exited(exit_code);
 			return TRUE;
 		}
 		if (g_str_equal(reason, "exited-normally"))
 		{
-			gdbio_info_func("Program exited normally.\n");
+			gdbio_info_func(_("Program exited normally.\n"));
 			gdbio_target_exited("0");
 			return TRUE;
 		}

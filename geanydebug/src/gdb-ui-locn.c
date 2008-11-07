@@ -11,6 +11,7 @@
 #include <gtk/gtk.h>
 #include "gdb-io.h"
 #include "gdb-ui.h"
+#include "support.h"
 
 
 
@@ -49,7 +50,7 @@ gdbui_location_dlg(gchar * title, gboolean is_watch)
 	}
 	dlg = gdbui_new_dialog(title);
 	vbox = GTK_BOX(GTK_DIALOG(dlg)->vbox);
-	btn = gtk_dialog_add_button(GTK_DIALOG(dlg), "Clea_r", GTK_RESPONSE_APPLY);
+	btn = gtk_dialog_add_button(GTK_DIALOG(dlg), _("Clea_r"), GTK_RESPONSE_APPLY);
 	img = gtk_image_new_from_stock(GTK_STOCK_CLEAR, GTK_ICON_SIZE_BUTTON);
 
 	gtk_button_set_image(GTK_BUTTON(btn), img);
@@ -64,7 +65,7 @@ gdbui_location_dlg(gchar * title, gboolean is_watch)
 	{
 		hbox = gtk_hbox_new(FALSE, 0);
 		gtk_box_pack_start(vbox, hbox, TRUE, TRUE, 0);
-		gtk_box_pack_start(GTK_BOX(hbox), gtk_label_new("Filename: "), FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(hbox), gtk_label_new(_("Filename: ")), FALSE, FALSE, 0);
 		file_entry = gtk_entry_new();
 		if (abi && abi->filename)
 		{
@@ -77,8 +78,8 @@ gdbui_location_dlg(gchar * title, gboolean is_watch)
 	hbox = gtk_hbox_new(FALSE, 0);
 	gtk_box_pack_start(vbox, hbox, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox),
-			   gtk_label_new(is_watch ? "Variable to watch:" :
-					 "Line number or function name: "), FALSE, FALSE, 0);
+			   gtk_label_new(is_watch ? _("Variable to watch:") :
+					 _("Line number or function name: ")), FALSE, FALSE, 0);
 	line_entry = gtk_entry_new();
 	if (abi)
 	{
@@ -119,7 +120,7 @@ gdbui_location_dlg(gchar * title, gboolean is_watch)
 	if (is_watch)
 	{
 		gtk_box_pack_start(vbox, gtk_hseparator_new(), FALSE, FALSE, 0);
-		hbox = gtk_label_new("Access trigger:");
+		hbox = gtk_label_new(_("Access trigger:"));
 		gtk_misc_set_alignment(GTK_MISC(hbox), 0.0f, 0.0f);
 		gtk_box_pack_start(vbox, hbox, FALSE, FALSE, 0);
 		hbox = gtk_hbox_new(FALSE, 0);

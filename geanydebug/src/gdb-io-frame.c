@@ -1,6 +1,6 @@
 
 /*
- * gdb-io-frame.c - Stack frame information functions for GDB wrapper library. 
+ * gdb-io-frame.c - Stack frame information functions for GDB wrapper library.
  *
  * See the file "gdb-io.h" for license information.
  *
@@ -11,6 +11,7 @@
 #include <glib.h>
 
 #include "gdb-io-priv.h"
+#include "support.h"
 
 
 static GdbFrameFunc gdbio_locals_func = NULL;
@@ -484,7 +485,7 @@ hash_list_to_var_list(GSList * hlist)
 			var->value = g_strdup(" ");
 			var->numchild = g_strdup("0");
 			vlist = g_slist_append(vlist, var);
-			gdbio_error_func("Field list too long, not all items can be displayed.\n");
+			gdbio_error_func(_("Field list too long, not all items can be displayed.\n"));
 			break;
 		}
 	}

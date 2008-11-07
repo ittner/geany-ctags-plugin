@@ -11,6 +11,7 @@
 
 #include "gdb-io.h"
 #include "gdb-ui.h"
+#include "support.h"
 
 
 static gpointer
@@ -123,7 +124,7 @@ static GtkWidget *
 new_info_btn()
 {
 	GtkWidget *rv;
-	rv = gtk_button_new_with_mnemonic("_Examine");
+	rv = gtk_button_new_with_mnemonic(_("_Examine"));
 	gtk_button_set_image(GTK_BUTTON(rv),
 			     gtk_image_new_from_stock(MORE_INFO, GTK_ICON_SIZE_BUTTON));
 #if GTK_CHECK_VERSION(2, 10, 0)
@@ -273,14 +274,14 @@ object_func(const GdbVar * obj, const GSList * list)
 	g_free(value);
 	gint resp;
 	memset(&vw, 0, sizeof(vw));
-	vw.dlg = gdbui_new_dialog("Object info");
+	vw.dlg = gdbui_new_dialog(_("Object info"));
 	vbox = GTK_BOX(GTK_DIALOG(vw.dlg)->vbox);
 	header = gtk_label_new(NULL);
 	monospace(header, NULL, heading);
 	g_free(heading);
 	gtk_box_pack_start(vbox, header, FALSE, FALSE, 0);
 
-	view = make_list(list, strchr(strval(obj->type), '[') ? "Elements" : "Fields", &vw);
+	view = make_list(list, strchr(strval(obj->type), '[') ? _("Elements") : _("Fields"), &vw);
 
 	gtk_box_pack_start(vbox, view, TRUE, TRUE, 0);
 
@@ -288,12 +289,12 @@ object_func(const GdbVar * obj, const GSList * list)
 
 //  btn=gtk_dialog_add_button(GTK_DIALOG(vw.dlg)," << _Back ",respGoBack);
 	btn = gtk_dialog_add_button(GTK_DIALOG(vw.dlg), GTK_STOCK_GO_BACK, respGoBack);
-	gdbui_set_tip(btn, "Return to previous dialog.");
+	gdbui_set_tip(btn, _("Return to previous dialog."));
 	gtk_dialog_set_default_response(GTK_DIALOG(vw.dlg), respGoBack);
 
 
 	vw.info_btn = new_info_btn();
-	gdbui_set_tip(vw.info_btn, "Display additional information about the selected item.");
+	gdbui_set_tip(vw.info_btn, _("Display additional information about the selected item."));
 	g_signal_connect(G_OBJECT(vw.info_btn), "clicked", G_CALLBACK(info_click), &vw);
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(vw.dlg)->action_area), vw.info_btn, FALSE, FALSE, 0);
 
@@ -340,10 +341,10 @@ locals_func(const GdbFrameInfo * frame, const GSList * locals)
 	GtkWidget *btn;
 
 	memset(&vw, 0, sizeof(vw));
-	vw.dlg = gdbui_new_dialog("Frame info");
+	vw.dlg = gdbui_new_dialog(_("Frame info"));
 	vbox = GTK_BOX(GTK_DIALOG(vw.dlg)->vbox);
 
-	heading = g_strdup_printf("\nFrame #%s in %s() at %s:%s\n",
+	heading = g_strdup_printf(_("\nFrame #%s in %s() at %s:%s\n"),
 				  strval(frame->level), strval(frame->func),
 				  basename(strval(frame->filename)), strval(frame->line));
 	header = gtk_label_new(NULL);
@@ -353,21 +354,21 @@ locals_func(const GdbFrameInfo * frame, const GSList * locals)
 
 
 	gtk_box_pack_start(vbox, gtk_hseparator_new(), FALSE, FALSE, 0);
-	view = make_list(frame->args, "Function arguments", &vw);
+	view = make_list(frame->args, _("Function arguments"), &vw);
 	gtk_box_pack_start(vbox, view, TRUE, TRUE, 0);
 
 	gtk_box_pack_start(vbox, gtk_hseparator_new(), FALSE, FALSE, 0);
-	view = make_list(locals, "Local variables", &vw);
+	view = make_list(locals, _("Local variables"), &vw);
 	gtk_box_pack_start(vbox, view, TRUE, TRUE, 0);
 
 //  btn=gtk_dialog_add_button(GTK_DIALOG(vw.dlg)," << _Back ",respGoBack);
 	btn = gtk_dialog_add_button(GTK_DIALOG(vw.dlg), GTK_STOCK_GO_BACK, respGoBack);
-	gdbui_set_tip(btn, "Return to stack list dialog.");
+	gdbui_set_tip(btn, _("Return to stack list dialog."));
 
 	gtk_dialog_set_default_response(GTK_DIALOG(vw.dlg), respGoBack);
 
 	vw.info_btn = new_info_btn();
-	gdbui_set_tip(vw.info_btn, "Display additional information about the selected item.");
+	gdbui_set_tip(vw.info_btn, _("Display additional information about the selected item."));
 	g_signal_connect(G_OBJECT(vw.info_btn), "clicked", G_CALLBACK(info_click), &vw);
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(vw.dlg)->action_area), vw.info_btn, FALSE, FALSE, 0);
 
@@ -573,7 +574,7 @@ gdbui_stack_dlg(const GSList * frame_list)
 	gtk_tree_selection_set_mode(select, GTK_SELECTION_SINGLE);
 	g_signal_connect(G_OBJECT(select), "changed", G_CALLBACK(stack_select_cb), &sw);
 
-	sw.dlg = gdbui_new_dialog("Stack trace");
+	sw.dlg = gdbui_new_dialog(_("Stack trace"));
 
 	scroll = gtk_scrolled_window_new(NULL, NULL);
 	gtk_widget_set_usize(scroll, (gdk_screen_get_width(gdk_screen_get_default()) / 3) * 2,
@@ -590,7 +591,7 @@ gdbui_stack_dlg(const GSList * frame_list)
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(sw.dlg)->vbox), sw.code_label, FALSE, FALSE, 4);
 
 	locals_btn = new_info_btn();
-	gdbui_set_tip(locals_btn, "Display additional information about the selected frame.");
+	gdbui_set_tip(locals_btn, _("Display additional information about the selected frame."));
 	g_signal_connect(G_OBJECT(locals_btn), "clicked", G_CALLBACK(show_frame_click), &sw);
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(sw.dlg)->action_area), locals_btn, FALSE, FALSE, 0);
 

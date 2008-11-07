@@ -12,6 +12,7 @@
 #include <gdk/gdkkeysyms.h>
 #include "gdb-io.h"
 #include "gdb-ui.h"
+#include "support.h"
 
 enum
 {
@@ -99,7 +100,7 @@ static void
 delete_click(GtkWidget * w, gpointer p)
 {
 	BkPtDlgData *bpd = p;
-	if (confirm(is_watchlist ? "Delete selected watchpoint?" : "Delete selected breakhpoint?"))
+	if (confirm(is_watchlist ? _("Delete selected watchpoint?") : _("Delete selected breakpoint?")))
 	{
 		gdbui_enable(FALSE);
 		gdbio_delete_break(break_dlg, bpd->bpi->number);
@@ -127,7 +128,7 @@ edit_click(GtkWidget * w, gpointer p)
 	gboolean changed = FALSE;
 
 	GtkWidget *dlg =
-		gtk_dialog_new_with_buttons(is_watchlist ? "Edit watchpoint" : "Edit breakpoint",
+		gtk_dialog_new_with_buttons(is_watchlist ? _("Edit watchpoint") : _("Edit breakpoint"),
 					    GTK_WINDOW(gdbui_setup.main_window),
 					    GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 					    GTK_STOCK_OK, GTK_RESPONSE_OK,
@@ -137,32 +138,32 @@ edit_click(GtkWidget * w, gpointer p)
 
 	gtk_dialog_set_default_response(GTK_DIALOG(dlg), GTK_RESPONSE_OK);
 
-	enabled_chk = gtk_check_button_new_with_label("Enabled");
+	enabled_chk = gtk_check_button_new_with_label(_("Enabled"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(enabled_chk), bpd->bpi->enabled[0] == 'y');
 	gtk_box_pack_start(vbox, enabled_chk, FALSE, FALSE, 0);
 	hbox = gtk_hbox_new(FALSE, 0);
 	gtk_box_pack_start(vbox, hbox, TRUE, TRUE, 0);
 
-	gtk_box_pack_start(GTK_BOX(hbox), gtk_label_new(" Break after "), FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), gtk_label_new(_(" Break after ")), FALSE, FALSE, 0);
 	after_entry = gtk_entry_new();
 	if (bpd->bpi->ignore)
 	{
 		gtk_entry_set_text(GTK_ENTRY(after_entry), bpd->bpi->ignore);
 	}
 	gtk_box_pack_start(GTK_BOX(hbox), after_entry, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox), gtk_label_new(" times. "), FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), gtk_label_new(_(" times. ")), FALSE, FALSE, 0);
 
 	hbox = gtk_hbox_new(FALSE, 0);
 	gtk_box_pack_start(vbox, hbox, TRUE, TRUE, 0);
 
-	gtk_box_pack_start(GTK_BOX(hbox), gtk_label_new(" Break when "), FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), gtk_label_new(_(" Break when ")), FALSE, FALSE, 0);
 	condition_entry = gtk_entry_new();
 	if (bpd->bpi->cond)
 	{
 		gtk_entry_set_text(GTK_ENTRY(condition_entry), bpd->bpi->cond);
 	}
 	gtk_box_pack_start(GTK_BOX(hbox), condition_entry, TRUE, TRUE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox), gtk_label_new(" is true. "), FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), gtk_label_new(_(" is true. ")), FALSE, FALSE, 0);
 
 	gtk_widget_show_all(dlg);
 	gtk_entry_set_activates_default(GTK_ENTRY(condition_entry), TRUE);
@@ -227,7 +228,7 @@ add_click(GtkWidget * w, gpointer p)
 {
 	BkPtDlgData *bpd = p;
 	LocationInfo *abi =
-		gdbui_location_dlg(is_watchlist ? "Add watchpoint" : "Add breakpoint",
+		gdbui_location_dlg(is_watchlist ? _("Add watchpoint") : _("Add breakpoint"),
 				   is_watchlist);
 	if (abi)
 	{
@@ -328,7 +329,7 @@ has_items(const GSList * frame_list)
 		{
 			continue;
 		}
-		if ((bpi) && (strstr(bpi->type, is_watchlist ? "watchpoint" : "breakpoint")))
+		if ((bpi) && (strstr(bpi->type, is_watchlist ? _("watchpoint") : _("breakpoint"))))
 		{
 			return TRUE;
 		}
@@ -382,7 +383,7 @@ break_dlg(const GSList * frame_list)
 			GdbBreakPointInfo *bpi = p->data;
 			if (bpi)
 			{
-				gboolean iswatch = !g_str_equal("breakpoint", bpi->type);
+				gboolean iswatch = !g_str_equal(_("breakpoint"), bpi->type);
 				if (is_watchlist != iswatch)
 				{
 					continue;
@@ -478,7 +479,7 @@ break_dlg(const GSList * frame_list)
 		gtk_tree_selection_set_mode(select, GTK_SELECTION_SINGLE);
 		g_signal_connect(G_OBJECT(select), "changed", G_CALLBACK(break_select_cb), &bpd);
 
-		bpd.dlg = gdbui_new_dialog(is_watchlist ? "Watchpoints" : "Breakpoints");
+		bpd.dlg = gdbui_new_dialog(is_watchlist ? _("Watchpoints") : _("Breakpoints"));
 
 		scroll = gtk_scrolled_window_new(NULL, NULL);
 		gtk_widget_set_usize(scroll,

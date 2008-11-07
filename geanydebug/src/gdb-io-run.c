@@ -1,6 +1,6 @@
 
 /*
- * gdb-io-run.c - Process execution and input functions for GDB wrapper library. 
+ * gdb-io-run.c - Process execution and input functions for GDB wrapper library.
  *
  * See the file "gdb-io.h" for license information.
  *
@@ -12,6 +12,7 @@
 #include <string.h>
 #include <glib.h>
 #include "gdb-io-priv.h"
+#include "support.h"
 
 
 extern gint g_unlink(const gchar * filename);
@@ -247,12 +248,12 @@ start_xterm(gchar * term_cmd)
 	gchar *all;
 	if (!gdbio_setup.temp_dir)
 	{
-		gdbio_error_func("tty temporary directory not specified!\n");
+		gdbio_error_func(_("tty temporary directory not specified!\n"));
 		return NULL;
 	}
 	if (!g_file_test(gdbio_setup.temp_dir, G_FILE_TEST_IS_DIR))
 	{
-		gdbio_error_func("tty temporary directory not found!\n");
+		gdbio_error_func(_("tty temporary directory not found!\n"));
 		return NULL;
 	}
 	if (!xterm_tty_file)
@@ -271,14 +272,14 @@ start_xterm(gchar * term_cmd)
 	}
 	if (!gdbio_setup.tty_helper)
 	{
-		gdbio_error_func("tty helper program not specified!\n");
+		gdbio_error_func(_("tty helper program not specified!\n"));
 		return NULL;
 	}
 	if (!
 	    (g_file_test(gdbio_setup.tty_helper, G_FILE_TEST_IS_EXECUTABLE) &&
 	     g_file_test(gdbio_setup.tty_helper, G_FILE_TEST_IS_REGULAR)))
 	{
-		gdbio_error_func("tty helper program not found!\n");
+		gdbio_error_func(_("tty helper program not found!\n"));
 		return NULL;
 	}
 	term_args[0] = term_cmd;
@@ -331,7 +332,7 @@ start_xterm(gchar * term_cmd)
 					if (strlen(contents))
 					{
 						tty_name = g_strdup(contents);
-						gdbio_info_func("Attaching to terminal %s\n",
+						gdbio_info_func(_("Attaching to terminal %s\n"),
 								tty_name);
 					}
 					break;
@@ -346,7 +347,7 @@ start_xterm(gchar * term_cmd)
 		while (ms <= 10000);
 		if (ms > 10000)
 		{
-			gdbio_error_func("Timeout waiting for TTY name.\n");
+			gdbio_error_func(_("Timeout waiting for TTY name.\n"));
 			kill_xterm();
 		}
 	}
@@ -395,7 +396,7 @@ static void
 on_gdb_exit(GPid pid, gint status, gpointer data)
 {
 	gdbio_pid = 0;
-	gdbio_info_func("GDB exited (pid=%d)\n", pid);
+	gdbio_info_func(_("GDB exited (pid=%d)\n"), pid);
 	g_spawn_close_pid(pid);
 
 
@@ -456,9 +457,9 @@ on_send_to_gdb(GIOChannel * src, GIOCondition cond, gpointer data)
 void
 gdbio_target_exited(gchar * reason)
 {
-	gdbio_info_func("Target process exited. (pid=%d; %s%s)\n", target_pid,
+	gdbio_info_func(_("Target process exited. (pid=%d; %s%s)\n"), target_pid,
 			reason
-			&& g_ascii_isdigit(reason[0]) ? "code=" : "reason:",
+			&& g_ascii_isdigit(reason[0]) ? _("code=") : _("reason:"),
 			reason ? reason : "unknown");
 	target_pid = 0;
 	kill_xterm();
@@ -524,19 +525,19 @@ gdbio_kill_target(gboolean force)
 		snprintf(pidstr, sizeof(pidstr) - 1, "/proc/%d", target_pid);
 		if (!g_file_test(pidstr, G_FILE_TEST_IS_DIR))
 		{
-			gdbio_info_func("Directory %s not found!\n", pidstr);
+			gdbio_info_func(_("Directory %s not found!\n"), pidstr);
 			pidstr[0] = '\0';
 		}
 		if (!force)
 		{
-			gdbio_info_func("Shutting down target program.\n");
+			gdbio_info_func(_("Shutting down target program.\n"));
 			gdbio_send_seq_cmd(target_killed, "kill SIGKILL\n");
 			gdbio_wait(250);
 			do_loop();
 		}
 		else
 		{
-			gdbio_info_func("Killing target program.\n");
+			gdbio_info_func(_("Killing target program.\n"));
 			kill(this_pid, SIGKILL);
 		}
 		while (1)
@@ -544,10 +545,10 @@ gdbio_kill_target(gboolean force)
 			do_loop();
 			if (ms >= 2000)
 			{
-				gdbio_info_func("Timeout waiting for target process.\n");
+				gdbio_info_func(_("Timeout waiting for target process.\n"));
 				if (!force)
 				{
-					gdbio_info_func("Using a bigger hammer!\n");
+					gdbio_info_func(_("Using a bigger hammer!\n"));
 					gdbio_kill_target(TRUE);
 				}
 				break;
@@ -561,7 +562,7 @@ gdbio_kill_target(gboolean force)
 				break;
 			}
 			if (!(ms % 1000))
-				gdbio_info_func("Waiting for target process to exit.\n");
+				gdbio_info_func(_("Waiting for target process to exit.\n"));
 			ms += gdbio_wait(250);
 		}
 	}
@@ -589,7 +590,7 @@ gdbio_exit()
 		{
 			if (!g_file_test(pidstr, G_FILE_TEST_IS_DIR))
 			{
-				gdbio_info_func("Directory %s not found!\n", pidstr);
+				gdbio_info_func(_("Directory %s not found!\n"), pidstr);
 				pidstr[0] = '\0';
 			}
 			do
@@ -597,7 +598,7 @@ gdbio_exit()
 				do_loop();
 				if (gdbio_pid == this_gdb)
 				{
-					gdbio_info_func("Killing GDB (pid=%d)\n", this_gdb);
+					gdbio_info_func(_("Killing GDB (pid=%d)\n"), this_gdb);
 				}
 				else
 				{
@@ -611,7 +612,7 @@ gdbio_exit()
 				}
 				if (ms > 2000)
 				{
-					gdbio_error_func("Timeout trying to kill GDB.\n");
+					gdbio_error_func(_("Timeout trying to kill GDB.\n"));
 					break;
 				}
 			}
@@ -621,7 +622,7 @@ gdbio_exit()
 		}
 		else
 		{
-			gdbio_info_func("Shutting down GDB\n");
+			gdbio_info_func(_("Shutting down GDB\n"));
 			gdbio_send_cmd("-gdb-exit\n");
 			while (1)
 			{
@@ -634,7 +635,7 @@ gdbio_exit()
 				if (gdbio_pid == this_gdb)
 				{
 					if (!(ms % 1000))
-						gdbio_info_func("Waiting for GDB to exit.\n");
+						gdbio_info_func(_("Waiting for GDB to exit.\n"));
 				}
 				else
 				{
@@ -642,7 +643,7 @@ gdbio_exit()
 				}
 				if (ms > 2000)
 				{
-					gdbio_info_func("Timeout waiting for GDB to exit.\n");
+					gdbio_info_func(_("Timeout waiting for GDB to exit.\n"));
 					gdbio_set_running(TRUE);
 					gdbio_exit();
 					break;
@@ -705,7 +706,7 @@ gdbio_load(const gchar * exe_name)
 				     GDB_SPAWN_FLAGS, NULL,
 				     NULL, &gdbio_pid, &gdbio_in, &gdbio_out, NULL, &err))
 	{
-		gdbio_info_func("Starting gdb (pid=%d)\n", gdbio_pid);
+		gdbio_info_func(_("Starting gdb (pid=%d)\n"), gdbio_pid);
 
 		g_child_watch_add(gdbio_pid, on_gdb_exit, NULL);
 		gdbio_src = g_child_watch_source_new(gdbio_pid);
@@ -765,7 +766,7 @@ gdbio_exec_target(gchar * terminal_command)
 void
 gdbio_set_target_pid(GPid pid)
 {
-	gdbio_info_func("Started target process. (pid=%d)\n", pid);
+	gdbio_info_func(_("Started target process. (pid=%d)\n"), pid);
 	target_pid = pid;
 }
 

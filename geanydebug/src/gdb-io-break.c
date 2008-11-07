@@ -1,6 +1,6 @@
 
 /*
- * gdb-io-break.c - Breakpoint management functions for GDB wrapper library. 
+ * gdb-io-break.c - Breakpoint management functions for GDB wrapper library.
  *
  * See the file "gdb-io.h" for license information.
  *
@@ -10,6 +10,7 @@
 #include <string.h>
 #include <glib.h>
 #include "gdb-io-priv.h"
+#include "support.h"
 
 
 static GdbListFunc gdbio_break_list_func = NULL;
@@ -138,12 +139,12 @@ added_break(gint seq, gchar ** list, gchar * resp)
 			HSTR(bkpt, number);
 			if (func)
 			{
-				gdbio_info_func("Added breakpoint #%s in %s() at %s:%s\n", number,
+				gdbio_info_func(_("Added breakpoint #%s in %s() at %s:%s\n"), number,
 						func, file, line);
 			}
 			else
 			{
-				gdbio_info_func("Added breakpoint #%s at %s:%s\n", number, file,
+				gdbio_info_func(_("Added breakpoint #%s at %s:%s\n"), number, file,
 						line);
 			}
 
@@ -155,7 +156,7 @@ added_break(gint seq, gchar ** list, gchar * resp)
 			{
 				HSTR(wpt, exp);
 				HSTR(wpt, number);
-				gdbio_info_func("Added write watchpoint #%s for %s\n", number, exp);
+				gdbio_info_func(_("Added write watchpoint #%s for %s\n"), number, exp);
 			}
 			else
 			{
@@ -164,7 +165,7 @@ added_break(gint seq, gchar ** list, gchar * resp)
 				{
 					HSTR(hw_awpt, exp);
 					HSTR(hw_awpt, number);
-					gdbio_info_func("Added read/write watchpoint #%s for %s\n",
+					gdbio_info_func(_("Added read/write watchpoint #%s for %s\n"),
 							number, exp);
 				}
 				else
@@ -175,7 +176,7 @@ added_break(gint seq, gchar ** list, gchar * resp)
 						HSTR(hw_rwpt, exp);
 						HSTR(hw_rwpt, number);
 						gdbio_info_func
-							("Added read watchpoint #%s for %s\n",
+							(_("Added read watchpoint #%s for %s\n"),
 							 number, exp);
 					}
 				}
@@ -222,7 +223,7 @@ deleted_break(gint seq, gchar ** list, gchar * resp)
 	if (h)
 	{
 		g_hash_table_destroy(h);
-		gdbio_info_func("Watch/breakpoint deleted.\n");
+		gdbio_info_func(_("Watch/breakpoint deleted.\n"));
 	}
 	if (gdbio_break_list_func)
 	{
@@ -246,7 +247,7 @@ toggled_break(gint seq, gchar ** list, gchar * resp)
 			if (msg)
 			{
 				gchar *tmp =
-					g_strconcat("Failed to toggle breakpoint -\n", msg, NULL);
+					g_strconcat(_("Failed to toggle breakpoint -\n"), msg, NULL);
 				gdbio_error_func(tmp);
 				if (tmp)
 				{
@@ -264,7 +265,7 @@ toggled_break(gint seq, gchar ** list, gchar * resp)
 	}
 	else
 	{
-		gdbio_info_func("Watch/breakpoint toggled.\n");
+		gdbio_info_func(_("Watch/breakpoint toggled.\n"));
 	}
 }
 
@@ -278,7 +279,7 @@ edited_break(gint seq, gchar ** list, gchar * resp)
 	if (h)
 	{
 		g_hash_table_destroy(h);
-		gdbio_info_func("Watch/breakpoint modified.\n");
+		gdbio_info_func(_("Watch/breakpoint modified.\n"));
 	}
 }
 

@@ -14,6 +14,8 @@
 #include "gdb-io.h"
 #include "gdb-ui.h"
 
+#include "support.h"
+
 
 
 GdbUiSetup gdbui_setup;
@@ -118,7 +120,7 @@ status_func(GdbStatus st)
 				we(pipe_chk);
 				we(term_chk);
 				wd(unload_btn);
-				status("(no program)", black, white);
+				status(_("(no program)"), black, white);
 				break;
 			}
 		case GdbLoaded:
@@ -132,19 +134,19 @@ status_func(GdbStatus st)
 				we(con_lab);
 				we(con_cmd);
 				we(env_btn);
-				status("loaded", white, black);
+				status(_("loaded"), white, black);
 				break;
 			}
 		case GdbStartup:
 			{
-				status("starting", yellow, red);
+				status(_("starting"), yellow, red);
 				break;
 			}
 		case GdbRunning:
 			{
 				we(pause_btn);
 				we(kill_btn);
-				status("running", green, white);
+				status(_("running"), green, white);
 				break;
 			}
 		case GdbStopped:
@@ -163,7 +165,7 @@ status_func(GdbStatus st)
 				we(con_cmd);
 				we(pipe_chk);
 				we(env_btn);
-				status("stopped", red, yellow);
+				status(_("stopped"), red, yellow);
 				break;
 			}
 		case GdbFinished:
@@ -177,7 +179,7 @@ status_func(GdbStatus st)
 				we(break_btn);
 				we(watch_btn);
 				we(env_btn);
-				status("terminated", white, black);
+				status(_("terminated"), white, black);
 				break;
 			}
 	}
@@ -214,7 +216,7 @@ signal_func(const GdbSignalInfo * si)
 				     si->from ? si->from : "");
 	if (pause_clicked)
 	{
-		status("paused", yellow, red);
+		status(_("paused"), yellow, red);
 		pause_clicked = FALSE;
 	}
 	else
@@ -223,7 +225,7 @@ signal_func(const GdbSignalInfo * si)
 							GTK_DIALOG_MODAL |
 							GTK_DIALOG_DESTROY_WITH_PARENT,
 							GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE,
-							"Program received signal:");
+							_("Program received signal:"));
 
 		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dlg), msg);
 		gtk_window_set_title(GTK_WINDOW(dlg), "debugger");
@@ -292,7 +294,7 @@ err_func(const gchar * msg)
 	GtkWidget *dlg = NULL;
 	dlg = gtk_message_dialog_new(GTK_WINDOW(gdbui_setup.main_window),
 				     GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-				     GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "Error:");
+				     GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, _("Error:"));
 	gtk_window_set_keep_above(GTK_WINDOW(dlg), TRUE);
 	gtk_window_set_title(GTK_WINDOW(dlg), "debugger");
 	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dlg), msg);
@@ -444,7 +446,7 @@ static void
 load_click(GtkWidget * btn, gpointer user_data)
 {
 	gchar *errmsg = NULL;
-	GtkWidget *dlg = gtk_file_chooser_dialog_new("Select executable to debug",
+	GtkWidget *dlg = gtk_file_chooser_dialog_new(_("Select executable to debug"),
 						     GTK_WINDOW(gdbui_setup.main_window),
 						     GTK_FILE_CHOOSER_ACTION_OPEN,
 						     GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -467,7 +469,7 @@ load_click(GtkWidget * btn, gpointer user_data)
 					{
 						case ELF_RELOC:
 							{
-								errmsg = "Debugging of object files is not supported.";
+								errmsg = _("Debugging of object files is not supported.");
 								break;
 							}
 						case ELF_EXEC:
@@ -517,29 +519,29 @@ load_click(GtkWidget * btn, gpointer user_data)
 								}
 								else
 								{
-									errmsg = "You don't have permission to execute this file.";
+									errmsg = _("You don't have permission to execute this file.");
 								}
 								break;
 							}
 						case ELF_SHARED:
 							{
-								errmsg = "Debugging of shared libraries is not supported.";
+								errmsg = _("Debugging of shared libraries is not supported.");
 								break;
 							}
 						case ELF_CORE:
 							{
-								errmsg = "Debugging of core files id not supported.";
+								errmsg = _("Debugging of core files id not supported.");
 								break;
 							}
 						default:
 							{
-								errmsg = "Target file must be ELF 32-bit x86 executable.";
+								errmsg = _("Target file must be ELF 32-bit x86 executable.");
 							}
 					}
 				}
 				else
 				{
-					errmsg = "You don't have permission to read this file.";
+					errmsg = _("You don't have permission to read this file.");
 				}
 				g_free(fn);
 			}
@@ -656,7 +658,7 @@ nexti_click(GtkWidget * btn, gpointer user_data)
 static void
 until_click(GtkWidget * btn, gpointer user_data)
 {
-	LocationInfo *li = gdbui_location_dlg("Run to location", FALSE);
+	LocationInfo *li = gdbui_location_dlg(_("Run to location"), FALSE);
 	if (li)
 	{
 		if (li->filename && *(li->filename))
@@ -766,7 +768,7 @@ gdbui_create_widgets(GtkWidget * parent)
 		gtk_container_add(GTK_CONTAINER(parent), vbox);
 	}
 
-	split2 stat_lab = gtk_label_new("no program");
+	split2 stat_lab = gtk_label_new(_("no program"));
 	gtk_box_pack_start(GTK_BOX(vbox), stat_lab, FALSE, FALSE, 4);
 	gtk_widget_show(vbox);
 
@@ -774,52 +776,52 @@ gdbui_create_widgets(GtkWidget * parent)
 	gtk_box_pack_start(GTK_BOX(vbox), action_area, FALSE, FALSE, 0);
 	gtk_widget_show(action_area);
 	load_btn =
-		make_btn("_Load", load_click, GTK_STOCK_OPEN, "Load target program into debugger.");
+		make_btn(_("_Load"), load_click, GTK_STOCK_OPEN, _("Load target program into debugger."));
 	unload_btn =
-		make_btn("_Unload", unload_click, GTK_STOCK_QUIT,
-			 "Kill the target program AND the debugger.");
+		make_btn(_("_Unload"), unload_click, GTK_STOCK_QUIT,
+			 _("Kill the target program AND the debugger."));
 	run_btn =
-		make_btn("_Run", run_click, GTK_STOCK_EXECUTE,
-			 "Execute target program in debugger.");
+		make_btn(_("_Run"), run_click, GTK_STOCK_EXECUTE,
+			 _("Execute target program in debugger."));
 	kill_btn =
-		make_btn("_Kill", kill_click, GTK_STOCK_STOP,
-			 "Kill the target program with SIGKILL.");
+		make_btn(_("_Kill"), kill_click, GTK_STOCK_STOP,
+			 _("Kill the target program with SIGKILL."));
 	pause_btn =
-		make_btn("_Pause", pause_click, GTK_STOCK_MEDIA_PAUSE,
-			 "Pause the target program with SIGINT.");
+		make_btn(_("_Pause"), pause_click, GTK_STOCK_MEDIA_PAUSE,
+			 _("Pause the target program with SIGINT."));
 	cont_btn =
-		make_btn("_Continue", cont_click, GTK_STOCK_MEDIA_PLAY,
-			 "Continue executing target program.");
+		make_btn(_("_Continue"), cont_click, GTK_STOCK_MEDIA_PLAY,
+			 _("Continue executing target program."));
 	step_btn =
-		make_btn("_Step", step_click, GTK_STOCK_GO_FORWARD,
-			 "Step to the next line or function call.");
+		make_btn(_("_Step"), step_click, GTK_STOCK_GO_FORWARD,
+			 _("Step to the next line or function call."));
 	stepi_btn =
-		make_btn("Step _in", stepi_click, GTK_STOCK_GOTO_LAST,
-			 "Execute the next machine instruction or function call.");
-	next_btn = make_btn("_Next", next_click, GTK_STOCK_MEDIA_FORWARD, "Step to the next line.");
+		make_btn(_("Step _in"), stepi_click, GTK_STOCK_GOTO_LAST,
+			 _("Execute the next machine instruction or function call."));
+	next_btn = make_btn("_Next", next_click, GTK_STOCK_MEDIA_FORWARD, _("Step to the next line."));
 	nexti_btn =
-		make_btn("Ne_xt in", nexti_click, GTK_STOCK_MEDIA_NEXT,
-			 "Execute the next machine instruction.");
+		make_btn(_("Ne_xt in"), nexti_click, GTK_STOCK_MEDIA_NEXT,
+			 _("Execute the next machine instruction."));
 	until_btn =
-		make_btn("Run _to", until_click, GTK_STOCK_JUMP_TO,
-			 "Run to specified source line.");
+		make_btn(_("Run _to"), until_click, GTK_STOCK_JUMP_TO,
+			 _("Run to specified source line."));
 	stack_btn =
-		make_btn("Stac_k", stack_click, GTK_STOCK_DND_MULTIPLE,
-			 "Display a backtrace of the current call stack.");
-	break_btn = make_btn("_Breaks", break_click, GTK_STOCK_INDEX, "Add or remove breakpoints.");
-	watch_btn = make_btn("_Watches", watch_click, GTK_STOCK_FIND, "Add or remove watchpoints.");
+		make_btn(_("Stac_k"), stack_click, GTK_STOCK_DND_MULTIPLE,
+			 _("Display a backtrace of the current call stack."));
+	break_btn = make_btn("_Breaks", break_click, GTK_STOCK_INDEX, _("Add or remove breakpoints."));
+	watch_btn = make_btn("_Watches", watch_click, GTK_STOCK_FIND, _("Add or remove watchpoints."));
 	finish_btn =
-		make_btn("_Finish", finish_click, GTK_STOCK_GOTO_BOTTOM,
-			 "Complete the currently executing function.");
+		make_btn(_("_Finish"), finish_click, GTK_STOCK_GOTO_BOTTOM,
+			 _("Complete the currently executing function."));
 	return_btn =
-		make_btn("_Return", return_click, GTK_STOCK_UNDO,
-			 "Return immediately from the current function.");
+		make_btn(_("_Return"), return_click, GTK_STOCK_UNDO,
+			 _("Return immediately from the current function."));
 	env_btn =
-		make_btn("En_viron", env_click, GTK_STOCK_PROPERTIES,
-			 "Set target environment and command line options.");
+		make_btn(_("En_viron"), env_click, GTK_STOCK_PROPERTIES,
+			 _("Set target environment and command line options."));
 	prefs_btn =
-		make_btn("_Options", prefs_click, GTK_STOCK_PREFERENCES,
-			 "Set user interface options.");
+		make_btn(_("_Options"), prefs_click, GTK_STOCK_PREFERENCES,
+			 _("Set user interface options."));
 
 	split1;
 	new_row;
@@ -868,22 +870,22 @@ gdbui_create_widgets(GtkWidget * parent)
 	split1;
 
 	w = vbox;
-	term_chk = gtk_check_button_new_with_label("Run in terminal");
+	term_chk = gtk_check_button_new_with_label(_("Run in terminal"));
 	gtk_box_pack_start(GTK_BOX(w), term_chk, FALSE, FALSE, 0);
-	gdbui_set_tip(term_chk, "Execute target program inside a terminal window.");
+	gdbui_set_tip(term_chk, _("Execute target program inside a terminal window."));
 
 
-	pipe_chk = gtk_check_button_new_with_label("Ignore SIGPIPE");
+	pipe_chk = gtk_check_button_new_with_label(_("Ignore SIGPIPE"));
 	gdbui_set_tip(pipe_chk,
-		      "Don't pause execution when target gets a SIGPIPE signal.\n"
-		      "(Useful for certain networking applications.)");
+		      _("Don't pause execution when target gets a SIGPIPE signal.\n"
+		      "(Useful for certain networking applications.)"));
 	gtk_box_pack_start(GTK_BOX(w), pipe_chk, FALSE, FALSE, 0);
 	g_signal_connect(G_OBJECT(pipe_chk), "clicked", G_CALLBACK(pipe_click), NULL);
 
 	split2;
 
-	con_lab = gtk_label_new(" Console:");
-	gdbui_set_tip(con_lab, "Send a GDB command directly to the debugger.");
+	con_lab = gtk_label_new(_("Console:"));
+	gdbui_set_tip(con_lab, _("Send a GDB command directly to the debugger."));
 	gtk_misc_set_alignment(GTK_MISC(con_lab), 0.0f, 0.0f);
 	gtk_box_pack_start(GTK_BOX(vbox), con_lab, FALSE, FALSE, 0);
 
@@ -939,7 +941,7 @@ main(gint argc, gchar * argv[])
 	g_signal_connect(G_OBJECT(gdbui_setup.main_window), "destroy", quit, NULL);
 	vbox = gdbui_create_widgets();
 	gtk_box_pack_start(GTK_BOX(vbox), gtk_hseparator_new(), TRUE, TRUE, 4);
-	quit_btn = make_btn("_Quit", quit_click, "Exit everything ");
+	quit_btn = make_btn(_("_Quit"), quit_click, _("Exit everything"));
 	gtk_box_pack_start(GTK_BOX(vbox), quit_btn, TRUE, TRUE, 0);
 	gtk_container_add(GTK_CONTAINER(gdbui_setup.main_window), vbox);
 	gtk_widget_show_all(gdbui_setup.main_window);

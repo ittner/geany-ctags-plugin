@@ -1,6 +1,6 @@
 
 /*
- * gdb-io-stack.c - Stack information functions for GDB wrapper library. 
+ * gdb-io-stack.c - Stack information functions for GDB wrapper library.
  *
  * See the file "gdb-io.h" for license information.
  *
@@ -10,6 +10,7 @@
 #include <glib.h>
 
 #include "gdb-io-priv.h"
+#include "support.h"
 
 static GdbListFunc gdbio_stack_list_func = NULL;
 static GSList *frame_list = NULL;
@@ -173,8 +174,10 @@ parse_stack_list(gint seq, gchar ** list, gchar * resp)
 			if (len >= MAX_STACK_RETURN)
 			{
 				gdbio_error_func
-					("Stack too deep to display!\n(Showing only %d frames)",
-					 len);
+					(ngettext(
+						"Stack too deep to display!\n(Showing only %d frame)",
+						"Stack too deep to display!\n(Showing only %d frames)",
+						 len), len);
 			}
 			gdbio_send_seq_cmd(parse_stack_args, "-stack-list-arguments 1 0 %d\n",
 					   len - 1);

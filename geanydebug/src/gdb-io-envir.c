@@ -1,6 +1,6 @@
 
 /*
- * gdb-io-envir.c - Environment settings for GDB wrapper library. 
+ * gdb-io-envir.c - Environment settings for GDB wrapper library.
  *
  * See the file "gdb-io.h" for license information.
  *
@@ -10,6 +10,7 @@
 #include <string.h>
 #include <glib.h>
 #include "gdb-io-priv.h"
+#include "support.h"
 
 
 static GdbEnvironFunc gdbio_environ_func = NULL;
@@ -119,7 +120,7 @@ get_env_dirs(gint seq, gchar ** list, gchar * resp)
 	}
 	else
 	{
-		gdbio_info_func("Failed to retrieve source search path setting from GDB.");
+		gdbio_info_func(_("Failed to retrieve source search path setting from GDB."));
 //    gdblx_dump_table(h);
 	}
 	if (h)
@@ -140,7 +141,7 @@ get_env_path(gint seq, gchar ** list, gchar * resp)
 	}
 	else
 	{
-		gdbio_info_func("Failed to retrieve executable search path setting from GDB.");
+		gdbio_info_func(_("Failed to retrieve executable search path setting from GDB."));
 //    gdblx_dump_table(h);
 	}
 	if (h)
@@ -162,7 +163,7 @@ get_env_cwd(gint seq, gchar ** list, gchar * resp)
 	}
 	else
 	{
-		gdbio_info_func("Failed to retrieve working directory setting from GDB.");
+		gdbio_info_func(_("Failed to retrieve working directory setting from GDB."));
 //    gdblx_dump_table(h);
 	}
 	if (h)
