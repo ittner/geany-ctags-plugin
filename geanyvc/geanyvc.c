@@ -2046,19 +2046,19 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 
 	/* init keybindins */
 	p_keybindings->set_item(plugin_key_group, VC_DIFF_FILE, kbdiff_file,
-	0, 0, "vc_show_diff_of_file", "Show diff of file", menu_vc_diff_file);
+	0, 0, "vc_show_diff_of_file", _("Show diff of file"), menu_vc_diff_file);
 	p_keybindings->set_item(plugin_key_group, VC_DIFF_DIR, kbdiff_dir,
-	0, 0, "vc_show_diff_of_dir", "Show diff of diretory", menu_vc_diff_dir);
+	0, 0, "vc_show_diff_of_dir", _("Show diff of diretory"), menu_vc_diff_dir);
 	p_keybindings->set_item(plugin_key_group, VC_DIFF_BASEDIR, kbdiff_basedir,
-	0, 0, "vc_show_diff_of_basedir", "Show diff of basedir", menu_vc_diff_basedir);
+	0, 0, "vc_show_diff_of_basedir", _("Show diff of basedir"), menu_vc_diff_basedir);
 	p_keybindings->set_item(plugin_key_group, VC_COMMIT, kbcommit,
-	0, 0, "vc_commit", "Commit changes", menu_vc_commit);
+	0, 0, "vc_commit", _("Commit changes"), menu_vc_commit);
 	p_keybindings->set_item(plugin_key_group, VC_STATUS, kbstatus,
-	0, 0, "vc_status", "Show status" , menu_vc_status);
+	0, 0, "vc_status", _("Show status") , menu_vc_status);
 	p_keybindings->set_item(plugin_key_group, VC_REVERT, kbrevert,
-	0, 0, "vc_revert", "Revert changes", menu_vc_revert_file);
+	0, 0, "vc_revert", _("Revert changes"), menu_vc_revert_file);
 	p_keybindings->set_item(plugin_key_group, VC_UPDATE, kbupdate,
-	0, 0, "vc_update", "Update file", menu_vc_update);
+	0, 0, "vc_update", _("Update file"), menu_vc_update);
 
 	plugin_fields->menu_item = menu_vc;
 	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
