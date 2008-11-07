@@ -15,7 +15,7 @@ msgstr ""
 #. All plugins must set name, description, version and author.
 #: ../src/dbg.c:57
 msgid "DBG"
-msgstr "DEG"
+msgstr "DBG"
 
 #: ../src/dbg.c:57
 msgid "Run external debugger."

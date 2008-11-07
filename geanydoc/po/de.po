@@ -18,7 +18,7 @@ msgstr "Doc"
 
 #: ../src/geanydoc.c:59
 msgid "Call documentation viewer on current symbol."
-msgstr "Dokumentationsbetrachter für das aktuelle Symbol aufrufen."
+msgstr "Dokumentationsbetrachter für das aktuelle Wort aufrufen."
 
 #: ../src/geanydoc.c:60
 msgid "Yura Siamshka <yurand2@gmail.com>"
@@ -26,11 +26,11 @@ msgstr "Yura Siamshka <yurand2@gmail.com>"
 
 #: ../src/geanydoc.c:179
 msgid "Could not parse the output of command"
-msgstr "Konnte die Ausgabe des Kommandos nicht verstehen."
+msgstr "Konnte die Ausgabe des Kommandos nicht analysieren."
 
 #: ../src/geanydoc.c:366
 msgid "Put output in buffer"
-msgstr "Ausgabe in den Zwischenspeicher übernehmen"
+msgstr "Ausgabe in einem neuen Dokument anzeigen"
 
 #: ../src/geanydoc.c:378
 msgid "Command 0:"
@@ -46,8 +46,8 @@ msgstr "%w wird mit dem aktuellen Wort ersetzt\n"
 
 #: ../src/geanydoc.c:445
 msgid "Document current word"
-msgstr "Aktuelles Wort dokumentieren"
+msgstr "Dokumentation für aktuelles Wort öffnen"
 
 #: ../src/geanydoc.c:446
 msgid "Document interactive"
-msgstr "Interaktive Dokumentierung"
+msgstr "Nach Dokumentationswerkzeug für aktuelles Wort fragen"

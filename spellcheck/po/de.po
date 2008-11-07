@@ -1,6 +1,6 @@
 # German translations for spellcheck package.
 # Copyright (C) 2008 THE spellcheck's COPYRIGHT HOLDER
-# This file is distributed under the same license as the copyonsave package.
+# This file is distributed under the same license as the spellcheck package.
 # Enrico Tröger <enrico.troeger@uvena.de> 2008
 #
 msgid ""
