@@ -495,10 +495,10 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 	gtk_table_attach_defaults(GTK_TABLE(table), encoding_combobox, 1, 2, 1, 2);
 
 	// Scriptsize
-	label_scriptsize = gtk_label_new(_("Scriptsize:"));
+	label_scriptsize = gtk_label_new(_("Fontsize:"));
 	scriptsize_combobox = gtk_combo_box_new_text();
 	gtk_tooltips_set_tip(tooltip, scriptsize_combobox,
-		_("Set the default script size of your new document"), NULL);
+		_("Set the default fontsize of your new document"), NULL);
 	gtk_combo_box_insert_text(GTK_COMBO_BOX(scriptsize_combobox), 0, "10pt");
 	gtk_combo_box_insert_text(GTK_COMBO_BOX(scriptsize_combobox), 1, "11pt");
 	gtk_combo_box_insert_text(GTK_COMBO_BOX(scriptsize_combobox), 2, "12pt");
