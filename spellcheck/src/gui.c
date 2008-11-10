@@ -203,7 +203,7 @@ static void on_menu_addword_item_activate(GtkMenuItem *menuitem, gpointer gdata)
 
 
 void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
-								  GeanyDocument *doc, gpointer user_data)
+							   GeanyDocument *doc, gpointer user_data)
 {
 	gsize n_suggs, i;
 	gchar **tmp_suggs;
@@ -216,6 +216,10 @@ void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 
 	/* ignore numbers or words starting with digits */
 	if (isdigit(*word))
+		return;
+
+	/* ignore non-text */
+	if (! speller_is_text(doc, pos))
 		return;
 
 	if (! NZV(word) || speller_dict_check(word) == 0)

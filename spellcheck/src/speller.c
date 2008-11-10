@@ -36,6 +36,7 @@
 #include "editor.h"
 #include "msgwindow.h"
 #include "utils.h"
+#include "scintilla/SciLexer.h"
 
 #include "pluginmacros.h"
 
@@ -69,6 +70,10 @@ static gint speller_check_word(GeanyDocument *doc, gint line_number, const gchar
 
 	/* ignore numbers or words starting with digits */
 	if (isdigit(*word))
+		return 0;
+
+	/* ignore non-text */
+	if (! speller_is_text(doc, start_pos))
 		return 0;
 
 	/* early out if the word is spelled correctly */
@@ -380,3 +385,445 @@ void speller_free(void)
 		enchant_broker_free_dict(speller_broker, speller_dict);
 	enchant_broker_free(speller_broker);
 }
+
+
+gboolean speller_is_text(GeanyDocument *doc, gint pos)
+{
+	gint lexer, style;
+
+	g_return_val_if_fail(doc != NULL, FALSE);
+	g_return_val_if_fail(pos >= 0, FALSE);
+
+	lexer = p_sci->send_message(doc->editor->sci, SCI_GETLEXER, 0, 0);
+	style = p_sci->get_style_at(doc->editor->sci, pos);
+
+	switch (lexer)
+	{
+		/* early out for the default style */
+		if (style == STYLE_DEFAULT)
+			return TRUE;
+
+		case SCLEX_ASM:
+		{
+			switch (style)
+			{
+				case SCE_ASM_DEFAULT:
+				case SCE_ASM_COMMENT:
+				case SCE_ASM_COMMENTBLOCK:
+				case SCE_ASM_STRING:
+				case SCE_ASM_STRINGEOL:
+				case SCE_ASM_CHARACTER:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_BASH:
+		case SCLEX_OMS:
+		{
+			switch (style)
+			{
+				case SCE_SH_DEFAULT:
+				case SCE_SH_COMMENTLINE:
+				case SCE_SH_STRING:
+				case SCE_SH_CHARACTER:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_CAML:
+		{
+			switch (style)
+			{
+				case SCE_CAML_DEFAULT:
+				case SCE_CAML_COMMENT:
+				case SCE_CAML_COMMENT1:
+				case SCE_CAML_COMMENT2:
+				case SCE_CAML_COMMENT3:
+				case SCE_CAML_STRING:
+				case SCE_CAML_CHAR:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_CPP:
+		case SCLEX_PASCAL:
+		{
+			switch (style)
+			{
+				case SCE_C_DEFAULT:
+				case SCE_C_COMMENT:
+				case SCE_C_COMMENTLINE:
+				case SCE_C_COMMENTDOC:
+				case SCE_C_STRING:
+				case SCE_C_CHARACTER:
+				case SCE_C_STRINGEOL:
+				case SCE_C_COMMENTLINEDOC:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_CSS:
+		{
+			switch (style)
+			{
+				case SCE_CSS_DEFAULT:
+				case SCE_CSS_COMMENT:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_D:
+		{
+			switch (style)
+			{
+				case SCE_D_DEFAULT:
+				case SCE_D_COMMENT:
+				case SCE_D_COMMENTLINE:
+				case SCE_D_COMMENTDOC:
+				case SCE_D_COMMENTNESTED:
+				case SCE_D_STRING:
+				case SCE_D_STRINGEOL:
+				case SCE_D_CHARACTER:
+				case SCE_D_COMMENTLINEDOC:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_DIFF:
+		{
+			switch (style)
+			{
+				case SCE_DIFF_DEFAULT:
+				case SCE_DIFF_COMMENT:
+				case SCE_DIFF_HEADER:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_FORTRAN:
+		case SCLEX_F77:
+		{
+			switch (style)
+			{
+				case SCE_F_DEFAULT:
+				case SCE_F_COMMENT:
+				case SCE_F_STRING1:
+				case SCE_F_STRING2:
+				case SCE_F_STRINGEOL:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_FREEBASIC:
+		{
+			switch (style)
+			{
+				case SCE_B_DEFAULT:
+				case SCE_B_COMMENT:
+				case SCE_B_STRING:
+				case SCE_B_STRINGEOL:
+				case SCE_B_CONSTANT:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_HASKELL:
+		{
+			switch (style)
+			{
+				case SCE_HA_DEFAULT:
+				case SCE_HA_COMMENTLINE:
+				case SCE_HA_COMMENTBLOCK:
+				case SCE_HA_COMMENTBLOCK2:
+				case SCE_HA_COMMENTBLOCK3:
+				case SCE_HA_STRING:
+				case SCE_HA_CHARACTER:
+				case SCE_HA_DATA:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_HTML:
+		case SCLEX_XML:
+		{
+			switch (style)
+			{
+				case SCE_H_DEFAULT:
+				case SCE_H_TAGUNKNOWN:
+				case SCE_H_ATTRIBUTEUNKNOWN:
+				case SCE_H_DOUBLESTRING:
+				case SCE_H_SINGLESTRING:
+				case SCE_H_COMMENT:
+				case SCE_H_CDATA:
+				case SCE_H_VALUE: /* really? */
+				case SCE_H_SGML_DEFAULT:
+				case SCE_H_SGML_COMMENT:
+				case SCE_H_SGML_DOUBLESTRING:
+				case SCE_H_SGML_SIMPLESTRING:
+				case SCE_H_SGML_1ST_PARAM_COMMENT:
+				case SCE_HJ_DEFAULT:
+				case SCE_HJ_COMMENT:
+				case SCE_HJ_COMMENTLINE:
+				case SCE_HJ_COMMENTDOC:
+				case SCE_HJ_DOUBLESTRING:
+				case SCE_HJ_SINGLESTRING:
+				case SCE_HJ_STRINGEOL:
+				case SCE_HB_DEFAULT:
+				case SCE_HB_COMMENTLINE:
+				case SCE_HB_STRING:
+				case SCE_HB_STRINGEOL:
+				case SCE_HBA_DEFAULT:
+				case SCE_HBA_COMMENTLINE:
+				case SCE_HBA_STRING:
+				case SCE_HBA_STRINGEOL:
+				case SCE_HJA_DEFAULT:
+				case SCE_HJA_COMMENT:
+				case SCE_HJA_COMMENTLINE:
+				case SCE_HJA_COMMENTDOC:
+				case SCE_HJA_DOUBLESTRING:
+				case SCE_HJA_SINGLESTRING:
+				case SCE_HJA_STRINGEOL:
+				case SCE_HP_DEFAULT:
+				case SCE_HP_COMMENTLINE:
+				case SCE_HP_STRING:
+				case SCE_HP_CHARACTER:
+				case SCE_HP_TRIPLE:
+				case SCE_HP_TRIPLEDOUBLE:
+				case SCE_HPA_DEFAULT:
+				case SCE_HPA_COMMENTLINE:
+				case SCE_HPA_STRING:
+				case SCE_HPA_CHARACTER:
+				case SCE_HPA_TRIPLE:
+				case SCE_HPA_TRIPLEDOUBLE:
+				case SCE_HPHP_DEFAULT:
+				case SCE_HPHP_SIMPLESTRING:
+				case SCE_HPHP_HSTRING:
+				case SCE_HPHP_COMMENT:
+				case SCE_HPHP_COMMENTLINE:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_LATEX:
+		{
+			switch (style)
+			{
+				case SCE_L_DEFAULT:
+				case SCE_L_COMMENT:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_LUA:
+		{
+			switch (style)
+			{
+				case SCE_LUA_DEFAULT:
+				case SCE_LUA_COMMENT:
+				case SCE_LUA_COMMENTLINE:
+				case SCE_LUA_COMMENTDOC:
+				case SCE_LUA_STRING:
+				case SCE_LUA_CHARACTER:
+				case SCE_LUA_LITERALSTRING:
+				case SCE_LUA_STRINGEOL:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_MAKEFILE:
+		{
+			switch (style)
+			{
+				case SCE_MAKE_DEFAULT:
+				case SCE_MAKE_COMMENT:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_MATLAB:
+		{
+			switch (style)
+			{
+				case SCE_MATLAB_DEFAULT:
+				case SCE_MATLAB_COMMENT:
+				case SCE_MATLAB_STRING:
+				case SCE_MATLAB_DOUBLEQUOTESTRING:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_PERL:
+		{
+			switch (style)
+			{
+				case SCE_PL_DEFAULT:
+				case SCE_PL_COMMENTLINE:
+				case SCE_PL_STRING:
+				case SCE_PL_CHARACTER:
+				case SCE_PL_POD:
+				case SCE_PL_POD_VERB:
+				case SCE_PL_LONGQUOTE:
+				/* do we want SCE_PL_STRING_* too? */
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_PO:
+		{
+			switch (style)
+			{
+				case SCE_PO_DEFAULT:
+				case SCE_PO_COMMENT:
+				case SCE_PO_MSGID_TEXT:
+				case SCE_PO_MSGSTR_TEXT:
+				case SCE_PO_MSGCTXT_TEXT:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_PROPERTIES:
+		{
+			switch (style)
+			{
+				case SCE_PROPS_DEFAULT:
+				case SCE_PROPS_COMMENT:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_PYTHON:
+		{
+			switch (style)
+			{
+				case SCE_P_DEFAULT:
+				case SCE_P_COMMENTLINE:
+				case SCE_P_STRING:
+				case SCE_P_CHARACTER:
+				case SCE_P_TRIPLE:
+				case SCE_P_TRIPLEDOUBLE:
+				case SCE_P_COMMENTBLOCK:
+				case SCE_P_STRINGEOL:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_R:
+		{
+			switch (style)
+			{
+				case SCE_R_DEFAULT:
+				case SCE_R_COMMENT:
+				case SCE_R_STRING:
+				case SCE_R_STRING2:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_RUBY:
+		{
+			switch (style)
+			{
+				case SCE_RB_DEFAULT:
+				case SCE_RB_COMMENTLINE:
+				case SCE_RB_STRING:
+				case SCE_RB_CHARACTER:
+				case SCE_RB_POD:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_SQL:
+		{
+			switch (style)
+			{
+				case SCE_SQL_DEFAULT:
+				case SCE_SQL_COMMENT:
+				case SCE_SQL_COMMENTLINE:
+				case SCE_SQL_COMMENTDOC:
+				case SCE_SQL_STRING:
+				case SCE_SQL_CHARACTER:
+				case SCE_SQL_SQLPLUS_COMMENT:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_TCL:
+		{
+			switch (style)
+			{
+				case SCE_TCL_DEFAULT:
+				case SCE_TCL_COMMENT:
+				case SCE_TCL_COMMENTLINE:
+				case SCE_TCL_IN_QUOTE:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_VHDL:
+		{
+			switch (style)
+			{
+				case SCE_VHDL_DEFAULT:
+				case SCE_VHDL_COMMENT:
+				case SCE_VHDL_COMMENTLINEBANG:
+				case SCE_VHDL_STRING:
+				case SCE_VHDL_STRINGEOL:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+	}
+	/* if the current lexer was not handled, let's say the passed position contains
+	 * valid text to not ignore more than we want */
+	return TRUE;
+}
+
+

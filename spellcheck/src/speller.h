@@ -43,6 +43,8 @@ gboolean speller_dict_check(const gchar *word);
 
 gchar **speller_dict_suggest(const gchar *word, gsize *n_suggs);
 
+gboolean speller_is_text(GeanyDocument *doc, gint pos);
+
 void speller_init(void);
 
 void speller_free(void);
