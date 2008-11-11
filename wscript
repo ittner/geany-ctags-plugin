@@ -32,11 +32,11 @@ If you need additional checks for header files, functions in libraries or
 need to check for library packages (using pkg-config), please ask Enrico
 before committing changes. Thanks.
 
-Requires WAF 1.5 (SVN r4695 or later) and Python 2.4 (or later).
+Requires WAF 1.5 (SVN r4830 or later) and Python 2.4 (or later).
 """
 
 
-import Build, Configure, Options, Runner, Utils
+import Build, Configure, Options, Runner, Utils, preproc
 import sys, os, subprocess
 
 
@@ -108,6 +108,8 @@ plugins = [
 ]
 
 
+preproc.go_absolute = True
+preproc.standard_includes = []
 
 def configure(conf):
 	def conf_get_svn_rev():
