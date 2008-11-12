@@ -1,5 +1,5 @@
-/*
- * 		letters.h
+v/*
+ * 		letters.c
  *
  *      Copyright 2008 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
  *
