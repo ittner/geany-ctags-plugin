@@ -157,6 +157,8 @@ static void menu_suggestion_item_activate_cb(GtkMenuItem *menuitem, gpointer gda
 		p_sci->set_selection_end(clickinfo.doc->editor->sci, endword);
 		p_sci->replace_sel(clickinfo.doc->editor->sci, sugg);
 
+		/** TODO replace word */
+
 		p_sci->indicator_clear(clickinfo.doc->editor->sci, startword, endword - startword);
 	}
 }
@@ -172,12 +174,15 @@ static void on_menu_addword_item_activate(GtkMenuItem *menuitem, gpointer gdata)
 	if (clickinfo.doc == NULL || clickinfo.word == NULL || clickinfo.pos == -1)
 		return;
 
-	/* we either ignore the word, so we only remove all indicators or
-	 * we add the word to the personal dictionary */
-	if (! ignore)
+	/* if we ignore the word, we add it to the current session, to ignore it
+	 * also for further checks*/
+	if (ignore)
+		speller_add_word_to_session(clickinfo.word);
+	/* if we do not ignore the word, we add the word to the personal dictionary */
+	else
 		speller_add_word(clickinfo.word);
 
-	/* Remove all indicators on the added word */
+	/* Remove all indicators on the added/ignored word */
 	sci = clickinfo.doc->editor->sci;
 	str = g_string_sized_new(256);
 	doc_len = p_sci->get_length(sci);

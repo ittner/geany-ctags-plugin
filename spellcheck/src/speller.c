@@ -350,7 +350,6 @@ void speller_dict_free_string_list(gchar **tmp_suggs)
 void speller_add_word(const gchar *word)
 {
 	enchant_dict_add_to_pwl(speller_dict, clickinfo.word, -1);
-
 }
 
 gboolean speller_dict_check(const gchar *word)
@@ -366,6 +365,14 @@ gchar **speller_dict_suggest(const gchar *word, gsize *n_suggs)
 	g_return_val_if_fail(speller_dict != NULL, NULL);
 
 	return enchant_dict_suggest(speller_dict, word, -1, n_suggs);
+}
+
+
+void speller_add_word_to_session(const gchar *word)
+{
+	g_return_if_fail(speller_dict != NULL);
+
+	enchant_dict_add_to_session(speller_dict, word, -1);
 }
 
 

@@ -1,3 +1,10 @@
+2008-11-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/speller.c, src/speller.h, src/gui.c:
+   When using 'Ignore All', add the word to ignore to the enchant
+   session list to really ignore it for further checks, too.
+
+
 2008-11-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/speller.c, src/speller.h, src/gui.c:

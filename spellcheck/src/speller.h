@@ -45,6 +45,8 @@ gchar **speller_dict_suggest(const gchar *word, gsize *n_suggs);
 
 gboolean speller_is_text(GeanyDocument *doc, gint pos);
 
+void speller_add_word_to_session(const gchar *word);
+
 void speller_init(void);
 
 void speller_free(void);
