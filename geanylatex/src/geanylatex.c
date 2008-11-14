@@ -783,8 +783,6 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 {
 	GtkTooltips *tooltips = NULL;
 
-	gchar *kblabel_insert_label, *kblabel_insert_ref, *kblabel_wizard;
-
 	p_main->locale_init(LOCALEDIR, GETTEXT_PACKAGE);
 
 	init_encodings_latex();
@@ -827,15 +825,14 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	g_signal_connect((gpointer) menu_latex_label, "activate", G_CALLBACK(insert_label_activated), NULL);
 
 	/* init keybindins */
-	kblabel_insert_label = _("Insert \\label");
-	kblabel_insert_ref = _("Insert \\ref");
-	kblabel_wizard = _("Run LaTeX-Wizard");
+
 	p_keybindings->set_item(plugin_key_group, LATEX_WIZZARD_KB, kbwizard,
-	0, 0, "run_latex_wizard", kblabel_wizard, menu_latex_wizzard);
+	0, 0, "run_latex_wizard", _("Run LaTeX-Wizard"), menu_latex_wizzard);
 	p_keybindings->set_item(plugin_key_group, LATEX_INSERT_LABEL_KB, kblabel_insert,
-	0, 0, "insert_latex_label", kblabel_insert_label, menu_latex_wizzard);
+	0, 0, "insert_latex_label", _("Insert \\label"), menu_latex_label);
 	p_keybindings->set_item(plugin_key_group, LATEX_INSERT_REF_KB, kbref_insert,
-	0, 0, "insert_latex_ref", kblabel_insert_ref, menu_latex_wizzard);
+	0, 0, "insert_latex_ref", _("Insert \\ref"), menu_latex_ref);
+
 
 	p_ui->add_document_sensitive(menu_latex_menu_special_char);
 	p_ui->add_document_sensitive(menu_latex_ref);
