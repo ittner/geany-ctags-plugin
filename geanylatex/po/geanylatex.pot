@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-09 22:46+0100\n"
+"POT-Creation-Date: 2008-11-14 01:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgid "LaTeX"
 msgstr ""
 
 #: src/geanylatex.c:54
-msgid "Plugin to make Geany better support LaTeX"
+msgid "Plugin to provide better LaTeX support"
 msgstr ""
 
 #: src/geanylatex.c:135
@@ -86,7 +86,8 @@ msgstr ""
 
 #: src/geanylatex.c:517
 msgid ""
-"Sets the entry of \\author command. In most cases here should stay your name"
+"Sets the value of the \\author command. In most cases this should be your "
+"name"
 msgstr ""
 
 #. Date
@@ -96,7 +97,7 @@ msgstr ""
 
 #: src/geanylatex.c:531
 msgid ""
-"Sets the entry of the \\date command inside header of your newly created "
+"Sets the value of the \\date command inside header of your newly created "
 "LaTeX-document. Keeping it at \\today is a good decision if you don't need "
 "any fixed date."
 msgstr ""
@@ -107,7 +108,7 @@ msgid "Title:"
 msgstr ""
 
 #: src/geanylatex.c:540
-msgid "Sets the title of your newly document."
+msgid "Sets the title of your new document."
 msgstr ""
 
 #. Papersize
@@ -116,10 +117,10 @@ msgid "Paper size:"
 msgstr ""
 
 #: src/geanylatex.c:550
-msgid "Chooce the paper format for the new created document"
+msgid "Choose the paper format for the newly created document"
 msgstr ""
 
-#. Buidling the wizard-dialog and showing it
+#. Building the wizard-dialog and showing it
 #: src/geanylatex.c:565
 msgid "LaTeX-Wizard"
 msgstr ""
@@ -131,7 +132,7 @@ msgstr ""
 #: src/geanylatex.c:578
 msgid ""
 "Uses the KOMA-script classes by Markus Kohm.\n"
-"Keep in mind: To compile your document these classes have to been installed "
+"Keep in mind: To compile your document these classes have to be installed "
 "before."
 msgstr ""
 
@@ -145,52 +146,53 @@ msgid ""
 "number of debugging helpers"
 msgstr ""
 
-#: src/geanylatex.c:786
-msgid "Insert \\label"
-msgstr ""
-
-#: src/geanylatex.c:787
-msgid "Insert \\ref"
-msgstr ""
-
-#: src/geanylatex.c:788
-msgid "Run LaTeX-Wizard"
-msgstr ""
-
-#: src/geanylatex.c:796
+#: src/geanylatex.c:794
 msgid "_LaTeX"
 msgstr ""
 
-#: src/geanylatex.c:802
+#: src/geanylatex.c:800
 msgid "LaTeX-_Wizard"
 msgstr ""
 
-#: src/geanylatex.c:805
-msgid "Starts a Wizard to create easily LaTeX-dokuments"
+#: src/geanylatex.c:803
+msgid "Starts a Wizard to easily create LaTeX-documents"
 msgstr ""
 
-#: src/geanylatex.c:810
+#: src/geanylatex.c:808
 msgid "Insert _Special Character"
 msgstr ""
 
-#: src/geanylatex.c:812
+#: src/geanylatex.c:810
 msgid "Helps to use some not very common letters and signs"
 msgstr ""
 
-#: src/geanylatex.c:819
+#: src/geanylatex.c:817
 msgid "Insert _Reference"
 msgstr ""
 
-#: src/geanylatex.c:821
+#: src/geanylatex.c:819
 msgid "Inserting references to the document"
 msgstr ""
 
-#: src/geanylatex.c:825
+#: src/geanylatex.c:823
 msgid "Insert _Label"
 msgstr ""
 
-#: src/geanylatex.c:827
-msgid "Helps at inserting labels to a docuemnt"
+#: src/geanylatex.c:825
+msgid "Helps at inserting labels to a document"
+msgstr ""
+
+#. init keybindins
+#: src/geanylatex.c:830
+msgid "Insert \\label"
+msgstr ""
+
+#: src/geanylatex.c:831
+msgid "Insert \\ref"
+msgstr ""
+
+#: src/geanylatex.c:832
+msgid "Run LaTeX-Wizard"
 msgstr ""
 
 #: src/latexencodings.c:37

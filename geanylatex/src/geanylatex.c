@@ -51,7 +51,7 @@ GeanyFunctions	*geany_functions;
 
 PLUGIN_VERSION_CHECK(104)
 
-PLUGIN_SET_INFO(_("LaTeX"), _("Plugin to make Geany better support LaTeX"), "0.2",
+PLUGIN_SET_INFO(_("LaTeX"), _("Plugin to provide better LaTeX support"), "0.2",
 	    "Frank Lanitz <frank@frank.uvena.de>")
 
 GtkWidget *menu_latex = NULL;
@@ -254,7 +254,7 @@ static void character_create_menu_item(GtkWidget *menu, const gchar *label, gint
 gint
 count_menu_entries(SubMenuTemplate *tmp, gint categorie)
 {
-	// TODO: Reset max value for to stop before it's too late
+	// TODO: Reset max value to stop before it's too late
 	gint i;
 	gint count = 0;
 	if (categorie == -1)
@@ -330,10 +330,10 @@ void sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template, Categor
 			split = TRUE;
 		}
 
-		// Setting active sub menu to sub menu of catagorie
+		// Setting active sub menu to sub menu of category
 		sub_menu = sub_menu_cat[i][0];
 		active_submenu = sub_menu;
-		// Finding entries for each categorie
+		// Finding entries for each category
 
 		for (j = 0; menu_template[j].latex != NULL; j++)
 		{
@@ -454,7 +454,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 
 	GtkTooltips *tooltip = gtk_tooltips_new();
 
-	// Creating and formating table
+	// Creating and formatting table
 	table = gtk_table_new(2, 6, FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table), 6);
 	gtk_table_set_row_spacings(GTK_TABLE(table), 6);
@@ -514,7 +514,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 	label_author = gtk_label_new(_("Author:"));
 	author_textbox = gtk_entry_new();
 	gtk_tooltips_set_tip(tooltip, author_textbox,
-		_("Sets the entry of \\author command. In most cases here should stay your name"), NULL);
+		_("Sets the value of the \\author command. In most cases this should be your name"), NULL);
 	if (geany_data->template_prefs->developer != NULL)
 	{
 		author = geany_data->template_prefs->developer;
@@ -528,7 +528,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 	label_date = gtk_label_new(_("Date:"));
 	date_textbox = gtk_entry_new();
 	gtk_tooltips_set_tip(tooltip, date_textbox,
-		_("Sets the entry of the \\date command inside header of your newly created LaTeX-document. Keeping it at \\today is a good decision if you don't need any fixed date."), NULL);
+		_("Sets the value of the \\date command inside header of your newly created LaTeX-document. Keeping it at \\today is a good decision if you don't need any fixed date."), NULL);
 	gtk_entry_set_text(GTK_ENTRY(date_textbox), "\\today");
 	gtk_misc_set_alignment(GTK_MISC(label_date), 0, 0.5);
 	gtk_table_attach_defaults(GTK_TABLE(table), label_date, 0, 1, 4, 5);
@@ -537,7 +537,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 	// Title of the new document
 	label_title = gtk_label_new(_("Title:"));
 	title_textbox = gtk_entry_new();
-	gtk_tooltips_set_tip(tooltip, title_textbox, _("Sets the title of your newly document."),
+	gtk_tooltips_set_tip(tooltip, title_textbox, _("Sets the title of your new document."),
 			     NULL);
 	gtk_misc_set_alignment(GTK_MISC(label_title), 0, 0.5);
 	gtk_table_attach_defaults(GTK_TABLE(table), label_title, 0, 1, 5, 6);
@@ -547,7 +547,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 	label_papersize = gtk_label_new(_("Paper size:"));
 	papersize_combobox = gtk_combo_box_new_text();
 	gtk_tooltips_set_tip(tooltip, papersize_combobox,
-		_("Chooce the paper format for the new created document"), NULL);
+		_("Choose the paper format for the newly created document"), NULL);
 	gtk_combo_box_insert_text(GTK_COMBO_BOX(papersize_combobox), 0, "A4");
 	gtk_combo_box_insert_text(GTK_COMBO_BOX(papersize_combobox), 1, "A5");
 	gtk_combo_box_insert_text(GTK_COMBO_BOX(papersize_combobox), 2, "A6");
@@ -561,7 +561,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 
 	gtk_widget_show_all(table);
 
-	// Buidling the wizard-dialog and showing it
+	// Building the wizard-dialog and showing it
 	dialog = gtk_dialog_new_with_buttons(_("LaTeX-Wizard"),
 					     GTK_WINDOW(geany->main_widgets->window),
 					     GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
@@ -575,7 +575,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 	checkbox_KOMA = gtk_check_button_new_with_label(_("Use KOMA-script classes if possible"));
 	gtk_tooltips_set_tip(tooltip, checkbox_KOMA,
 			     _
-			     ("Uses the KOMA-script classes by Markus Kohm.\nKeep in mind: To compile your document these classes have to been installed before."),
+			     ("Uses the KOMA-script classes by Markus Kohm.\nKeep in mind: To compile your document these classes have to be installed before."),
 			     NULL);
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_KOMA), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_KOMA), KOMA_active);
@@ -783,9 +783,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 {
 	GtkTooltips *tooltips = NULL;
 
-	gchar *kblabel_insert_label = _("Insert \\label");
-	gchar *kblabel_insert_ref = _("Insert \\ref");
-	gchar *kblabel_wizard = _("Run LaTeX-Wizard");
+	gchar *kblabel_insert_label, *kblabel_insert_ref, *kblabel_wizard;
 
 	p_main->locale_init(LOCALEDIR, GETTEXT_PACKAGE);
 
@@ -802,7 +800,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	menu_latex_wizzard = gtk_menu_item_new_with_mnemonic(_("LaTeX-_Wizard"));
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_wizzard);
 	gtk_tooltips_set_tip(tooltips, menu_latex_wizzard,
-			     _("Starts a Wizard to create easily LaTeX-dokuments"), NULL);
+			     _("Starts a Wizard to easily create LaTeX-documents"), NULL);
 
 	g_signal_connect((gpointer) menu_latex_wizzard, "activate",
 			 G_CALLBACK(wizard_activated), NULL);
@@ -824,11 +822,14 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 
 	menu_latex_label = gtk_menu_item_new_with_mnemonic(_("Insert _Label"));
 	gtk_tooltips_set_tip(tooltips, menu_latex_label,
-	     _("Helps at inserting labels to a docuemnt"), NULL);
+	     _("Helps at inserting labels to a document"), NULL);
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_label);
 	g_signal_connect((gpointer) menu_latex_label, "activate", G_CALLBACK(insert_label_activated), NULL);
 
 	/* init keybindins */
+	kblabel_insert_label = _("Insert \\label");
+	kblabel_insert_ref = _("Insert \\ref");
+	kblabel_wizard = _("Run LaTeX-Wizard");
 	p_keybindings->set_item(plugin_key_group, LATEX_WIZZARD_KB, kbwizard,
 	0, 0, "run_latex_wizard", kblabel_wizard, menu_latex_wizzard);
 	p_keybindings->set_item(plugin_key_group, LATEX_INSERT_LABEL_KB, kblabel_insert,

@@ -1,3 +1,9 @@
+2008-11-14  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Applied a patch by Enrico which corrects some spelling
+   mistakes and cleans up code a bit.
+
+
 2008-11-02  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Make usage of Geany API v104 by using of Geany's plugin init
