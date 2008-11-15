@@ -122,9 +122,15 @@ gint speller_process_line(GeanyDocument *doc, gint line_number, const gchar *lin
 {
 	gint pos_start, pos_end;
 	gint wstart, wend;
-	GString *str = g_string_sized_new(256);
+	GString *str;
 	gint suggestions_found = 0;
 	gchar c;
+
+	g_return_val_if_fail(speller_dict != NULL, 0);
+	g_return_val_if_fail(doc != NULL, 0);
+	g_return_val_if_fail(line != NULL, 0);
+
+	str = g_string_sized_new(256);
 
 	pos_start = p_sci->get_position_from_line(doc->editor->sci, line_number);
 	/* TODO use SCI_GETLINEENDPOSITION */
@@ -169,6 +175,7 @@ void speller_check_document(GeanyDocument *doc)
 	gint suggestions_found = 0;
 
 	g_return_if_fail(speller_dict != NULL);
+	g_return_if_fail(doc != NULL);
 
 	enchant_dict_describe(speller_dict, dict_describe, &dict_string);
 
@@ -349,12 +356,16 @@ void speller_dict_free_string_list(gchar **tmp_suggs)
 
 void speller_add_word(const gchar *word)
 {
+	g_return_if_fail(speller_dict != NULL);
+	g_return_if_fail(word != NULL);
+
 	enchant_dict_add_to_pwl(speller_dict, clickinfo.word, -1);
 }
 
 gboolean speller_dict_check(const gchar *word)
 {
 	g_return_val_if_fail(speller_dict != NULL, FALSE);
+	g_return_val_if_fail(word != NULL, FALSE);
 
 	return enchant_dict_check(speller_dict, word, -1);
 }
@@ -363,6 +374,7 @@ gboolean speller_dict_check(const gchar *word)
 gchar **speller_dict_suggest(const gchar *word, gsize *n_suggs)
 {
 	g_return_val_if_fail(speller_dict != NULL, NULL);
+	g_return_val_if_fail(word != NULL, NULL);
 
 	return enchant_dict_suggest(speller_dict, word, -1, n_suggs);
 }
@@ -371,8 +383,19 @@ gchar **speller_dict_suggest(const gchar *word, gsize *n_suggs)
 void speller_add_word_to_session(const gchar *word)
 {
 	g_return_if_fail(speller_dict != NULL);
+	g_return_if_fail(word != NULL);
 
 	enchant_dict_add_to_session(speller_dict, word, -1);
+}
+
+
+void speller_store_replacement(const gchar *old_word, const gchar *new_word)
+{
+	g_return_if_fail(speller_dict != NULL);
+	g_return_if_fail(old_word != NULL);
+	g_return_if_fail(new_word != NULL);
+
+	enchant_dict_store_replacement(speller_dict, old_word, -1, new_word, -1);
 }
 
 

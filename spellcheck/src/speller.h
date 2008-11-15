@@ -47,6 +47,8 @@ gboolean speller_is_text(GeanyDocument *doc, gint pos);
 
 void speller_add_word_to_session(const gchar *word);
 
+void speller_store_replacement(const gchar *old_word, const gchar *new_word);
+
 void speller_init(void);
 
 void speller_free(void);

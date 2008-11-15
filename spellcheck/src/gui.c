@@ -139,6 +139,7 @@ static void menu_suggestion_item_activate_cb(GtkMenuItem *menuitem, gpointer gda
 {
 	gchar *sugg = gdata;
 	gint startword, endword;
+	ScintillaObject *sci = clickinfo.doc->editor->sci;
 
 	if (clickinfo.doc == NULL || clickinfo.pos == -1)
 	{
@@ -146,20 +147,30 @@ static void menu_suggestion_item_activate_cb(GtkMenuItem *menuitem, gpointer gda
 		return;
 	}
 
-	startword = p_sci->send_message(
-		clickinfo.doc->editor->sci, SCI_WORDSTARTPOSITION, clickinfo.pos, 0);
-	endword = p_sci->send_message(
-		clickinfo.doc->editor->sci, SCI_WORDENDPOSITION, clickinfo.pos, 0);
+	startword = p_sci->send_message(sci, SCI_WORDSTARTPOSITION, clickinfo.pos, 0);
+	endword = p_sci->send_message(sci, SCI_WORDENDPOSITION, clickinfo.pos, 0);
 
 	if (startword != endword)
 	{
-		p_sci->set_selection_start(clickinfo.doc->editor->sci, startword);
-		p_sci->set_selection_end(clickinfo.doc->editor->sci, endword);
-		p_sci->replace_sel(clickinfo.doc->editor->sci, sugg);
+		gchar *word;
+				
+		p_sci->set_selection_start(sci, startword);
+		p_sci->set_selection_end(sci, endword);
+		
+		/* retrieve the old text */
+		word = g_malloc(p_sci->get_selected_text_length(sci) + 1);
+		p_sci->get_selected_text(sci, word);
+		
+		/* replace the misspelled word with the chosen suggestion */
+		p_sci->replace_sel(sci, sugg);
 
-		/** TODO replace word */
+		/* store the replacement for future checks */
+		speller_store_replacement(word, sugg);
 
-		p_sci->indicator_clear(clickinfo.doc->editor->sci, startword, endword - startword);
+		/* remove indicator */
+		p_sci->indicator_clear(sci, startword, endword - startword);
+		
+		g_free(word);
 	}
 }
 
