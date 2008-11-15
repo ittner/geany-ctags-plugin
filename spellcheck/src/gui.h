@@ -46,4 +46,8 @@ void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 
 void gui_toolbar_update(void);
 
+void gui_init(void);
+
+void gui_free(void);
+
 #endif

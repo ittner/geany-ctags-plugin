@@ -45,21 +45,7 @@ typedef struct
 } SpellCheck;
 
 
-#define MAX_MENU_SUGGESTIONS 10
-
-typedef struct
-{
-	gint pos;
-	GeanyDocument *doc;
-	/* static array to keep suggestions for use as callback user data for the editing menu items */
-	gchar *suggs[MAX_MENU_SUGGESTIONS];
-	/* static storage for the misspelled word under the cursor when using the editing menu */
-	gchar *word;
-} SpellClickInfo;
-
-
 extern SpellCheck *sc;
-extern SpellClickInfo clickinfo;
 extern GeanyPlugin		*geany_plugin;
 extern GeanyData		*geany_data;
 extern GeanyFunctions	*geany_functions;

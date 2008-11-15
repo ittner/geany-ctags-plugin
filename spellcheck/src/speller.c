@@ -359,7 +359,7 @@ void speller_add_word(const gchar *word)
 	g_return_if_fail(speller_dict != NULL);
 	g_return_if_fail(word != NULL);
 
-	enchant_dict_add_to_pwl(speller_dict, clickinfo.word, -1);
+	enchant_dict_add_to_pwl(speller_dict, word, -1);
 }
 
 gboolean speller_dict_check(const gchar *word)

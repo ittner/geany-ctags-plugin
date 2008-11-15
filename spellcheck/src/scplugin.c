@@ -60,7 +60,6 @@ PLUGIN_SET_INFO(_("Spell Check"), _("Checks the spelling of the current document
 
 
 SpellCheck *sc = NULL;
-SpellClickInfo clickinfo;
 
 
 
@@ -183,7 +182,6 @@ void plugin_init(GeanyData *data)
 {
 	GtkWidget *sp_item;
 	GKeyFile *config = g_key_file_new();
-	guint i;
 	gchar *default_lang;
 
 	default_lang = speller_get_default_lang();
@@ -210,13 +208,8 @@ void plugin_init(GeanyData *data)
 
 	gui_toolbar_update();
 
+	gui_init();
 	speller_init();
-
-	for (i = 0; i < MAX_MENU_SUGGESTIONS; i++)
-	{
-		clickinfo.suggs[i] = NULL;
-	}
-	clickinfo.word = NULL;
 
 	gui_create_edit_menu();
 	sp_item = gui_create_menu(sc->menu_item);
@@ -292,11 +285,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 void plugin_cleanup(void)
 {
 	guint i;
-	for (i = 0; i < MAX_MENU_SUGGESTIONS; i++)
-	{
-		clickinfo.suggs[i] = NULL;
-	}
-	g_free(clickinfo.word);
+
 	for (i = 0; i < sc->dicts->len; i++)
 	{
 		g_free(g_ptr_array_index(sc->dicts, i));
@@ -310,6 +299,7 @@ void plugin_cleanup(void)
 	if (sc->toolbar_button != NULL)
 		gtk_widget_destroy(GTK_WIDGET(sc->toolbar_button));
 
+	gui_free();
 	speller_free();
 
 	g_free(sc->default_language);

@@ -45,6 +45,19 @@
 
 
 
+#define MAX_MENU_SUGGESTIONS 10
+
+typedef struct
+{
+	gint pos;
+	GeanyDocument *doc;
+	/* static array to keep suggestions for use as callback user data for the editing menu items */
+	gchar *suggs[MAX_MENU_SUGGESTIONS];
+	/* static storage for the misspelled word under the cursor when using the editing menu */
+	gchar *word;
+} SpellClickInfo;
+static SpellClickInfo clickinfo;
+
 /* Flag to indicate that a callback function will be triggered by generating the appropriate event
  * but the callback should be ignored. */
 static gboolean ignore_sc_callback = FALSE;
@@ -153,14 +166,14 @@ static void menu_suggestion_item_activate_cb(GtkMenuItem *menuitem, gpointer gda
 	if (startword != endword)
 	{
 		gchar *word;
-				
+
 		p_sci->set_selection_start(sci, startword);
 		p_sci->set_selection_end(sci, endword);
-		
+
 		/* retrieve the old text */
 		word = g_malloc(p_sci->get_selected_text_length(sci) + 1);
 		p_sci->get_selected_text(sci, word);
-		
+
 		/* replace the misspelled word with the chosen suggestion */
 		p_sci->replace_sel(sci, sugg);
 
@@ -169,7 +182,7 @@ static void menu_suggestion_item_activate_cb(GtkMenuItem *menuitem, gpointer gda
 
 		/* remove indicator */
 		p_sci->indicator_clear(sci, startword, endword - startword);
-		
+
 		g_free(word);
 	}
 }
@@ -439,3 +452,25 @@ GtkWidget *gui_create_menu(GtkWidget *sp_item)
 }
 
 
+void gui_init(void)
+{
+	guint i;
+
+	for (i = 0; i < MAX_MENU_SUGGESTIONS; i++)
+	{
+		clickinfo.suggs[i] = NULL;
+	}
+	clickinfo.word = NULL;
+}
+
+
+void gui_free(void)
+{
+	guint i;
+
+	for (i = 0; i < MAX_MENU_SUGGESTIONS; i++)
+	{
+		g_free(clickinfo.suggs[i]);
+	}
+	g_free(clickinfo.word);
+}
