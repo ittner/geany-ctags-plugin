@@ -11,6 +11,8 @@
    Remove the limit of showing a maximum of 10 suggestions, instead
    add sub menus for more suggestions if available, similar to what
    'gtkspell' does.
+   Fix an endless loop and some mismatches in clearing indicators when
+   using 'Add to Dictionary' and 'Ignore All'.
 
 
 2008-11-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

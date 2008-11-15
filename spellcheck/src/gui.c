@@ -211,15 +211,17 @@ static void on_menu_addword_item_activate(GtkMenuItem *menuitem, gpointer gdata)
 		if (startword >= 0)
 		{
 			endword = p_sci->send_message(sci, SCI_INDICATOREND, 0, startword);
+			if (startword == endword)
+				continue;
 
 			if (str->len < (guint)(endword - startword + 1))
 				str = g_string_set_size(str, endword - startword + 1);
 			p_sci->get_text_range(sci, startword, endword, str->str);
 
-			if (strncmp(str->str, clickinfo.word, str->len) == 0)
+			if (strcmp(str->str, clickinfo.word) == 0)
 				p_sci->indicator_clear(sci, startword, endword - startword);
 
-			i = endword + 1;
+			i = endword;
 		}
 	}
 	g_string_free(str, TRUE);
