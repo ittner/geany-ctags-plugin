@@ -45,14 +45,10 @@
 
 
 
-#define MAX_MENU_SUGGESTIONS 10
-
 typedef struct
 {
 	gint pos;
 	GeanyDocument *doc;
-	/* static array to keep suggestions for use as callback user data for the editing menu items */
-	gchar *suggs[MAX_MENU_SUGGESTIONS];
 	/* static storage for the misspelled word under the cursor when using the editing menu */
 	gchar *word;
 } SpellClickInfo;
@@ -150,15 +146,11 @@ static void clear_indicators_on_line(GeanyDocument *doc, gint line_number)
 
 static void menu_suggestion_item_activate_cb(GtkMenuItem *menuitem, gpointer gdata)
 {
-	gchar *sugg = gdata;
+	const gchar *sugg;
 	gint startword, endword;
 	ScintillaObject *sci = clickinfo.doc->editor->sci;
 
-	if (clickinfo.doc == NULL || clickinfo.pos == -1)
-	{
-		g_free(sugg);
-		return;
-	}
+	g_return_if_fail(clickinfo.doc != NULL && clickinfo.pos != -1);
 
 	startword = p_sci->send_message(sci, SCI_WORDSTARTPOSITION, clickinfo.pos, 0);
 	endword = p_sci->send_message(sci, SCI_WORDENDPOSITION, clickinfo.pos, 0);
@@ -173,6 +165,9 @@ static void menu_suggestion_item_activate_cb(GtkMenuItem *menuitem, gpointer gda
 		/* retrieve the old text */
 		word = g_malloc(p_sci->get_selected_text_length(sci) + 1);
 		p_sci->get_selected_text(sci, word);
+
+		/* retrieve the new text */
+		sugg = gtk_label_get_text(GTK_LABEL(GTK_BIN(menuitem)->child));
 
 		/* replace the misspelled word with the chosen suggestion */
 		p_sci->replace_sel(sci, sugg);
@@ -235,7 +230,7 @@ void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 							   GeanyDocument *doc, gpointer user_data)
 {
 	gsize n_suggs, i;
-	gchar **tmp_suggs;
+	gchar **suggs;
 
 	g_return_if_fail(doc != NULL && doc->is_valid);
 
@@ -254,35 +249,42 @@ void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 	if (! NZV(word) || speller_dict_check(word) == 0)
 		return;
 
-	tmp_suggs = speller_dict_suggest(word, &n_suggs);
+	suggs = speller_dict_suggest(word, &n_suggs);
 
-	if (tmp_suggs != NULL)
+	if (suggs != NULL)
 	{
-		GtkWidget *menu_item, *image;
+		GtkWidget *menu_item, *menu, *image;
 		gchar *label;
 
 		clickinfo.pos = pos;
 		clickinfo.doc = doc;
 		setptr(clickinfo.word, g_strdup(word));
 
-		if (GTK_IS_WIDGET(sc->edit_menu_sub))
+		if (sc->edit_menu_sub != NULL && GTK_IS_WIDGET(sc->edit_menu_sub))
 			gtk_widget_destroy(sc->edit_menu_sub);
 
-		sc->edit_menu_sub = gtk_menu_new();
+		sc->edit_menu_sub = menu = gtk_menu_new();
 		gtk_menu_item_set_submenu(GTK_MENU_ITEM(sc->edit_menu), sc->edit_menu_sub);
 
-		/* TODO do we need more than 10 suggestions? gtkspell offers additional suggestions
-		 * in another sub menu, should we too? */
-		for (i = 0; i < MIN(n_suggs, MAX_MENU_SUGGESTIONS); i++)
+		for (i = 0; i < n_suggs; i++)
 		{
-			/* keep the suggestions in a static array for the callback function */
-			g_free(clickinfo.suggs[i]);
-			clickinfo.suggs[i] = g_strdup(tmp_suggs[i]);
+			if (i > 0 && i % 10 == 0)
+			{
+				menu_item = gtk_menu_item_new();
+				gtk_widget_show(menu_item);
+				gtk_menu_shell_append(GTK_MENU_SHELL(menu), menu_item);
 
-			menu_item = gtk_menu_item_new_with_label(clickinfo.suggs[i]);
-			gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
+				menu_item = gtk_menu_item_new_with_label(_("More..."));
+				gtk_widget_show(menu_item);
+				gtk_menu_shell_append(GTK_MENU_SHELL(menu), menu_item);
+
+				menu = gtk_menu_new();
+				gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_item), menu);
+			}
+			menu_item = gtk_menu_item_new_with_label(suggs[i]);
+			gtk_container_add(GTK_CONTAINER(menu), menu_item);
 			g_signal_connect((gpointer) menu_item, "activate",
-				G_CALLBACK(menu_suggestion_item_activate_cb), clickinfo.suggs[i]);
+				G_CALLBACK(menu_suggestion_item_activate_cb), NULL);
 		}
 		menu_item = gtk_separator_menu_item_new();
 		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
@@ -307,7 +309,7 @@ void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 		gtk_widget_show(sc->edit_menu_sep);
 		gtk_widget_show_all(sc->edit_menu_sub);
 
-		speller_dict_free_string_list(tmp_suggs);
+		speller_dict_free_string_list(suggs);
 
 		g_free(label);
 	}
@@ -454,23 +456,11 @@ GtkWidget *gui_create_menu(GtkWidget *sp_item)
 
 void gui_init(void)
 {
-	guint i;
-
-	for (i = 0; i < MAX_MENU_SUGGESTIONS; i++)
-	{
-		clickinfo.suggs[i] = NULL;
-	}
 	clickinfo.word = NULL;
 }
 
 
 void gui_free(void)
 {
-	guint i;
-
-	for (i = 0; i < MAX_MENU_SUGGESTIONS; i++)
-	{
-		g_free(clickinfo.suggs[i]);
-	}
 	g_free(clickinfo.word);
 }

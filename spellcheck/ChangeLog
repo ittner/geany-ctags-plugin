@@ -5,6 +5,12 @@
    replacement to the spell checker to remember it in further checks.
  * src/gui.c, src/scplugin.c, src/speller.c, src/gui.h, src/scplugin.h:
    Move SpellClickInfo struct into gui.c.
+ * src/gui.c:
+   Remove SpellClickInfo::suggs and retrieve the suggestion text from
+   the menu item label directly.
+   Remove the limit of showing a maximum of 10 suggestions, instead
+   add sub menus for more suggestions if available, similar to what
+   'gtkspell' does.
 
 
 2008-11-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
