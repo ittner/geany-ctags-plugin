@@ -62,7 +62,7 @@ static gboolean ignore_sc_callback = FALSE;
 
 void gui_perform_check(GeanyDocument *doc)
 {
-	p_editor->clear_indicators(doc->editor);
+	p_editor->indicator_clear(doc->editor, GEANY_INDICATOR_ERROR);
 	if (sc->use_msgwin)
 	{
 		p_msgwindow->clear_tab(MSG_MESSAGE);
@@ -380,7 +380,7 @@ static void menu_item_activate_cb(GtkMenuItem *menuitem, gpointer gdata)
 
 	speller_reinit_enchant_dict();
 
-	p_editor->clear_indicators(doc->editor);
+	p_editor->indicator_clear(doc->editor, GEANY_INDICATOR_ERROR);
 	if (sc->use_msgwin)
 	{
 		p_msgwindow->clear_tab(MSG_MESSAGE);

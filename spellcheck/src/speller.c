@@ -83,7 +83,7 @@ static gint speller_check_word(GeanyDocument *doc, gint line_number, const gchar
 	if (start_pos == -1)
 		start_pos = end_pos - strlen(word);
 
-	p_editor->set_indicator(doc->editor, start_pos, end_pos);
+	p_editor->indicator_set_on_range(doc->editor, GEANY_INDICATOR_ERROR, start_pos, end_pos);
 
 	if (sc->use_msgwin)
 	{
