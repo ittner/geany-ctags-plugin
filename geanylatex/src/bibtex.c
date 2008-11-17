@@ -20,7 +20,6 @@
  */
 
 #include "bibtex.h"
-#include <string.h>
 
 #define set_status(entry_number, flag) \
 	fields[entry_number] = flag;
@@ -133,7 +132,7 @@ static int get_entry_pos(char *str)
 	int i;
 	if(str != NULL) {
 		for (i = 0; i < N_ENTRIES; i++) {
-			if (strcasecmp(str, label_entry[i]) == 0)
+			if (g_strcasecmp(str, label_entry[i]) == 0)
 				return i;
 		}
 	}
