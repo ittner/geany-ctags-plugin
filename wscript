@@ -82,9 +82,9 @@ plugins = [
 		 '0.3'),
 	Plugin('geanylatex',
 		 [ 'geanylatex/src/latexencodings.c', 'geanylatex/src/geanylatex.c',
-		   'geanylatex/src/letters.c' ],
+		   'geanylatex/src/letters.c', 'geanylatex/src/bibtex.c' ],
 		 [ 'geanylatex' ], # include dirs
-		 '0.2'),
+		 '0.3dev'),
 	Plugin('geanylua',
 		 [ 'geanylua/geanylua.c' ], # the other source files are listed in build_lua()
 		 [ 'geanylua' ], # include dirs

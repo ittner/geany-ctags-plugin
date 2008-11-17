@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-14 01:00+0100\n"
+"POT-Creation-Date: 2008-11-14 02:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,86 +16,86 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/geanylatex.c:54
+#: src/geanylatex.c:29
 msgid "LaTeX"
 msgstr ""
 
-#: src/geanylatex.c:54
+#: src/geanylatex.c:29
 msgid "Plugin to provide better LaTeX support"
 msgstr ""
 
-#: src/geanylatex.c:135
+#: src/geanylatex.c:90
 msgid "Insert label"
 msgstr ""
 
-#: src/geanylatex.c:148
+#: src/geanylatex.c:103
 msgid "Label name:"
 msgstr ""
 
-#: src/geanylatex.c:179
+#: src/geanylatex.c:134
 msgid "Insert reference"
 msgstr ""
 
-#: src/geanylatex.c:192
+#: src/geanylatex.c:147
 msgid "Ref name:"
 msgstr ""
 
-#: src/geanylatex.c:202
+#: src/geanylatex.c:157
 msgid "standard reference"
 msgstr ""
 
-#: src/geanylatex.c:207
+#: src/geanylatex.c:162
 msgid "page reference"
 msgstr ""
 
-#: src/geanylatex.c:372
+#: src/geanylatex.c:327
 msgid "More"
 msgstr ""
 
 #. Documentclass
-#: src/geanylatex.c:463
+#: src/geanylatex.c:418
 msgid "Documentclass:"
 msgstr ""
 
-#: src/geanylatex.c:466
+#: src/geanylatex.c:421
 msgid "Choose the kind of document you want to write"
 msgstr ""
 
 #. Encoding
-#: src/geanylatex.c:479
+#: src/geanylatex.c:434
 msgid "Encoding:"
 msgstr ""
 
-#: src/geanylatex.c:483
+#: src/geanylatex.c:438
 msgid "Set the encoding for your new document"
 msgstr ""
 
 #. Scriptsize
-#: src/geanylatex.c:498
+#: src/geanylatex.c:453
 msgid "Fontsize:"
 msgstr ""
 
-#: src/geanylatex.c:501
+#: src/geanylatex.c:456
 msgid "Set the default fontsize of your new document"
 msgstr ""
 
 #. Author
-#: src/geanylatex.c:514
+#: src/geanylatex.c:469
 msgid "Author:"
 msgstr ""
 
-#: src/geanylatex.c:517
+#: src/geanylatex.c:472
 msgid ""
 "Sets the value of the \\author command. In most cases this should be your "
 "name"
 msgstr ""
 
 #. Date
-#: src/geanylatex.c:528
+#: src/geanylatex.c:483
 msgid "Date:"
 msgstr ""
 
-#: src/geanylatex.c:531
+#: src/geanylatex.c:486
 msgid ""
 "Sets the value of the \\date command inside header of your newly created "
 "LaTeX-document. Keeping it at \\today is a good decision if you don't need "
@@ -103,95 +103,99 @@ msgid ""
 msgstr ""
 
 #. Title of the new document
-#: src/geanylatex.c:538
+#: src/geanylatex.c:493
 msgid "Title:"
 msgstr ""
 
-#: src/geanylatex.c:540
+#: src/geanylatex.c:495
 msgid "Sets the title of your new document."
 msgstr ""
 
 #. Papersize
-#: src/geanylatex.c:547
+#: src/geanylatex.c:502
 msgid "Paper size:"
 msgstr ""
 
-#: src/geanylatex.c:550
+#: src/geanylatex.c:505
 msgid "Choose the paper format for the newly created document"
 msgstr ""
 
 #. Building the wizard-dialog and showing it
-#: src/geanylatex.c:565
+#: src/geanylatex.c:520
 msgid "LaTeX-Wizard"
 msgstr ""
 
-#: src/geanylatex.c:575
+#: src/geanylatex.c:530
 msgid "Use KOMA-script classes if possible"
 msgstr ""
 
-#: src/geanylatex.c:578
+#: src/geanylatex.c:533
 msgid ""
 "Uses the KOMA-script classes by Markus Kohm.\n"
 "Keep in mind: To compile your document these classes have to be installed "
 "before."
 msgstr ""
 
-#: src/geanylatex.c:584
+#: src/geanylatex.c:539
 msgid "Use draft mode"
 msgstr ""
 
-#: src/geanylatex.c:586
+#: src/geanylatex.c:541
 msgid ""
 "Set the draft flag inside new created documents to get documents with a "
 "number of debugging helpers"
 msgstr ""
 
-#: src/geanylatex.c:794
+#: src/geanylatex.c:750
 msgid "_LaTeX"
 msgstr ""
 
-#: src/geanylatex.c:800
+#: src/geanylatex.c:756
 msgid "LaTeX-_Wizard"
 msgstr ""
 
-#: src/geanylatex.c:803
+#: src/geanylatex.c:759
 msgid "Starts a Wizard to easily create LaTeX-documents"
 msgstr ""
 
-#: src/geanylatex.c:808
+#: src/geanylatex.c:764
 msgid "Insert _Special Character"
 msgstr ""
 
-#: src/geanylatex.c:810
+#: src/geanylatex.c:766
 msgid "Helps to use some not very common letters and signs"
 msgstr ""
 
-#: src/geanylatex.c:817
+#: src/geanylatex.c:773
 msgid "Insert _Reference"
 msgstr ""
 
-#: src/geanylatex.c:819
+#: src/geanylatex.c:775
 msgid "Inserting references to the document"
 msgstr ""
 
-#: src/geanylatex.c:823
+#: src/geanylatex.c:779
 msgid "Insert _Label"
 msgstr ""
 
-#: src/geanylatex.c:825
+#: src/geanylatex.c:781
 msgid "Helps at inserting labels to a document"
 msgstr ""
 
+#: src/geanylatex.c:785
+msgid "Insert _BiBTeX entry"
+msgstr ""
+
 #. init keybindins
-#: src/geanylatex.c:830
+#: src/geanylatex.c:790
 msgid "Insert \\label"
 msgstr ""
 
-#: src/geanylatex.c:831
+#: src/geanylatex.c:791
 msgid "Insert \\ref"
 msgstr ""
 
-#: src/geanylatex.c:832
+#: src/geanylatex.c:792
 msgid "Run LaTeX-Wizard"
 msgstr ""
 
@@ -239,7 +243,7 @@ msgstr ""
 msgid "IBM 852 code page"
 msgstr ""
 
-#: src/latexencodings.c:54 src/letters.c:41
+#: src/latexencodings.c:54 src/letters.c:41 src/bibtex.c:34
 msgid "Misc"
 msgstr ""
 
@@ -261,4 +265,270 @@ msgstr ""
 
 #: src/letters.c:44
 msgid "Binary operation"
+msgstr ""
+
+#: src/bibtex.c:25
+msgid "Article"
+msgstr ""
+
+#: src/bibtex.c:26
+msgid "Book"
+msgstr ""
+
+#: src/bibtex.c:27
+msgid "Booklet"
+msgstr ""
+
+#: src/bibtex.c:28
+msgid "Conference"
+msgstr ""
+
+#: src/bibtex.c:29
+msgid "Inbook"
+msgstr ""
+
+#: src/bibtex.c:30
+msgid "Incollection"
+msgstr ""
+
+#: src/bibtex.c:31
+msgid "Inproceedings"
+msgstr ""
+
+#: src/bibtex.c:32
+msgid "Manual"
+msgstr ""
+
+#: src/bibtex.c:33
+msgid "Mastersthesis"
+msgstr ""
+
+#: src/bibtex.c:35
+msgid "PhdThesis"
+msgstr ""
+
+#: src/bibtex.c:36
+msgid "Proceedings"
+msgstr ""
+
+#: src/bibtex.c:37
+msgid "Techreport"
+msgstr ""
+
+#: src/bibtex.c:38
+msgid "Unpublished"
+msgstr ""
+
+#: src/bibtex.c:41
+msgid "Address"
+msgstr ""
+
+#: src/bibtex.c:42
+msgid "Annote"
+msgstr ""
+
+#: src/bibtex.c:43
+msgid "Author"
+msgstr ""
+
+#: src/bibtex.c:44
+msgid "Booktitle"
+msgstr ""
+
+#: src/bibtex.c:45
+msgid "Chapter"
+msgstr ""
+
+#: src/bibtex.c:46
+msgid "Crossref"
+msgstr ""
+
+#: src/bibtex.c:47
+msgid "Edition"
+msgstr ""
+
+#: src/bibtex.c:48
+msgid "Editor"
+msgstr ""
+
+#: src/bibtex.c:49
+msgid "E-print"
+msgstr ""
+
+#: src/bibtex.c:50
+msgid "HowPublished"
+msgstr ""
+
+#: src/bibtex.c:51
+msgid "Institution"
+msgstr ""
+
+#: src/bibtex.c:52
+msgid "Journal"
+msgstr ""
+
+#: src/bibtex.c:53
+msgid "Key"
+msgstr ""
+
+#: src/bibtex.c:54
+msgid "Month"
+msgstr ""
+
+#: src/bibtex.c:55
+msgid "Note"
+msgstr ""
+
+#: src/bibtex.c:56
+msgid "Number"
+msgstr ""
+
+#: src/bibtex.c:57
+msgid "Organization"
+msgstr ""
+
+#: src/bibtex.c:58
+msgid "Pages"
+msgstr ""
+
+#: src/bibtex.c:59
+msgid "Publisher"
+msgstr ""
+
+#: src/bibtex.c:60
+msgid "School"
+msgstr ""
+
+#: src/bibtex.c:61
+msgid "Series"
+msgstr ""
+
+#: src/bibtex.c:62
+msgid "Title"
+msgstr ""
+
+#: src/bibtex.c:63
+msgid "Type"
+msgstr ""
+
+#: src/bibtex.c:64
+msgid "URL"
+msgstr ""
+
+#: src/bibtex.c:65
+msgid "Volume"
+msgstr ""
+
+#: src/bibtex.c:66
+msgid "Year"
+msgstr ""
+
+#: src/bibtex.c:97
+msgid "Address of publisher"
+msgstr ""
+
+#: src/bibtex.c:98
+msgid "Annotation for annotated bibliography styles"
+msgstr ""
+
+#: src/bibtex.c:99
+msgid "Name(s) of the author(s), separated by 'and' if more than one"
+msgstr ""
+
+#: src/bibtex.c:100
+msgid "Title of the book, if only part of it is being cited"
+msgstr ""
+
+#: src/bibtex.c:101
+msgid "Chapter number"
+msgstr ""
+
+#: src/bibtex.c:102
+msgid "Citation key of the cross-referenced entry"
+msgstr ""
+
+#: src/bibtex.c:103
+msgid "Edition of the book (such as \"first\" or \"second\")"
+msgstr ""
+
+#: src/bibtex.c:104
+msgid "Name(s) of the editor(s), separated by 'and' if more than one"
+msgstr ""
+
+#: src/bibtex.c:105
+msgid "Specification of electronic publication"
+msgstr ""
+
+#: src/bibtex.c:106
+msgid "Publishing method if the method is nonstandard"
+msgstr ""
+
+#: src/bibtex.c:107
+msgid "Institution that was involved in the publishing"
+msgstr ""
+
+#: src/bibtex.c:108
+msgid "Journal or magazine in which the work was published"
+msgstr ""
+
+#: src/bibtex.c:109
+msgid ""
+"Hidden field used for specifying or overriding the alphabetical order of "
+"entries"
+msgstr ""
+
+#: src/bibtex.c:110
+msgid "Month of publication or creation if unpublished"
+msgstr ""
+
+#: src/bibtex.c:111
+msgid "Miscellaneous extra information"
+msgstr ""
+
+#: src/bibtex.c:112
+msgid "Number of journal, magazine, or tech-report"
+msgstr ""
+
+#: src/bibtex.c:113
+msgid "Sponsor of the conference"
+msgstr ""
+
+#: src/bibtex.c:114
+msgid "Page numbers separated by commas or double-hyphens"
+msgstr ""
+
+#: src/bibtex.c:115
+msgid "Name of publisher"
+msgstr ""
+
+#: src/bibtex.c:116
+msgid "School where thesis was written"
+msgstr ""
+
+#: src/bibtex.c:117
+msgid "Series of books in which the book was published"
+msgstr ""
+
+#: src/bibtex.c:118
+msgid "Title of the work"
+msgstr ""
+
+#: src/bibtex.c:119
+msgid "Type of technical report"
+msgstr ""
+
+#: src/bibtex.c:120
+msgid "Internet address"
+msgstr ""
+
+#: src/bibtex.c:121
+msgid "Number of the volume"
+msgstr ""
+
+#: src/bibtex.c:122
+msgid "Year of publication or creation if unpublished"
+msgstr ""
+
+#: src/bibtex.c:127
+msgid "Recipient's Address"
 msgstr ""

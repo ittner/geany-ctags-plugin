@@ -22,36 +22,11 @@
 /* LaTeX plugin */
 /* This plugin improves the work with LaTeX and Geany.*/
 
-#include "geany.h"
-#include "support.h"
-#include "plugindata.h"
-#include "document.h"
-#include "editor.h"
-#include "filetypes.h"
-#include "templates.h"
-#include "utils.h"
-#include "ui_utils.h"
-#include "keybindings.h"
-#include "prefs.h"
-#include "pluginmacros.h"
-
-#ifdef HAVE_LOCALE_H
-# include <locale.h>
-#endif
-
-#include "datatypes.h"
-#include "letters.h"
-#include "latexencodings.h"
-
-typedef void (*SubMenuCallback) (G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata);
-
-GeanyPlugin		*geany_plugin;
-GeanyData		*geany_data;
-GeanyFunctions	*geany_functions;
+#include "geanylatex.h"
 
 PLUGIN_VERSION_CHECK(104)
 
-PLUGIN_SET_INFO(_("LaTeX"), _("Plugin to provide better LaTeX support"), "0.2",
+PLUGIN_SET_INFO(_("LaTeX"), _("Plugin to provide better LaTeX support"), "0.3dev",
 	    "Frank Lanitz <frank@frank.uvena.de>")
 
 GtkWidget *menu_latex = NULL;
@@ -61,9 +36,10 @@ GtkWidget *menu_latex_menu_special_char = NULL;
 GtkWidget *menu_latex_menu_special_char_submenu = NULL;
 GtkWidget *menu_latex_ref = NULL;
 GtkWidget *menu_latex_label = NULL;
+GtkWidget *menu_latex_bibtex = NULL;
+GtkWidget *menu_latex_bibtex_submenu = NULL;
 
 static GtkWidget *main_menu_item = NULL;
-
 
 /* Doing some basic keybinding stuff */
 enum
@@ -71,32 +47,13 @@ enum
 	LATEX_WIZZARD_KB,
 	LATEX_INSERT_LABEL_KB,
 	LATEX_INSERT_REF_KB,
+/*	LATEX_INSERT_BIBTEX_ENTRY_KB,*/
 	COUNT_KB
 };
 
 PLUGIN_KEY_GROUP(geanylatex, COUNT_KB)
 
-
-#define TEMPLATE_LATEX "\
-\\documentclass[{CLASSOPTION}]{{DOCUMENTCLASS}}\n\
-{ENCODING}\
-{TITLE}\
-{AUTHOR}\
-{DATE}\
-\\begin{document}\n\
-\n\
-\\end{document}\n"
-
-#define create_sub_menu(base_menu, menu, item, title) \
-		(menu) = gtk_menu_new(); \
-		(item) = gtk_menu_item_new_with_mnemonic((title)); \
-		gtk_menu_item_set_submenu(GTK_MENU_ITEM((item)), (menu)); \
-		gtk_container_add(GTK_CONTAINER(base_menu), (item)); \
-		gtk_widget_show((item));
-
-#define MAX_MENU_ENTRIES 20
-
-static void
+void
 insert_string(gchar *string)
 {
 	GeanyDocument *doc = NULL;
@@ -762,6 +719,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 	gtk_widget_destroy(dialog);
 }
 
+
 static void kblabel_insert(G_GNUC_UNUSED guint key_id)
 {
 	insert_label_activated(NULL, NULL);
@@ -777,11 +735,18 @@ static void kbwizard(G_GNUC_UNUSED guint key_id)
 	wizard_activated(NULL, NULL);
 }
 
+/*static void kb_bibtex_entry_insert(G_GNUC_UNUSED guint key_id)
+{
+	insert_bibtex_entry(NULL, NULL);
+}*/
 
 void
 plugin_init(G_GNUC_UNUSED GeanyData * data)
 {
 	GtkTooltips *tooltips = NULL;
+	GtkWidget *tmp = NULL;
+	int i;
+
 
 	p_main->locale_init(LOCALEDIR, GETTEXT_PACKAGE);
 
@@ -824,19 +789,36 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_label);
 	g_signal_connect((gpointer) menu_latex_label, "activate", G_CALLBACK(insert_label_activated), NULL);
 
+	menu_latex_bibtex = gtk_menu_item_new_with_mnemonic(_("BibTeX"));
+	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_bibtex);
+
+	menu_latex_bibtex_submenu = gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_latex_bibtex), menu_latex_bibtex_submenu);
+
+	for (i = 0; i < N_TYPES; i++)
+	{
+		tmp = NULL;
+		tmp = gtk_menu_item_new_with_mnemonic(label_types[i]);
+		gtk_container_add(GTK_CONTAINER(menu_latex_bibtex_submenu), tmp);
+		g_signal_connect((gpointer) tmp, "activate", G_CALLBACK(insert_bibtex_entry), GINT_TO_POINTER(i));
+	}
+
 	/* init keybindins */
 
 	p_keybindings->set_item(plugin_key_group, LATEX_WIZZARD_KB, kbwizard,
-	0, 0, "run_latex_wizard", _("Run LaTeX-Wizard"), menu_latex_wizzard);
+		0, 0, "run_latex_wizard", _("Run LaTeX-Wizard"), menu_latex_wizzard);
 	p_keybindings->set_item(plugin_key_group, LATEX_INSERT_LABEL_KB, kblabel_insert,
-	0, 0, "insert_latex_label", _("Insert \\label"), menu_latex_label);
+		0, 0, "insert_latex_label", _("Insert \\label"), menu_latex_label);
 	p_keybindings->set_item(plugin_key_group, LATEX_INSERT_REF_KB, kbref_insert,
-	0, 0, "insert_latex_ref", _("Insert \\ref"), menu_latex_ref);
-
+		0, 0, "insert_latex_ref", _("Insert \\ref"), menu_latex_ref);
+/*	p_keybindings->set_item(plugin_key_group, LATEX_INSERT_BIBTEX_ENTRY_KB,
+		kb_bibtex_entry_insert, 0, 0, "insert_latex_bibtex_entry", _("Add BiBTeX entry"),
+		menu_latex_bibtex); */
 
 	p_ui->add_document_sensitive(menu_latex_menu_special_char);
 	p_ui->add_document_sensitive(menu_latex_ref);
 	p_ui->add_document_sensitive(menu_latex_label);
+	p_ui->add_document_sensitive(menu_latex_bibtex);
 
 	gtk_widget_set_sensitive(menu_latex_wizzard, TRUE);
 	gtk_widget_show_all(menu_latex);
