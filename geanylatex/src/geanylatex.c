@@ -252,7 +252,6 @@ void sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template, Categor
 {
 	gint i;
 	gint j;
-	gint max_menu_entries = MAX_MENU_ENTRIES;
 	gint categories = count_menu_cat_entries(category_name);
 	GtkWidget *sub_menu = NULL;
 	GtkWidget *sub_menu_cat[categories][2];
@@ -282,7 +281,7 @@ void sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template, Categor
 
 		// Default is, not to split anything to make menu not
 		// deeper than realy needed.
-		if (item_count > max_menu_entries)
+		if (item_count > MAX_MENU_ENTRIES)
 		{
 			split = TRUE;
 		}
@@ -297,7 +296,7 @@ void sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template, Categor
 			if (menu_template[j].cat == i)
 			{
 				// Creates a new sub sub menu if needed
-				if (split == TRUE && (local_count % max_menu_entries) == 0)
+				if (split == TRUE && (local_count % MAX_MENU_ENTRIES) == 0)
 				{
 					gint next_split_point = 0;
 					GtkWidget *tmp = NULL;
@@ -306,7 +305,7 @@ void sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template, Categor
 					sub_menu = active_submenu;
 
 					for (next_split_point = 0;
-						next_split_point < max_menu_entries ; next_split_point ++)
+						next_split_point < MAX_MENU_ENTRIES ; next_split_point ++)
 					{
 						if (menu_template[j+next_split_point].cat != i)
 						{
