@@ -49,10 +49,9 @@
 
 typedef void (*SubMenuCallback) (G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata);
 
-
-GeanyPlugin	*geany_plugin;
-GeanyData	*geany_data;
-GeanyFunctions	*geany_functions;
+extern GeanyPlugin	*geany_plugin;
+extern GeanyData	*geany_data;
+extern GeanyFunctions	*geany_functions;
 
 
 #define TEMPLATE_LATEX "\
