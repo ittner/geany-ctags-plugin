@@ -154,46 +154,46 @@ void insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpo
 
 	switch(doctype) {
 	case ARTICLE:
-		set_status(get_entry_pos("author"), TRUE);
-		set_status(get_entry_pos("title"), TRUE);
-		set_status(get_entry_pos("journal"), TRUE);
-		set_status(get_entry_pos("year"), TRUE);
+		set_status(AUTHOR, TRUE);
+		set_status(TITLE, TRUE);
+		set_status(JOURNAL, TRUE);
+		set_status(YEAR, TRUE);
 		break;
 	case BOOK:
-		set_status(get_entry_pos("author"), TRUE);
-		set_status(get_entry_pos("editor"), TRUE);
-		set_status(get_entry_pos("title"), TRUE);
-		set_status(get_entry_pos("publisher"), TRUE);
-		set_status(get_entry_pos("year"), TRUE);
+		set_status(AUTHOR, TRUE);
+		set_status(EDITOR, TRUE);
+		set_status(TITLE, TRUE);
+		set_status(PUBLISHER, TRUE);
+		set_status(YEAR, TRUE);
 		break;
 	case BOOKLET:
-		set_status(get_entry_pos("title"), TRUE);
+		set_status(TITLE, TRUE);
 		break;
 	case CONFERENCE:
 	case INCOLLECTION:
 	case INPROCEEDINGS:
-		set_status(get_entry_pos("author"), TRUE);
-		set_status(get_entry_pos("title"), TRUE);
-		set_status(get_entry_pos("booktitle"), TRUE);
-		set_status(get_entry_pos("year"), TRUE);
+		set_status(AUTHOR, TRUE);
+		set_status(TITLE, TRUE);
+		set_status(BOOKTITLE, TRUE);
+		set_status(YEAR, TRUE);
 		break;
 	case INBOOK:
-		set_status(get_entry_pos("author"), TRUE);
-		set_status(get_entry_pos("editor"), TRUE);
-		set_status(get_entry_pos("title"), TRUE);
-		set_status(get_entry_pos("chapter"), TRUE);
-		set_status(get_entry_pos("pages"), TRUE);
-		set_status(get_entry_pos("publisher"), TRUE);
-		set_status(get_entry_pos("year"), TRUE);
+		set_status(AUTHOR, TRUE);
+		set_status(EDITOR, TRUE);
+		set_status(TITLE, TRUE);
+		set_status(CHAPTER, TRUE);
+		set_status(PAGES, TRUE);
+		set_status(PUBLISHER, TRUE);
+		set_status(YEAR, TRUE);
 		break;
 	case MANUAL:
-		set_status(get_entry_pos("title"), TRUE);
+		set_status(TITLE, TRUE);
 		break;
 	case MASTERSTHESIS:
-		set_status(get_entry_pos("author"), TRUE);
-		set_status(get_entry_pos("title"), TRUE);
-		set_status(get_entry_pos("school"), TRUE);
-		set_status(get_entry_pos("year"), TRUE);
+		set_status(AUTHOR, TRUE);
+		set_status(TITLE, TRUE);
+		set_status(SCHOOL, TRUE);
+		set_status(YEAR, TRUE);
 		break;
 	case MISC:
 		for (i = 0; i < N_ENTRIES; i++)
@@ -201,19 +201,19 @@ void insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpo
 			set_status(i, TRUE);
 		}
 	case PHDTHESIS:
-		set_status(get_entry_pos("title"), TRUE);
-		set_status(get_entry_pos("year"), TRUE);
+		set_status(TITLE, TRUE);
+		set_status(YEAR, TRUE);
 		break;
 	case TECHREPORT:
-		set_status(get_entry_pos("author"), TRUE);
-		set_status(get_entry_pos("title"), TRUE);
-		set_status(get_entry_pos("institution"), TRUE);
-		set_status(get_entry_pos("year"), TRUE);
+		set_status(AUTHOR, TRUE);
+		set_status(TITLE, TRUE);
+		set_status(INSTITUTION, TRUE);
+		set_status(YEAR, TRUE);
 		break;
 	case UNPUBLISHED:
-		set_status(get_entry_pos("author"), TRUE);
-		set_status(get_entry_pos("title"), TRUE);
-		set_status(get_entry_pos("note"), TRUE);
+		set_status(AUTHOR, TRUE);
+		set_status(TITLE, TRUE);
+		set_status(NOTE, TRUE);
 	}
 
 	output = g_strconcat(output, label_types[doctype], "{ \n",NULL);
