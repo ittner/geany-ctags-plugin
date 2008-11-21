@@ -764,7 +764,8 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	menu_latex_menu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_latex), menu_latex_menu);
 
-	menu_latex_wizzard = gtk_menu_item_new_with_mnemonic(_("LaTeX-_Wizard"));
+
+	menu_latex_wizzard = p_ui->image_menu_item_new(GTK_STOCK_NEW, _("LaTeX-_Wizard"));
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_wizzard);
 	gtk_tooltips_set_tip(tooltips, menu_latex_wizzard,
 			     _("Starts a Wizard to easily create LaTeX-documents"), NULL);
