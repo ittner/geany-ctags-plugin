@@ -24,7 +24,7 @@
 
 #include "geanylatex.h"
 
-PLUGIN_VERSION_CHECK(104)
+PLUGIN_VERSION_CHECK(111)
 
 PLUGIN_SET_INFO(_("LaTeX"), _("Plugin to provide better LaTeX support"), "0.3dev",
 	    "Frank Lanitz <frank@frank.uvena.de>")
