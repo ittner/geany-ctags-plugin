@@ -255,7 +255,7 @@ void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 
 	if (suggs != NULL)
 	{
-		GtkWidget *menu_item, *menu, *image;
+		GtkWidget *menu_item, *menu;
 		gchar *label;
 
 		clickinfo.pos = pos;
@@ -291,18 +291,13 @@ void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 		menu_item = gtk_separator_menu_item_new();
 		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
 
-		image = gtk_image_new_from_stock(GTK_STOCK_ADD, GTK_ICON_SIZE_MENU);
-
 		label = g_strdup_printf(_("Add \"%s\" to Dictionary"), word);
-		menu_item = gtk_image_menu_item_new_with_label(label);
-		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item), image);
+		menu_item = p_ui->image_menu_item_new(GTK_STOCK_ADD, label);
 		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
 		g_signal_connect((gpointer) menu_item, "activate",
 			G_CALLBACK(on_menu_addword_item_activate), GINT_TO_POINTER(0));
 
-		image = gtk_image_new_from_stock(GTK_STOCK_REMOVE, GTK_ICON_SIZE_MENU);
-		menu_item = gtk_image_menu_item_new_with_label(_("Ignore All"));
-		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item), image);
+		menu_item = p_ui->image_menu_item_new(GTK_STOCK_REMOVE, _("Ignore All"));
 		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
 		g_signal_connect((gpointer) menu_item, "activate",
 			G_CALLBACK(on_menu_addword_item_activate), GINT_TO_POINTER(1));
@@ -409,11 +404,7 @@ void gui_kb_toggle_typing_activate_cb(guint key_id)
 
 void gui_create_edit_menu(void)
 {
-	GtkWidget *image;
-
-	image = gtk_image_new_from_stock(GTK_STOCK_SPELL_CHECK, GTK_ICON_SIZE_MENU);
-	sc->edit_menu = gtk_image_menu_item_new_with_label(_("Spelling Suggestions"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(sc->edit_menu), image);
+	sc->edit_menu = p_ui->image_menu_item_new(GTK_STOCK_SPELL_CHECK, _("Spelling Suggestions"));
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), sc->edit_menu);
 	gtk_menu_reorder_child(GTK_MENU(geany->main_widgets->editor_menu), sc->edit_menu, 0);
 

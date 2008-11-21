@@ -54,7 +54,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(100)
+PLUGIN_VERSION_CHECK(110)
 PLUGIN_SET_INFO(_("Spell Check"), _("Checks the spelling of the current document."), "0.2",
 			_("The Geany developer team"))
 
@@ -203,7 +203,7 @@ void plugin_init(GeanyData *data)
 
 	locale_init();
 
-	sc->menu_item = gtk_image_menu_item_new_from_stock("gtk-spell-check", NULL);
+	sc->menu_item = gtk_image_menu_item_new_from_stock(GTK_STOCK_SPELL_CHECK, NULL);
 	p_ui->add_document_sensitive(sc->menu_item);
 
 	gui_toolbar_update();

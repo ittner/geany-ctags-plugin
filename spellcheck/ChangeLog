@@ -1,3 +1,9 @@
+2008-11-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/scplugin.c, src/gui.c:
+   Make use of ui_image_menu_item_new().
+
+
 2008-11-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/speller.c, src/gui.c:
