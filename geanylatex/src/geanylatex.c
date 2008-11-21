@@ -29,6 +29,11 @@ PLUGIN_VERSION_CHECK(104)
 PLUGIN_SET_INFO(_("LaTeX"), _("Plugin to provide better LaTeX support"), "0.3dev",
 	    "Frank Lanitz <frank@frank.uvena.de>")
 
+GeanyPlugin	*geany_plugin;
+GeanyData	*geany_data;
+GeanyFunctions	*geany_functions;
+
+
 GtkWidget *menu_latex = NULL;
 GtkWidget *menu_latex_menu = NULL;
 GtkWidget *menu_latex_wizzard = NULL;
