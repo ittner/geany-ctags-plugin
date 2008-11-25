@@ -91,7 +91,7 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 	GtkTooltips *tooltip = NULL;
 	tooltip = gtk_tooltips_new();
 
-	dialog = gtk_dialog_new_with_buttons(_("Lipsum-gnerator"),
+	dialog = gtk_dialog_new_with_buttons(_("Lipsum-generator"),
  					GTK_WINDOW(geany->main_widgets->window),
 					GTK_DIALOG_DESTROY_WITH_PARENT,
  					GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
