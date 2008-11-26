@@ -30,6 +30,10 @@
 #include "keybindings.h"
 #include "pluginmacros.h"
 
+#ifdef HAVE_LOCALE_H
+# include <locale.h>
+#endif
+
 
 /* For your templates you can use:
  * {{TITLE_S}}: Start for title e.g <H1>
@@ -144,6 +148,8 @@ plugin_init(G_GNUC_UNUSED GeanyData *data)
 	GtkWidget *menu_lipsum = NULL;
 	GtkTooltips *tooltips = NULL;
 	tooltips = gtk_tooltips_new();
+
+	p_main->locale_init(LOCALEDIR, GETTEXT_PACKAGE);
 
 	menu_lipsum = gtk_image_menu_item_new_with_mnemonic(_("_Lipsum"));
 	gtk_tooltips_set_tip(tooltips, menu_lipsum,
