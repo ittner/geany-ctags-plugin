@@ -104,7 +104,11 @@ plugins = [
 	Plugin('spellcheck',
 		 [ 'spellcheck/src/gui.c', 'spellcheck/src/scplugin.c', 'spellcheck/src/speller.c' ], # source files
 		 [ 'spellcheck', 'spellcheck/src' ], # include dirs
-		 '0.3', [ [ 'enchant', '1.3', True ] ])
+		 '0.3', [ [ 'enchant', '1.3', True ] ]),
+	Plugin('geanylipsum',
+		 [ 'geanylipsum/src/geanylipsum.c' ], # source files
+		 [ 'geanylipsum', 'geanylipsum/src' ], # include dirs
+		 '0.1dev'),
 ]
 
 
