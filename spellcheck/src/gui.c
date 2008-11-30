@@ -167,7 +167,7 @@ static void menu_suggestion_item_activate_cb(GtkMenuItem *menuitem, gpointer gda
 		p_sci->get_selected_text(sci, word);
 
 		/* retrieve the new text */
-		sugg = gtk_label_get_text(GTK_LABEL(GTK_BIN(menuitem)->child));
+		sugg = gtk_label_get_text(GTK_LABEL(gtk_bin_get_child(GTK_BIN(menuitem))));
 
 		/* replace the misspelled word with the chosen suggestion */
 		p_sci->replace_sel(sci, sugg);
@@ -231,8 +231,7 @@ static void on_menu_addword_item_activate(GtkMenuItem *menuitem, gpointer gdata)
 void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 							   GeanyDocument *doc, gpointer user_data)
 {
-	gsize n_suggs, i;
-	gchar **suggs;
+	gchar *search_word;
 
 	g_return_if_fail(doc != NULL && doc->is_valid);
 
@@ -240,27 +239,35 @@ void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 	gtk_widget_hide(sc->edit_menu);
 	gtk_widget_hide(sc->edit_menu_sep);
 
-	/* ignore numbers or words starting with digits */
-	if (isdigit(*word))
+	/* if we have a selection, prefer it over the current word */
+	if (p_sci->has_selection(doc->editor->sci))
+	{
+		gint len = p_sci->get_selected_text_length(doc->editor->sci);
+		search_word = g_malloc(len + 1);
+		p_sci->get_selected_text(doc->editor->sci, search_word);
+	}
+	else
+		search_word = g_strdup(word);
+
+	/* ignore numbers or words starting with digits and non-text */
+	if (! NZV(search_word) || isdigit(*search_word) || ! speller_is_text(doc, pos))
+	{
+		g_free(search_word);
 		return;
+	}
 
-	/* ignore non-text */
-	if (! speller_is_text(doc, pos))
-		return;
-
-	if (! NZV(word) || speller_dict_check(word) == 0)
-		return;
-
-	suggs = speller_dict_suggest(word, &n_suggs);
-
-	if (suggs != NULL)
+	if (speller_dict_check(search_word) != 0)
 	{
 		GtkWidget *menu_item, *menu;
 		gchar *label;
+		gsize n_suggs, i;
+		gchar **suggs;
+
+		suggs = speller_dict_suggest(search_word, &n_suggs);
 
 		clickinfo.pos = pos;
 		clickinfo.doc = doc;
-		setptr(clickinfo.word, g_strdup(word));
+		setptr(clickinfo.word, search_word);
 
 		if (sc->edit_menu_sub != NULL && GTK_IS_WIDGET(sc->edit_menu_sub))
 			gtk_widget_destroy(sc->edit_menu_sub);
@@ -288,10 +295,16 @@ void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 			g_signal_connect((gpointer) menu_item, "activate",
 				G_CALLBACK(menu_suggestion_item_activate_cb), NULL);
 		}
+		if (suggs == NULL)
+		{
+			menu_item = gtk_menu_item_new_with_label(_("(No Suggestions)"));
+			gtk_widget_set_sensitive(menu_item, FALSE);
+			gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
+		}
 		menu_item = gtk_separator_menu_item_new();
 		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
 
-		label = g_strdup_printf(_("Add \"%s\" to Dictionary"), word);
+		label = g_strdup_printf(_("Add \"%s\" to Dictionary"), search_word);
 		menu_item = p_ui->image_menu_item_new(GTK_STOCK_ADD, label);
 		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
 		g_signal_connect((gpointer) menu_item, "activate",
@@ -306,9 +319,14 @@ void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 		gtk_widget_show(sc->edit_menu_sep);
 		gtk_widget_show_all(sc->edit_menu_sub);
 
-		speller_dict_free_string_list(suggs);
+		if (suggs != NULL)
+			speller_dict_free_string_list(suggs);
 
 		g_free(label);
+	}
+	else
+	{
+		g_free(search_word);
 	}
 }
 
