@@ -428,6 +428,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 0, "Book");
 	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 1, "Article");
 	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 2, "Report");
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 3, "Letter");
 
 	gtk_combo_box_set_active(GTK_COMBO_BOX(documentclass_combobox), 0);
 
@@ -643,6 +644,10 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 					documentclass_str = g_utf8_casefold("scrreprt", -1);
 					break;
 				}
+				case 3:
+				{
+					documentclass_str = g_utf8_casefold("scrlttr2", -1);
+				}
 			}
 		}
 		else
@@ -662,6 +667,11 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 				case 2:
 				{
 					documentclass_str = g_utf8_casefold("report", -1);
+					break;
+				}
+			    case 3:
+				{
+				  	documentclass_str = g_utf8_casefold("letter", -1);
 					break;
 				}
 			}
