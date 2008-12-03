@@ -24,6 +24,7 @@
 
 #include "geanylatex.h"
 
+
 /* Define generic stuff */
 enum {
 	ARTICLE = 0,
@@ -74,7 +75,7 @@ enum {
 	N_ENTRIES
 };
 
-extern gchar *label_types[];
+extern gchar *label_types[N_TYPES];
 
 int push_bibtex_entry(int style, GeanyDocument *doc);
 

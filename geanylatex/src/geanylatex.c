@@ -761,7 +761,6 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	GtkWidget *tmp = NULL;
 	int i;
 
-
 	p_main->locale_init(LOCALEDIR, GETTEXT_PACKAGE);
 
 	init_encodings_latex();
@@ -813,7 +812,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	for (i = 0; i < N_TYPES; i++)
 	{
 		tmp = NULL;
-		tmp = gtk_menu_item_new_with_mnemonic(label_types[i]);
+		tmp = gtk_menu_item_new_with_mnemonic(_(label_types[i]));
 		gtk_container_add(GTK_CONTAINER(menu_latex_bibtex_submenu), tmp);
 		g_signal_connect((gpointer) tmp, "activate", G_CALLBACK(insert_bibtex_entry), GINT_TO_POINTER(i));
 	}

@@ -25,6 +25,8 @@
 #ifndef GEANYLATEX_H
 #define GEANYLATEX_H
 
+
+
 #include "geany.h"
 #include "support.h"
 #include "plugindata.h"
@@ -37,15 +39,15 @@
 #include "keybindings.h"
 #include "prefs.h"
 #include "pluginmacros.h"
+#include "datatypes.h"
+#include "letters.h"
+#include "latexencodings.h"
+#include "bibtex.h"
 
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
 #endif
 
-#include "datatypes.h"
-#include "letters.h"
-#include "latexencodings.h"
-#include "bibtex.h"
 
 typedef void (*SubMenuCallback) (G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata);
 
