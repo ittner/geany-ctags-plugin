@@ -646,7 +646,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 				}
 				case 3:
 				{
-					documentclass_str = g_utf8_casefold("scrlttr2", -1);
+					documentclass_str = g_utf8_casefold("letter", -1);
 				}
 			}
 		}
