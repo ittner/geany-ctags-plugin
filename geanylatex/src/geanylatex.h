@@ -76,7 +76,8 @@ extern GeanyFunctions	*geany_functions;
 {AUTHOR}\
 \\begin{document}\n\
 \\begin{letter}{}\n\
-\\opening{}\n\
+\\opening{{OPENING}}\n\n\
+\\closing{{CLOSING}}\n\
 \\end{document}\n"
 
 #define create_sub_menu(base_menu, menu, item, title) \

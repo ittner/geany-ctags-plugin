@@ -762,6 +762,10 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 
 			g_free(title);
 		}
+
+		p_utils->string_replace_all(code, "{OPENING}", _("Dear Sir or Madame"));
+		p_utils->string_replace_all(code, "{CLOSING}", _("With kind regards"));
+
 		output = g_string_free(code, FALSE);
 		show_output(output, NULL, encoding_int);
 	}
