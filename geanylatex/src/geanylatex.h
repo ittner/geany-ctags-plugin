@@ -69,8 +69,7 @@ extern GeanyFunctions	*geany_functions;
 #define TEMPLATE_LATEX_LETTER "\
 \\documentclass[{CLASSOPTION}]{{DOCUMENTCLASS}}\n\
 {ENCODING}\
-\\stdaddress{}\n\
-\\place{}\n\
+\\address{}\n\
 {DATE}\
 {TITLE}\
 {AUTHOR}\
@@ -78,6 +77,7 @@ extern GeanyFunctions	*geany_functions;
 \\begin{letter}{}\n\
 \\opening{{OPENING}}\n\n\
 \\closing{{CLOSING}}\n\
+\\end{letter}\n\
 \\end{document}\n"
 
 #define create_sub_menu(base_menu, menu, item, title) \
