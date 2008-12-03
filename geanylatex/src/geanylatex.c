@@ -425,10 +425,10 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 	documentclass_combobox = gtk_combo_box_new_text();
 	gtk_tooltips_set_tip(tooltip, documentclass_combobox,
 		_("Choose the kind of document you want to write"), NULL);
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 0, "Book");
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 1, "Article");
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 2, "Report");
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 3, "Letter");
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 0, _("Book"));
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 1, _("Article"));
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 2, _("Report"));
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 3, _("Letter"));
 
 	gtk_combo_box_set_active(GTK_COMBO_BOX(documentclass_combobox), 0);
 

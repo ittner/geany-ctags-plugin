@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-24 18:31+0100\n"
+"POT-Creation-Date: 2008-12-03 00:11+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,41 +61,57 @@ msgstr ""
 msgid "Choose the kind of document you want to write"
 msgstr ""
 
+#: src/geanylatex.c:428 src/bibtex.c:30
+msgid "Book"
+msgstr ""
+
+#: src/geanylatex.c:429 src/bibtex.c:29
+msgid "Article"
+msgstr ""
+
+#: src/geanylatex.c:430
+msgid "Report"
+msgstr ""
+
+#: src/geanylatex.c:431
+msgid "Letter"
+msgstr ""
+
 #. Encoding
-#: src/geanylatex.c:440
+#: src/geanylatex.c:441
 msgid "Encoding:"
 msgstr ""
 
-#: src/geanylatex.c:444
+#: src/geanylatex.c:445
 msgid "Set the encoding for your new document"
 msgstr ""
 
 #. Scriptsize
-#: src/geanylatex.c:459
+#: src/geanylatex.c:460
 msgid "Fontsize:"
 msgstr ""
 
-#: src/geanylatex.c:462
+#: src/geanylatex.c:463
 msgid "Set the default fontsize of your new document"
 msgstr ""
 
 #. Author
-#: src/geanylatex.c:475
+#: src/geanylatex.c:476
 msgid "Author:"
 msgstr ""
 
-#: src/geanylatex.c:478
+#: src/geanylatex.c:479
 msgid ""
 "Sets the value of the \\author command. In most cases this should be your "
 "name"
 msgstr ""
 
 #. Date
-#: src/geanylatex.c:489
+#: src/geanylatex.c:490
 msgid "Date:"
 msgstr ""
 
-#: src/geanylatex.c:492
+#: src/geanylatex.c:493
 msgid ""
 "Sets the value of the \\date command inside header of your newly created "
 "LaTeX-document. Keeping it at \\today is a good decision if you don't need "
@@ -103,98 +119,98 @@ msgid ""
 msgstr ""
 
 #. Title of the new document
-#: src/geanylatex.c:499
+#: src/geanylatex.c:500
 msgid "Title:"
 msgstr ""
 
-#: src/geanylatex.c:501
+#: src/geanylatex.c:502
 msgid "Sets the title of your new document."
 msgstr ""
 
 #. Papersize
-#: src/geanylatex.c:508
+#: src/geanylatex.c:509
 msgid "Paper size:"
 msgstr ""
 
-#: src/geanylatex.c:511
+#: src/geanylatex.c:512
 msgid "Choose the paper format for the newly created document"
 msgstr ""
 
 #. Building the wizard-dialog and showing it
-#: src/geanylatex.c:526
+#: src/geanylatex.c:527
 msgid "LaTeX-Wizard"
 msgstr ""
 
-#: src/geanylatex.c:536
+#: src/geanylatex.c:537
 msgid "Use KOMA-script classes if possible"
 msgstr ""
 
-#: src/geanylatex.c:539
+#: src/geanylatex.c:540
 msgid ""
 "Uses the KOMA-script classes by Markus Kohm.\n"
 "Keep in mind: To compile your document these classes have to be installed "
 "before."
 msgstr ""
 
-#: src/geanylatex.c:545
+#: src/geanylatex.c:546
 msgid "Use draft mode"
 msgstr ""
 
-#: src/geanylatex.c:547
+#: src/geanylatex.c:548
 msgid ""
 "Set the draft flag inside new created documents to get documents with a "
 "number of debugging helpers"
 msgstr ""
 
-#: src/geanylatex.c:761
+#: src/geanylatex.c:771
 msgid "_LaTeX"
 msgstr ""
 
-#: src/geanylatex.c:768
+#: src/geanylatex.c:778
 msgid "LaTeX-_Wizard"
 msgstr ""
 
-#: src/geanylatex.c:771
+#: src/geanylatex.c:781
 msgid "Starts a Wizard to easily create LaTeX-documents"
 msgstr ""
 
-#: src/geanylatex.c:776
+#: src/geanylatex.c:786
 msgid "Insert _Special Character"
 msgstr ""
 
-#: src/geanylatex.c:778
+#: src/geanylatex.c:788
 msgid "Helps to use some not very common letters and signs"
 msgstr ""
 
-#: src/geanylatex.c:785
+#: src/geanylatex.c:795
 msgid "Insert _Reference"
 msgstr ""
 
-#: src/geanylatex.c:787
+#: src/geanylatex.c:797
 msgid "Inserting references to the document"
 msgstr ""
 
-#: src/geanylatex.c:791
+#: src/geanylatex.c:801
 msgid "Insert _Label"
 msgstr ""
 
-#: src/geanylatex.c:793
+#: src/geanylatex.c:803
 msgid "Helps at inserting labels to a document"
 msgstr ""
 
-#: src/geanylatex.c:797
+#: src/geanylatex.c:807
 msgid "BibTeX"
 msgstr ""
 
-#: src/geanylatex.c:814
+#: src/geanylatex.c:824
 msgid "Run LaTeX-Wizard"
 msgstr ""
 
-#: src/geanylatex.c:816
+#: src/geanylatex.c:826
 msgid "Insert \\label"
 msgstr ""
 
-#: src/geanylatex.c:818
+#: src/geanylatex.c:828
 msgid "Insert \\ref"
 msgstr ""
 
@@ -264,14 +280,6 @@ msgstr ""
 
 #: src/letters.c:44
 msgid "Binary operation"
-msgstr ""
-
-#: src/bibtex.c:29
-msgid "Article"
-msgstr ""
-
-#: src/bibtex.c:30
-msgid "Book"
 msgstr ""
 
 #: src/bibtex.c:31
