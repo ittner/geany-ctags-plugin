@@ -677,7 +677,10 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 			}
 		}
 
-		code = g_string_new(TEMPLATE_LATEX);
+		if (documentclass_int == 3)
+			code = g_string_new(TEMPLATE_LATEX_LETTER);
+		else
+			code = g_string_new(TEMPLATE_LATEX);
 
 		if (classoptions != NULL)
 		{
@@ -698,11 +701,27 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 		{
 			if (author[0] != '\0')
 			{
-				author = g_strconcat("\\author{", author, "}\n", NULL);
+				if (documentclass_int == 3)
+			  	{
+			  		author = g_strconcat("\\signature{", author, "}\n", NULL);
+				}
+			  	else
+				{
+					author = g_strconcat("\\author{", author, "}\n", NULL);
+				}
+
 				p_utils->string_replace_all(code, "{AUTHOR}", author);
 			}
 			else
-				p_utils->string_replace_all(code, "{AUTHOR}", "\% \\author{}\n");
+				if (documentclass_int == 3)
+				{
+					p_utils->string_replace_all(code, "{AUTHOR}", "\% \\signature{}\n");
+				}
+				else
+				{
+					p_utils->string_replace_all(code, "{AUTHOR}", "\% \\author{}\n");
+				}
+
 			g_free(author);
 		}
 		if (date != NULL)
@@ -720,11 +739,27 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 		{
 			if (title[0] != '\0')
 			{
-				title = g_strconcat("\\title{", title, "}\n", NULL);
+				if (documentclass_int == 3)
+				{
+					title = g_strconcat("\\subject{", title, "}\n", NULL);
+				}
+				else
+				{
+					title = g_strconcat("\\title{", title, "}\n", NULL);
+				}
+
 				p_utils->string_replace_all(code, "{TITLE}", title);
 			}
 			else
-				p_utils->string_replace_all(code, "{TITLE}", "\% \\title{} \n");
+				if (documentclass_int == 3)
+				{
+					p_utils->string_replace_all(code, "{TITLE}", "\% \\subject{} \n");
+				}
+				else
+				{
+					p_utils->string_replace_all(code, "{TITLE}", "\% \\title{} \n");
+				}
+
 			g_free(title);
 		}
 		output = g_string_free(code, FALSE);

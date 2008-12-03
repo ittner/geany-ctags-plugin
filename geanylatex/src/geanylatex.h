@@ -66,6 +66,19 @@ extern GeanyFunctions	*geany_functions;
 \n\
 \\end{document}\n"
 
+#define TEMPLATE_LATEX_LETTER "\
+\\documentclass[{CLASSOPTION}]{{DOCUMENTCLASS}}\n\
+{ENCODING}\
+\\stdaddress{}\n\
+\\place{}\n\
+{DATE}\
+{TITLE}\
+{AUTHOR}\
+\\begin{document}\n\
+\\begin{letter}{}\n\
+\\opening{}\n\
+\\end{document}\n"
+
 #define create_sub_menu(base_menu, menu, item, title) \
 		(menu) = gtk_menu_new(); \
 		(item) = gtk_menu_item_new_with_mnemonic((title)); \
