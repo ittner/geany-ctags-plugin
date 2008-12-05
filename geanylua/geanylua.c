@@ -34,6 +34,7 @@
 #include "geany.h"
 #include "plugindata.h"
 #include "keybindings.h"
+#include "geanyfunctions.h"
 
 #include <glib/gi18n.h>
 
@@ -180,7 +181,7 @@ void configure(GtkWidget *parent)
 	if (glspi_configure) {
 		glspi_configure(parent);
 	} else {
-		geany_functions->p_dialogs->show_msgbox(GTK_MESSAGE_ERROR,
+		dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 			_("The "PLUGIN_NAME" plugin failed to load properly.\n"
 			"Please check your installation.") );
 	}

@@ -12,10 +12,6 @@
 #define NEED_FAIL_ARG_TYPE
 #include "glspi.h"
 
-#include "editor.h"
-#include "templates.h"
-
-
 
 static gint glspi_pluginver(lua_State* L)
 {
@@ -150,7 +146,7 @@ static gint glspi_signal(lua_State* L) {
 	if (!lua_isstring(L,1) ) {	return FAIL_STRING_ARG(1); }
 	widname=lua_tostring(L,1);
 	signame=lua_tostring(L,2);
-	w=p_support->lookup_widget(main_widgets->window, widname);
+	w=ui_lookup_widget(main_widgets->window, widname);
 	if (!w) {
 		lua_pushfstring(L, _("Error in module \"%s\" at function %s():\n"
 			"widget \"%s\"  not found for argument #1.\n "),
@@ -406,7 +402,7 @@ static gint glspi_keycmd(lua_State* L)
 		lua_error(L);
 		return 0;
 	}
-	p_keybindings->send_command(he->group, he->key_id);
+	keybindings_send_command(he->group, he->key_id);
 	return 0;
 }
 
@@ -579,13 +575,13 @@ static gint glspi_keygrab(lua_State* L)
 	if (lua_gettop(L)>0) {
 		if (!lua_isstring(L,1)) {return FAIL_STRING_ARG(1); }
 		prompt=lua_tostring(L,1);
-		doc=p_document->get_current();
+		doc=document_get_current();
 	}
 
 	if (prompt && doc && doc->is_valid ) {
-		gint fvl=sci_send_message(doc->editor->sci,SCI_GETFIRSTVISIBLELINE, 0,0);
-		gint pos=p_sci->get_position_from_line(doc->editor->sci, fvl+1);
-		sci_send_message(doc->editor->sci,SCI_CALLTIPSHOW,pos+3, (gint)prompt);
+		gint fvl=scintilla_send_message(doc->editor->sci,SCI_GETFIRSTVISIBLELINE, 0,0);
+		gint pos=sci_get_position_from_line(doc->editor->sci, fvl+1);
+		scintilla_send_message(doc->editor->sci,SCI_CALLTIPSHOW,pos+3, (gint)prompt);
 	}
 	gdk_window_add_filter(main_widgets->window->window, keygrab_cb, &km);
 	do {
@@ -599,7 +595,7 @@ static gint glspi_keygrab(lua_State* L)
 
 	gdk_window_remove_filter(main_widgets->window->window, keygrab_cb, &km);
 	if (prompt && doc && doc->is_valid) {
-	p_sci->send_command(doc->editor->sci, SCI_CALLTIPCANCEL);
+	sci_send_command(doc->editor->sci, SCI_CALLTIPCANCEL);
 	}
 	km.group=0; /* reset the hijacked flag before passing to GDK */
 	lua_pushstring(L, gdk_keyval_name(gdk_keymap_lookup_key(NULL, &km)));

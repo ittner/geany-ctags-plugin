@@ -22,8 +22,10 @@
 #include "sciwrappers.h"
 #include "keybindings.h"
 #include "ui_utils.h"
+#include "editor.h"
+#include "templates.h"
 
-#include "pluginmacros.h"
+#include "geanyfunctions.h"
 #define main_widgets	geany->main_widgets
 
 #include "glspi_ver.h"
@@ -58,7 +60,7 @@
 
 
 #define DOC_REQUIRED \
-	GeanyDocument *doc = p_document->get_current();\
+	GeanyDocument *doc = document_get_current();\
 	if (!(doc && doc->is_valid)) {return 0;}
 
 
@@ -75,12 +77,6 @@
 
 
 #define push_number(L,n) lua_pushnumber(L,(lua_Number)n)
-
-#define sci_send_message(s,m,w,l) \
-		p_sci->send_message( s,\
-		(unsigned int) (m), \
-		(long unsigned int) (w), \
-		(long int) (l) )
 
 
 

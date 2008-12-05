@@ -10,24 +10,20 @@
 #include "glspi.h"
 #include "glspi_sci.h"
 
-#include "editor.h"
-
-
-
 
 /* Get or Set the entire text of the currently active Geany document */
 static gint glspi_text(lua_State* L)
 {
 
-	GeanyDocument *doc = p_document->get_current();
+	GeanyDocument *doc = document_get_current();
 
 	if (!doc) { return 0; }
 	if (0 == lua_gettop(L)) { /* Called with no args, GET the current text */
-		gint len = p_sci->get_length(doc->editor->sci);
+		gint len = sci_get_length(doc->editor->sci);
 		gchar *txt = NULL;
 		if (len>0) {
 			txt = g_malloc0((guint)len+2);
-			p_sci->get_text(doc->editor->sci, len+1, txt);
+			sci_get_text(doc->editor->sci, len+1, txt);
 			lua_pushstring(L, (const gchar *) txt);
 			g_free(txt);
 		} else {
@@ -40,7 +36,7 @@ static gint glspi_text(lua_State* L)
 			return FAIL_STRING_ARG(1);
 		}
 		txt = lua_tostring(L, 1);
-		p_sci->set_text(doc->editor->sci, txt);
+		sci_set_text(doc->editor->sci, txt);
 		return 0;
 	}
 }
@@ -52,11 +48,11 @@ static gint glspi_selection(lua_State* L)
 
 	DOC_REQUIRED
 	if (0 == lua_gettop(L)) { /* Called with no args, GET the selection */
-		gint len = p_sci->get_selected_text_length(doc->editor->sci);
+		gint len = sci_get_selected_text_length(doc->editor->sci);
 		gchar *txt = NULL;
 		if (len>0) {
 			txt = g_malloc0((guint)(len+1));
-			p_sci->get_selected_text(doc->editor->sci, txt);
+			sci_get_selected_text(doc->editor->sci, txt);
 			lua_pushstring(L, (const gchar *) txt);
 			g_free(txt);
 		} else {
@@ -67,7 +63,7 @@ static gint glspi_selection(lua_State* L)
 		const gchar*txt=NULL;
 		if (!lua_isstring(L, 1)) { return FAIL_STRING_ARG(1); }
 		txt = lua_tostring(L, 1);
-		p_sci->replace_sel(doc->editor->sci, txt);
+		sci_replace_sel(doc->editor->sci, txt);
 		return 0;
 	}
 }
@@ -82,7 +78,7 @@ static gint glspi_select(lua_State* L)
 	gboolean rectsel=FALSE;
 	DOC_REQUIRED
 	if (0==argc) {
-		rectsel=sci_send_message(doc->editor->sci, SCI_SELECTIONISRECTANGLE, 0, 0);
+		rectsel=scintilla_send_message(doc->editor->sci, SCI_SELECTIONISRECTANGLE, 0, 0);
 	}
 
 	lua_getglobal(L, LUA_MODULE_NAME);
@@ -99,8 +95,8 @@ static gint glspi_select(lua_State* L)
 		}
 	}
 	if (0==argc) {
-		sel_end=p_sci->get_current_position(doc->editor->sci);
-		sel_start=sci_send_message(doc->editor->sci, SCI_GETANCHOR, 0, 0);
+		sel_end=sci_get_current_position(doc->editor->sci);
+		sel_start=scintilla_send_message(doc->editor->sci, SCI_GETANCHOR, 0, 0);
 		push_number(L, sel_start);
 		push_number(L, sel_end);
 		return 2;
@@ -113,14 +109,14 @@ static gint glspi_select(lua_State* L)
 			if (!lua_isnumber(L, 2)) { return FAIL_NUMERIC_ARG(2); }
 			sel_end=lua_tonumber(L,2);
 		}
-		sci_send_message(doc->editor->sci,
+		scintilla_send_message(doc->editor->sci,
 			SCI_SETSELECTIONMODE, rectsel?SC_SEL_RECTANGLE:SC_SEL_STREAM, 0);
-		p_sci->set_current_position(doc->editor->sci, sel_end, FALSE);
-		sci_send_message(doc->editor->sci, SCI_SETANCHOR, sel_start, 0);
-		p_sci->ensure_line_is_visible(doc->editor->sci,
-			p_sci->get_line_from_position(doc->editor->sci, sel_end));
-		p_sci->scroll_caret(doc->editor->sci);
-		sci_send_message(doc->editor->sci,
+		sci_set_current_position(doc->editor->sci, sel_end, FALSE);
+		scintilla_send_message(doc->editor->sci, SCI_SETANCHOR, sel_start, 0);
+		sci_ensure_line_is_visible(doc->editor->sci,
+			sci_get_line_from_position(doc->editor->sci, sel_end));
+		sci_scroll_caret(doc->editor->sci);
+		scintilla_send_message(doc->editor->sci,
 			SCI_SETSELECTIONMODE, rectsel?SC_SEL_RECTANGLE:SC_SEL_STREAM, 0);
 		return 0;
 	}
@@ -131,7 +127,7 @@ static gint glspi_select(lua_State* L)
 static gint glspi_height(lua_State* L)
 {
 	DOC_REQUIRED
-	push_number(L, p_sci->get_line_count(doc->editor->sci));
+	push_number(L, sci_get_line_count(doc->editor->sci));
 	return 1;
 }
 
@@ -140,7 +136,7 @@ static gint glspi_height(lua_State* L)
 static gint glspi_length(lua_State* L)
 {
 	DOC_REQUIRED
-	push_number(L, p_sci->get_length(doc->editor->sci));
+	push_number(L, sci_get_length(doc->editor->sci));
 	return 1;
 }
 
@@ -151,11 +147,11 @@ static gint glspi_caret(lua_State* L)
 {
 	DOC_REQUIRED
 	if (lua_gettop(L)==0) {
-		push_number(L,p_sci->get_current_position(doc->editor->sci));
+		push_number(L,sci_get_current_position(doc->editor->sci));
 		return 1;
 	} else {
 		if (!lua_isnumber(L,1)) { return FAIL_NUMERIC_ARG(1); }
-		p_sci->set_current_position(doc->editor->sci,(gint)lua_tonumber(L,1),TRUE);
+		sci_set_current_position(doc->editor->sci,(gint)lua_tonumber(L,1),TRUE);
 		return 0;
 	}
 }
@@ -173,19 +169,19 @@ static gint glspi_rowcol(lua_State* L)
 		case 0:
 		case 1:
 			if (argc==0) {
-				pos=p_sci->get_current_position(doc->editor->sci);
+				pos=sci_get_current_position(doc->editor->sci);
 			} else {
 				if (!lua_isnumber(L,1)) { return FAIL_NUMERIC_ARG(1); }
 				pos=lua_tonumber(L,1);
 				if ( pos < 0 ) {
 					pos=0;
 				} else {
-					len=p_sci->get_length(doc->editor->sci);
+					len=sci_get_length(doc->editor->sci);
 					if ( pos >= len ) { pos=len-1; }
 				}
 			}
-			line=p_sci->get_line_from_position(doc->editor->sci,pos);
-			col=p_sci->get_col_from_position(doc->editor->sci,pos);
+			line=sci_get_line_from_position(doc->editor->sci,pos);
+			col=sci_get_col_from_position(doc->editor->sci,pos);
 			push_number(L,line+1);
 			push_number(L,col);
 			return 2;
@@ -196,17 +192,17 @@ static gint glspi_rowcol(lua_State* L)
 			if ( line < 1 ) {
 				line=1;
 			} else {
-				cnt=p_sci->get_line_count(doc->editor->sci);
+				cnt=sci_get_line_count(doc->editor->sci);
 				if ( line > cnt ) { line=cnt; }
 			}
 			col=lua_tonumber(L,2);
 			if ( col < 0 ) {
 				col=0;
 			} else {
-				len=p_sci->get_line_length(doc->editor->sci,line);
+				len=sci_get_line_length(doc->editor->sci,line);
 				if (col>=len) {col=len-1;}
 			}
-			pos=p_sci->get_position_from_line(doc->editor->sci,line-1)+col;
+			pos=sci_get_position_from_line(doc->editor->sci,line-1)+col;
 			push_number(L,pos);
 			return 1;
 	}
@@ -221,9 +217,9 @@ static gint glspi_batch(lua_State* L)
 		return FAIL_BOOL_ARG(1);
 	}
 	if (lua_toboolean(L,1)) {
-		p_sci->start_undo_action(doc->editor->sci);
+		sci_start_undo_action(doc->editor->sci);
 	} else {
-		p_sci->end_undo_action(doc->editor->sci);
+		sci_end_undo_action(doc->editor->sci);
 	}
 	return 0;
 }
@@ -241,13 +237,13 @@ static gint glspi_word(lua_State* L)
 		if (!lua_isnumber(L,1)) { return FAIL_NUMERIC_ARG(1); }
 		pos=lua_tonumber(L,1);
 	} else {
-		pos = p_sci->get_current_position(doc->editor->sci);
+		pos = sci_get_current_position(doc->editor->sci);
 	}
-	linenum = p_sci->get_line_from_position(doc->editor->sci, pos);
-	bol = p_sci->get_position_from_line(doc->editor->sci, linenum);
+	linenum = sci_get_line_from_position(doc->editor->sci, pos);
+	bol = sci_get_position_from_line(doc->editor->sci, linenum);
 	bow = pos - bol;
 	eow = pos - bol;
-	text=p_sci->get_line(doc->editor->sci, linenum);
+	text=sci_get_line(doc->editor->sci, linenum);
 	lua_getglobal(L, LUA_MODULE_NAME);
 	if ( lua_istable(L, -1) ) {
 		lua_pushstring(L,tokenWordChars);
@@ -278,9 +274,9 @@ static gint glspi_word(lua_State* L)
 */
 static gchar* get_line_text(GeanyDocument*doc,gint linenum)
 {
-	gint count=p_sci->get_line_count(doc->editor->sci);
+	gint count=sci_get_line_count(doc->editor->sci);
 	if ((linenum>0)&&(linenum<=count)) {
-		gchar *text=p_sci->get_line(doc->editor->sci, linenum-1);
+		gchar *text=sci_get_line(doc->editor->sci, linenum-1);
 		return text?text:g_strdup("");
 	} else {
 		return FALSE;
@@ -435,7 +431,7 @@ static gint glspi_navigate(lua_State* L)
 	} else {
 		gint n;
 		for (n=0; n<count; n++) {
-			p_sci->send_command(doc->editor->sci,scicmd);
+			sci_send_command(doc->editor->sci,scicmd);
 		}
 	}
 	return 0;
@@ -461,17 +457,17 @@ static gint glspi_copy(lua_State* L)
 
 	switch (lua_gettop(L)) {
 		case 0:
-			start=p_sci->get_selection_start(doc->editor->sci);
-			stop=p_sci->get_selection_end(doc->editor->sci);
+			start=sci_get_selection_start(doc->editor->sci);
+			stop=sci_get_selection_end(doc->editor->sci);
 			if (start>stop) { swap(&start,&stop); }
-			if (start!=stop) p_sci->send_command(doc->editor->sci, SCI_COPY);
+			if (start!=stop) sci_send_command(doc->editor->sci, SCI_COPY);
 			push_number(L, stop-start);
 			return 1;
 		case 1:
 			if (!lua_isstring(L,1)) {return FAIL_STRING_ARG(1);}
 			content=lua_tostring(L,1);
 			len=strlen(content);
-			if (len) { sci_send_message(doc->editor->sci,SCI_COPYTEXT,len,(gint)content); }
+			if (len) { scintilla_send_message(doc->editor->sci,SCI_COPYTEXT,len,(gint)content); }
 			push_number(L, len);
 			return 1;
 		default:
@@ -482,7 +478,7 @@ static gint glspi_copy(lua_State* L)
 			if (start<0) { return FAIL_UNSIGNED_ARG(1); }
 			if (stop <0) { return FAIL_UNSIGNED_ARG(2); }
 			if (start>stop) { swap(&start,&stop); }
-			if (start!=stop) sci_send_message(doc->editor->sci,SCI_COPYRANGE,start,stop);
+			if (start!=stop) scintilla_send_message(doc->editor->sci,SCI_COPYRANGE,start,stop);
 			push_number(L, stop-start);
 			return 1;
 	}
@@ -494,12 +490,12 @@ static gint glspi_cut(lua_State* L)
 {
 	gint start,stop,len;
 	DOC_REQUIRED
-	start=p_sci->get_selection_start(doc->editor->sci);
-	stop=p_sci->get_selection_end(doc->editor->sci);
-	len=p_sci->get_length(doc->editor->sci);
+	start=sci_get_selection_start(doc->editor->sci);
+	stop=sci_get_selection_end(doc->editor->sci);
+	len=sci_get_length(doc->editor->sci);
 	if (start>stop) {swap(&start,&stop); }
-	if (start!=stop) {p_sci->send_command(doc->editor->sci, SCI_CUT); }
-	push_number(L,len-p_sci->get_length(doc->editor->sci));
+	if (start!=stop) {sci_send_command(doc->editor->sci, SCI_CUT); }
+	push_number(L,len-sci_get_length(doc->editor->sci));
 	return 1;
 }
 
@@ -510,10 +506,10 @@ static gint glspi_cut(lua_State* L)
 static gint glspi_paste(lua_State* L)
 {
 	DOC_REQUIRED
-	if (sci_send_message(doc->editor->sci,SCI_CANPASTE,0,0)) {
-		gint len=p_sci->get_length(doc->editor->sci);
-		p_sci->send_command(doc->editor->sci,SCI_PASTE);
-		push_number(L,p_sci->get_length(doc->editor->sci)-len);
+	if (scintilla_send_message(doc->editor->sci,SCI_CANPASTE,0,0)) {
+		gint len=sci_get_length(doc->editor->sci);
+		sci_send_command(doc->editor->sci,SCI_PASTE);
+		push_number(L,sci_get_length(doc->editor->sci)-len);
 	} else {
 		lua_pushnil(L);
 	}
@@ -527,12 +523,12 @@ static gint glspi_match(lua_State* L)
 	gint pos;
 	DOC_REQUIRED
 	if (lua_gettop(L)==0) {
-		pos=p_sci->get_current_position(doc->editor->sci);
+		pos=sci_get_current_position(doc->editor->sci);
 	} else {
 		if ( !lua_isnumber(L,1) ) {return FAIL_NUMERIC_ARG(1);}
 		pos=lua_tonumber(L,1);
 	}
-	push_number(L,p_sci->find_matching_brace(doc->editor->sci,pos));
+	push_number(L,sci_find_matching_brace(doc->editor->sci,pos));
 	return 1;
 }
 
@@ -544,12 +540,12 @@ static gint glspi_byte(lua_State* L)
 	gint pos;
 	DOC_REQUIRED
 	if (lua_gettop(L)==0) {
-		pos=p_sci->get_current_position(doc->editor->sci);
+		pos=sci_get_current_position(doc->editor->sci);
 	} else {
 		if ( !lua_isnumber(L,1) ) {return FAIL_NUMERIC_ARG(1);}
 		pos=lua_tonumber(L,1);
 	}
-	push_number(L,p_sci->get_char_at(doc->editor->sci,pos));
+	push_number(L,sci_get_char_at(doc->editor->sci,pos));
 	return 1;
 }
 
@@ -709,19 +705,19 @@ static gint glspi_scintilla(lua_State* L)
 		case SLT_TEXTRANGE: return FAIL_API;
 		case SLT_STRINGRESULT:
 			if ((he->msgid==SCI_GETTEXT)&&(wparam==0)) {
-				wparam=sci_send_message(doc->editor->sci, SCI_GETLENGTH, 0,0);
+				wparam=scintilla_send_message(doc->editor->sci, SCI_GETLENGTH, 0,0);
 			}
 			switch (he->msgid) {
 				case SCI_GETTEXT:
 					if (wparam==0){
-						wparam=sci_send_message(doc->editor->sci, SCI_GETLENGTH, 0,0);
+						wparam=scintilla_send_message(doc->editor->sci, SCI_GETLENGTH, 0,0);
 					} else { wparam++; }
 					break;
 				case SCI_GETCURLINE:
 					if (wparam>0) { wparam++; }
 					break;
 			}
-			bufsize=sci_send_message(doc->editor->sci, he->msgid, wparam, 0);
+			bufsize=scintilla_send_message(doc->editor->sci, he->msgid, wparam, 0);
 			if (bufsize) {
 				resultbuf=g_malloc0((guint)(bufsize+1));
 				lparam=GPOINTER_TO_INT(resultbuf);
@@ -736,20 +732,20 @@ static gint glspi_scintilla(lua_State* L)
 	}
 	switch (he->result) {
 		case SLT_VOID:
-			sci_send_message(doc->editor->sci, he->msgid, wparam, lparam);
+			scintilla_send_message(doc->editor->sci, he->msgid, wparam, lparam);
 			lua_pushnil(L);
 			return 1;
 		case SLT_INT:
 			if (he->lparam==SLT_STRINGRESULT) {
-				sci_send_message(doc->editor->sci, he->msgid, wparam, lparam);
+				scintilla_send_message(doc->editor->sci, he->msgid, wparam, lparam);
 				lua_pushstring(L,resultbuf);
 				g_free(resultbuf);
 			} else {
-				push_number(L, sci_send_message(doc->editor->sci, he->msgid, wparam, lparam));
+				push_number(L, scintilla_send_message(doc->editor->sci, he->msgid, wparam, lparam));
 			}
 			return 1;
 		case SLT_BOOL:
-			lua_pushboolean(L, sci_send_message(doc->editor->sci, he->msgid, wparam, lparam));
+			lua_pushboolean(L, scintilla_send_message(doc->editor->sci, he->msgid, wparam, lparam));
 			return 1;
 		default:return FAIL_API;
 	}
@@ -805,7 +801,7 @@ static gint glspi_find(lua_State* L)
 		lua_pop(L, 1);
 	}
 
-	if (sci_send_message(doc->editor->sci,SCI_FINDTEXT,flags,GPOINTER_TO_INT(&ttf))!=-1) {
+	if (scintilla_send_message(doc->editor->sci,SCI_FINDTEXT,flags,GPOINTER_TO_INT(&ttf))!=-1) {
 		push_number(L,ttf.chrgText.cpMin);
 		push_number(L,ttf.chrgText.cpMax);
 		g_free(ttf.lpstrText);

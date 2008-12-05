@@ -173,7 +173,7 @@ static void hotkey_init(void)
 					key=0;
 					mod=0;
 				}
-				p_keybindings->set_item(KG, i, kb_activate,
+				keybindings_set_item(KG, i, kb_activate,
 						key,mod,KG->keys[i].name,KG->keys[i].label,NULL);
 			}
 		} else {

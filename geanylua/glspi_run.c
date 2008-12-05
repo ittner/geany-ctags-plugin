@@ -7,9 +7,6 @@
 #define NEED_FAIL_ARG_TYPE
 #include "glspi.h"
 
-#include "editor.h"
-
-
 
 typedef gint (*KeyfileAssignFunc) (lua_State *L, GKeyFile*kf);
 
@@ -46,7 +43,7 @@ void glspi_init_kfile_module(lua_State *L, KeyfileAssignFunc *func);
 */
 static void repaint_scintilla(void)
 {
-	GeanyDocument* doc=p_document->get_current();
+	GeanyDocument* doc=document_get_current();
 	if ( doc && doc->is_valid ) {
 		gdk_window_invalidate_rect(GTK_WIDGET(doc->editor->sci)->window, NULL, TRUE);
 		gdk_window_process_updates(GTK_WIDGET(doc->editor->sci)->window, TRUE);
@@ -81,13 +78,13 @@ static gboolean glspi_show_question(gchar*title, gchar*question, gboolean defaul
 
 static gboolean glspi_goto_error(gchar *fn, gint line)
 {
-	GeanyDocument *doc=p_document->open_file(fn, FALSE, NULL, NULL);
+	GeanyDocument *doc=document_open_file(fn, FALSE, NULL, NULL);
 	if (doc) {
 		if (doc->is_valid) {
 			ScintillaObject*sci=doc->editor->sci;
 			if (sci) {
-				gint pos=p_sci->get_position_from_line(sci,line-1);
-				p_sci->set_current_position(sci,pos,TRUE);
+				gint pos=sci_get_position_from_line(sci,line-1);
+				sci_set_current_position(sci,pos,TRUE);
 				return TRUE;
 			}
 		}

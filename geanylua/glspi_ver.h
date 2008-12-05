@@ -14,7 +14,7 @@
 
 #define PLUGIN_AUTHOR "Jeff Pohlmeyer"
 
-#define MY_GEANY_API_VER 86
+#define MY_GEANY_API_VER 115
 
 #define LUA_MODULE_NAME "geany"
 
