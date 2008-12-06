@@ -1,3 +1,9 @@
+2008-12-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/scplugin.c, src/gui.c, src/speller.c:
+   Update to Geany API 115 - use geanyfunctions.h, from Nick's patch.
+
+
 2008-11-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/gui.c:

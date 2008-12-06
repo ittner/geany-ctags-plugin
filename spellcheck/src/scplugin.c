@@ -42,7 +42,7 @@
 #include "utils.h"
 #include "ui_utils.h"
 
-#include "pluginmacros.h"
+#include "geanyfunctions.h"
 
 #include "scplugin.h"
 #include "gui.h"
@@ -54,7 +54,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-PLUGIN_VERSION_CHECK(110)
+PLUGIN_VERSION_CHECK(115)
 PLUGIN_SET_INFO(_("Spell Check"), _("Checks the spelling of the current document."), "0.2",
 			_("The Geany developer team"))
 
@@ -160,16 +160,16 @@ static void configure_response_cb(GtkDialog *dialog, gint response, gpointer use
 
 		gui_toolbar_update();
 
-		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && p_utils->mkdir(config_dir, TRUE) != 0)
+		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && utils_mkdir(config_dir, TRUE) != 0)
 		{
-			p_dialogs->show_msgbox(GTK_MESSAGE_ERROR,
+			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 				_("Plugin configuration directory could not be created."));
 		}
 		else
 		{
 			/* write config to file */
 			data = g_key_file_to_data(config, NULL, NULL);
-			p_utils->write_file(sc->config_file, data);
+			utils_write_file(sc->config_file, data);
 			g_free(data);
 		}
 		g_free(config_dir);
@@ -191,20 +191,20 @@ void plugin_init(GeanyData *data)
 		"spellcheck", G_DIR_SEPARATOR_S, "spellcheck.conf", NULL);
 
 	g_key_file_load_from_file(config, sc->config_file, G_KEY_FILE_NONE, NULL);
-	sc->default_language = p_utils->get_setting_string(config,
+	sc->default_language = utils_get_setting_string(config,
 		"spellcheck", "language", default_lang);
-	sc->check_while_typing = p_utils->get_setting_boolean(config,
+	sc->check_while_typing = utils_get_setting_boolean(config,
 		"spellcheck", "check_while_typing", FALSE);
-	sc->show_toolbar_item = p_utils->get_setting_boolean(config,
+	sc->show_toolbar_item = utils_get_setting_boolean(config,
 		"spellcheck", "show_toolbar_item", TRUE);
-	sc->use_msgwin = p_utils->get_setting_boolean(config, "spellcheck", "use_msgwin", FALSE);
+	sc->use_msgwin = utils_get_setting_boolean(config, "spellcheck", "use_msgwin", FALSE);
 	g_key_file_free(config);
 	g_free(default_lang);
 
 	locale_init();
 
 	sc->menu_item = gtk_image_menu_item_new_from_stock(GTK_STOCK_SPELL_CHECK, NULL);
-	p_ui->add_document_sensitive(sc->menu_item);
+	ui_add_document_sensitive(sc->menu_item);
 
 	gui_toolbar_update();
 
@@ -219,9 +219,9 @@ void plugin_init(GeanyData *data)
 		"key-release-event", G_CALLBACK(gui_key_release_cb), NULL);
 
 	/* setup keybindings */
-	p_keybindings->set_item(plugin_key_group, KB_SPELL_CHECK, gui_kb_run_activate_cb,
+	keybindings_set_item(plugin_key_group, KB_SPELL_CHECK, gui_kb_run_activate_cb,
 		0, 0, "spell_check", _("Run Spell Check"), NULL);
-	p_keybindings->set_item(plugin_key_group, KB_SPELL_TOOGLE_TYPING,
+	keybindings_set_item(plugin_key_group, KB_SPELL_TOOGLE_TYPING,
 		gui_kb_toggle_typing_activate_cb, 0, 0, "spell_toggle_typing",
 		_("Toggle Check While Typing"), NULL);
 }
@@ -257,7 +257,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	{
 		gtk_combo_box_append_text(GTK_COMBO_BOX(combo), g_ptr_array_index(sc->dicts, i));
 
-		if (p_utils->str_equal(g_ptr_array_index(sc->dicts, i), sc->default_language))
+		if (utils_str_equal(g_ptr_array_index(sc->dicts, i), sc->default_language))
 			gtk_combo_box_set_active(GTK_COMBO_BOX(combo), i);
 	}
 	/* if the default language couldn't be selected, select the first available language */

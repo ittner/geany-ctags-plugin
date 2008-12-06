@@ -36,9 +36,10 @@
 #include "editor.h"
 #include "msgwindow.h"
 #include "utils.h"
+#include "ui_utils.h"
 #include "scintilla/SciLexer.h"
 
-#include "pluginmacros.h"
+#include "geanyfunctions.h"
 
 #include "speller.h"
 #include "scplugin.h"
@@ -83,7 +84,7 @@ static gint speller_check_word(GeanyDocument *doc, gint line_number, const gchar
 	if (start_pos == -1)
 		start_pos = end_pos - strlen(word);
 
-	p_editor->indicator_set_on_range(doc->editor, GEANY_INDICATOR_ERROR, start_pos, end_pos);
+	editor_indicator_set_on_range(doc->editor, GEANY_INDICATOR_ERROR, start_pos, end_pos);
 
 	if (sc->use_msgwin)
 	{
@@ -106,7 +107,7 @@ static gint speller_check_word(GeanyDocument *doc, gint line_number, const gchar
 				g_string_append_c(str, ' ');
 			}
 
-			p_msgwindow->msg_add(COLOR_RED, line_number + 1, doc, "%s", str->str);
+			msgwin_msg_add(COLOR_RED, line_number + 1, doc, "%s", str->str);
 
 			if (suggs != NULL && n_suggs > 0)
 				enchant_dict_free_string_list(speller_dict, suggs);
@@ -132,17 +133,17 @@ gint speller_process_line(GeanyDocument *doc, gint line_number, const gchar *lin
 
 	str = g_string_sized_new(256);
 
-	pos_start = p_sci->get_position_from_line(doc->editor->sci, line_number);
+	pos_start = sci_get_position_from_line(doc->editor->sci, line_number);
 	/* TODO use SCI_GETLINEENDPOSITION */
-	pos_end = p_sci->get_position_from_line(doc->editor->sci, line_number + 1);
+	pos_end = sci_get_position_from_line(doc->editor->sci, line_number + 1);
 
 	while (pos_start < pos_end)
 	{
-		wstart = p_sci->send_message(doc->editor->sci, SCI_WORDSTARTPOSITION, pos_start, TRUE);
-		wend = p_sci->send_message(doc->editor->sci, SCI_WORDENDPOSITION, wstart, FALSE);
+		wstart = scintilla_send_message(doc->editor->sci, SCI_WORDSTARTPOSITION, pos_start, TRUE);
+		wend = scintilla_send_message(doc->editor->sci, SCI_WORDENDPOSITION, wstart, FALSE);
 		if (wstart == wend)
 			break;
-		c = p_sci->get_char_at(doc->editor->sci, wstart);
+		c = sci_get_char_at(doc->editor->sci, wstart);
 		/* hopefully it's enough to check for these both */
 		if (ispunct(c) || isspace(c))
 		{
@@ -154,7 +155,7 @@ gint speller_process_line(GeanyDocument *doc, gint line_number, const gchar *lin
 		if (str->len < (guint)(wend - wstart))
 			g_string_set_size(str, wend - wstart);
 
-		p_sci->get_text_range(doc->editor->sci, wstart, wend, str->str);
+		sci_get_text_range(doc->editor->sci, wstart, wend, str->str);
 
 		suggestions_found += speller_check_word(doc, line_number, str->str, wstart, wend);
 
@@ -179,15 +180,15 @@ void speller_check_document(GeanyDocument *doc)
 
 	enchant_dict_describe(speller_dict, dict_describe, &dict_string);
 
-	if (p_sci->has_selection(doc->editor->sci))
+	if (sci_has_selection(doc->editor->sci))
 	{
-		first_line = p_sci->get_line_from_position(
-			doc->editor->sci, p_sci->get_selection_start(doc->editor->sci));
-		last_line = p_sci->get_line_from_position(
-			doc->editor->sci, p_sci->get_selection_end(doc->editor->sci));
+		first_line = sci_get_line_from_position(
+			doc->editor->sci, sci_get_selection_start(doc->editor->sci));
+		last_line = sci_get_line_from_position(
+			doc->editor->sci, sci_get_selection_end(doc->editor->sci));
 
 		if (sc->use_msgwin)
-			p_msgwindow->msg_add(COLOR_BLUE, -1, NULL,
+			msgwin_msg_add(COLOR_BLUE, -1, NULL,
 				_("Checking file \"%s\" (lines %d to %d using %s):"),
 				DOC_FILENAME(doc), first_line + 1, last_line + 1, dict_string);
 		g_message("Checking file \"%s\" (lines %d to %d using %s):",
@@ -196,9 +197,9 @@ void speller_check_document(GeanyDocument *doc)
 	else
 	{
 		first_line = 0;
-		last_line = p_sci->get_line_count(doc->editor->sci);
+		last_line = sci_get_line_count(doc->editor->sci);
 		if (sc->use_msgwin)
-			p_msgwindow->msg_add(COLOR_BLUE, -1, NULL, _("Checking file \"%s\" (using %s):"),
+			msgwin_msg_add(COLOR_BLUE, -1, NULL, _("Checking file \"%s\" (using %s):"),
 				DOC_FILENAME(doc), dict_string);
 		g_message("Checking file \"%s\" (using %s):", DOC_FILENAME(doc), dict_string);
 	}
@@ -206,21 +207,21 @@ void speller_check_document(GeanyDocument *doc)
 
 	for (i = first_line; i < last_line; i++)
 	{
-		line = p_sci->get_line(doc->editor->sci, i);
+		line = sci_get_line(doc->editor->sci, i);
 
 		suggestions_found += speller_process_line(doc, i, line);
 
 		g_free(line);
 	}
 	if (suggestions_found == 0 && sc->use_msgwin)
-		p_msgwindow->msg_add(COLOR_BLUE, -1, NULL, _("The checked text is spelled correctly."));
+		msgwin_msg_add(COLOR_BLUE, -1, NULL, _("The checked text is spelled correctly."));
 }
 
 
 static void broker_init_failed(void)
 {
 	const gchar *err = enchant_broker_get_error(speller_broker);
-	p_dialogs->show_msgbox(GTK_MESSAGE_ERROR,
+	dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 		_("The Enchant library couldn't be initialized (%s)."),
 		(err != NULL) ? err : _("unknown error (maybe the chosen language is not available)"));
 }
@@ -230,7 +231,7 @@ static void dict_compare(gpointer data, gpointer user_data)
 {
 	gboolean *supported = user_data;
 
-	if (p_utils->str_equal(sc->default_language, data))
+	if (utils_str_equal(sc->default_language, data))
 		*supported = TRUE;
 }
 
@@ -322,7 +323,7 @@ static void add_dict_array(const gchar* const lang_tag, const gchar* const provi
 	/* find duplicates and skip them */
 	for (i = 0; i < sc->dicts->len; i++)
 	{
-		if (p_utils->str_equal(g_ptr_array_index(sc->dicts, i), result))
+		if (utils_str_equal(g_ptr_array_index(sc->dicts, i), result))
 			return;
 	}
 
@@ -424,8 +425,8 @@ gboolean speller_is_text(GeanyDocument *doc, gint pos)
 	g_return_val_if_fail(doc != NULL, FALSE);
 	g_return_val_if_fail(pos >= 0, FALSE);
 
-	lexer = p_sci->send_message(doc->editor->sci, SCI_GETLEXER, 0, 0);
-	style = p_sci->get_style_at(doc->editor->sci, pos);
+	lexer = scintilla_send_message(doc->editor->sci, SCI_GETLEXER, 0, 0);
+	style = sci_get_style_at(doc->editor->sci, pos);
 
 	switch (lexer)
 	{

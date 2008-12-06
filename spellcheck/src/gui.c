@@ -37,7 +37,7 @@
 #include "utils.h"
 #include "ui_utils.h"
 
-#include "pluginmacros.h"
+#include "geanyfunctions.h"
 
 #include "gui.h"
 #include "scplugin.h"
@@ -62,11 +62,11 @@ static gboolean ignore_sc_callback = FALSE;
 
 void gui_perform_check(GeanyDocument *doc)
 {
-	p_editor->indicator_clear(doc->editor, GEANY_INDICATOR_ERROR);
+	editor_indicator_clear(doc->editor, GEANY_INDICATOR_ERROR);
 	if (sc->use_msgwin)
 	{
-		p_msgwindow->clear_tab(MSG_MESSAGE);
-		p_msgwindow->switch_tab(MSG_MESSAGE, FALSE);
+		msgwin_clear_tab(MSG_MESSAGE);
+		msgwin_switch_tab(MSG_MESSAGE, FALSE);
 	}
 
 	speller_check_document(doc);
@@ -76,9 +76,9 @@ void gui_perform_check(GeanyDocument *doc)
 static void print_typing_changed_message(void)
 {
 	if (sc->check_while_typing)
-		p_ui->set_statusbar(FALSE, _("Spell checking while typing is now enabled"));
+		ui_set_statusbar(FALSE, _("Spell checking while typing is now enabled"));
 	else
-		p_ui->set_statusbar(FALSE, _("Spell checking while typing is now disabled"));
+		ui_set_statusbar(FALSE, _("Spell checking while typing is now disabled"));
 }
 
 
@@ -109,14 +109,14 @@ void gui_toolbar_update(void)
 	{
 		if (sc->toolbar_button == NULL)
 		{
-			sc->toolbar_button = gtk_toggle_tool_button_new_from_stock("gtk-spell-check");
+			sc->toolbar_button = gtk_toggle_tool_button_new_from_stock(GTK_STOCK_SPELL_CHECK);
 #if GTK_CHECK_VERSION(2, 12, 0)
-			gtk_widget_set_tooltip_text(GTK_WIDGET(sc->toolbar_button),
+			gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(sc->toolbar_button),
 				_("Toggle spell check while typing."));
 #endif
 			gtk_widget_show(GTK_WIDGET(sc->toolbar_button));
-			p_plugin->add_toolbar_item(geany_plugin, sc->toolbar_button);
-			p_ui->add_document_sensitive(GTK_WIDGET(sc->toolbar_button));
+			plugin_add_toolbar_item(geany_plugin, sc->toolbar_button);
+			ui_add_document_sensitive(GTK_WIDGET(sc->toolbar_button));
 
 			g_signal_connect(sc->toolbar_button, "toggled",
 				G_CALLBACK(toolbar_item_toggled_cb), NULL);
@@ -136,10 +136,10 @@ static void clear_indicators_on_line(GeanyDocument *doc, gint line_number)
 
 	g_return_if_fail(doc != NULL);
 
-	start_pos = p_sci->get_position_from_line(doc->editor->sci, line_number);
-	length = p_sci->get_line_length(doc->editor->sci, line_number);
+	start_pos = sci_get_position_from_line(doc->editor->sci, line_number);
+	length = sci_get_line_length(doc->editor->sci, line_number);
 
-	p_sci->indicator_clear(doc->editor->sci, start_pos, length);
+	sci_indicator_clear(doc->editor->sci, start_pos, length);
 }
 
 
@@ -152,31 +152,31 @@ static void menu_suggestion_item_activate_cb(GtkMenuItem *menuitem, gpointer gda
 
 	g_return_if_fail(clickinfo.doc != NULL && clickinfo.pos != -1);
 
-	startword = p_sci->send_message(sci, SCI_WORDSTARTPOSITION, clickinfo.pos, 0);
-	endword = p_sci->send_message(sci, SCI_WORDENDPOSITION, clickinfo.pos, 0);
+	startword = scintilla_send_message(sci, SCI_WORDSTARTPOSITION, clickinfo.pos, 0);
+	endword = scintilla_send_message(sci, SCI_WORDENDPOSITION, clickinfo.pos, 0);
 
 	if (startword != endword)
 	{
 		gchar *word;
 
-		p_sci->set_selection_start(sci, startword);
-		p_sci->set_selection_end(sci, endword);
+		sci_set_selection_start(sci, startword);
+		sci_set_selection_end(sci, endword);
 
 		/* retrieve the old text */
-		word = g_malloc(p_sci->get_selected_text_length(sci) + 1);
-		p_sci->get_selected_text(sci, word);
+		word = g_malloc(sci_get_selected_text_length(sci) + 1);
+		sci_get_selected_text(sci, word);
 
 		/* retrieve the new text */
 		sugg = gtk_label_get_text(GTK_LABEL(gtk_bin_get_child(GTK_BIN(menuitem))));
 
 		/* replace the misspelled word with the chosen suggestion */
-		p_sci->replace_sel(sci, sugg);
+		sci_replace_sel(sci, sugg);
 
 		/* store the replacement for future checks */
 		speller_store_replacement(word, sugg);
 
 		/* remove indicator */
-		p_sci->indicator_clear(sci, startword, endword - startword);
+		sci_indicator_clear(sci, startword, endword - startword);
 
 		g_free(word);
 	}
@@ -204,22 +204,22 @@ static void on_menu_addword_item_activate(GtkMenuItem *menuitem, gpointer gdata)
 	/* Remove all indicators on the added/ignored word */
 	sci = clickinfo.doc->editor->sci;
 	str = g_string_sized_new(256);
-	doc_len = p_sci->get_length(sci);
+	doc_len = sci_get_length(sci);
 	for (i = 0; i < doc_len; i++)
 	{
-		startword = p_sci->send_message(sci, SCI_INDICATORSTART, 0, i);
+		startword = scintilla_send_message(sci, SCI_INDICATORSTART, 0, i);
 		if (startword >= 0)
 		{
-			endword = p_sci->send_message(sci, SCI_INDICATOREND, 0, startword);
+			endword = scintilla_send_message(sci, SCI_INDICATOREND, 0, startword);
 			if (startword == endword)
 				continue;
 
 			if (str->len < (guint)(endword - startword + 1))
 				str = g_string_set_size(str, endword - startword + 1);
-			p_sci->get_text_range(sci, startword, endword, str->str);
+			sci_get_text_range(sci, startword, endword, str->str);
 
 			if (strcmp(str->str, clickinfo.word) == 0)
-				p_sci->indicator_clear(sci, startword, endword - startword);
+				sci_indicator_clear(sci, startword, endword - startword);
 
 			i = endword;
 		}
@@ -240,11 +240,11 @@ void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 	gtk_widget_hide(sc->edit_menu_sep);
 
 	/* if we have a selection, prefer it over the current word */
-	if (p_sci->has_selection(doc->editor->sci))
+	if (sci_has_selection(doc->editor->sci))
 	{
-		gint len = p_sci->get_selected_text_length(doc->editor->sci);
+		gint len = sci_get_selected_text_length(doc->editor->sci);
 		search_word = g_malloc(len + 1);
-		p_sci->get_selected_text(doc->editor->sci, search_word);
+		sci_get_selected_text(doc->editor->sci, search_word);
 	}
 	else
 		search_word = g_strdup(word);
@@ -305,12 +305,12 @@ void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
 
 		label = g_strdup_printf(_("Add \"%s\" to Dictionary"), search_word);
-		menu_item = p_ui->image_menu_item_new(GTK_STOCK_ADD, label);
+		menu_item = ui_image_menu_item_new(GTK_STOCK_ADD, label);
 		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
 		g_signal_connect((gpointer) menu_item, "activate",
 			G_CALLBACK(on_menu_addword_item_activate), GINT_TO_POINTER(0));
 
-		menu_item = p_ui->image_menu_item_new(GTK_STOCK_REMOVE, _("Ignore All"));
+		menu_item = ui_image_menu_item_new(GTK_STOCK_REMOVE, _("Ignore All"));
 		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
 		g_signal_connect((gpointer) menu_item, "activate",
 			G_CALLBACK(on_menu_addword_item_activate), GINT_TO_POINTER(1));
@@ -350,28 +350,28 @@ gboolean gui_key_release_cb(GtkWidget *widget, GdkEventKey *ev, gpointer user_da
 	/* set current time for the next key press */
 	time_prev = time_now;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 	/* bail out if we don't have a document or if we are not in the editor widget */
 	focusw = gtk_window_get_focus(GTK_WINDOW(geany->main_widgets->window));
 	if (doc == NULL || focusw != GTK_WIDGET(doc->editor->sci))
 		return FALSE;
 
 	if (ev->keyval == '\r' &&
-		p_sci->send_message(doc->editor->sci, SCI_GETEOLMODE, 0, 0) == SC_EOL_CRLF)
+		scintilla_send_message(doc->editor->sci, SCI_GETEOLMODE, 0, 0) == SC_EOL_CRLF)
 	{	/* prevent double line checking */
 		return FALSE;
 	}
 
-	line_number = p_sci->get_current_line(doc->editor->sci);
+	line_number = sci_get_current_line(doc->editor->sci);
 	if (ev->keyval == '\n' || ev->keyval == '\r')
 		line_number--; /* check previous line if we start a new one */
-	line = p_sci->get_line(doc->editor->sci, line_number);
+	line = sci_get_line(doc->editor->sci, line_number);
 
 	clear_indicators_on_line(doc, line_number);
 	if (speller_process_line(doc, line_number, line) != 0)
 	{
 		if (sc->use_msgwin)
-			p_msgwindow->switch_tab(MSG_MESSAGE, FALSE);
+			msgwin_switch_tab(MSG_MESSAGE, FALSE);
 	}
 
 	g_string_free(str, TRUE);
@@ -385,7 +385,7 @@ static void menu_item_activate_cb(GtkMenuItem *menuitem, gpointer gdata)
 {
 	GeanyDocument *doc;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 
 	/* Another language was chosen from the menu item, so make it default for this session. */
     if (gdata != NULL)
@@ -393,11 +393,11 @@ static void menu_item_activate_cb(GtkMenuItem *menuitem, gpointer gdata)
 
 	speller_reinit_enchant_dict();
 
-	p_editor->indicator_clear(doc->editor, GEANY_INDICATOR_ERROR);
+	editor_indicator_clear(doc->editor, GEANY_INDICATOR_ERROR);
 	if (sc->use_msgwin)
 	{
-		p_msgwindow->clear_tab(MSG_MESSAGE);
-		p_msgwindow->switch_tab(MSG_MESSAGE, FALSE);
+		msgwin_clear_tab(MSG_MESSAGE);
+		msgwin_switch_tab(MSG_MESSAGE, FALSE);
 	}
 
 	speller_check_document(doc);
@@ -422,7 +422,7 @@ void gui_kb_toggle_typing_activate_cb(guint key_id)
 
 void gui_create_edit_menu(void)
 {
-	sc->edit_menu = p_ui->image_menu_item_new(GTK_STOCK_SPELL_CHECK, _("Spelling Suggestions"));
+	sc->edit_menu = ui_image_menu_item_new(GTK_STOCK_SPELL_CHECK, _("Spelling Suggestions"));
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), sc->edit_menu);
 	gtk_menu_reorder_child(GTK_MENU(geany->main_widgets->editor_menu), sc->edit_menu, 0);
 
