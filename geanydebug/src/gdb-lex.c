@@ -125,8 +125,8 @@ gdblx_parse_results(gchar * results)
 	GHashTable *rv = new_hash();
 	GdbLxValue *top = new_value(vt_HASH, rv);
 	GQueue *queue = g_queue_new();
-	g_queue_push_head(queue, top);
 	GTokenType tt;
+	g_queue_push_head(queue, top);
 	if (!scanner)
 	{
 		scanner = init_scanner();
@@ -247,7 +247,7 @@ dump_value(GdbLxValue * v, gint depth)
 		case vt_LIST:
 			{
 				indent("[");
-				g_slist_foreach(v->list, dump_list_cb, GINT_TO_POINTER(depth) + 1);
+				g_slist_foreach(v->list, dump_list_cb, GINT_TO_POINTER(depth + 1));
 				indent("]");
 				break;
 			}
@@ -279,7 +279,7 @@ dump_rec(GHashTable * h, gint depth)
 {
 	if (h)
 	{
-		g_hash_table_foreach(h, dump_rec_cb, GINT_TO_POINTER(depth) + 1);
+		g_hash_table_foreach(h, dump_rec_cb, GINT_TO_POINTER(depth + 1));
 	}
 	else
 	{

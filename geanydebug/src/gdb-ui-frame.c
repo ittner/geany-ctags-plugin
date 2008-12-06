@@ -191,7 +191,7 @@ make_list(const GSList * list, gchar * title, VarWidgets * vw)
 	GtkWidget *scroll;
 	GtkCellRenderer *renderer = gtk_cell_renderer_text_new();
 	GtkListStore *store = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_POINTER);
-	GtkTreeSelection *select;
+	GtkTreeSelection *selection;
 	gint width, height;
 	gint len = g_slist_length((GSList *) list);
 	const GSList *p;
@@ -208,9 +208,9 @@ make_list(const GSList * list, gchar * title, VarWidgets * vw)
 	column = gtk_tree_view_column_new_with_attributes(title, renderer, "text", 0, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(listview), column);
 
-	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(listview));
-	gtk_tree_selection_set_mode(select, GTK_SELECTION_SINGLE);
-	g_signal_connect(G_OBJECT(select), "changed", G_CALLBACK(locals_select_cb), vw);
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(listview));
+	gtk_tree_selection_set_mode(selection, GTK_SELECTION_SINGLE);
+	g_signal_connect(G_OBJECT(selection), "changed", G_CALLBACK(locals_select_cb), vw);
 
 	gtk_cell_renderer_get_size(GTK_CELL_RENDERER(renderer), listview,
 				   NULL, NULL, NULL, &width, &height);
@@ -269,10 +269,10 @@ object_func(const GdbVar * obj, const GSList * list)
 	GtkWidget *btn;
 	gchar *heading;
 	gchar *value = fmt_val(obj->value);
+	gint resp;
 
 	heading = g_strdup_printf("\n%s %s = %s\n", strval(obj->type), strval(obj->name), value);
 	g_free(value);
-	gint resp;
 	memset(&vw, 0, sizeof(vw));
 	vw.dlg = gdbui_new_dialog(_("Object info"));
 	vbox = GTK_BOX(GTK_DIALOG(vw.dlg)->vbox);
@@ -413,9 +413,10 @@ stack_select_cb(GtkTreeSelection * selection, gpointer data)
 		gtk_tree_model_get(model, &iter, fcFrame, &frame, -1);
 		if (frame)
 		{
+			gchar *path;
 			sw->frame = frame;
 			strncpy(current_frame, frame->level, sizeof(current_frame) - 1);
-			gchar *path = g_strdup_printf("%s:%s", frame->filename, frame->line);
+			path = g_strdup_printf("%s:%s", frame->filename, frame->line);
 			monospace(sw->path_label, NULL, path);
 			g_free(path);
 
@@ -495,7 +496,7 @@ gdbui_stack_dlg(const GSList * frame_list)
 	GtkWidget *listview;
 	GtkTreeViewColumn *column;
 	GtkCellRenderer *renderer = gtk_cell_renderer_text_new();
-	GtkTreeSelection *select;
+	GtkTreeSelection *selection;
 	GtkWidget *scroll;
 	GtkWidget *locals_btn;
 	gint most_args = 0;
@@ -570,9 +571,9 @@ gdbui_stack_dlg(const GSList * frame_list)
 	gtk_misc_set_alignment(GTK_MISC(sw.args_label), 0.0f, 0.0f);
 	gtk_misc_set_alignment(GTK_MISC(sw.code_label), 0.0f, 0.0f);
 
-	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(listview));
-	gtk_tree_selection_set_mode(select, GTK_SELECTION_SINGLE);
-	g_signal_connect(G_OBJECT(select), "changed", G_CALLBACK(stack_select_cb), &sw);
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(listview));
+	gtk_tree_selection_set_mode(selection, GTK_SELECTION_SINGLE);
+	g_signal_connect(G_OBJECT(selection), "changed", G_CALLBACK(stack_select_cb), &sw);
 
 	sw.dlg = gdbui_new_dialog(_("Stack trace"));
 

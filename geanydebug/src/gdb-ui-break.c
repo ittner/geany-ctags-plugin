@@ -87,7 +87,7 @@ confirm(const gchar * question)
 	GtkWidget *dlg =
 		gtk_message_dialog_new(GTK_WINDOW(gdbui_setup.main_window), GTK_MESSAGE_QUESTION,
 				       GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-				       GTK_BUTTONS_YES_NO, question);
+				       GTK_BUTTONS_YES_NO, "%s", question);
 	gtk_dialog_set_default_response(GTK_DIALOG(dlg), GTK_RESPONSE_YES);
 	rv = gtk_dialog_run(GTK_DIALOG(dlg)) == GTK_RESPONSE_YES;
 	gtk_widget_destroy(dlg);
@@ -351,7 +351,7 @@ break_dlg(const GSList * frame_list)
 		GtkWidget *listview;
 		GtkTreeViewColumn *column;
 		GtkCellRenderer *renderer = gtk_cell_renderer_text_new();
-		GtkTreeSelection *select;
+		GtkTreeSelection *selection;
 		GtkWidget *scroll;
 		GtkWidget *delete_btn;
 		GtkWidget *add_btn;
@@ -475,9 +475,9 @@ break_dlg(const GSList * frame_list)
 								  bcCond, NULL);
 		gtk_tree_view_append_column(GTK_TREE_VIEW(listview), column);
 
-		select = gtk_tree_view_get_selection(GTK_TREE_VIEW(listview));
-		gtk_tree_selection_set_mode(select, GTK_SELECTION_SINGLE);
-		g_signal_connect(G_OBJECT(select), "changed", G_CALLBACK(break_select_cb), &bpd);
+		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(listview));
+		gtk_tree_selection_set_mode(selection, GTK_SELECTION_SINGLE);
+		g_signal_connect(G_OBJECT(selection), "changed", G_CALLBACK(break_select_cb), &bpd);
 
 		bpd.dlg = gdbui_new_dialog(is_watchlist ? _("Watchpoints") : _("Breakpoints"));
 

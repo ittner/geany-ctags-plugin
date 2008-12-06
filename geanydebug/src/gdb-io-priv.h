@@ -1,6 +1,6 @@
 
 /*
- * gdb-io-priv.h - private header for GDB wrapper library. 
+ * gdb-io-priv.h - private header for GDB wrapper library.
  *
  * See the file "gdb-io.h" for license information.
  *
@@ -50,9 +50,9 @@ Preprocessor sugar for declaring C variables from hash key names, e.g.
 expands to:
   gchar *somevar = gdblx_lookup_string ( myhash, "somevar" );
 */
-#define HSTR(hash,token) gchar* token = gdblx_lookup_string(hash, #token"");
-#define HTAB(hash,token) GHashTable* token = gdblx_lookup_hash(hash, #token"");
-#define HLST(hash,token) GSList* token = gdblx_lookup_list(hash, #token"");
+#define HSTR(hash,token) gchar* token = gdblx_lookup_string(hash, #token"")
+#define HTAB(hash,token) GHashTable* token = gdblx_lookup_hash(hash, #token"")
+#define HLST(hash,token) GSList* token = gdblx_lookup_list(hash, #token"")
 
 
 #if 0

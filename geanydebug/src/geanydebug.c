@@ -75,7 +75,7 @@ static void
 info_message_cb(const gchar * msg)
 {
 	show_compwin();
-	msgwin_compiler_add(COLOR_BLACK, msg);
+	msgwin_compiler_add(COLOR_BLACK, "%s", msg);
 }
 
 
@@ -83,7 +83,7 @@ static void
 warn_message_cb(const gchar * msg)
 {
 	show_compwin();
-	msgwin_compiler_add(COLOR_RED, msg);
+	msgwin_compiler_add(COLOR_RED, "%s", msg);
 }
 
 
@@ -111,7 +111,7 @@ goto_file_line_cb(const gchar * filename, const gchar * line, const gchar * reas
 	gint line_num = gdbio_atoi((gchar *) line) - 1;
 	if (reason)
 	{
-		msgwin_compiler_add(COLOR_BLUE, reason);
+		msgwin_compiler_add(COLOR_BLUE, "%s", reason);
 	}
 	doc = document_open_file(filename, FALSE, NULL, NULL);
 	if (!(doc && doc->is_valid))

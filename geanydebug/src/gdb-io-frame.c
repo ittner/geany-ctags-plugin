@@ -102,9 +102,10 @@ create_var(gchar * varname)
 static void
 var_deleted(gint seq, gchar ** list, gchar * resp)
 {
+	GdbVar *lv;
 	gdbio_pop_seq(seq);
 	(*which_index)++;
-	GdbVar *lv = g_slist_nth_data(*which_list, *which_index);
+	lv = g_slist_nth_data(*which_list, *which_index);
 	if (lv)
 	{
 		create_var(lv->name);
@@ -215,7 +216,7 @@ got_varlist(gint seq, gchar ** list, gchar * resp)
 				HSTR(v->hash, name);
 				if (name)
 				{
-					GdbVar *lv = g_new0(GdbVar, 1);
+					lv = g_new0(GdbVar, 1);
 					lv->name = g_strdup(name);
 					*which_list = g_slist_append(*which_list, lv);
 				}

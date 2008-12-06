@@ -227,7 +227,7 @@ signal_func(const GdbSignalInfo * si)
 							GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE,
 							_("Program received signal:"));
 
-		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dlg), msg);
+		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dlg), "%s", msg);
 		gtk_window_set_title(GTK_WINDOW(dlg), "debugger");
 		gtk_window_set_keep_above(GTK_WINDOW(dlg), TRUE);
 		gtk_dialog_run(GTK_DIALOG(dlg));
@@ -270,7 +270,7 @@ info_func(const gchar * msg)
 	}
 	else
 	{
-		g_printerr(msg);
+		g_printerr("%s", msg);
 	}
 }
 
@@ -297,7 +297,7 @@ err_func(const gchar * msg)
 				     GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, _("Error:"));
 	gtk_window_set_keep_above(GTK_WINDOW(dlg), TRUE);
 	gtk_window_set_title(GTK_WINDOW(dlg), "debugger");
-	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dlg), msg);
+	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dlg), "%s", msg);
 	gtk_window_set_keep_above(GTK_WINDOW(dlg), TRUE);
 	gtk_dialog_run(GTK_DIALOG(dlg));
 	gtk_widget_destroy(dlg);

@@ -72,13 +72,13 @@ stack_cb(gpointer data, gpointer user_data)
 			fullname = file;
 		if (level && addr && func && fullname && line)
 		{
-			GdbFrameInfo *frame = g_new0(GdbFrameInfo, 1);
-			strncpy(frame->level, level, sizeof(frame->level) - 1);
-			strncpy(frame->addr, addr, sizeof(frame->addr) - 1);
-			strncpy(frame->line, line, sizeof(frame->line) - 1);
-			frame->func = g_strdup(func);
-			frame->filename = g_strdup(fullname);
-			frame_list = g_slist_append(frame_list, frame);
+			GdbFrameInfo *frame_info = g_new0(GdbFrameInfo, 1);
+			strncpy(frame_info->level, level, sizeof(frame_info->level) - 1);
+			strncpy(frame_info->addr, addr, sizeof(frame_info->addr) - 1);
+			strncpy(frame_info->line, line, sizeof(frame_info->line) - 1);
+			frame_info->func = g_strdup(func);
+			frame_info->filename = g_strdup(fullname);
+			frame_list = g_slist_append(frame_list, frame_info);
 		}
 	}
 }

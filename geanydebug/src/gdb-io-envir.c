@@ -60,8 +60,7 @@ get_env_args(gint seq, gchar ** list, gchar * resp)
 			args = unquote(list[i] + 1);
 			if (args && *args)
 			{
-				g_strstrip(args);
-				gchar *quote = strchr(args, '"');
+				gchar *quote = strchr(g_strstrip(args), '"');
 				if (quote)
 				{
 					memmove(args, quote + 1, strlen(quote));

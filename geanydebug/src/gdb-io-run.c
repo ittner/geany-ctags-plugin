@@ -135,15 +135,16 @@ void
 gdbio_error_func(gchar * fmt, ...)
 {
 	va_list args;
+	gchar *msg;
 	va_start(args, fmt);
-	gchar *msg = g_strdup_vprintf(fmt, args);
+	msg = g_strdup_vprintf(fmt, args);
 	if (gdbio_setup.error_func)
 	{
 		gdbio_setup.error_func(g_strstrip(msg));
 	}
 	else
 	{
-		g_printerr(msg);
+		g_printerr("%s", msg);
 	}
 	g_free(msg);
 	va_end(args);
@@ -154,15 +155,16 @@ void
 gdbio_info_func(gchar * fmt, ...)
 {
 	va_list args;
+	gchar *msg;
 	va_start(args, fmt);
-	gchar *msg = g_strdup_vprintf(fmt, args);
+	msg = g_strdup_vprintf(fmt, args);
 	if (gdbio_setup.info_func)
 	{
 		gdbio_setup.info_func(g_strstrip(msg));
 	}
 	else
 	{
-		g_printerr(msg);
+		g_printerr("%s", msg);
 	}
 	g_free(msg);
 	va_end(args);
