@@ -39,7 +39,7 @@
 #include "msgwindow.h"
 
 #include "plugindata.h"
-#include "pluginmacros.h"
+#include "geanyfunctions.h"
 
 #include "gdb-io.h"
 #include "gdb-ui.h"
@@ -51,7 +51,7 @@
 
 
 
-PLUGIN_VERSION_CHECK(78)
+PLUGIN_VERSION_CHECK(115)
 PLUGIN_SET_INFO(_("Debugger"), _("Integrated debugging with GDB."), VERSION, _("Jeff Pohlmeyer"))
 
 static GeanyData *geany_data;
@@ -75,7 +75,7 @@ static void
 info_message_cb(const gchar * msg)
 {
 	show_compwin();
-	p_msgwindow->compiler_add(COLOR_BLACK, msg);
+	msgwin_compiler_add(COLOR_BLACK, msg);
 }
 
 
@@ -83,7 +83,7 @@ static void
 warn_message_cb(const gchar * msg)
 {
 	show_compwin();
-	p_msgwindow->compiler_add(COLOR_RED, msg);
+	msgwin_compiler_add(COLOR_RED, msg);
 }
 
 
@@ -111,22 +111,22 @@ goto_file_line_cb(const gchar * filename, const gchar * line, const gchar * reas
 	gint line_num = gdbio_atoi((gchar *) line) - 1;
 	if (reason)
 	{
-		p_msgwindow->compiler_add(COLOR_BLUE, reason);
+		msgwin_compiler_add(COLOR_BLUE, reason);
 	}
-	doc = p_document->open_file(filename, FALSE, NULL, NULL);
+	doc = document_open_file(filename, FALSE, NULL, NULL);
 	if (!(doc && doc->is_valid))
 	{
 		return;
 	}
 	page = gtk_notebook_page_num(NOTEBOOK, GTK_WIDGET(doc->editor->sci));
 	gtk_notebook_set_current_page(NOTEBOOK, page);
-	pos = p_sci->get_position_from_line(doc->editor->sci, line_num);
-	p_sci->ensure_line_is_visible(doc->editor->sci, line_num);
+	pos = sci_get_position_from_line(doc->editor->sci, line_num);
+	sci_ensure_line_is_visible(doc->editor->sci, line_num);
 	while (gtk_events_pending())
 	{
 		gtk_main_iteration();
 	}
-	p_sci->set_current_position(doc->editor->sci, pos, TRUE);
+	sci_set_current_position(doc->editor->sci, pos, TRUE);
 	gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 	gtk_window_present(GTK_WINDOW(geany->main_widgets->window));
 }
@@ -140,17 +140,17 @@ get_current_word()
 	gint pos, linenum, bol, bow, eow;
 	gchar *text = NULL;
 	gchar *rv = NULL;
-	document *doc = p_document->get_current();
+	document *doc = document_get_current();
 	if (!(doc && doc->is_valid))
 	{
 		return NULL;
 	}
-	pos = p_sci->get_current_position(doc->sci);
-	linenum = p_sci->get_line_from_position(doc->sci, pos);
-	bol = p_sci->get_position_from_line(doc->sci, linenum);
+	pos = sci_get_current_position(doc->sci);
+	linenum = sci_get_line_from_position(doc->sci, pos);
+	bol = sci_get_position_from_line(doc->sci, linenum);
 	bow = pos - bol;
 	eow = pos - bol;
-	text = p_sci->get_line(doc->sci, linenum);
+	text = sci_get_line(doc->sci, linenum);
 	word_chars = GEANY_WORDCHARS;
 	while ((bow > 0) && (strchr(word_chars, text[bow - 1]) != NULL))
 	{
@@ -192,23 +192,23 @@ get_current_word()
 	gchar c;
 	gint text_len;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 	g_return_val_if_fail(doc != NULL && doc->file_name != NULL, NULL);
 
-	text_len = p_sci->get_selected_text_length(doc->editor->sci);
+	text_len = sci_get_selected_text_length(doc->editor->sci);
 	if (text_len > 1)
 	{
 		txt = g_malloc(text_len + 1);
-		p_sci->get_selected_text(doc->editor->sci, txt);
+		sci_get_selected_text(doc->editor->sci, txt);
 		return txt;
 	}
 
-	pos = p_sci->get_current_position(doc->editor->sci);
+	pos = sci_get_current_position(doc->editor->sci);
 	if (pos > 0)
 		pos--;
 
 	cstart = pos;
-	c = p_sci->get_char_at(doc->editor->sci, cstart);
+	c = sci_get_char_at(doc->editor->sci, cstart);
 
 	if (!word_check_left(c))
 		return NULL;
@@ -217,25 +217,25 @@ get_current_word()
 	{
 		cstart--;
 		if (cstart >= 0)
-			c = p_sci->get_char_at(doc->editor->sci, cstart);
+			c = sci_get_char_at(doc->editor->sci, cstart);
 		else
 			break;
 	}
 	cstart++;
 
 	cend = pos;
-	c = p_sci->get_char_at(doc->editor->sci, cend);
-	while (word_check_right(c) && cend < p_sci->get_length(doc->editor->sci))
+	c = sci_get_char_at(doc->editor->sci, cend);
+	while (word_check_right(c) && cend < sci_get_length(doc->editor->sci))
 	{
 		cend++;
-		c = p_sci->get_char_at(doc->editor->sci, cend);
+		c = sci_get_char_at(doc->editor->sci, cend);
 	}
 
 	if (cstart == cend)
 		return NULL;
 	txt = g_malloc0(cend - cstart + 1);
 
-	p_sci->get_text_range(doc->editor->sci, cstart, cend, txt);
+	sci_get_text_range(doc->editor->sci, cstart, cend, txt);
 	return txt;
 }
 
@@ -245,7 +245,7 @@ get_current_word()
 static LocationInfo *
 location_query_cb()
 {
-	GeanyDocument *doc = p_document->get_current();
+	GeanyDocument *doc = document_get_current();
 	if (!(doc && doc->is_valid))
 	{
 		return NULL;
@@ -255,7 +255,7 @@ location_query_cb()
 		LocationInfo *abi;
 		gint line;
 		abi = g_new0(LocationInfo, 1);
-		line = p_sci->get_current_line(doc->editor->sci);
+		line = sci_get_current_line(doc->editor->sci);
 		abi->filename = g_strdup(doc->file_name);
 		if (line >= 0)
 		{
@@ -277,15 +277,15 @@ update_settings_cb()
 	g_key_file_set_string(kf, unix_name, "term_cmd", gdbui_setup.options.term_cmd);
 	g_key_file_set_boolean(kf, unix_name, "show_tooltips", gdbui_setup.options.show_tooltips);
 	g_key_file_set_boolean(kf, unix_name, "show_icons", gdbui_setup.options.show_icons);
-	if (p_utils->mkdir(gdbio_setup.temp_dir, TRUE) != 0)
+	if (utils_mkdir(gdbio_setup.temp_dir, TRUE) != 0)
 	{
-		p_dialogs->show_msgbox(GTK_MESSAGE_ERROR,
+		dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 				       _("Plugin configuration directory could not be created."));
 	}
 	else
 	{
 		gchar *data = g_key_file_to_data(kf, NULL, NULL);
-		p_utils->write_file(config_file, data);
+		utils_write_file(config_file, data);
 		g_free(data);
 	}
 	g_key_file_free(kf);
@@ -375,12 +375,12 @@ plugin_init(GeanyData * data)
 	gdbui_setup.line_func = goto_file_line_cb;
 
 
-	msgbook = GTK_NOTEBOOK(p_support->lookup_widget(geany->main_widgets->window, "notebook_info"));
-	compwin = gtk_widget_get_parent(p_support->lookup_widget(geany->main_widgets->window, "treeview5"));
+	msgbook = GTK_NOTEBOOK(ui_lookup_widget(geany->main_widgets->window, "notebook_info"));
+	compwin = gtk_widget_get_parent(ui_lookup_widget(geany->main_widgets->window, "treeview5"));
 	frame = gtk_frame_new(NULL);
 	gtk_notebook_append_page(GTK_NOTEBOOK(geany->main_widgets->sidebar_notebook), frame,
 				 gtk_label_new("Debug"));
-	gdbui_set_tips(GTK_TOOLTIPS(p_support->lookup_widget(geany->main_widgets->window, "tooltips")));
+	gdbui_set_tips(GTK_TOOLTIPS(ui_lookup_widget(geany->main_widgets->window, "tooltips")));
 	gdbui_create_widgets(frame);
 	gtk_widget_show_all(frame);
 }
