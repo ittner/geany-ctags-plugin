@@ -197,31 +197,41 @@ static void key_send_as_attachment(G_GNUC_UNUSED guint key_id)
 	send_as_attachment(NULL, NULL);
 }
 
-#if GTK_CHECK_VERSION(2, 12, 0)
-#define ICON_LOOKUP_MODE GTK_ICON_LOOKUP_GENERIC_FALLBACK
-#else
-#define ICON_LOOKUP_MODE GTK_ICON_LOOKUP_USE_BUILTIN
-#endif
+#define GEANYSENDMAIL_STOCK_MAIL "geanysendmail-mail"
+
+static void add_stock_item(void)
+{
+	GtkIconSet *icon_set;
+	GtkIconFactory *factory = gtk_icon_factory_new();
+	GtkIconTheme *theme = gtk_icon_theme_get_default();
+	GtkStockItem item = { GEANYSENDMAIL_STOCK_MAIL, _("Mail"), 0, 0, GETTEXT_PACKAGE };
+
+	if (gtk_icon_theme_has_icon(theme, "mail-message-new"))
+	{
+		GtkIconSource *icon_source = gtk_icon_source_new();
+		icon_set = gtk_icon_set_new();
+		gtk_icon_source_set_icon_name(icon_source, "mail-message-new");
+		gtk_icon_set_add_source(icon_set, icon_source);
+		gtk_icon_source_free(icon_source);
+	}
+	else
+	{
+		GdkPixbuf *pb = gdk_pixbuf_new_from_inline(-1, mail_pixbuf, FALSE, NULL);
+		icon_set = gtk_icon_set_new_from_pixbuf(pb);
+		g_object_unref(pb);
+	}
+	gtk_icon_factory_add(factory, item.stock_id, icon_set);
+	gtk_stock_add(&item, 1);
+	gtk_icon_factory_add_default(factory);
+
+	g_object_unref(factory);
+	gtk_icon_set_unref(icon_set);
+}
+
 
 void show_icon()
 {
-	GdkPixbuf *mailbutton_pb = NULL;
-	GtkWidget *icon = NULL;
-	GtkIconSize size = geany_data->toolbar_prefs->icon_size;
-
-	mailbutton_pb = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
-					"mail-message-new", size, ICON_LOOKUP_MODE, NULL);
-
-	/* Fallback if icon is not part of theme */
-	if (mailbutton_pb == NULL)
-	{
-		mailbutton_pb = gdk_pixbuf_new_from_inline(-1, mail_pixbuf, FALSE, NULL);
-	}
-
-	icon = gtk_image_new_from_pixbuf(mailbutton_pb);
-	g_object_unref(mailbutton_pb);
-
-	mailbutton = (GtkWidget*) gtk_tool_button_new (icon, _("Mail"));
+	mailbutton = GTK_WIDGET(gtk_tool_button_new_from_stock(GEANYSENDMAIL_STOCK_MAIL));
 	plugin_add_toolbar_item(geany_plugin, GTK_TOOL_ITEM(mailbutton));
 	ui_add_document_sensitive(mailbutton);
 	g_signal_connect (G_OBJECT(mailbutton), "clicked", G_CALLBACK(send_as_attachment), NULL);
@@ -384,6 +394,7 @@ void plugin_init(GeanyData G_GNUC_UNUSED *data)
 
 	tooltips = gtk_tooltips_new();
 
+	add_stock_item();
 	if (icon_in_toolbar == TRUE)
 	{
 		show_icon();
