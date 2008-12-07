@@ -28,7 +28,7 @@
 #include "filetypes.h"
 #include "utils.h"
 #include "keybindings.h"
-#include "pluginmacros.h"
+#include "geanyfunctions.h"
 
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
@@ -64,7 +64,7 @@ GeanyPlugin		*geany_plugin;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
-PLUGIN_VERSION_CHECK(104)
+PLUGIN_VERSION_CHECK(115)
 PLUGIN_SET_INFO(_("Lipsum"), _("Creating dummy text with Geany"), VERSION, _("Frank Lanitz <frank@frank.uvena.de>"));
 
 static GtkWidget *main_menu_item = NULL;
@@ -74,12 +74,12 @@ insert_string(gchar *string)
 {
 	GeanyDocument *doc = NULL;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 
 	if (doc != NULL)
 	{
-		gint pos = p_sci->get_current_position(doc->editor->sci);
-		p_sci->insert_text(doc->editor->sci, pos, string);
+		gint pos = sci_get_current_position(doc->editor->sci);
+		sci_insert_text(doc->editor->sci, pos, string);
 	}
 }
 
@@ -99,7 +99,7 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
  					GTK_WINDOW(geany->main_widgets->window),
 					GTK_DIALOG_DESTROY_WITH_PARENT,
  					GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-	vbox = p_ui->dialog_vbox_new(GTK_DIALOG(dialog));
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 10);
 
@@ -149,7 +149,7 @@ plugin_init(G_GNUC_UNUSED GeanyData *data)
 	GtkTooltips *tooltips = NULL;
 	tooltips = gtk_tooltips_new();
 
-	p_main->locale_init(LOCALEDIR, GETTEXT_PACKAGE);
+	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
 
 	menu_lipsum = gtk_image_menu_item_new_with_mnemonic(_("_Lipsum"));
 	gtk_tooltips_set_tip(tooltips, menu_lipsum,
