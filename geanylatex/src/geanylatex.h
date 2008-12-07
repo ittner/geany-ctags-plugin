@@ -38,7 +38,7 @@
 #include "ui_utils.h"
 #include "keybindings.h"
 #include "prefs.h"
-#include "pluginmacros.h"
+#include "geanyfunctions.h"
 #include "datatypes.h"
 #include "letters.h"
 #include "latexencodings.h"

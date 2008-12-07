@@ -132,7 +132,7 @@ static int get_entry_pos(char *str)
 	int i;
 	if(str != NULL) {
 		for (i = 0; i < N_ENTRIES; i++) {
-			if (p_utils->str_casecmp(str, label_entry[i]) == 0)
+			if (utils_str_casecmp(str, label_entry[i]) == 0)
 				return i;
 		}
 	}

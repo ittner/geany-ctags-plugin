@@ -24,7 +24,7 @@
 
 #include "geanylatex.h"
 
-PLUGIN_VERSION_CHECK(111)
+PLUGIN_VERSION_CHECK(115)
 
 PLUGIN_SET_INFO(_("LaTeX"), _("Plugin to provide better LaTeX support"), "0.3dev",
 	    "Frank Lanitz <frank@frank.uvena.de>")
@@ -63,12 +63,12 @@ insert_string(gchar *string)
 {
 	GeanyDocument *doc = NULL;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 
 	if (doc != NULL)
 	{
-		gint pos = p_sci->get_current_position(doc->editor->sci);
-		p_sci->insert_text(doc->editor->sci, pos, string);
+		gint pos = sci_get_current_position(doc->editor->sci);
+		sci_insert_text(doc->editor->sci, pos, string);
 	}
 }
 
@@ -99,7 +99,7 @@ insert_label_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpoin
 					     GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
 					     GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
 					     NULL);
-	vbox = p_ui->dialog_vbox_new(GTK_DIALOG(dialog));
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 10);
 
@@ -143,7 +143,7 @@ insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointe
 					     GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
 					     GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
 					     NULL);
-	vbox = p_ui->dialog_vbox_new(GTK_DIALOG(dialog));
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 10);
 
@@ -362,12 +362,12 @@ static void
 show_output(const gchar * output, const gchar * name, const gint local_enc)
 {
 	GeanyDocument *doc = NULL;
-	GeanyFiletype *ft = p_filetypes->lookup_by_name("LaTeX");
+	GeanyFiletype *ft = filetypes_lookup_by_name("LaTeX");
 
 	if (output)
 	{
-		doc = p_document->new_file(name, ft, output);
-		p_document->set_encoding(doc, p_encodings->get_charset_from_index(latex_encodings[local_enc].geany_enc));
+		doc = document_new_file(name, ft, output);
+		document_set_encoding(doc, encodings_get_charset_from_index(latex_encodings[local_enc].geany_enc));
 	}
 
 }
@@ -529,7 +529,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 					     GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
 					     GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
 					     NULL);
-	vbox = p_ui->dialog_vbox_new(GTK_DIALOG(dialog));
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 10);
 	gtk_container_add(GTK_CONTAINER(vbox), table);
@@ -684,17 +684,17 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 
 		if (classoptions != NULL)
 		{
-			p_utils->string_replace_all(code, "{CLASSOPTION}", classoptions);
+			utils_string_replace_all(code, "{CLASSOPTION}", classoptions);
 			g_free(classoptions);
 		}
 		if (documentclass_str != NULL)
 		{
-			p_utils->string_replace_all(code, "{DOCUMENTCLASS}", documentclass_str);
+			utils_string_replace_all(code, "{DOCUMENTCLASS}", documentclass_str);
 			g_free(documentclass_str);
 		}
 		if (enc_latex_char != NULL)
 		{
-			p_utils->string_replace_all(code, "{ENCODING}", enc_latex_char);
+			utils_string_replace_all(code, "{ENCODING}", enc_latex_char);
 			g_free(enc_latex_char);
 		}
 		if (author != NULL)
@@ -710,16 +710,16 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 					author = g_strconcat("\\author{", author, "}\n", NULL);
 				}
 
-				p_utils->string_replace_all(code, "{AUTHOR}", author);
+				utils_string_replace_all(code, "{AUTHOR}", author);
 			}
 			else
 				if (documentclass_int == 3)
 				{
-					p_utils->string_replace_all(code, "{AUTHOR}", "\% \\signature{}\n");
+					utils_string_replace_all(code, "{AUTHOR}", "\% \\signature{}\n");
 				}
 				else
 				{
-					p_utils->string_replace_all(code, "{AUTHOR}", "\% \\author{}\n");
+					utils_string_replace_all(code, "{AUTHOR}", "\% \\author{}\n");
 				}
 
 			g_free(author);
@@ -729,10 +729,10 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 			if (date[0] != '\0')
 			{
 				date = g_strconcat("\\date{", date, "}\n", NULL);
-				p_utils->string_replace_all(code, "{DATE}", date);
+				utils_string_replace_all(code, "{DATE}", date);
 			}
 			else
-				p_utils->string_replace_all(code, "{DATE}", "\% \\date{}\n");
+				utils_string_replace_all(code, "{DATE}", "\% \\date{}\n");
 			g_free(date);
 		}
 		if (title != NULL)
@@ -748,23 +748,23 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 					title = g_strconcat("\\title{", title, "}\n", NULL);
 				}
 
-				p_utils->string_replace_all(code, "{TITLE}", title);
+				utils_string_replace_all(code, "{TITLE}", title);
 			}
 			else
 				if (documentclass_int == 3)
 				{
-					p_utils->string_replace_all(code, "{TITLE}", "\% \\subject{} \n");
+					utils_string_replace_all(code, "{TITLE}", "\% \\subject{} \n");
 				}
 				else
 				{
-					p_utils->string_replace_all(code, "{TITLE}", "\% \\title{} \n");
+					utils_string_replace_all(code, "{TITLE}", "\% \\title{} \n");
 				}
 
 			g_free(title);
 		}
 
-		p_utils->string_replace_all(code, "{OPENING}", _("Dear Sir or Madame"));
-		p_utils->string_replace_all(code, "{CLOSING}", _("With kind regards"));
+		utils_string_replace_all(code, "{OPENING}", _("Dear Sir or Madame"));
+		utils_string_replace_all(code, "{CLOSING}", _("With kind regards"));
 
 		output = g_string_free(code, FALSE);
 		show_output(output, NULL, encoding_int);
@@ -800,7 +800,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	GtkWidget *tmp = NULL;
 	int i;
 
-	p_main->locale_init(LOCALEDIR, GETTEXT_PACKAGE);
+	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
 
 	init_encodings_latex();
 
@@ -813,7 +813,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_latex), menu_latex_menu);
 
 
-	menu_latex_wizzard = p_ui->image_menu_item_new(GTK_STOCK_NEW, _("LaTeX-_Wizard"));
+	menu_latex_wizzard = ui_image_menu_item_new(GTK_STOCK_NEW, _("LaTeX-_Wizard"));
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_wizzard);
 	gtk_tooltips_set_tip(tooltips, menu_latex_wizzard,
 			     _("Starts a Wizard to easily create LaTeX-documents"), NULL);
@@ -858,20 +858,20 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 
 	/* init keybindins */
 
-	p_keybindings->set_item(plugin_key_group, LATEX_WIZZARD_KB, kbwizard,
+	keybindings_set_item(plugin_key_group, LATEX_WIZZARD_KB, kbwizard,
 		0, 0, "run_latex_wizard", _("Run LaTeX-Wizard"), menu_latex_wizzard);
-	p_keybindings->set_item(plugin_key_group, LATEX_INSERT_LABEL_KB, kblabel_insert,
+	keybindings_set_item(plugin_key_group, LATEX_INSERT_LABEL_KB, kblabel_insert,
 		0, 0, "insert_latex_label", _("Insert \\label"), menu_latex_label);
-	p_keybindings->set_item(plugin_key_group, LATEX_INSERT_REF_KB, kbref_insert,
+	keybindings_set_item(plugin_key_group, LATEX_INSERT_REF_KB, kbref_insert,
 		0, 0, "insert_latex_ref", _("Insert \\ref"), menu_latex_ref);
-/*	p_keybindings->set_item(plugin_key_group, LATEX_INSERT_BIBTEX_ENTRY_KB,
+/*	keybindings_set_item(plugin_key_group, LATEX_INSERT_BIBTEX_ENTRY_KB,
 		kb_bibtex_entry_insert, 0, 0, "insert_latex_bibtex_entry", _("Add BiBTeX entry"),
 		menu_latex_bibtex); */
 
-	p_ui->add_document_sensitive(menu_latex_menu_special_char);
-	p_ui->add_document_sensitive(menu_latex_ref);
-	p_ui->add_document_sensitive(menu_latex_label);
-	p_ui->add_document_sensitive(menu_latex_bibtex);
+	ui_add_document_sensitive(menu_latex_menu_special_char);
+	ui_add_document_sensitive(menu_latex_ref);
+	ui_add_document_sensitive(menu_latex_label);
+	ui_add_document_sensitive(menu_latex_bibtex);
 
 	gtk_widget_set_sensitive(menu_latex_wizzard, TRUE);
 	gtk_widget_show_all(menu_latex);
