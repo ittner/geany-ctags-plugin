@@ -38,13 +38,13 @@
 #include "ui_utils.h"
 #include "prefs.h"
 #include "keybindings.h"
-#include "pluginmacros.h"
+#include "highlighting.h"
+#include "geanyfunctions.h"
 
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
 #endif
 
-#include "highlighting.h"
 #include "SciLexer.h"
 
 #include "geanyvc.h"
@@ -60,7 +60,7 @@ GeanyData *geany_data;
 GeanyFunctions *geany_functions;
 
 
-PLUGIN_VERSION_CHECK(104);
+PLUGIN_VERSION_CHECK(115);
 PLUGIN_SET_INFO(_("VC"), _("Interface to different Version Control systems."), VERSION,
 		_("Yura Siamashka <yurand2@gmail.com>,\nFrank Lanitz <frank@frank.uvena.de>"));
 
@@ -323,45 +323,45 @@ get_cmd(const gchar ** argv, const gchar * dir, const gchar * filename, GSList *
 		}
 		else if (argv[i] == ABS_DIRNAME)
 		{
-			ret[j] = p_utils->get_locale_from_utf8(abs_dir);
+			ret[j] = utils_get_locale_from_utf8(abs_dir);
 		}
 		else if (argv[i] == ABS_FILENAME)
 		{
-			ret[j] = p_utils->get_locale_from_utf8(filename);
+			ret[j] = utils_get_locale_from_utf8(filename);
 		}
 		else if (argv[i] == BASE_DIRNAME)
 		{
-			ret[j] = p_utils->get_locale_from_utf8(base_dirname);
+			ret[j] = utils_get_locale_from_utf8(base_dirname);
 		}
 		else if (argv[i] == BASE_FILENAME)
 		{
-			ret[j] = p_utils->get_locale_from_utf8(base_filename);
+			ret[j] = utils_get_locale_from_utf8(base_filename);
 		}
 		else if (argv[i] == BASENAME)
 		{
-			ret[j] = p_utils->get_locale_from_utf8(basename);
+			ret[j] = utils_get_locale_from_utf8(basename);
 		}
 		else if (argv[i] == FILE_LIST)
 		{
 			for (tmp = filelist; tmp != NULL; tmp = g_slist_next(tmp))
 			{
-				ret[j] = p_utils->get_locale_from_utf8((gchar *) tmp->data);
+				ret[j] = utils_get_locale_from_utf8((gchar *) tmp->data);
 				j++;
 			}
 			j--;
 		}
 		else if (argv[i] == MESSAGE)
 		{
-			ret[j] = p_utils->get_locale_from_utf8(message);
+			ret[j] = utils_get_locale_from_utf8(message);
 		}
 		else
 		{
 			repl = g_string_new(argv[i]);
-			p_utils->string_replace_all(repl, P_ABS_DIRNAME, abs_dir);
-			p_utils->string_replace_all(repl, P_ABS_FILENAME, filename);
-			p_utils->string_replace_all(repl, P_BASENAME, basename);
+			utils_string_replace_all(repl, P_ABS_DIRNAME, abs_dir);
+			utils_string_replace_all(repl, P_ABS_FILENAME, filename);
+			utils_string_replace_all(repl, P_BASENAME, basename);
 			ret[j] = g_string_free(repl, FALSE);
-			setptr(ret[j], p_utils->get_locale_from_utf8(ret[j]));
+			setptr(ret[j], utils_get_locale_from_utf8(ret[j]));
 		}
 	}
 	g_free(abs_dir);
@@ -382,26 +382,26 @@ show_output(const gchar * std_output, const gchar * name, const gchar * force_en
 
 	if (std_output)
 	{
-		cur_doc = p_document->get_current();
-		doc = p_document->find_by_filename(name);
+		cur_doc = document_get_current();
+		doc = document_find_by_filename(name);
 		if (doc == NULL)
 		{
-			doc = p_document->new_file(name, NULL, std_output);
+			doc = document_new_file(name, NULL, std_output);
 		}
 		else
 		{
-			p_sci->set_text(doc->editor->sci, std_output);
+			sci_set_text(doc->editor->sci, std_output);
 			book = GTK_NOTEBOOK(geany->main_widgets->notebook);
 			page = gtk_notebook_page_num(book, GTK_WIDGET(doc->editor->sci));
 			gtk_notebook_set_current_page(book, page);
 		}
-		p_document->set_text_changed(doc, set_changed_flag);
-		p_document->set_encoding(doc, (force_encoding ? force_encoding : "UTF-8"));
-		p_navqueue->goto_line(cur_doc, doc, 1);
+		document_set_text_changed(doc, set_changed_flag);
+		document_set_encoding(doc, (force_encoding ? force_encoding : "UTF-8"));
+		navqueue_goto_line(cur_doc, doc, 1);
 	}
 	else
 	{
-		p_ui->set_statusbar(FALSE, _("Could not parse the output of command"));
+		ui_set_statusbar(FALSE, _("Could not parse the output of command"));
 	}
 }
 
@@ -445,14 +445,14 @@ execute_custom_command(const gchar * dir, const gchar ** argv, const gchar ** en
 		argv = cur->data;
 		if (cur != g_slist_last(largv))
 		{
-			p_utils->spawn_sync(dir, cur->data, (gchar **) env,
+			utils_spawn_sync(dir, cur->data, (gchar **) env,
 					    G_SPAWN_SEARCH_PATH | G_SPAWN_STDOUT_TO_DEV_NULL |
 					    G_SPAWN_STDERR_TO_DEV_NULL, NULL, NULL, NULL, NULL,
 					    &exit_code, &error);
 		}
 		else
 		{
-			p_utils->spawn_sync(dir, cur->data, (gchar **) env,
+			utils_spawn_sync(dir, cur->data, (gchar **) env,
 					    G_SPAWN_SEARCH_PATH | (std_out ? 0 :
 								   G_SPAWN_STDOUT_TO_DEV_NULL) |
 					    (std_err ? 0 : G_SPAWN_STDERR_TO_DEV_NULL), NULL, NULL,
@@ -461,7 +461,7 @@ execute_custom_command(const gchar * dir, const gchar ** argv, const gchar ** en
 		if (error)
 		{
 			g_warning("geanyvc: s_spawn_sync error: %s", error->message);
-			p_ui->set_statusbar(FALSE, _("geanyvc: s_spawn_sync error: %s"),
+			ui_set_statusbar(FALSE, _("geanyvc: s_spawn_sync error: %s"),
 					    error->message);
 			g_error_free(error);
 		}
@@ -471,13 +471,13 @@ execute_custom_command(const gchar * dir, const gchar ** argv, const gchar ** en
 		if (std_out && *std_out)
 		{
 			tmp = g_string_new(*std_out);
-			p_utils->string_replace_all(tmp, "\r\n", "\n");
-			p_utils->string_replace_all(tmp, "\r", "\n");
+			utils_string_replace_all(tmp, "\r\n", "\n");
+			utils_string_replace_all(tmp, "\r", "\n");
 			setptr(*std_out, g_string_free(tmp, FALSE));
 
 			if (!g_utf8_validate(*std_out, -1, NULL))
 			{
-				setptr(*std_out, p_encodings->convert_to_utf8(*std_out,
+				setptr(*std_out, encodings_convert_to_utf8(*std_out,
 									      strlen(*std_out),
 									      NULL));
 			}
@@ -490,13 +490,13 @@ execute_custom_command(const gchar * dir, const gchar ** argv, const gchar ** en
 		if (std_err && *std_err)
 		{
 			tmp = g_string_new(*std_err);
-			p_utils->string_replace_all(tmp, "\r\n", "\n");
-			p_utils->string_replace_all(tmp, "\r", "\n");
+			utils_string_replace_all(tmp, "\r\n", "\n");
+			utils_string_replace_all(tmp, "\r", "\n");
 			setptr(*std_err, g_string_free(tmp, FALSE));
 
 			if (!g_utf8_validate(*std_err, -1, NULL))
 			{
-				setptr(*std_err, p_encodings->convert_to_utf8(*std_err,
+				setptr(*std_err, encodings_convert_to_utf8(*std_err,
 									      strlen(*std_err),
 									      NULL));
 			}
@@ -562,12 +562,12 @@ vcdiff_file_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpoint
 	const VC_RECORD *vc;
 	GeanyDocument *doc;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
 	if (doc->changed)
 	{
-		p_document->save_file(doc, FALSE);
+		document_save_file(doc, FALSE);
 	}
 
 	vc = find_vc(doc->file_name);
@@ -586,13 +586,13 @@ vcdiff_file_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpoint
 			   4) rename file.geany.~NEW~ to origin file
 			   5) show diff
 			 */
-			localename = p_utils->get_locale_from_utf8(doc->file_name);
+			localename = utils_get_locale_from_utf8(doc->file_name);
 
 			new = g_strconcat(doc->file_name, ".geanyvc.~NEW~", NULL);
-			setptr(new, p_utils->get_locale_from_utf8(new));
+			setptr(new, utils_get_locale_from_utf8(new));
 
 			old = g_strconcat(doc->file_name, ".geanyvc.~BASE~", NULL);
-			setptr(old, p_utils->get_locale_from_utf8(old));
+			setptr(old, utils_get_locale_from_utf8(old));
 
 			if (g_rename(localename, new) != 0)
 			{
@@ -634,7 +634,7 @@ vcdiff_file_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpoint
 	}
 	else
 	{
-		p_ui->set_statusbar(FALSE, _("No changes were made."));
+		ui_set_statusbar(FALSE, _("No changes were made."));
 	}
 }
 
@@ -647,12 +647,12 @@ vcdiff_dir_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointe
 	const VC_RECORD *vc;
 	GeanyDocument *doc;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
 	if (doc->changed)
 	{
-		p_document->save_file(doc, FALSE);
+		document_save_file(doc, FALSE);
 	}
 
 	base_name = g_path_get_dirname(doc->file_name);
@@ -669,7 +669,7 @@ vcdiff_dir_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointe
 	}
 	else
 	{
-		p_ui->set_statusbar(FALSE, _("No changes were made."));
+		ui_set_statusbar(FALSE, _("No changes were made."));
 	}
 
 	g_free(base_name);
@@ -687,12 +687,12 @@ vcdiff_basedir_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpo
 	const VC_RECORD *vc;
 	GeanyDocument *doc;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
 	if (doc && doc->changed && doc->file_name != NULL)
 	{
-		p_document->save_file(doc, FALSE);
+		document_save_file(doc, FALSE);
 	}
 
 	vc = find_vc(doc->file_name);
@@ -713,7 +713,7 @@ vcdiff_basedir_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpo
 	}
 	else
 	{
-		p_ui->set_statusbar(FALSE, _("No changes were made."));
+		ui_set_statusbar(FALSE, _("No changes were made."));
 	}
 	g_free(basedir);
 }
@@ -725,7 +725,7 @@ vcblame_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer g
 	const VC_RECORD *vc;
 	GeanyDocument *doc;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
 	vc = find_vc(doc->file_name);
@@ -739,7 +739,7 @@ vcblame_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer g
 	}
 	else
 	{
-		p_ui->set_statusbar(FALSE, _("No history avaible"));
+		ui_set_statusbar(FALSE, _("No history avaible"));
 	}
 }
 
@@ -751,10 +751,10 @@ vclog_file_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointe
 	const VC_RECORD *vc;
 	GeanyDocument *doc;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
-	p_ui->set_statusbar(TRUE, doc->file_name);
+	ui_set_statusbar(TRUE, doc->file_name);
 
 	vc = find_vc(doc->file_name);
 	g_return_if_fail(vc);
@@ -775,7 +775,7 @@ vclog_dir_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer
 	const VC_RECORD *vc;
 	GeanyDocument *doc;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
 	base_name = g_path_get_dirname(doc->file_name);
@@ -801,7 +801,7 @@ vclog_basedir_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpoi
 	GeanyDocument *doc;
 	gchar *basedir;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
 	vc = find_vc(doc->file_name);
@@ -828,12 +828,12 @@ vcstatus_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 	const VC_RECORD *vc;
 	GeanyDocument *doc;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
 	if (doc->changed)
 	{
-		p_document->save_file(doc, FALSE);
+		document_save_file(doc, FALSE);
 	}
 
 	base_name = g_path_get_dirname(doc->file_name);
@@ -860,12 +860,12 @@ command_with_question_activated(gchar ** text, gint cmd, const gchar * question,
 	const VC_RECORD *vc;
 	GeanyDocument *doc;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 	g_return_val_if_fail(doc != NULL && doc->file_name != NULL, FALSE);
 
 	if (doc->changed)
 	{
-		p_document->save_file(doc, FALSE);
+		document_save_file(doc, FALSE);
 	}
 
 	if (ask)
@@ -900,14 +900,14 @@ vcrevert_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 	gboolean ret;
 	GeanyDocument *doc;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
 	ret = command_with_question_activated(NULL, VC_COMMAND_REVERT_FILE,
 					      _("Do you really want to revert: %s?"), TRUE);
 	if (ret)
 	{
-		p_document->reload_file(doc, NULL);
+		document_reload_file(doc, NULL);
 	}
 }
 
@@ -928,8 +928,7 @@ vcremove_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 					      _("Do you really want to remove: %s?"), TRUE);
 	if (ret)
 	{
-		p_document->
-			remove_page(gtk_notebook_get_current_page
+		document_remove_page(gtk_notebook_get_current_page
 				    (GTK_NOTEBOOK(geany->main_widgets->notebook)));
 	}
 }
@@ -941,12 +940,12 @@ vcupdate_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 	GeanyDocument *doc;
 	gboolean ret;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
 	if (doc->changed)
 	{
-		p_document->save_file(doc, FALSE);
+		document_save_file(doc, FALSE);
 	}
 
 	ret = command_with_question_activated(&text, VC_COMMAND_UPDATE,
@@ -954,7 +953,7 @@ vcupdate_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 					      set_add_confirmation);
 	if (ret)
 	{
-		p_document->reload_file(doc, NULL);
+		document_reload_file(doc, NULL);
 
 		if (NZV(text))
 			show_output(text, "*VC-UPDATE*", NULL);
@@ -1118,7 +1117,7 @@ static void
 commit_toggled(G_GNUC_UNUSED GtkCellRendererToggle * cell, gchar * path_str, gpointer data)
 {
 	GtkTreeView *treeview = GTK_TREE_VIEW(data);
-	GtkWidget *diffView = p_support->lookup_widget(GTK_WIDGET(treeview), "textDiff");
+	GtkWidget *diffView = ui_lookup_widget(GTK_WIDGET(treeview), "textDiff");
 	GtkTreeModel *model = gtk_tree_view_get_model(treeview);
 	GtkTreeIter iter;
 	GtkTreePath *path = gtk_tree_path_new_from_string(path_str);
@@ -1182,7 +1181,7 @@ get_diff_color(G_GNUC_UNUSED GeanyDocument * doc, gint style)
 	static GdkColor c = { 0, 0, 0, 0 };
 	const GeanyLexerStyle *s;
 
-	s = p_highlighting->get_style(GEANY_FILETYPES_DIFF, style);
+	s = highlighting_get_style(GEANY_FILETYPES_DIFF, style);
 	c.red = (s->foreground % 256) * 257;
 	c.green = s->foreground & -16711936;
 	c.blue = (s->foreground & 0xff0000) / 256;
@@ -1350,11 +1349,11 @@ vccommit_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 	GSList *lst;
 	GtkTreeModel *model;
 	GtkWidget *commit = create_commitDialog();
-	GtkWidget *treeview = p_support->lookup_widget(commit, "treeSelect");
-	GtkWidget *diffView = p_support->lookup_widget(commit, "textDiff");
-	GtkWidget *messageView = p_support->lookup_widget(commit, "textCommitMessage");
-	GtkWidget *vpaned1 = p_support->lookup_widget(commit, "vpaned1");
-	GtkWidget *vpaned2 = p_support->lookup_widget(commit, "vpaned2");
+	GtkWidget *treeview = ui_lookup_widget(commit, "treeSelect");
+	GtkWidget *diffView = ui_lookup_widget(commit, "textDiff");
+	GtkWidget *messageView = ui_lookup_widget(commit, "textCommitMessage");
+	GtkWidget *vpaned1 = ui_lookup_widget(commit, "vpaned1");
+	GtkWidget *vpaned2 = ui_lookup_widget(commit, "vpaned2");
 
 	GtkTextBuffer *mbuf;
 	GtkTextBuffer *diffbuf;
@@ -1374,7 +1373,7 @@ vccommit_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 	GError *spellcheck_error = NULL;
 #endif
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 	g_return_if_fail(doc);
 	g_return_if_fail(doc->file_name);
 	dir = g_path_get_dirname(doc->file_name);
@@ -1386,7 +1385,7 @@ vccommit_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 	if (!lst)
 	{
 		g_free(dir);
-		p_ui->set_statusbar(FALSE, _("Nothing to commit."));
+		ui_set_statusbar(FALSE, _("Nothing to commit."));
 		return;
 	}
 
@@ -1432,7 +1431,7 @@ vccommit_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 	speller = gtkspell_new_attach(GTK_TEXT_VIEW(messageView), NULL, &spellcheck_error);
 	if (speller == NULL)
 	{
-		p_ui->set_statusbar(FALSE, _("Error initializing spell checking: %s"),
+		ui_set_statusbar(FALSE, _("Error initializing spell checking: %s"),
 				    spellcheck_error->message);
 		g_error_free(spellcheck_error);
 		spellcheck_error = NULL;
@@ -1442,7 +1441,7 @@ vccommit_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 		gtkspell_set_language(speller, lang, &spellcheck_error);
 		if (spellcheck_error != NULL)
 		{
-			p_ui->set_statusbar(TRUE,
+			ui_set_statusbar(TRUE,
 					    _
 					    ("Error while setting up language for spellchecking. Please check configuration. Error message was: %s"),
 					    spellcheck_error->message);
@@ -1503,7 +1502,7 @@ update_menu_items()
 
 	gchar *dir;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 	have_file = doc && doc->file_name && g_path_is_absolute(doc->file_name);
 
 	if (have_file)
@@ -1645,9 +1644,9 @@ on_configure_response(G_GNUC_UNUSED GtkDialog * dialog, gint response,
 #endif
 
 		if (!g_file_test(config_dir, G_FILE_TEST_IS_DIR)
-		    && p_utils->mkdir(config_dir, TRUE) != 0)
+		    && utils_mkdir(config_dir, TRUE) != 0)
 		{
-			p_dialogs->show_msgbox(GTK_MESSAGE_ERROR,
+			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 					       _
 					       ("Plugin configuration directory could not be created."));
 		}
@@ -1655,7 +1654,7 @@ on_configure_response(G_GNUC_UNUSED GtkDialog * dialog, gint response,
 		{
 			// write config to file
 			data = g_key_file_to_data(config, NULL, NULL);
-			p_utils->write_file(config_file, data);
+			utils_write_file(config_file, data);
 			g_free(data);
 		}
 
@@ -1900,7 +1899,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	GtkWidget *menu_vc_menu = NULL;
 	GtkTooltips *tooltips = NULL;
 
-	p_main->locale_init(LOCALEDIR, GETTEXT_PACKAGE);
+	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
 
 	config_file =
 		g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
@@ -2045,19 +2044,19 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	gtk_widget_show_all(menu_vc);
 
 	/* init keybindins */
-	p_keybindings->set_item(plugin_key_group, VC_DIFF_FILE, kbdiff_file,
+	keybindings_set_item(plugin_key_group, VC_DIFF_FILE, kbdiff_file,
 	0, 0, "vc_show_diff_of_file", _("Show diff of file"), menu_vc_diff_file);
-	p_keybindings->set_item(plugin_key_group, VC_DIFF_DIR, kbdiff_dir,
+	keybindings_set_item(plugin_key_group, VC_DIFF_DIR, kbdiff_dir,
 	0, 0, "vc_show_diff_of_dir", _("Show diff of diretory"), menu_vc_diff_dir);
-	p_keybindings->set_item(plugin_key_group, VC_DIFF_BASEDIR, kbdiff_basedir,
+	keybindings_set_item(plugin_key_group, VC_DIFF_BASEDIR, kbdiff_basedir,
 	0, 0, "vc_show_diff_of_basedir", _("Show diff of basedir"), menu_vc_diff_basedir);
-	p_keybindings->set_item(plugin_key_group, VC_COMMIT, kbcommit,
+	keybindings_set_item(plugin_key_group, VC_COMMIT, kbcommit,
 	0, 0, "vc_commit", _("Commit changes"), menu_vc_commit);
-	p_keybindings->set_item(plugin_key_group, VC_STATUS, kbstatus,
+	keybindings_set_item(plugin_key_group, VC_STATUS, kbstatus,
 	0, 0, "vc_status", _("Show status") , menu_vc_status);
-	p_keybindings->set_item(plugin_key_group, VC_REVERT, kbrevert,
+	keybindings_set_item(plugin_key_group, VC_REVERT, kbrevert,
 	0, 0, "vc_revert", _("Revert changes"), menu_vc_revert_file);
-	p_keybindings->set_item(plugin_key_group, VC_UPDATE, kbupdate,
+	keybindings_set_item(plugin_key_group, VC_UPDATE, kbupdate,
 	0, 0, "vc_update", _("Update file"), menu_vc_update);
 
 	plugin_fields->menu_item = menu_vc;

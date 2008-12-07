@@ -29,7 +29,7 @@
 #include "ui_utils.h"
 #include "project.h"
 #include "prefs.h"
-#include "pluginmacros.h"
+#include "geanyfunctions.h"
 
 
 #include "geanyvc.h"
@@ -81,7 +81,7 @@ vc_external_diff(const gchar * src, const gchar * dest)
 	argv[1] = (gchar *) src;
 	argv[2] = (gchar *) dest;
 
-	p_utils->spawn_sync(NULL, argv, NULL,
+	utils_spawn_sync(NULL, argv, NULL,
 			    G_SPAWN_SEARCH_PATH | G_SPAWN_STDOUT_TO_DEV_NULL |
 			    G_SPAWN_STDERR_TO_DEV_NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }

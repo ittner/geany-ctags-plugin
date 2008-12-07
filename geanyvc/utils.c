@@ -22,7 +22,7 @@
 #include "geany.h"
 #include "utils.h"
 #include "plugindata.h"
-#include "pluginmacros.h"
+#include "geanyfunctions.h"
 
 extern GeanyData *geany_data;
 extern GeanyFunctions *geany_functions;
