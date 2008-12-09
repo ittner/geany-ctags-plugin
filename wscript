@@ -301,6 +301,15 @@ def build_lua(bld, p, libs):
 	obj.uselib		            = libs
 	obj.install_path			= '${DATADIR}/geany/plugins/geanylua'
 
+	# install docs
+	bld.install_files('${DATADIR}/doc/geany/plugins/geanylua', 'geanylua/docs/*.html')
+	# install examples (Waf doesn't support installing files recursively, yet)
+	bld.install_files('${DATADIR}/geany/plugins/geanylua/examples/dialogs', 'geanylua/examples/dialogs/*.lua')
+	bld.install_files('${DATADIR}/geany/plugins/geanylua/examples/edit', 'geanylua/examples/edit/*.lua')
+	bld.install_files('${DATADIR}/geany/plugins/geanylua/examples/info', 'geanylua/examples/info/*.lua')
+	bld.install_files('${DATADIR}/geany/plugins/geanylua/examples/scripting', 'geanylua/examples/scripting/*.lua')
+	bld.install_files('${DATADIR}/geany/plugins/geanylua/examples/work', 'geanylua/examples/work/*.lua')
+
 
 def build_debug(bld, p, libs):
 	obj					        = bld.new_task_gen('cc', 'program')
