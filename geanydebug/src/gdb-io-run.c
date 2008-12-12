@@ -55,6 +55,17 @@ static GHashTable *sequencer;
 
 
 
+#if !GLIB_CHECK_VERSION(2, 14, 0)
+static void
+g_string_append_vprintf(GString *str, const gchar *fmt, va_list args)
+{
+	gchar *tmp = g_strdup_vprintf(fmt, args);
+	g_string_append(str, tmp);
+	g_free(tmp);
+}
+#endif
+
+
 /* Add a handler function to the sequencer */
 gint
 gdbio_send_seq_cmd(ResponseHandler func, const gchar * fmt, ...)
