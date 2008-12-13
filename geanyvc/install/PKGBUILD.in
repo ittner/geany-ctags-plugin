@@ -7,7 +7,7 @@ arch=(i686 x86_64)
 url="http://geany-plugins.sourceforge.net/geanyvc/"
 license=("GPL3")
 depends=('geany>=0.15')
-makedepends=()
+makedepends=('intltool')
 conflicts=()
 replaces=()
 backup=()
