@@ -30,7 +30,7 @@
 #include "keybindings.h"
 #include "utils.h"
 #include "ui_utils.h"
-#include "pluginmacros.h"
+#include "geanyfunctions.h"
 
 #include "project.h"
 
@@ -78,14 +78,14 @@ build_properties_dialog(gboolean properties)
 	GtkWidget *bbox;
 	GtkWidget *label;
 	GtkTooltips *tooltips =
-		GTK_TOOLTIPS(p_support->lookup_widget(geany->main_widgets->window, "tooltips"));
+		GTK_TOOLTIPS(ui_lookup_widget(geany->main_widgets->window, "tooltips"));
 	PropertyDialogElements *e;
 	gchar *dir = NULL;
 	gchar *basename = NULL;
 	gint i;
 	GeanyDocument *doc;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 
 	if (doc && doc->file_name != NULL && g_path_is_absolute(doc->file_name))
 	{
@@ -127,7 +127,7 @@ build_properties_dialog(gboolean properties)
 		gtk_dialog_add_action_widget(GTK_DIALOG(e->dialog), button, GTK_RESPONSE_OK);
 	}
 
-	vbox = p_ui->dialog_vbox_new(GTK_DIALOG(e->dialog));
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(e->dialog));
 
 	table = gtk_table_new(5, 2, FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table), 5);
@@ -140,7 +140,7 @@ build_properties_dialog(gboolean properties)
 	gtk_entry_set_max_length(GTK_ENTRY(e->name), MAX_NAME_LEN);
 	gtk_entry_set_text(GTK_ENTRY(e->name), basename);
 
-	p_ui->table_add_row(GTK_TABLE(table), 0, label, e->name, NULL);
+	ui_table_add_row(GTK_TABLE(table), 0, label, e->name, NULL);
 
 	label = gtk_label_new(_("Location:"));
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
@@ -150,18 +150,18 @@ build_properties_dialog(gboolean properties)
 	if (properties)
 	{
 		gtk_widget_set_sensitive(e->file_name, FALSE);
-		p_ui->table_add_row(GTK_TABLE(table), 1, label, e->file_name, NULL);
+		ui_table_add_row(GTK_TABLE(table), 1, label, e->file_name, NULL);
 	}
 	else
 	{
 		button = gtk_button_new();
 		image = gtk_image_new_from_stock("gtk-open", GTK_ICON_SIZE_BUTTON);
 		gtk_container_add(GTK_CONTAINER(button), image);
-		bbox = p_ui->path_box_new(_("Choose Project Location"),
+		bbox = ui_path_box_new(_("Choose Project Location"),
 					  GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
 					  GTK_ENTRY(e->file_name));
 		gtk_entry_set_text(GTK_ENTRY(e->file_name), dir);
-		p_ui->table_add_row(GTK_TABLE(table), 1, label, bbox, NULL);
+		ui_table_add_row(GTK_TABLE(table), 1, label, bbox, NULL);
 	}
 
 
@@ -173,11 +173,11 @@ build_properties_dialog(gboolean properties)
 			     _("Base directory of all files that make up the project. "
 			       "This can be a new path, or an existing directory tree. "
 			       "You can use paths relative to the project filename."), NULL);
-	bbox = p_ui->path_box_new(_("Choose Project Base Path"),
+	bbox = ui_path_box_new(_("Choose Project Base Path"),
 				  GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(e->base_path));
 	gtk_entry_set_text(GTK_ENTRY(e->base_path), dir);
 
-	p_ui->table_add_row(GTK_TABLE(table), 2, label, bbox, NULL);
+	ui_table_add_row(GTK_TABLE(table), 2, label, bbox, NULL);
 
 	label = gtk_label_new(_(""));
 	e->regenerate = gtk_check_button_new_with_label(_("Generate file list on load"));
@@ -187,7 +187,7 @@ build_properties_dialog(gboolean properties)
 			       "you checked this option, since your modification will be lost on "
 			       "on next project load"), NULL);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(e->regenerate), TRUE);
-	p_ui->table_add_row(GTK_TABLE(table), 3, label, e->regenerate, NULL);
+	ui_table_add_row(GTK_TABLE(table), 3, label, e->regenerate, NULL);
 
 
 	label = gtk_label_new(_("Type:"));
@@ -198,7 +198,7 @@ build_properties_dialog(gboolean properties)
 		gtk_combo_box_append_text(GTK_COMBO_BOX(e->type), project_type_string[i]);
 	gtk_combo_box_set_active(GTK_COMBO_BOX(e->type), 0);
 
-	p_ui->table_add_row(GTK_TABLE(table), 4, label, e->type, NULL);
+	ui_table_add_row(GTK_TABLE(table), 4, label, e->type, NULL);
 
 	gtk_container_add(GTK_CONTAINER(vbox), table);
 	g_free(dir);
@@ -228,7 +228,7 @@ on_new_project(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer user
 
 		if (g_file_test(path, G_FILE_TEST_EXISTS))
 		{
-			p_ui->set_statusbar(TRUE, _("Project file \"%s\" already exists"), path);
+			ui_set_statusbar(TRUE, _("Project file \"%s\" already exists"), path);
 			g_free(path);
 			goto retry;
 		}
@@ -248,7 +248,7 @@ on_new_project(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer user
 
 		geany_project_save(prj);
 		geany_project_free(prj);
-		p_document->open_file(path, FALSE, NULL, NULL);
+		document_open_file(path, FALSE, NULL, NULL);
 	}
 
 	gtk_widget_destroy(e->dialog);
@@ -308,10 +308,10 @@ on_delete_project(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer u
 	if (!g_current_project)
 		return;
 
-	if (p_dialogs->show_question("Do you really wish to delete current project:\n%s?",
+	if (dialogs_show_question("Do you really wish to delete current project:\n%s?",
 				     g_current_project->name))
 	{
-		path = p_utils->get_locale_from_utf8(g_current_project->path);
+		path = utils_get_locale_from_utf8(g_current_project->path);
 		xproject_close(FALSE);
 		g_unlink(path);
 		g_free(path);
@@ -323,7 +323,7 @@ on_add_file(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer user_da
 {
 	GeanyDocument *doc;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 	g_return_if_fail(doc && doc->file_name != NULL && g_path_is_absolute(doc->file_name));
 
 	if (!g_current_project)
@@ -341,7 +341,7 @@ on_find_in_project(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 
 	dir = g_path_get_dirname(g_current_project->path);
 	setptr(dir, g_build_filename(dir, g_current_project->base_path, NULL));
-	p_search->show_find_in_files_dialog(dir);
+	search_show_find_in_files_dialog(dir);
 	g_free(dir);
 }
 
@@ -352,7 +352,7 @@ update_menu_items()
 	gboolean badd_file;
 	GeanyDocument *doc;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 	g_return_if_fail(doc != NULL && doc->file_name != NULL);
 
 	cur_file_exists = doc && doc->file_name != NULL && g_path_is_absolute(doc->file_name);

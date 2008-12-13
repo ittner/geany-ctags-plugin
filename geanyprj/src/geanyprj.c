@@ -30,7 +30,7 @@
 #include "filetypes.h"
 #include "utils.h"
 #include "ui_utils.h"
-#include "pluginmacros.h"
+#include "geanyfunctions.h"
 
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
@@ -40,7 +40,7 @@
 
 #include "geanyprj.h"
 
-PLUGIN_VERSION_CHECK(82);
+PLUGIN_VERSION_CHECK(115);
 PLUGIN_SET_INFO(_("Project"), _("Alternative project support."), VERSION,
 		_("Yura Siamashka <yurand2@gmail.com>"));
 
@@ -58,7 +58,7 @@ reload_project()
 
 	debug("%s\n", __FUNCTION__);
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 	if (doc == NULL || doc->file_name == NULL)
 		return;
 
@@ -159,7 +159,7 @@ void
 plugin_init(G_GNUC_UNUSED GeanyData * data)
 {
 	GtkWidget *prj =
-		p_support->lookup_widget(GTK_WIDGET(geany->main_widgets->window), "menu_project1");
+		ui_lookup_widget(GTK_WIDGET(geany->main_widgets->window), "menu_project1");
 
 	locale_init();
 	tools_menu_init();
@@ -178,7 +178,7 @@ plugin_cleanup()
 {
 	GeanyProject *project = geany->app->project;
 	GtkWidget *prj =
-		p_support->lookup_widget(GTK_WIDGET(geany->main_widgets->window), "menu_project1");
+		ui_lookup_widget(GTK_WIDGET(geany->main_widgets->window), "menu_project1");
 	gtk_widget_set_child_visible(prj, TRUE);
 	gtk_widget_set_size_request(prj, -1, -1);
 

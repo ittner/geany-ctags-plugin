@@ -30,7 +30,7 @@
 #include "document.h"
 #include "filetypes.h"
 #include "utils.h"
-#include "pluginmacros.h"
+#include "geanyfunctions.h"
 
 #include "project.h"
 
@@ -50,8 +50,8 @@ const gchar *project_type_string[NEW_PROJECT_TYPE_SIZE] = {
 static gboolean
 project_filter_c_cpp(const gchar * file)
 {
-	if (p_filetypes->detect_from_file(file)->id == GEANY_FILETYPES_C ||
-	    p_filetypes->detect_from_file(file)->id == GEANY_FILETYPES_CPP)
+	if (filetypes_detect_from_file(file)->id == GEANY_FILETYPES_C ||
+	    filetypes_detect_from_file(file)->id == GEANY_FILETYPES_CPP)
 		return TRUE;
 	return FALSE;
 }
@@ -59,7 +59,7 @@ project_filter_c_cpp(const gchar * file)
 static gboolean
 project_filter_c(const gchar * file)
 {
-	if (p_filetypes->detect_from_file(file)->id == GEANY_FILETYPES_C)
+	if (filetypes_detect_from_file(file)->id == GEANY_FILETYPES_C)
 		return TRUE;
 	return FALSE;
 }
@@ -67,7 +67,7 @@ project_filter_c(const gchar * file)
 static gboolean
 project_filter_python(const gchar * file)
 {
-	if (p_filetypes->detect_from_file(file)->id == GEANY_FILETYPES_PYTHON)
+	if (filetypes_detect_from_file(file)->id == GEANY_FILETYPES_PYTHON)
 		return TRUE;
 	return FALSE;
 }
@@ -75,7 +75,7 @@ project_filter_python(const gchar * file)
 static gboolean
 project_filter_all(const gchar * file)
 {
-	if (p_filetypes->detect_from_file(file)->id != GEANY_FILETYPES_NONE)
+	if (filetypes_detect_from_file(file)->id != GEANY_FILETYPES_NONE)
 		return TRUE;
 	return FALSE;
 }
@@ -99,7 +99,7 @@ void *project_type_filter[NEW_PROJECT_TYPE_SIZE] = {
 static void
 free_tag_object(gpointer obj)
 {
-	p_tm->workspace_remove_object((TMWorkObject *) obj, TRUE, FALSE);
+	tm_workspace_remove_object((TMWorkObject *) obj, TRUE, FALSE);
 }
 
 struct GeanyPrj *
@@ -141,24 +141,24 @@ geany_project_load(const gchar * path)
 	ret = geany_project_new();
 	geany_project_set_path(ret, path);
 
-	tmp = p_utils->get_setting_string(config, "project", "name", GEANY_STRING_UNTITLED);
+	tmp = utils_get_setting_string(config, "project", "name", GEANY_STRING_UNTITLED);
 	geany_project_set_name(ret, tmp);
 	g_free(tmp);
 
-	tmp = p_utils->get_setting_string(config, "project", "description", "");
+	tmp = utils_get_setting_string(config, "project", "description", "");
 	geany_project_set_description(ret, tmp);
 	g_free(tmp);
 
-	tmp = p_utils->get_setting_string(config, "project", "base_path", "");
+	tmp = utils_get_setting_string(config, "project", "base_path", "");
 	geany_project_set_base_path(ret, tmp);
 	g_free(tmp);
 
-	tmp = p_utils->get_setting_string(config, "project", "run_cmd", "");
+	tmp = utils_get_setting_string(config, "project", "run_cmd", "");
 	geany_project_set_run_cmd(ret, tmp);
 	g_free(tmp);
 
 	geany_project_set_type_string(ret,
-				      p_utils->get_setting_string(config, "project", "type",
+				      utils_get_setting_string(config, "project", "type",
 								  project_type_string[0]));
 	geany_project_set_regenerate(ret,
 				     g_key_file_get_boolean(config, "project", "regenerate", NULL));
@@ -175,15 +175,14 @@ geany_project_load(const gchar * path)
 		{
 			filename = get_full_path(path, file);
 
-			locale_filename = p_utils->get_locale_from_utf8(filename);
-			tm_obj = p_tm->source_file_new(locale_filename, FALSE,
-						       p_filetypes->
-						       detect_from_file(filename)->name);
+			locale_filename = utils_get_locale_from_utf8(filename);
+			tm_obj = tm_source_file_new(locale_filename, FALSE,
+						       filetypes_detect_from_file(filename)->name);
 			g_free(locale_filename);
 			if (tm_obj)
 			{
 				g_hash_table_insert(ret->tags, filename, tm_obj);
-				p_tm->source_file_update(tm_obj, TRUE, FALSE, TRUE);
+				tm_source_file_update(tm_obj, TRUE, FALSE, TRUE);
 			}
 			else
 				g_free(filename);
@@ -354,14 +353,14 @@ geany_project_set_tags_from_list(struct GeanyPrj *prj, GSList * files)
 
 	for (tmp = files; tmp != NULL; tmp = g_slist_next(tmp))
 	{
-		locale_filename = p_utils->get_locale_from_utf8(tmp->data);
-		tm_obj = p_tm->source_file_new(locale_filename, FALSE,
-					       p_filetypes->detect_from_file(tmp->data)->name);
+		locale_filename = utils_get_locale_from_utf8(tmp->data);
+		tm_obj = tm_source_file_new(locale_filename, FALSE,
+					       filetypes_detect_from_file(tmp->data)->name);
 		g_free(locale_filename);
 		if (tm_obj)
 		{
 			g_hash_table_insert(prj->tags, g_strdup(tmp->data), tm_obj);
-			p_tm->source_file_update(tm_obj, TRUE, FALSE, TRUE);
+			tm_source_file_update(tm_obj, TRUE, FALSE, TRUE);
 		}
 	}
 }
@@ -410,14 +409,14 @@ geany_project_add_file(struct GeanyPrj *prj, const gchar * path)
 		return TRUE;
 	}
 
-	filename = p_utils->get_locale_from_utf8(path);
-	tm_obj = p_tm->source_file_new(filename, FALSE,
-				       p_filetypes->detect_from_file(path)->name);
+	filename = utils_get_locale_from_utf8(path);
+	tm_obj = tm_source_file_new(filename, FALSE,
+				       filetypes_detect_from_file(path)->name);
 	g_free(filename);
 	if (tm_obj)
 	{
 		g_hash_table_insert(prj->tags, g_strdup(path), tm_obj);
-		p_tm->source_file_update(tm_obj, TRUE, FALSE, TRUE);
+		tm_source_file_update(tm_obj, TRUE, FALSE, TRUE);
 	}
 	geany_project_save(prj);
 	return TRUE;

@@ -30,7 +30,7 @@
 #include "document.h"
 #include "filetypes.h"
 #include "utils.h"
-#include "pluginmacros.h"
+#include "geanyfunctions.h"
 
 #include "project.h"
 
@@ -47,14 +47,14 @@ static void
 add_tag(G_GNUC_UNUSED gpointer key, gpointer value, G_GNUC_UNUSED gpointer user_data)
 {
 	debug("%s file=%s\n", __FUNCTION__, (const gchar *) key);
-	p_tm->workspace_add_object((TMWorkObject *) value);
+	tm_workspace_add_object((TMWorkObject *) value);
 }
 
 static void
 remove_tag(G_GNUC_UNUSED gpointer key, gpointer value, G_GNUC_UNUSED gpointer user_data)
 {
 	debug("%s file=%s\n", __FUNCTION__, (const gchar *) key);
-	p_tm->workspace_remove_object((TMWorkObject *) value, FALSE, FALSE);
+	tm_workspace_remove_object((TMWorkObject *) value, FALSE, FALSE);
 }
 
 /* This fonction should keep in sync with geany code */
@@ -66,7 +66,7 @@ xproject_close(gboolean cache)
 	if (!geany->app->project)
 		return;
 
-	p_ui->set_statusbar(TRUE, _("Project \"%s\" closed."), geany->app->project->name);
+	ui_set_statusbar(TRUE, _("Project \"%s\" closed."), geany->app->project->name);
 
 	g_free(geany->app->project->name);
 	g_free(geany->app->project->description);
@@ -117,7 +117,7 @@ xproject_open(const gchar * path)
 	if (!p)
 		return;
 
-	p_ui->set_statusbar(TRUE, _("Project \"%s\" opened."), p->name);
+	ui_set_statusbar(TRUE, _("Project \"%s\" opened."), p->name);
 
 	geany->app->project = g_new0(struct GeanyProject, 1);
 	geany->app->project->type = PROJECT_TYPE;
@@ -144,7 +144,7 @@ xproject_update_tag(const gchar * filename)
 		tm_obj = g_hash_table_lookup(g_current_project->tags, filename);
 		if (tm_obj)
 		{
-			p_tm->source_file_update(tm_obj, TRUE, FALSE, TRUE);
+			tm_source_file_update(tm_obj, TRUE, FALSE, TRUE);
 		}
 	}
 
@@ -155,7 +155,7 @@ xproject_update_tag(const gchar * filename)
 					    filename);
 		if (tm_obj)
 		{
-			p_tm->source_file_update(tm_obj, TRUE, FALSE, TRUE);
+			tm_source_file_update(tm_obj, TRUE, FALSE, TRUE);
 		}
 	}
 }
@@ -175,7 +175,7 @@ xproject_add_file(const gchar * path)
 		tm_obj = (TMWorkObject *) g_hash_table_lookup(g_current_project->tags, path);
 		if (tm_obj)
 		{
-			p_tm->workspace_add_object((TMWorkObject *) tm_obj);
+			tm_workspace_add_object((TMWorkObject *) tm_obj);
 		}
 		sidebar_refresh();
 		return TRUE;
@@ -196,7 +196,7 @@ xproject_remove_file(const gchar * path)
 	tm_obj = (TMWorkObject *) g_hash_table_lookup(g_current_project->tags, path);
 	if (tm_obj)
 	{
-		p_tm->workspace_remove_object(tm_obj, FALSE, FALSE);
+		tm_workspace_remove_object(tm_obj, FALSE, FALSE);
 	}
 
 	if (geany_project_remove_file(g_current_project, path))

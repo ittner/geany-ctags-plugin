@@ -31,7 +31,7 @@
 #include "keybindings.h"
 #include "utils.h"
 #include "ui_utils.h"
-#include "pluginmacros.h"
+#include "geanyfunctions.h"
 
 #include "project.h"
 
@@ -74,7 +74,7 @@ get_tree_path_filename(GtkTreePath * treepath)
 
 	gtk_tree_model_get_iter(model, &iter, treepath);
 	gtk_tree_model_get(model, &iter, FILEVIEW_COLUMN_NAME, &name, -1);
-	setptr(name, p_utils->get_locale_from_utf8(name));
+	setptr(name, utils_get_locale_from_utf8(name));
 	setptr(name, get_full_path(g_current_project->path, name));
 	return name;
 }
@@ -92,7 +92,7 @@ open_selected_files(GList * list)
 		gchar *fname = get_tree_path_filename(treepath);
 		files = g_slist_append(files, fname);
 	}
-	p_document->open_files(files, FALSE, NULL, NULL);
+	document_open_files(files, FALSE, NULL, NULL);
 	g_slist_foreach(files, (GFunc) g_free, NULL);	// free filenames
 	g_slist_free(files);
 }
@@ -254,7 +254,7 @@ create_popup_menu()
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect_swapped((gpointer) item, "activate",
-				 G_CALLBACK(p_keybindings->send_command),
+				 G_CALLBACK(keybindings_send_command),
 				 GINT_TO_POINTER(GEANY_KEYS_VIEW_SIDEBAR));
 
 	return menu;
@@ -267,7 +267,7 @@ update_popup_menu(G_GNUC_UNUSED GtkWidget * popup_menu)
 	gboolean badd_file;
 	GeanyDocument *doc;
 
-	doc = p_document->get_current();
+	doc = document_get_current();
 
 	cur_file_exists = doc && doc->file_name != NULL && g_path_is_absolute(doc->file_name);
 

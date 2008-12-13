@@ -22,8 +22,8 @@
 
 #include "geany.h"
 #include "plugindata.h"
-#include "pluginmacros.h"
 #include "utils.h"
+#include "geanyfunctions.h"
 
 extern GeanyData *geany_data;
 extern GeanyFunctions *geany_functions;
@@ -173,7 +173,7 @@ void
 save_config(GKeyFile * config, const gchar * path)
 {
 	gchar *data = g_key_file_to_data(config, NULL, NULL);
-	p_utils->write_file(path, data);
+	utils_write_file(path, data);
 	g_free(data);
 }
 
