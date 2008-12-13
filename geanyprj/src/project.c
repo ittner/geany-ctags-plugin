@@ -197,6 +197,20 @@ geany_project_load(const gchar * path)
 	return ret;
 }
 
+#if !GLIB_CHECK_VERSION(2, 12, 0)
+static gboolean
+get_true(gpointer key, gpointer value, gpointer user_data)
+{
+	return TRUE;
+}
+
+static void
+g_hash_table_remove_all(GHashTable *hash_table)
+{
+	g_hash_table_foreach_remove(hash_table, get_true, NULL);
+}
+#endif
+
 void
 geany_project_regenerate_file_list(struct GeanyPrj *prj)
 {
