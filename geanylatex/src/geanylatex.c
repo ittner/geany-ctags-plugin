@@ -429,6 +429,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 1, _("Article"));
 	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 2, _("Report"));
 	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 3, _("Letter"));
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 4, _("Presentation"));
 
 	gtk_combo_box_set_active(GTK_COMBO_BOX(documentclass_combobox), 0);
 
@@ -648,6 +649,10 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 				{
 					documentclass_str = g_utf8_casefold("letter", -1);
 				}
+				case 4:
+				{
+					documentclass_str = g_utf8_casefold("beamer", -1);
+				}
 			}
 		}
 		else
@@ -674,11 +679,17 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 				  	documentclass_str = g_utf8_casefold("letter", -1);
 					break;
 				}
+				case 4:
+				{
+					documentclass_str = g_utf8_casefold("beamer", -1);
+				}
 			}
 		}
 
 		if (documentclass_int == 3)
 			code = g_string_new(TEMPLATE_LATEX_LETTER);
+		else if (documentclass_int == 4)
+			code = g_string_new(TEMPLATE_LATEX_BEAMER);
 		else
 			code = g_string_new(TEMPLATE_LATEX);
 

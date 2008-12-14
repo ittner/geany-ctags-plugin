@@ -26,7 +26,6 @@
 #define GEANYLATEX_H
 
 
-
 #include "geany.h"
 #include "support.h"
 #include "plugindata.h"
@@ -78,6 +77,19 @@ extern GeanyFunctions	*geany_functions;
 \\opening{{OPENING}}\n\n\
 \\closing{{CLOSING}}\n\
 \\end{letter}\n\
+\\end{document}\n"
+
+#define TEMPLATE_LATEX_BEAMER "\
+\\documentclass[]{{DOCUMENTCLASS}}\n\
+\\usetheme{default}\
+{ENCODING}\
+{TITLE}\
+{AUTHOR}\
+{DATE}\
+\\begin{document}\n\
+\\frame{\\titlepage}\n\
+\\begin{frame}\n\
+\\end{frame}\n\
 \\end{document}\n"
 
 #define create_sub_menu(base_menu, menu, item, title) \
