@@ -626,6 +626,35 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 			classoptions = g_strconcat(scriptsize, NULL);
 		}
 
+
+		switch (documentclass_int)
+		{
+			case 0:
+			{
+				documentclass_str = g_utf8_casefold("book", -1);
+				break;
+			}
+			case 1:
+			{
+				documentclass_str = g_utf8_casefold("article", -1);
+				break;
+			}
+			case 2:
+			{
+				documentclass_str = g_utf8_casefold("report", -1);
+				break;
+			}
+			case 3:
+			{
+				documentclass_str = g_utf8_casefold("letter", -1);
+				break;
+			}
+			case 4:
+			{
+				documentclass_str = g_utf8_casefold("beamer", -1);
+			}
+		}
+
 		if (KOMA_active)
 		{
 			switch (documentclass_int)
@@ -645,45 +674,8 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 					documentclass_str = g_utf8_casefold("scrreprt", -1);
 					break;
 				}
-				case 3:
-				{
-					documentclass_str = g_utf8_casefold("letter", -1);
-				}
-				case 4:
-				{
-					documentclass_str = g_utf8_casefold("beamer", -1);
-				}
 			}
-		}
-		else
-		{
-			switch (documentclass_int)
-			{
-				case 0:
-				{
-					documentclass_str = g_utf8_casefold("book", -1);
-					break;
-				}
-				case 1:
-				{
-					documentclass_str = g_utf8_casefold("article", -1);
-					break;
-				}
-				case 2:
-				{
-					documentclass_str = g_utf8_casefold("report", -1);
-					break;
-				}
-			    case 3:
-				{
-				  	documentclass_str = g_utf8_casefold("letter", -1);
-					break;
-				}
-				case 4:
-				{
-					documentclass_str = g_utf8_casefold("beamer", -1);
-				}
-			}
+
 		}
 
 		if (documentclass_int == 3)
