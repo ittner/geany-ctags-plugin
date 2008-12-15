@@ -190,6 +190,7 @@ void insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpo
 		set_status(TITLE, TRUE);
 		break;
 	case MASTERSTHESIS:
+	case PHDTHESIS:
 		set_status(AUTHOR, TRUE);
 		set_status(TITLE, TRUE);
 		set_status(SCHOOL, TRUE);
@@ -200,10 +201,6 @@ void insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpo
 		{
 			set_status(i, TRUE);
 		}
-	case PHDTHESIS:
-		set_status(TITLE, TRUE);
-		set_status(YEAR, TRUE);
-		break;
 	case TECHREPORT:
 		set_status(AUTHOR, TRUE);
 		set_status(TITLE, TRUE);
@@ -214,6 +211,16 @@ void insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpo
 		set_status(AUTHOR, TRUE);
 		set_status(TITLE, TRUE);
 		set_status(NOTE, TRUE);
+		break;
+	case PROCEEDINGS:
+		set_status(TITLE, TRUE);
+		set_status(YEAR, TRUE);
+		break;
+	default:
+		for (i = 0; i < N_ENTRIES; i++)
+		{
+			set_status(i, TRUE);
+		}
 	}
 
 	output = g_strconcat(output, label_types[doctype], "{ \n",NULL);
