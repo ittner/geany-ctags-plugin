@@ -216,7 +216,7 @@ static void character_create_menu_item(GtkWidget *menu, const gchar *label, gint
 gint
 count_menu_entries(SubMenuTemplate *tmp, gint categorie)
 {
-	// TODO: Reset max value to stop before it's too late
+	/* TODO: Reset max value to stop before it's too late */
 	gint i;
 	gint count = 0;
 	if (categorie == -1)
@@ -262,7 +262,7 @@ void sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template, Categor
 	GtkWidget *sub_menu_cat[categories][2];
 	GtkWidget *active_submenu = NULL;
 
-	// Creates sub menus based on information from letter.h
+	/* Creates sub menus based on information from letter.h */
 	for (i = 0; i < categories; i++)
 	{
 		if (count_menu_entries(menu_template, i) > 0)
@@ -272,35 +272,36 @@ void sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template, Categor
 		}
 	}
 
-	// Searching for all categories
+	/* Searching for all categories */
 	for (i = 0; i < categories; i++)
 	{
 		gboolean split = FALSE;
 		gboolean last_sub_menu = FALSE;
 		gboolean sorted = category_name[i].sorted;
-		gint local_count = 0; // To check whether we need to build up a new sub sub menu.
+		/* To check whether we need to build up a new sub sub menu. */
+		gint local_count = 0;
 		gint item_count = count_menu_entries(menu_template, i);
 
 		if (item_count < 1)
 			continue;
 
-		// Default is, not to split anything to make menu not
-		// deeper than realy needed.
+		/*  Default is, not to split anything to make menu not */
+		/*  deeper than realy needed.  */
 		if (item_count > MAX_MENU_ENTRIES)
 		{
 			split = TRUE;
 		}
 
-		// Setting active sub menu to sub menu of category
+		/*  Setting active sub menu to sub menu of category */
 		sub_menu = sub_menu_cat[i][0];
 		active_submenu = sub_menu;
-		// Finding entries for each category
+		/*  Finding entries for each category */
 
 		for (j = 0; menu_template[j].latex != NULL; j++)
 		{
 			if (menu_template[j].cat == i)
 			{
-				// Creates a new sub sub menu if needed
+				/*  Creates a new sub sub menu if needed */
 				if (split == TRUE && (local_count % MAX_MENU_ENTRIES) == 0)
 				{
 					gint next_split_point = 0;
@@ -337,7 +338,7 @@ void sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template, Categor
 					}
 				}
 
-				// Sets the counter to keep in track if a new submenu needs to be build up
+				/*  Sets the counter to keep in track if a new submenu needs to be build up */
 				local_count = local_count + 1;
 				character_create_menu_item(sub_menu, g_strconcat(menu_template[j].label, "\t", menu_template[j].latex, NULL), j, callback_function);
 			}
@@ -415,12 +416,12 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 
 	GtkTooltips *tooltip = gtk_tooltips_new();
 
-	// Creating and formatting table
+	/*  Creating and formatting table */
 	table = gtk_table_new(2, 6, FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table), 6);
 	gtk_table_set_row_spacings(GTK_TABLE(table), 6);
 
-	// Documentclass
+	/*  Documentclass */
 	label_documentclass = gtk_label_new(_("Documentclass:"));
 	documentclass_combobox = gtk_combo_box_new_text();
 	gtk_tooltips_set_tip(tooltip, documentclass_combobox,
@@ -438,7 +439,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 	gtk_table_attach_defaults(GTK_TABLE(table), label_documentclass, 0, 1, 0, 1);
 	gtk_table_attach_defaults(GTK_TABLE(table), documentclass_combobox, 1, 2, 0, 1);
 
-	// Encoding
+	/*  Encoding */
 	label_encoding = gtk_label_new(_("Encoding:"));
 
 	encoding_combobox = gtk_combo_box_new_text();
@@ -457,7 +458,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 	gtk_table_attach_defaults(GTK_TABLE(table), label_encoding, 0, 1, 1, 2);
 	gtk_table_attach_defaults(GTK_TABLE(table), encoding_combobox, 1, 2, 1, 2);
 
-	// Scriptsize
+	/*  Scriptsize */
 	label_scriptsize = gtk_label_new(_("Fontsize:"));
 	scriptsize_combobox = gtk_combo_box_new_text();
 	gtk_tooltips_set_tip(tooltip, scriptsize_combobox,
@@ -473,7 +474,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 	gtk_table_attach_defaults(GTK_TABLE(table), label_scriptsize, 0, 1, 2, 3);
 	gtk_table_attach_defaults(GTK_TABLE(table), scriptsize_combobox, 1, 2, 2, 3);
 
-	// Author
+	/*  Author */
 	label_author = gtk_label_new(_("Author:"));
 	author_textbox = gtk_entry_new();
 	gtk_tooltips_set_tip(tooltip, author_textbox,
@@ -487,7 +488,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 	gtk_table_attach_defaults(GTK_TABLE(table), label_author, 0, 1, 3, 4);
 	gtk_table_attach_defaults(GTK_TABLE(table), author_textbox, 1, 2, 3, 4);
 
-	// Date
+	/*  Date */
 	label_date = gtk_label_new(_("Date:"));
 	date_textbox = gtk_entry_new();
 	gtk_tooltips_set_tip(tooltip, date_textbox,
@@ -497,7 +498,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 	gtk_table_attach_defaults(GTK_TABLE(table), label_date, 0, 1, 4, 5);
 	gtk_table_attach_defaults(GTK_TABLE(table), date_textbox, 1, 2, 4, 5);
 
-	// Title of the new document
+	/*  Title of the new document */
 	label_title = gtk_label_new(_("Title:"));
 	title_textbox = gtk_entry_new();
 	gtk_tooltips_set_tip(tooltip, title_textbox, _("Sets the title of your new document."),
@@ -506,7 +507,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 	gtk_table_attach_defaults(GTK_TABLE(table), label_title, 0, 1, 5, 6);
 	gtk_table_attach_defaults(GTK_TABLE(table), title_textbox, 1, 2, 5, 6);
 
-	// Papersize
+	/*  Papersize */
 	label_papersize = gtk_label_new(_("Paper size:"));
 	papersize_combobox = gtk_combo_box_new_text();
 	gtk_tooltips_set_tip(tooltip, papersize_combobox,
@@ -524,7 +525,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 
 	gtk_widget_show_all(table);
 
-	// Building the wizard-dialog and showing it
+	/*  Building the wizard-dialog and showing it */
 	dialog = gtk_dialog_new_with_buttons(_("LaTeX-Wizard"),
 					     GTK_WINDOW(geany->main_widgets->window),
 					     GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,

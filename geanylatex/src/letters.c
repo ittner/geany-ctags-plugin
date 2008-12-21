@@ -51,7 +51,7 @@ CategoryName cat_names[] = {
  * AAACCCBBB is valid
  * ACABCBACB is _not_ valid and will course trouble */
 SubMenuTemplate char_array[] = {
-	// Greek characters
+	/* Greek characters */
 	{GREEK_LETTERS, "Α", "\\Alpha" },
 	{GREEK_LETTERS, "α", "\\alpha" },
 	{GREEK_LETTERS, "Β", "\\Beta" },
@@ -106,13 +106,13 @@ SubMenuTemplate char_array[] = {
 	{GREEK_LETTERS, "ϒ", "\\upsih" },
 	{GREEK_LETTERS, "ϖ", "\\piv" },
 
-	// German Umlaute
+	/* German Umlaute */
 	{GERMAN_LETTERS, "ä","\"a"},
 	{GERMAN_LETTERS, "ü","\"u"},
 	{GERMAN_LETTERS, "ö","\"o"},
 	{GERMAN_LETTERS, "ß","\"s"},
 
-	// Czech characters
+	/* Czech characters */
 	{MISC_LETTERS, "ě","\\v{e}"},
 	{MISC_LETTERS, "š","\\v{s}"},
 	{MISC_LETTERS, "č","\\v[c}"},
@@ -125,7 +125,7 @@ SubMenuTemplate char_array[] = {
 	{MISC_LETTERS, "Ř","\\v{R}"},
 	{MISC_LETTERS, "Ž","\\v{Z}"},
 
-	//// Misc
+	/* Misc */
 	{MISC_LETTERS, "\\","\\backslash"},
 	{MISC_LETTERS, "€", "\\euro"},
 	{ARROW_CHAR, "←", "\\leftarrow" },
