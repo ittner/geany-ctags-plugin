@@ -94,7 +94,7 @@ extern GeanyFunctions	*geany_functions;
 
 #define create_sub_menu(base_menu, menu, item, title) \
 		(menu) = gtk_menu_new(); \
-		(item) = gtk_menu_item_new_with_mnemonic((title)); \
+		(item) = gtk_menu_item_new_with_mnemonic(_(title)); \
 		gtk_menu_item_set_submenu(GTK_MENU_ITEM((item)), (menu)); \
 		gtk_container_add(GTK_CONTAINER(base_menu), (item)); \
 		gtk_widget_show((item));
