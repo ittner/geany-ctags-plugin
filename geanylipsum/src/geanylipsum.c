@@ -130,13 +130,15 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 		// Number of titles/paragraphes etc.
 		// t.b.d.
 		gtk_widget_destroy(dialog);
+
+		insert_string(LOREMIPSUM);
 	}
 	else
 	{
 		gtk_widget_destroy(dialog);
 	}
 
-	insert_string(LOREMIPSUM);
+	
 
 }
 
