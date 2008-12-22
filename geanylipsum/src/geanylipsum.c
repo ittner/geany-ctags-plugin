@@ -60,6 +60,12 @@ clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
 #define CONTENT "\
 {{B_CONTENT}}"
 
+enum {
+  PLAIN_LIPSUM = 0,
+  HTML_LIPSUM,
+  LATEX_LIPSUM
+};
+
 GeanyPlugin		*geany_plugin;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
@@ -91,7 +97,8 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 	GtkWidget *dialog = NULL;
 	GtkWidget *vbox = NULL;
 	GtkWidget *radio1 = NULL;
-	GtkWidget *radio2= NULL;
+	GtkWidget *radio2 = NULL;
+	GtkWidget *radio3 = NULL;
 	GtkTooltips *tooltip = NULL;
 	tooltip = gtk_tooltips_new();
 
@@ -113,6 +120,11 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 	gtk_button_set_focus_on_click(GTK_BUTTON(radio2), FALSE);
 	gtk_container_add(GTK_CONTAINER(vbox), radio2);
 
+	radio3 = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(radio1),
+		_("Plain"));
+	gtk_button_set_focus_on_click(GTK_BUTTON(radio3), FALSE);
+	gtk_container_add(GTK_CONTAINER(vbox), radio3);
+
 	gtk_widget_show_all(vbox);
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
@@ -121,12 +133,17 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 		// Filetyp
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio1)))
 		{
-			type = 0;
+			type = HTML_LIPSUM;
+		}
+		else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio2)))
+		{
+			type = LATEX_LIPSUM;
 		}
 		else
 		{
-			type = 1;
+		  	type = PLAIN_LIPSUM;
 		}
+
 		// Number of titles/paragraphes etc.
 		// t.b.d.
 		gtk_widget_destroy(dialog);
@@ -138,7 +155,7 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 		gtk_widget_destroy(dialog);
 	}
 
-	
+
 
 }
 
