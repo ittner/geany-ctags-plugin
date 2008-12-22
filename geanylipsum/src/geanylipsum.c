@@ -155,8 +155,7 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
-		// Checking, what the user likes to have
-		// Filetyp
+		/* Checking for filetype that should be used */
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio1)))
 		{
 			type = HTML_LIPSUM;
@@ -170,8 +169,6 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 		  	type = PLAIN_LIPSUM;
 		}
 
-		// Number of titles/paragraphes etc.
-		// t.b.d.
 		gtk_widget_destroy(dialog);
 
 		insert_string(LOREMIPSUM);
