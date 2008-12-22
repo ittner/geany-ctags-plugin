@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-25 23:15+0100\n"
+"POT-Creation-Date: 2008-12-22 23:17+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,34 +16,38 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/geanylipsum.c:64
+#: src/geanylipsum.c:74
 msgid "Lipsum"
 msgstr ""
 
-#: src/geanylipsum.c:64
+#: src/geanylipsum.c:74
 msgid "Creating dummy text with Geany"
 msgstr ""
 
-#: src/geanylipsum.c:64
+#: src/geanylipsum.c:74
 msgid "Frank Lanitz <frank@frank.uvena.de>"
 msgstr ""
 
-#: src/geanylipsum.c:94
+#: src/geanylipsum.c:117
 msgid "Lipsum-generator"
 msgstr ""
 
-#: src/geanylipsum.c:103
+#: src/geanylipsum.c:126
 msgid "HTML"
 msgstr ""
 
-#: src/geanylipsum.c:108
+#: src/geanylipsum.c:136
 msgid "LaTeX"
 msgstr ""
 
-#: src/geanylipsum.c:148
+#: src/geanylipsum.c:146
+msgid "Plain"
+msgstr ""
+
+#: src/geanylipsum.c:196
 msgid "_Lipsum"
 msgstr ""
 
-#: src/geanylipsum.c:150
+#: src/geanylipsum.c:198
 msgid "Include Pseudotext to your code"
 msgstr ""

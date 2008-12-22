@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geanylipsum 0.1dev\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-25 23:15+0100\n"
+"POT-Creation-Date: 2008-12-22 23:17+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: geany-118n <geany-118n@uvena.de>\n"
@@ -13,34 +13,38 @@ msgstr ""
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: src/geanylipsum.c:64
+#: src/geanylipsum.c:74
 msgid "Lipsum"
 msgstr "Lipsum"
 
-#: src/geanylipsum.c:64
+#: src/geanylipsum.c:74
 msgid "Creating dummy text with Geany"
 msgstr "Platzhaltertexte erstellen mit Geany"
 
-#: src/geanylipsum.c:64
+#: src/geanylipsum.c:74
 msgid "Frank Lanitz <frank@frank.uvena.de>"
 msgstr "Frank Lanitz <frank@frank.uvena.de>"
 
-#: src/geanylipsum.c:94
+#: src/geanylipsum.c:117
 msgid "Lipsum-generator"
 msgstr "Lorem ipsum Generator"
 
-#: src/geanylipsum.c:103
+#: src/geanylipsum.c:126
 msgid "HTML"
 msgstr "HTML"
 
-#: src/geanylipsum.c:108
+#: src/geanylipsum.c:136
 msgid "LaTeX"
 msgstr "LaTeX"
 
-#: src/geanylipsum.c:148
+#: src/geanylipsum.c:146
+msgid "Plain"
+msgstr "Unformatiert"
+
+#: src/geanylipsum.c:196
 msgid "_Lipsum"
 msgstr "_Lipsum"
 
-#: src/geanylipsum.c:150
+#: src/geanylipsum.c:198
 msgid "Include Pseudotext to your code"
 msgstr "Fügt Platzhaltertexte in das Dokument ein"
