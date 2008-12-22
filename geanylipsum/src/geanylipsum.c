@@ -75,6 +75,7 @@ PLUGIN_SET_INFO(_("Lipsum"), _("Creating dummy text with Geany"), VERSION, _("Fr
 
 static GtkWidget *main_menu_item = NULL;
 
+
 void
 insert_string(gchar *string)
 {
@@ -100,8 +101,18 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 	GtkWidget *radio2 = NULL;
 	GtkWidget *radio3 = NULL;
 	GtkTooltips *tooltip = NULL;
+	GeanyDocument *doc = NULL;
+	GeanyFiletype *ft = NULL;
+	gboolean toggled = FALSE;
+
 	tooltip = gtk_tooltips_new();
 
+	doc = document_get_current();
+
+	if (doc != NULL)
+	{
+		ft = doc->file_type;
+	}
 	dialog = gtk_dialog_new_with_buttons(_("Lipsum-generator"),
  					GTK_WINDOW(geany->main_widgets->window),
 					GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -114,15 +125,29 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 		_("HTML"));
 	gtk_button_set_focus_on_click(GTK_BUTTON(radio1), FALSE);
 	gtk_container_add(GTK_CONTAINER(vbox), radio1);
+	if (ft != NULL && ft->id == GEANY_FILETYPES_HTML)
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio1), TRUE);
+		toggled = TRUE;
+	}
 
 	radio2 = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(radio1),
 		_("LaTeX"));
 	gtk_button_set_focus_on_click(GTK_BUTTON(radio2), FALSE);
+	if (ft != NULL && ft->id == GEANY_FILETYPES_LATEX)
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio2), TRUE);
+		toggled = TRUE;
+	}
 	gtk_container_add(GTK_CONTAINER(vbox), radio2);
 
 	radio3 = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(radio1),
 		_("Plain"));
 	gtk_button_set_focus_on_click(GTK_BUTTON(radio3), FALSE);
+	if (toggled == FALSE)
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio3), TRUE);
+	}
 	gtk_container_add(GTK_CONTAINER(vbox), radio3);
 
 	gtk_widget_show_all(vbox);
