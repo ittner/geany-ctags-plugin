@@ -60,9 +60,9 @@ class Plugin:
 
 # add a new element for your plugin
 plugins = [
-	Plugin('geanydbg',
-		 [ 'geanydbg/src/dbg.c' ], # source files
-		 [ 'geanydbg', 'geanydbg/src' ], # include dirs
+	Plugin('externdbg',
+		 [ 'externdbg/src/dbg.c' ], # source files
+		 [ 'externdbg', 'externdbg/src' ], # include dirs
 		 '0.1'),
 	Plugin('geanydebug',
 		 map(lambda x: "geanydebug/src/" + x, ['gdb-io-break.c',
