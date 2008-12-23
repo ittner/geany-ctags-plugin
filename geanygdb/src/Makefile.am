@@ -1,6 +1,6 @@
 
-lib_LTLIBRARIES = geanydebug.la
-geanydebug_la_SOURCES = gdb-io-break.c \
+lib_LTLIBRARIES = geanygdb.la
+geanygdb_la_SOURCES = gdb-io-break.c \
     gdb-io-envir.c \
     gdb-io-frame.c \
     gdb-io-priv.h \
@@ -18,11 +18,11 @@ geanydebug_la_SOURCES = gdb-io-break.c \
     gdb-ui.h \
     geanydebug.c
 
-geanydebug_la_LDFLAGS = -module -avoid-version
-geanydebug_la_LIBADD  = @GEANY_LIBS@  $(INTLLIBS)
+geanygdb_la_LDFLAGS = -module -avoid-version
+geanygdb_la_LIBADD  = @GEANY_LIBS@  $(INTLLIBS)
 
-bin_PROGRAMS = geanydebug_ttyhelper
-geanydebug_ttyhelper_SOURCES = ttyhelper.c
+bin_PROGRAMS = geanygdb_ttyhelper
+geanygdb_ttyhelper_SOURCES = ttyhelper.c
 
 AM_CFLAGS = @GEANY_CFLAGS@ -DLOCALEDIR=\""$(localedir)"\" -DPREFIX=\""$(prefix)"\"
 

@@ -16,7 +16,7 @@ CP = copy
 RM = del
 PREFIX = C:/libs
 GEANY_SRC = ../geany
-TARGET = geanydebug.dll
+TARGET = geanygdb.dll
 .SUFFIXES: .c .o
 -include localwin32.mk
 
