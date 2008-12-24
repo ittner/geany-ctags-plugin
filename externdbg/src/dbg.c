@@ -54,7 +54,7 @@ static GtkWidget *keyb1;
  * for binary compatibility. */
 PLUGIN_VERSION_CHECK(78);
 /* All plugins must set name, description, version and author. */
-PLUGIN_SET_INFO(_("External Debuger"), _("Run external debugger."), VERSION,
+PLUGIN_SET_INFO(_("External Debugger"), _("Run external debugger."), VERSION,
 		_("Yura Siamshka <yurand2@gmail.com>"));
 
 /* Keybinding(s) */

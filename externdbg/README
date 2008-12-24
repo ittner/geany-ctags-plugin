@@ -1,15 +1,15 @@
 .. |(version)| replace:: 0.1
 
-========
-External Debuger
-================
+=================
+External Debugger
+=================
 
 .. contents::
 
 About
 =====
 
-External Debuger is plugin for Geany IDE that run external C debugger on executable.
+External Debugger is plugin for Geany IDE that run external C debugger on executable.
 
 In order to use it you need Geany >= 0.15 or svn version.
 
@@ -35,7 +35,7 @@ you can set custom debugger path in settings.
 License
 =======
 
-External Debuger is distributed under the terms of the GNU General Public License
+External Debugger is distributed under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 3 of the
 License, or (at your option) any later version. A copy of this license
 can be found in the file COPYING included with the source code of this
