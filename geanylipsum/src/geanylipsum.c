@@ -112,7 +112,7 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 	if (doc != NULL)
 	{
 		ft = doc->file_type;
-		g_free(doc);
+		doc = NULL;
 	}
 	dialog = gtk_dialog_new_with_buttons(_("Lipsum-generator"),
  					GTK_WINDOW(geany->main_widgets->window),
