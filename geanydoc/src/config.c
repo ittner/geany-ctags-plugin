@@ -49,7 +49,7 @@ const gchar defaults[] =
 	"command1 = devhelp -s '%w'\n"
 	"[PHP]\n"
 	"internal = false\n"
-	"command0 = firefox \"http://www.php.net/%s\"\n"
+	"command0 = firefox \"http://www.php.net/%w\"\n"
 	"[Sh]\n"
 	"internal = true\n"
 	"command0 = man -P \"col -b\" -S 1:4:5:6:7:8:9 '%w'\n"
