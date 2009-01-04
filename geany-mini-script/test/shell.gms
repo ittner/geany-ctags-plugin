@@ -1,0 +1,1 @@
+grep "[cC]ombien" - | tr '[a-z]' '[A-Z]'
