@@ -109,6 +109,10 @@ plugins = [
 		 [ 'geanylipsum/src/geanylipsum.c' ], # source files
 		 [ 'geanylipsum', 'geanylipsum/src' ], # include dirs
 		 '0.1dev'),
+	Plugin('geany-mini-script',
+		 [ 'geany-mini-script/src/gms.c', 'geany-mini-script/src/gms_gui.c' ], # source files
+		 [ 'geany-mini-script', 'geany-mini-script/src' ], # include dirs
+		 '0.2')
 ]
 
 
@@ -156,10 +160,8 @@ def configure(conf):
 
 	conf.check_tool('compiler_cc intltool')
 
-	conf.check_cfg(package='gtk+-2.0', atleast_version='2.6.0', uselib_store='GTK', mandatory=True)
-	conf.check_cfg(package='gtk+-2.0', args='--cflags --libs', uselib_store='GTK')
-	conf.check_cfg(package='geany', atleast_version='0.15', mandatory=True)
-	conf.check_cfg(package='geany', args='--cflags --libs')
+	conf.check_cfg(package='gtk+-2.0', atleast_version='2.6.0', uselib_store='GTK', mandatory=True, args='--cflags --libs', uselib_store='GTK')
+	conf.check_cfg(package='geany', atleast_version='0.15', mandatory=True, args='--cflags --libs')
 
 	gtk_version = conf.check_cfg(modversion='gtk+-2.0') or 'Unknown'
 	geany_version = conf.check_cfg(modversion='geany') or 'Unknown'
@@ -184,12 +186,10 @@ def configure(conf):
 		if p.name in enabled_plugins:
 			for l in p.libs:
 				uselib = Utils.quote_define_name(l[0])
-				conf.check_cfg(package=l[0], uselib_store=uselib, atleast_version=l[1])
+				conf.check_cfg(package=l[0], uselib_store=uselib, atleast_version=l[1], args='--cflags --libs')
 				if not conf.env['HAVE_%s' % uselib] == 1:
 					if l[2]:
 						enabled_plugins.remove(p.name)
-				else:
-					conf.check_cfg(package=l[0], args='--cflags --libs', uselib_store=uselib)
 
 	conf_define_from_opt('LIBDIR', Options.options.libdir, conf.env['PREFIX'] + '/lib')
 	# get and define Geany's libdir for use as plugin binary installation dir
@@ -271,11 +271,14 @@ def build(bld):
 		if p.name == 'geanydebug':
 			build_debug(bld, p, libs) # build additional binary for the debug plugin
 
+		if p.name == 'geany-mini-script': tgt = 'gms'
+		else: tgt = p.name
+
 		obj					        = bld.new_task_gen('cc', 'shlib')
 		obj.source			        = p.sources
 		obj.includes				= p.includes
 		obj.env['shlib_PATTERN']    = '%s.so'
-		obj.target			        = p.name
+		obj.target			        = tgt
 		obj.uselib		            = libs
 		obj.install_path			= '${GEANY_LIBDIR}/geany'
 		# if we are compiling more than one plugin, allow some of to fail
@@ -345,11 +348,12 @@ def shutdown():
 						size_old = os.stat(p.name + '.pot').st_size
 					except:
 						size_old = 0
-					subprocess.call(['intltool-update', '--pot'])
+					subprocess.call(['intltool-update', '--pot', 'g', p.name])
 					size_new = os.stat(p.name + '.pot').st_size
 					if size_new != size_old:
 						Utils.pprint('CYAN', 'Updated POT file for %s.' % p.name)
-						launch('intltool-update -r', 'Updating translations for %s' % p.name, 'CYAN')
+						launch('intltool-update -r -g %s' % p.name,
+							'Updating translations for %s' % p.name, 'CYAN')
 					else:
 						Utils.pprint('CYAN', 'POT file is up to date for %s.' % p.name)
 				except:
