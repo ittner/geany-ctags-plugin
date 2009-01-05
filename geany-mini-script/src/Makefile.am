@@ -4,4 +4,4 @@ gms_la_SOURCES  = gms.c  gms_gui.c
 gms_la_LDFLAGS  = -module -avoid-version
 gms_la_LIBADD   = @GEANY_LIBS@
 
-AM_CPPFLAGS     = @GEANY_CFLAGS@ -DLOCALEDIR=\""$(localedir)"\"
+AM_CPPFLAGS     = -Wshadow @GEANY_CFLAGS@ -DLOCALEDIR=\""$(localedir)"\"
