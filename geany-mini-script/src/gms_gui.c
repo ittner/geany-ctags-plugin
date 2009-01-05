@@ -251,7 +251,6 @@ static void gms_cb_load(
 
     if (gtk_dialog_run (GTK_DIALOG (p_dialog)) == GTK_RESPONSE_ACCEPT)
     {
-        gms_private_t *this = GMS_PRIVATE(data) ;
         gchar         *filename = NULL;
 
         filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (p_dialog));
@@ -307,7 +306,6 @@ static void gms_cb_save(
 
     if (gtk_dialog_run (GTK_DIALOG (p_dialog)) == GTK_RESPONSE_ACCEPT)
     {
-        gms_private_t *this = GMS_PRIVATE(data) ;
         gchar         *filename = NULL;
 
         filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (p_dialog));
