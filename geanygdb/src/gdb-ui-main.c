@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <elf.h>
 #include <gtk/gtk.h>
 
 #include "gdb-io.h"
@@ -392,53 +393,81 @@ make_btn(gchar * text, GtkCallback cb, gchar * img, gchar * tip)
 
 
 
-// Crude check for "ELF 32-bit LSB [reloc|exec|shared|core] Intel 80386, version 1"
+/* Check for ELF type */
 typedef enum
-{ ELF_RELOC, ELF_EXEC, ELF_SHARED, ELF_CORE, ELF_NOT_ELF } ElfType;
+{ ELF_RELOC, ELF_EXEC, ELF_SHARED, ELF_CORE, ELF_UNKNOWN } ElfType;
 
 static ElfType
-get_elf_type(const char *filename)
+get_elf_type(const char * filename)
 {
-	char buf[32];
-	ElfType rv = ELF_NOT_ELF;
-	int n;
-	FILE *fh = fopen(filename, "r");
-	if (fh)
+	/* There are seperate 32 bit and 64 bit elf headers on linux. The
+	 * bits we are interested in should be in the same location for
+	 * both. */
+	union
 	{
-		memset(buf, 0, sizeof(buf));
-		n = fread(buf, 1, sizeof(buf), fh);
-		fclose(fh);
-		if ((n == sizeof(buf)) &&
-		    (memcmp(buf, "\177ELF", 4) == 0) &&
-		    (memcmp(buf + 5, "\1\1\0\0\0\0\0\0\0\0\0", 11) == 0)
-		    /* && (memcmp(buf+17,"\0\3\0\1",4)==0) *//* <= Intel 80386, version 1 */
-			)
-		{
-			switch (buf[4])
-			{
-				case '\1':
-					break;	/* 32-bit */
-				case '\2':
-					break;	/* 64-bit */
-				default:
-					return ELF_NOT_ELF;
-			}
-			switch (buf[16])
-			{
-				case '\1':
-					return ELF_RELOC;
-				case '\2':
-					return ELF_EXEC;
-				case '\3':
-					return ELF_SHARED;
-				case '\4':
-					return ELF_CORE;
-			}
-		}
-	}
-	return rv;
-}
+		Elf32_Ehdr ehdr32;
+		Elf64_Ehdr ehdr64;
+	} e_header;
 
+	int read_ehdr;
+	int is_32bit_elf;
+	int is_little_endian;
+	const char* e_type_buf;
+	unsigned int e_type;
+	FILE* file = fopen(filename, "r");
+
+	if (!file)
+		return ELF_UNKNOWN;
+
+	read_ehdr = fread(&e_header, sizeof(e_header), 1, file);
+	fclose(file);
+
+	if (read_ehdr != 1)
+		return ELF_UNKNOWN;
+
+	/* Determine how to read the rest of the header.  */
+	switch (e_header.ehdr32.e_ident[EI_DATA])
+	{
+		default: /* fall through */
+		case ELFDATANONE: /* fall through */
+		case ELFDATA2LSB:
+			is_little_endian = 1;
+			break;
+		case ELFDATA2MSB:
+			is_little_endian = 0;
+		break;
+	}
+
+	/* For now we only support 32 bit and 64 bit ELF files.  */
+	is_32bit_elf = (e_header.ehdr32.e_ident[EI_CLASS] != ELFCLASS64);
+
+	/* The type field offset and size should be the same between 32 and 64 bit platforms! */
+	if (!is_32bit_elf &&
+		((char*) &e_header.ehdr32.e_type != (char*) &e_header.ehdr64.e_type ||
+		(char*) &e_header.ehdr32.e_machine != (char*) &e_header.ehdr64.e_machine))
+		return ELF_UNKNOWN;
+
+	/* get the type taking endian into account */
+	e_type_buf = (char*) &e_header.ehdr32.e_type;
+	if (is_little_endian)
+		e_type = ((unsigned int) (e_type_buf[0])) | (((unsigned int) (e_type_buf[1])) << 8);
+	else
+		e_type = ((unsigned int) (e_type_buf[1])) | (((unsigned int) (e_type_buf[0])) << 8);
+
+	switch (e_type)
+	{
+		case ET_REL:
+			return ELF_RELOC;
+		case ET_EXEC:
+			return ELF_EXEC;
+		case ET_DYN:
+			return ELF_SHARED;
+		case ET_CORE:
+			return ELF_CORE;
+		default:
+			return ELF_UNKNOWN;
+	}
+}
 
 
 
