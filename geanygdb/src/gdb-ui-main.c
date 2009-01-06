@@ -21,7 +21,7 @@
 
 GdbUiSetup gdbui_setup;
 
-static GtkWidget *vbox;
+static GtkWidget *main_vbox;
 static GtkWidget *action_area;
 static GtkWidget *stat_lab;
 
@@ -72,7 +72,7 @@ static gboolean pause_clicked = FALSE;
 void
 gdbui_enable(gboolean enabled)
 {
-	gtk_widget_set_sensitive(vbox, enabled);
+	gtk_widget_set_sensitive(main_vbox, enabled);
 }
 
 
@@ -771,7 +771,7 @@ entry_activate(GtkWidget * w, gpointer user_data)
 
 
 #define split1 split(action_area)
-#define split2 split(vbox)
+#define split2 split(main_vbox)
 
 
 //#define splitw gtk_widget_new(GTK_TYPE_BIN,NULL)
@@ -791,18 +791,26 @@ GtkWidget *
 gdbui_create_widgets(GtkWidget * parent)
 {
 	GtkWidget *w = NULL;
-	vbox = gtk_vbox_new(FALSE, 0);
+	GtkWidget *scrollable;
+
+	scrollable = gtk_scrolled_window_new(NULL, NULL);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrollable), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+	gtk_widget_show(scrollable);
+
 	if (parent)
 	{
-		gtk_container_add(GTK_CONTAINER(parent), vbox);
+		gtk_container_add(GTK_CONTAINER(parent), scrollable);
 	}
 
+	main_vbox = gtk_vbox_new(FALSE, 0);
+
+	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrollable), main_vbox);
+
 	split2 stat_lab = gtk_label_new(_("no program"));
-	gtk_box_pack_start(GTK_BOX(vbox), stat_lab, FALSE, FALSE, 4);
-	gtk_widget_show(vbox);
+	gtk_box_pack_start(GTK_BOX(main_vbox), stat_lab, FALSE, FALSE, 4);
 
 	action_area = gtk_vbox_new(FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(vbox), action_area, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(main_vbox), action_area, FALSE, FALSE, 0);
 	gtk_widget_show(action_area);
 	load_btn =
 		make_btn(_("_Load"), load_click, GTK_STOCK_OPEN, _("Load target program into debugger."));
@@ -898,7 +906,7 @@ gdbui_create_widgets(GtkWidget * parent)
 
 	split1;
 
-	w = vbox;
+	w = main_vbox;
 	term_chk = gtk_check_button_new_with_label(_("Run in terminal"));
 	gtk_box_pack_start(GTK_BOX(w), term_chk, FALSE, FALSE, 0);
 	gdbui_set_tip(term_chk, _("Execute target program inside a terminal window."));
@@ -916,13 +924,13 @@ gdbui_create_widgets(GtkWidget * parent)
 	con_lab = gtk_label_new(_("Console:"));
 	gdbui_set_tip(con_lab, _("Send a GDB command directly to the debugger."));
 	gtk_misc_set_alignment(GTK_MISC(con_lab), 0.0f, 0.0f);
-	gtk_box_pack_start(GTK_BOX(vbox), con_lab, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(main_vbox), con_lab, FALSE, FALSE, 0);
 
 	con_cmd = gtk_entry_new();
 	g_signal_connect(G_OBJECT(con_cmd), "activate", G_CALLBACK(entry_activate), NULL);
-	gtk_box_pack_start(GTK_BOX(vbox), con_cmd, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(main_vbox), con_cmd, FALSE, FALSE, 0);
 
-	gtk_widget_show_all(vbox);
+	gtk_widget_show_all(main_vbox);
 
 	gdbio_setup.error_func = err_func;
 	gdbio_setup.signal_func = signal_func;
@@ -932,7 +940,7 @@ gdbui_create_widgets(GtkWidget * parent)
 	last_used = load_btn;
 	status_func(curr_status);
 
-	return vbox;
+	return main_vbox;
 }
 
 
