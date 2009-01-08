@@ -107,6 +107,7 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 	GeanyDocument *doc = NULL;
 	GeanyFiletype *ft = NULL;
 	gboolean toggled = FALSE;
+	int length = 0;
 
 	tooltip = gtk_tooltips_new();
 
@@ -181,6 +182,10 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 		{
 		  	type = PLAIN_LIPSUM;
 		}
+
+		/* Checking for length of string that should be inserted */
+		length = gtk_spin_button_get_value_as_int(
+			GTK_SPIN_BUTTON(spin));
 
 		gtk_widget_destroy(dialog);
 
