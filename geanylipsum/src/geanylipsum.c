@@ -100,6 +100,9 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 	GtkWidget *radio1 = NULL;
 	GtkWidget *radio2 = NULL;
 	GtkWidget *radio3 = NULL;
+	GtkWidget *label = NULL;
+	GtkWidget *hbox = NULL;
+	GtkWidget *spin = NULL;
 	GtkTooltips *tooltip = NULL;
 	GeanyDocument *doc = NULL;
 	GeanyFiletype *ft = NULL;
@@ -150,6 +153,16 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio3), TRUE);
 	}
 	gtk_container_add(GTK_CONTAINER(vbox), radio3);
+
+	label = gtk_label_new(_("characters"));
+	spin = gtk_spin_button_new_with_range(1, 1800, 1);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin), 1500);
+
+	hbox = gtk_hbox_new(FALSE, 5);
+	gtk_box_pack_start(GTK_BOX(hbox), spin, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 5);
 
 	gtk_widget_show_all(vbox);
 
