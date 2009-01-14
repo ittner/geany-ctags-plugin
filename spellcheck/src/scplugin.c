@@ -114,7 +114,7 @@ static void locale_init(void)
 #endif
 
 #ifdef G_OS_WIN32
-	gchar *install_dir = g_win32_get_package_installation_directory("geany", NULL);
+	gchar *install_dir = g_win32_get_package_installation_directory(NULL, NULL);
 	/* e.g. C:\Program Files\geany\lib\locale */
 	locale_dir = g_strconcat(install_dir, "\\share\\locale", NULL);
 	g_free(install_dir);
