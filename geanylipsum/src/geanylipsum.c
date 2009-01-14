@@ -1,7 +1,7 @@
 /*
  *      geanylipsum.c
  *
- *      Copyright 2008 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
+ *      Copyright 2008-2009 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -51,19 +51,8 @@ eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam\
 voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet \
 clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
 
-#define TITLE "\
-{{TITLE_S}}{{T_CONTENT}}{{TITLE_E}}"
-
-#define SUBTITLE "\
-{{SUBTITLE_S}}{{S_CONTENT}}{{SUBTITLE_S}}"
-
-#define CONTENT "\
-{{B_CONTENT}}"
-
 enum {
   PLAIN_LIPSUM = 0,
-  HTML_LIPSUM,
-  LATEX_LIPSUM
 };
 
 GeanyPlugin		*geany_plugin;
@@ -94,30 +83,20 @@ insert_string(gchar *string)
 void
 lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gdata)
 {
-	gint type;
 	GtkWidget *dialog = NULL;
 	GtkWidget *vbox = NULL;
-	GtkWidget *radio1 = NULL;
-	GtkWidget *radio2 = NULL;
-	GtkWidget *radio3 = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *hbox = NULL;
 	GtkWidget *spin = NULL;
 	GtkTooltips *tooltip = NULL;
 	GeanyDocument *doc = NULL;
-	GeanyFiletype *ft = NULL;
-	gboolean toggled = FALSE;
+
 	int length = 0;
 
 	tooltip = gtk_tooltips_new();
 
 	doc = document_get_current();
 
-	if (doc != NULL)
-	{
-		ft = doc->file_type;
-		doc = NULL;
-	}
 	dialog = gtk_dialog_new_with_buttons(_("Lipsum-generator"),
  					GTK_WINDOW(geany->main_widgets->window),
 					GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -125,35 +104,6 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 10);
-
-	radio1 = gtk_radio_button_new_with_label(NULL,
-		_("HTML"));
-	gtk_button_set_focus_on_click(GTK_BUTTON(radio1), FALSE);
-	gtk_container_add(GTK_CONTAINER(vbox), radio1);
-	if (ft != NULL && ft->id == GEANY_FILETYPES_HTML)
-	{
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio1), TRUE);
-		toggled = TRUE;
-	}
-
-	radio2 = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(radio1),
-		_("LaTeX"));
-	gtk_button_set_focus_on_click(GTK_BUTTON(radio2), FALSE);
-	if (ft != NULL && ft->id == GEANY_FILETYPES_LATEX)
-	{
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio2), TRUE);
-		toggled = TRUE;
-	}
-	gtk_container_add(GTK_CONTAINER(vbox), radio2);
-
-	radio3 = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(radio1),
-		_("Plain"));
-	gtk_button_set_focus_on_click(GTK_BUTTON(radio3), FALSE);
-	if (toggled == FALSE)
-	{
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio3), TRUE);
-	}
-	gtk_container_add(GTK_CONTAINER(vbox), radio3);
 
 	label = gtk_label_new(_("characters"));
 	spin = gtk_spin_button_new_with_range(1, 1800, 1);
@@ -169,19 +119,6 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
-		/* Checking for filetype that should be used */
-		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio1)))
-		{
-			type = HTML_LIPSUM;
-		}
-		else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio2)))
-		{
-			type = LATEX_LIPSUM;
-		}
-		else
-		{
-		  	type = PLAIN_LIPSUM;
-		}
 
 		/* Checking for length of string that should be inserted */
 		length = gtk_spin_button_get_value_as_int(
@@ -195,8 +132,6 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 	{
 		gtk_widget_destroy(dialog);
 	}
-
-
 
 }
 
