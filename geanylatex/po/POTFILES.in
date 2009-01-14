@@ -2,3 +2,4 @@ src/geanylatex.c
 src/latexencodings.c
 src/letters.c
 src/bibtex.c
+src/bibtexlabels.c

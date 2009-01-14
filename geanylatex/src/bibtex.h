@@ -75,7 +75,13 @@ enum {
 	N_ENTRIES
 };
 
-extern gchar *label_types[N_TYPES];
+extern gchar *label_types[];
+
+extern const gchar *label_tooltips[];
+
+extern const gchar *label_entry_keywords[];
+
+extern const gchar *label_entry[];
 
 int push_bibtex_entry(int style, GeanyDocument *doc);
 
