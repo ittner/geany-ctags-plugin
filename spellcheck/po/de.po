@@ -1,7 +1,7 @@
 # German translations for spellcheck package.
-# Copyright (C) 2008 THE spellcheck's COPYRIGHT HOLDER
+# Copyright (C) 2008-2009 THE spellcheck's COPYRIGHT HOLDER
 # This file is distributed under the same license as the spellcheck package.
-# Enrico Tröger <enrico.troeger@uvena.de> 2008
+# Enrico Tröger <enrico.troeger@uvena.de> 2008-2009
 #
 msgid ""
 msgstr ""
@@ -85,7 +85,7 @@ msgstr "Alle ignorieren"
 
 #: src/gui.c:378
 msgid "Spelling Suggestions"
-msgstr "Rechtschreib-Vorschläge"
+msgstr "Rechtschreibvorschläge"
 
 #: src/gui.c:401
 msgid "Default"
