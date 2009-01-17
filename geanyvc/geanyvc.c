@@ -512,7 +512,7 @@ execute_custom_command(const gchar * dir, const gchar ** argv, const gchar ** en
 	return exit_code;
 }
 
-gint
+static gint
 execute_command(const VC_RECORD * vc, gchar ** std_out, gchar ** std_err, const gchar * filename,
 		gint cmd, GSList * list, const gchar * message)
 {
@@ -753,8 +753,6 @@ vclog_file_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointe
 
 	doc = document_get_current();
 	g_return_if_fail(doc != NULL && doc->file_name != NULL);
-
-	ui_set_statusbar(TRUE, doc->file_name);
 
 	vc = find_vc(doc->file_name);
 	g_return_if_fail(vc);
@@ -1196,7 +1194,7 @@ get_diff_color(G_GNUC_UNUSED GeanyDocument * doc, gint style)
 #define GLADE_HOOKUP_OBJECT_NO_REF(component,widget,name) \
   g_object_set_data (G_OBJECT (component), name, widget)
 
-GtkWidget *
+static GtkWidget *
 create_commitDialog(void)
 {
 	GtkWidget *commitDialog;
