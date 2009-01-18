@@ -451,7 +451,6 @@ gboolean speller_is_text(GeanyDocument *doc, gint pos)
 			break;
 		}
 		case SCLEX_BASH:
-		case SCLEX_OMS:
 		{
 			switch (style)
 			{
