@@ -26,6 +26,7 @@
 	fields[entry_number] = flag;
 
 
+#if 0
 static int get_entry_pos(char *str)
 {
 	int i;
@@ -37,7 +38,7 @@ static int get_entry_pos(char *str)
 	}
 	return -1;
 }
-
+#endif
 
 void insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata)
 {
