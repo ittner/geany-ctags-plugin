@@ -65,6 +65,16 @@ PLUGIN_SET_INFO(_("Lipsum"), _("Creating dummy text with Geany"), VERSION, _("Fr
 static GtkWidget *main_menu_item = NULL;
 
 
+/* Doing some basic keybinding stuff */
+enum
+{
+	LIPSUM_KB_INSERT,
+	COUNT_KB
+};
+
+PLUGIN_KEY_GROUP(geanylipsum, COUNT_KB);
+
+
 void
 insert_string(gchar *string)
 {
@@ -135,6 +145,11 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 
 }
 
+static void kblipsum_insert(G_GNUC_UNUSED guint key_id)
+{
+	lipsum_activated(NULL, NULL);
+}
+
 
 /* Called by Geany to initialize the plugin */
 void
@@ -154,7 +169,13 @@ plugin_init(G_GNUC_UNUSED GeanyData *data)
 			 G_CALLBACK(lipsum_activated), NULL);
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_lipsum);
 
+	/* init keybindins */
+
+	keybindings_set_item(plugin_key_group, LIPSUM_KB_INSERT, kblipsum_insert,
+		0, 0, "inster_lipsum", _("Insert Lipsum tex"), menu_lipsum);
+
 	main_menu_item = menu_lipsum;
+
 }
 
 /* Called by Geany before unloading the plugin. */
