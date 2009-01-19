@@ -83,7 +83,8 @@ plugins = [
 	Plugin('geanylatex',
 		 [ 'geanylatex/src/latexencodings.c', 'geanylatex/src/geanylatex.c',
 		   'geanylatex/src/letters.c', 'geanylatex/src/bibtex.c',
-		   'geanylatex/src/bibtexlabels.c' ],
+		   'geanylatex/src/bibtexlabels.c', 'geanylatex/src/reftex.c',
+		   'geanylatex/src/latexutils.c'],
 		 [ 'geanylatex' ], # include dirs
 		 '0.3dev'),
 	Plugin('geanylua',
