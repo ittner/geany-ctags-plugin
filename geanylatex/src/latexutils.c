@@ -64,26 +64,3 @@ const gchar *get_aux_file()
 	return NULL;
 }
 
-LaTeXLabel parseLine(const gchar *line)
-{
-	LaTeXLabel label;
-
-	gchar *t = NULL;
-	const gchar *x = NULL;
-	gint l = 0;
-
-	line += 10;
-	x = line;
-	t = strchr(line, '}');
-	if (t != NULL)
-	{
-		while (*x != '\0' && x < t && *x != '}')
-		{
-			l++;
-			x++;
-		}
-	}
-	label.label_name = g_strndup(line, l);
-
-	return label;
-}

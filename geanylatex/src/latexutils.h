@@ -22,11 +22,8 @@
 #define LATEXUTILS_H
 
 #include "geanylatex.h"
-#include "reftex.h"
 
 gchar **geanylatex_read_file_in_array(const gchar *filename);
-
-LaTeXLabel parseLine(const gchar *line);
 
 const gchar *get_aux_file();
 
