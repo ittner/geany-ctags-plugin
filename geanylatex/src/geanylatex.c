@@ -138,6 +138,7 @@ insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointe
 	GtkWidget *radio1 = NULL;
 	GtkWidget *radio2 = NULL;
 
+
 	dialog = gtk_dialog_new_with_buttons(_("Insert reference"),
 					     GTK_WINDOW(geany->main_widgets->window),
 					     GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
@@ -152,7 +153,8 @@ insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointe
 	gtk_table_set_row_spacings(GTK_TABLE(table), 6);
 
 	label_ref = gtk_label_new(_("Ref name:"));
-	textbox_ref = gtk_entry_new();
+	textbox_ref = gtk_combo_box_entry_new_text();
+	add_Labels(textbox_ref, get_aux_file());
 
 	gtk_misc_set_alignment(GTK_MISC(label_ref), 0, 0.5);
 
@@ -178,7 +180,7 @@ insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointe
 	{
 		gchar *ref_string = NULL;
 
-		ref_string = g_strdup(gtk_entry_get_text(GTK_ENTRY(textbox_ref)));
+		ref_string = g_strdup(gtk_combo_box_get_active_text(GTK_COMBO_BOX(textbox_ref)));
 
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio2)) == FALSE)
 		{

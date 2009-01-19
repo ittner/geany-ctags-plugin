@@ -42,6 +42,7 @@
 #include "letters.h"
 #include "latexencodings.h"
 #include "bibtex.h"
+#include "reftex.h"
 
 #ifdef HAVE_LOCALE_H
 # include <locale.h>

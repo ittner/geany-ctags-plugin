@@ -20,6 +20,7 @@
  */
 
 #include "bibtex.h"
+#include "reftex.h"
 
 #define set_status(entry_number, flag) \
 	fields[entry_number] = flag;
