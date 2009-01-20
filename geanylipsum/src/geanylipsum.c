@@ -63,7 +63,8 @@ PLUGIN_VERSION_CHECK(115)
 PLUGIN_SET_INFO(_("Lipsum"), _("Creating dummy text with Geany"), VERSION, _("Frank Lanitz <frank@frank.uvena.de>"));
 
 static GtkWidget *main_menu_item = NULL;
-
+static gchar *config_file = NULL;
+static gchar *lipsum = NULL;
 
 /* Doing some basic keybinding stuff */
 enum
@@ -89,7 +90,6 @@ insert_string(gchar *string)
 	}
 }
 
-/* Only inserts a default tet. So dialog is some kind of useless at the moment ;) */
 void
 lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gdata)
 {
@@ -136,7 +136,7 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 
 		gtk_widget_destroy(dialog);
 
-		insert_string(LOREMIPSUM);
+		insert_string(lipsum);
 	}
 	else
 	{
@@ -156,10 +156,26 @@ void
 plugin_init(G_GNUC_UNUSED GeanyData *data)
 {
 	GtkWidget *menu_lipsum = NULL;
+	GKeyFile *config = g_key_file_new();
 	GtkTooltips *tooltips = NULL;
 	tooltips = gtk_tooltips_new();
 
 	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
+
+	config_file = g_strconcat(geany->app->configdir,
+		G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
+		"geanylipsum", G_DIR_SEPARATOR_S, "lipsum.conf", NULL);
+
+	/* Initialising options from config file */
+	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
+	lipsum = g_key_file_get_string(config, "snippets", "lipsumtext", NULL);
+
+	/* Setting default value */
+	if (lipsum == NULL)
+	{
+		lipsum = g_strdup(LOREMIPSUM);
+	}
+	g_key_file_free(config);
 
 	menu_lipsum = gtk_image_menu_item_new_with_mnemonic(_("_Lipsum"));
 	gtk_tooltips_set_tip(tooltips, menu_lipsum,
@@ -170,7 +186,6 @@ plugin_init(G_GNUC_UNUSED GeanyData *data)
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_lipsum);
 
 	/* init keybindins */
-
 	keybindings_set_item(plugin_key_group, LIPSUM_KB_INSERT, kblipsum_insert,
 		0, 0, "inster_lipsum", _("Insert Lipsum tex"), menu_lipsum);
 
