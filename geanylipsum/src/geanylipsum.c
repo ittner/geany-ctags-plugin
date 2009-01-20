@@ -119,7 +119,7 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 	gtk_box_set_spacing(GTK_BOX(vbox), 10);
 
 	label = gtk_label_new(_("characters"));
-	spin = gtk_spin_button_new_with_range(1, 1800, 1);
+	spin = gtk_spin_button_new_with_range(1, 5000, 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin), 1500);
 
 	hbox = gtk_hbox_new(FALSE, 5);
@@ -141,8 +141,6 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 		/* Checking for length of string that should be inserted */
 		length = gtk_spin_button_get_value_as_int(
 			GTK_SPIN_BUTTON(spin));
-
-		gtk_widget_destroy(dialog);
 
 		/* Checking what we have */
 
@@ -168,11 +166,9 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 
 		if (missing > 0)
 			insert_string(g_strndup(lipsum, missing));
+
+		gtk_widget_destroy(dialog);
 	}
-
-	gtk_widget_destroy(dialog);
-
-
 }
 
 static void kblipsum_insert(G_GNUC_UNUSED guint key_id)
