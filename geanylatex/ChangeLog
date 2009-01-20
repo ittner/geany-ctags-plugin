@@ -1,3 +1,13 @@
+2009-01-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Improved reference dialog to offer labels based on aux file
+
+
+2008-11-17  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Added a submenu supporting inserting bibtex entries
+
+
 2008-11-14  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Applied a patch by Enrico which corrects some spelling

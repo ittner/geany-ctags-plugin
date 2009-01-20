@@ -9,7 +9,6 @@ for 0.3
     * Parsing of *.bib
     * Inserting of \cite
 * Adding support for diff. letter classes
-* Parsing of LaTeX-documents for better support of \ref{}
 * Replacing of environments
 
 for 0.4
@@ -23,5 +22,4 @@ for 0.4
 
 * Make plugin use customizahle templates
 * Code examples for very common problems
-* Some I18n work
 * Make special characters extensible through files
