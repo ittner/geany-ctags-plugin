@@ -66,6 +66,7 @@ static GtkWidget *main_menu_item = NULL;
 static gchar *config_file = NULL;
 static gchar *lipsum = NULL;
 
+
 /* Doing some basic keybinding stuff */
 enum
 {
@@ -74,6 +75,7 @@ enum
 };
 
 PLUGIN_KEY_GROUP(geanylipsum, COUNT_KB);
+
 
 
 void
@@ -89,6 +91,7 @@ insert_string(gchar *string)
 		sci_insert_text(doc->editor->sci, pos, string);
 	}
 }
+
 
 void
 lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gdata)
@@ -130,18 +133,45 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
 
+		int tmp = 0;
+		int x = 0;
+		int i = 0;
+		int missing = 0;
+
 		/* Checking for length of string that should be inserted */
 		length = gtk_spin_button_get_value_as_int(
 			GTK_SPIN_BUTTON(spin));
 
 		gtk_widget_destroy(dialog);
 
-		insert_string(lipsum);
+		/* Checking what we have */
+
+		tmp = strlen(lipsum);
+
+		if (tmp > length)
+		{
+			x = 0;
+			missing = length - (x * tmp);
+		}
+		else if (tmp == length)
+		{
+			x = 1;
+		}
+		else if (tmp > 0)
+		{
+			x = length / tmp;
+			missing = length - (x * tmp);
+		}
+
+		for (i = 0; i < x; i++)
+			insert_string(lipsum);
+
+		if (missing > 0)
+			insert_string(g_strndup(lipsum, missing));
 	}
-	else
-	{
-		gtk_widget_destroy(dialog);
-	}
+
+	gtk_widget_destroy(dialog);
+
 
 }
 
