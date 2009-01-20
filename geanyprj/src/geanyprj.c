@@ -53,8 +53,6 @@ reload_project()
 	gchar *dir;
 	gchar *proj;
 	GeanyDocument *doc;
-	GeanyProject *project = geany->app->project;
-
 
 	debug("%s\n", __FUNCTION__);
 
@@ -65,21 +63,14 @@ reload_project()
 	dir = g_path_get_dirname(doc->file_name);
 	proj = find_file_path(dir, ".geanyprj");
 
-	// This is not our project, close it as best as we can
-	if (project && project->type != PROJECT_TYPE)
-	{
-		debug("%s Closing unknown project type \n", __FUNCTION__);
-		xproject_close(TRUE);
-	}
-
 	if (!proj)
 	{
-		if (project)
+		if (g_current_project)
 			xproject_close(TRUE);
 		return;
 	}
 
-	if (!project)
+	if (!g_current_project)
 	{
 		xproject_open(proj);
 	}
@@ -129,7 +120,8 @@ PluginCallback plugin_callbacks[] = {
 	{NULL, NULL, FALSE, NULL}
 };
 
-static void locale_init(void)
+static void
+locale_init(void)
 {
 #ifdef ENABLE_NLS
 	gchar *locale_dir = NULL;
@@ -158,14 +150,8 @@ static void locale_init(void)
 void
 plugin_init(G_GNUC_UNUSED GeanyData * data)
 {
-	GtkWidget *prj =
-		ui_lookup_widget(GTK_WIDGET(geany->main_widgets->window), "menu_project1");
-
 	locale_init();
 	tools_menu_init();
-
-	gtk_widget_set_child_visible(prj, FALSE);
-	gtk_widget_set_size_request(prj, 0, 0);
 
 	xproject_init();
 	create_sidebar();
@@ -176,18 +162,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 void
 plugin_cleanup()
 {
-	GeanyProject *project = geany->app->project;
-	GtkWidget *prj =
-		ui_lookup_widget(GTK_WIDGET(geany->main_widgets->window), "menu_project1");
-	gtk_widget_set_child_visible(prj, TRUE);
-	gtk_widget_set_size_request(prj, -1, -1);
-
 	tools_menu_uninit();
-
-	if (project)
-	{
-		xproject_close(TRUE);
-	}
 
 	if (g_current_project)
 		geany_project_free(g_current_project);

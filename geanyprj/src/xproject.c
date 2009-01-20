@@ -63,20 +63,6 @@ xproject_close(gboolean cache)
 {
 	debug("%s\n", __FUNCTION__);
 
-	if (!geany->app->project)
-		return;
-
-	ui_set_statusbar(TRUE, _("Project \"%s\" closed."), geany->app->project->name);
-
-	g_free(geany->app->project->name);
-	g_free(geany->app->project->description);
-	g_free(geany->app->project->file_name);
-	g_free(geany->app->project->base_path);
-	g_free(geany->app->project->run_cmd);
-
-	g_free(geany->app->project);
-	geany->app->project = NULL;
-
 	if (!g_current_project)
 		return;
 
@@ -118,15 +104,6 @@ xproject_open(const gchar * path)
 		return;
 
 	ui_set_statusbar(TRUE, _("Project \"%s\" opened."), p->name);
-
-	geany->app->project = g_new0(struct GeanyProject, 1);
-	geany->app->project->type = PROJECT_TYPE;
-	geany->app->project->name = g_strdup(p->name);
-	geany->app->project->description = g_strdup(p->description);
-	geany->app->project->base_path = g_strdup(p->base_path);
-	geany->app->project->run_cmd = g_strdup(p->run_cmd);
-	geany->app->project->make_in_base_path = TRUE;
-
 	g_hash_table_foreach(p->tags, add_tag, NULL);
 
 	g_current_project = p;

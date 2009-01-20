@@ -158,8 +158,8 @@ build_properties_dialog(gboolean properties)
 		image = gtk_image_new_from_stock("gtk-open", GTK_ICON_SIZE_BUTTON);
 		gtk_container_add(GTK_CONTAINER(button), image);
 		bbox = ui_path_box_new(_("Choose Project Location"),
-					  GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-					  GTK_ENTRY(e->file_name));
+				       GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+				       GTK_ENTRY(e->file_name));
 		gtk_entry_set_text(GTK_ENTRY(e->file_name), dir);
 		ui_table_add_row(GTK_TABLE(table), 1, label, bbox, NULL);
 	}
@@ -174,7 +174,7 @@ build_properties_dialog(gboolean properties)
 			       "This can be a new path, or an existing directory tree. "
 			       "You can use paths relative to the project filename."), NULL);
 	bbox = ui_path_box_new(_("Choose Project Base Path"),
-				  GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(e->base_path));
+			       GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(e->base_path));
 	gtk_entry_set_text(GTK_ENTRY(e->base_path), dir);
 
 	ui_table_add_row(GTK_TABLE(table), 2, label, bbox, NULL);
@@ -309,7 +309,7 @@ on_delete_project(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer u
 		return;
 
 	if (dialogs_show_question("Do you really wish to delete current project:\n%s?",
-				     g_current_project->name))
+				  g_current_project->name))
 	{
 		path = utils_get_locale_from_utf8(g_current_project->path);
 		xproject_close(FALSE);
