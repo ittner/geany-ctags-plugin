@@ -1,123 +1,128 @@
 # Belarusian translations for geanyprj package.
-#: ../src/menu.c:178
+#
+#
+#: ../src/menu.c:182
 msgid ""
 msgstr ""
-"Project-Id-Version: geanyprj 0.1\n"
+"Project-Id-Version: geanyprj 0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-20 02:19+0300\n"
+"POT-Creation-Date: 2009-01-20 14:09+0200\n"
+"PO-Revision-Date: 2009-01-20 14:09+0200\n"
+"Last-Translator: yura <(null)>\n"
+"Language-Team: Belarusian <i18n@mova.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Language: Belarusian\n"
-"X-Poedit-Country: BELARUS\n"
-"X-Poedit-SourceCharset: utf-8\n"
 
-#: ../src/geanyprj.c:38 ../src/sidebar.c:458
+#: ../src/geanyprj.c:44 ../src/sidebar.c:462
 msgid "Project"
-msgstr ""
+msgstr "Праэкт"
 
-#: ../src/geanyprj.c:38
+#: ../src/geanyprj.c:44
 msgid "Alternative project support."
-msgstr ""
+msgstr "Альтэрнатыўная падтрымка праэкта"
 
-#: ../src/geanyprj.c:39
+#: ../src/geanyprj.c:45
 msgid "Yura Siamashka <yurand2@gmail.com>"
-msgstr ""
+msgstr "Юра Сямашка <yurand2@gmail.com>"
 
-#: ../src/menu.c:102
+#: ../src/menu.c:105
 msgid "Project Preferences"
-msgstr ""
+msgstr "Наладкі праэкта"
 
-#: ../src/menu.c:110 ../src/menu.c:395 ../src/sidebar.c:180
+#: ../src/menu.c:114 ../src/menu.c:397 ../src/sidebar.c:183
 msgid "New Project"
-msgstr ""
+msgstr "Новы Праэкт"
 
-#: ../src/menu.c:119
+#: ../src/menu.c:123
 msgid "C_reate"
-msgstr ""
+msgstr "Стварыць"
 
-#: ../src/menu.c:132
+#: ../src/menu.c:136
 msgid "Name:"
-msgstr ""
+msgstr "Імя:"
 
-#: ../src/menu.c:141
+#: ../src/menu.c:145
 msgid "Location:"
-msgstr ""
+msgstr "Лакацыя:"
 
-#: ../src/menu.c:156
+#: ../src/menu.c:160
 msgid "Choose Project Location"
-msgstr ""
+msgstr "Выбяры лакацыю праэкта"
 
-#: ../src/menu.c:164
+#: ../src/menu.c:168
 msgid "Base path:"
-msgstr ""
+msgstr "Базавы шлях:"
 
-#: ../src/menu.c:169
+#: ../src/menu.c:173
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
 "project filename."
 msgstr ""
+"Базавая тэчка да ўсіх файлаў складаючых праэкт. Можа быць новы або ўжо "
+"існуючы шлях. Вы можаце выкарыстоўваць шлях адносны шляха праектнага файла."
 
-#: ../src/menu.c:172
+#: ../src/menu.c:176
 msgid "Choose Project Base Path"
-msgstr ""
+msgstr "Выбяры базавы шлях праэкта"
 
-#: ../src/menu.c:179
+#: ../src/menu.c:183
 msgid "Generate file list on load"
-msgstr ""
+msgstr "Ствараць спіс файлаў пры загрузке"
 
-#: ../src/menu.c:181
+#: ../src/menu.c:185
 msgid ""
 "Automatically add files that match project type on project load automaticly. "
 "You can't manually add/remove files if you checked this option, since your "
 "modification will be lost on on next project load"
 msgstr ""
+"Аўтаматычна дадаваць падыходзячыя пад тып праэкту файлы. Вы не можаце "
+"дадаваць/выдаляць файлы з праекту, калі вы абралі гэту наладку таму, што "
+"вашы зьмяненьні будуць страчаны пры наступнай загрузке праэкта."
 
-#: ../src/menu.c:189
+#: ../src/menu.c:193
 msgid "Type:"
-msgstr ""
+msgstr "Тып:"
 
-#: ../src/menu.c:227
+#: ../src/menu.c:231
 #, c-format
 msgid "Project file \"%s\" already exists"
-msgstr ""
+msgstr "Файл праэкта \"%s\" ужо існуе"
 
-#: ../src/menu.c:383
+#: ../src/menu.c:385
 msgid "_Project"
-msgstr ""
+msgstr "Праэкт"
 
-#: ../src/menu.c:404 ../src/sidebar.c:189
+#: ../src/menu.c:406 ../src/sidebar.c:192
 msgid "Delete Project"
-msgstr ""
+msgstr "Выдаліць праэкт"
 
-#: ../src/menu.c:415 ../src/sidebar.c:202
+#: ../src/menu.c:417 ../src/sidebar.c:205
 msgid "Add File"
-msgstr ""
+msgstr "Дадаць файл"
 
-#: ../src/menu.c:426 ../src/sidebar.c:224
+#: ../src/menu.c:428 ../src/sidebar.c:227
 msgid "Preferences"
-msgstr ""
+msgstr "Наладкі"
 
-#: ../src/menu.c:437 ../src/sidebar.c:237
+#: ../src/menu.c:439 ../src/sidebar.c:240
 msgid "Find in Project"
-msgstr ""
+msgstr "Знайсьці і праэкце"
 
-#: ../src/sidebar.c:211
+#: ../src/sidebar.c:214
 msgid "Remove File"
-msgstr ""
+msgstr "Выдаліць файл"
 
-#: ../src/sidebar.c:248
+#: ../src/sidebar.c:251
 msgid "H_ide Sidebar"
-msgstr ""
+msgstr "Схаваць сайдбар"
 
-#: ../src/xproject.c:64
-#, c-format
-msgid "Project \"%s\" closed."
-msgstr ""
-
-#: ../src/xproject.c:115
+#: ../src/xproject.c:106
 #, c-format
 msgid "Project \"%s\" opened."
-msgstr ""
+msgstr "Праэкт \"%s\" адчынен."
+
+#~ msgid "Project \"%s\" closed."
+#~ msgstr "Праэкт \"%s\" зачынен."
