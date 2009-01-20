@@ -144,7 +144,7 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
  				}
  				else
  				{
- 					// write config to file
+ 					/* write config to file */
  					data = g_key_file_to_data(config, NULL, NULL);
  					utils_write_file(config_file, data);
 					g_free(data);
@@ -298,7 +298,7 @@ on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
 		}
 		else
 		{
-			// write config to file
+			/* write config to file */
 			gchar *data = g_key_file_to_data(config, NULL, NULL);
 			utils_write_file(config_file, data);
 			g_free(data);
@@ -383,7 +383,7 @@ void plugin_init(GeanyData G_GNUC_UNUSED *data)
 	config_file = g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
 		"geanysendmail", G_DIR_SEPARATOR_S, "mail.conf", NULL);
 
-	// Initialising options from config file
+	/* Initialising options from config file */
 	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 	mailer = g_key_file_get_string(config, "tools", "mailer", NULL);
 	address = g_key_file_get_string(config, "tools", "address", NULL);
@@ -400,7 +400,7 @@ void plugin_init(GeanyData G_GNUC_UNUSED *data)
 		show_icon();
 	}
 
-	// Build up menu entry
+	/* Build up menu entry */
 	menu_mail = gtk_menu_item_new_with_mnemonic(_("_Mail document"));
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_mail);
 	gtk_tooltips_set_tip(tooltips, menu_mail,
