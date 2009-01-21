@@ -201,7 +201,6 @@ def configure(conf):
 
 
 	svn_rev = conf_get_svn_rev()
-	conf.define('ENABLE_NLS', 1)
 	conf.define('REVISION', svn_rev, 1)
 
 	# write a config.h for each plugin
@@ -212,8 +211,13 @@ def configure(conf):
 				conf.define('USE_GTKSPELL', 1);
 			conf.define('VERSION', p.version, 1)
 			conf.define('PACKAGE', p.name, 1)
-			conf.define('GETTEXT_PACKAGE', p.name, 1)
 			conf.define('PREFIX', conf.env['PREFIX'], 1)
+			if os.path.exists(os.path.join(p.name, 'po')):
+				conf.define('GETTEXT_PACKAGE', p.name, 1)
+				conf.define('ENABLE_NLS', 1)
+			else:
+				conf.undefine('GETTEXT_PACKAGE')
+				conf.undefine('ENABLE_NLS')
 			conf.write_config_header(os.path.join(p.name, 'config.h'))
 
 	Utils.pprint('BLUE', 'Summary:')
@@ -252,10 +256,6 @@ def set_options(opt):
 			help='plugins which should not be built, ignored when --enable-plugins is set, same format as --enable-plugins' % \
 			{ '1' : plugins[0].name, '2' : plugins[1].name }, dest='skip_plugins')
 
-#~ future code
-#~ def error_handler(self, tsk):
-	#~ print "haha, %r failed" % tsk
-	#~ self.error = 0
 
 def build(bld):
 	for p in plugins:
@@ -275,16 +275,18 @@ def build(bld):
 		if p.name == 'geany-mini-script': tgt = 'gms'
 		else: tgt = p.name
 
-		obj					        = bld.new_task_gen('cc', 'shlib')
-		obj.source			        = p.sources
-		obj.includes				= p.includes
-		obj.env['shlib_PATTERN']    = '%s.so'
-		obj.target			        = tgt
-		obj.uselib		            = libs
-		obj.install_path			= '${LIBDIR}/geany'
-		# if we are compiling more than one plugin, allow some of to fail
-		#~ Runner.Parallel.error_handler = error_handler
+		bld.env['shlib_PATTERN']    = '%s.so'
 
+		bld.new_task_gen(
+			features		= 'cc cshlib',
+			source			= p.sources,
+			includes		= p.includes,
+			target			= tgt,
+			uselib			= libs,
+			install_path	= '${LIBDIR}/geany'
+		)
+
+		# TODO update waf and use new syntax
 		if os.path.exists(os.path.join(p.name, 'po')):
 			obj		    = bld.new_task_gen('intltool_po')
 			obj.podir   = os.path.join(p.name, 'po')
@@ -297,13 +299,14 @@ def build_lua(bld, p, libs):
 					'geanylua/glspi_doc.c', 'geanylua/glspi_kfile.c', 'geanylua/glspi_run.c',
 					'geanylua/glspi_sci.c', 'geanylua/gsdlg_lua.c' ]
 
-	obj					        = bld.new_task_gen('cc', 'shlib')
-	obj.source			        = lua_sources
-	obj.includes				= p.includes
-	obj.env['shlib_PATTERN']    = '%s.so'
-	obj.target			        = 'libgeanylua'
-	obj.uselib		            = libs
-	obj.install_path			= '${DATADIR}/geany/plugins/geanylua'
+	bld.new_task_gen(
+		features		= 'cc cshlib',
+		source			= lua_sources,
+		includes		= p.includes,
+		target			= 'libgeanylua',
+		uselib			= libs,
+		install_path	= '${DATADIR}/geany/plugins/geanylua'
+	)
 
 	# install docs
 	bld.install_files('${DATADIR}/doc/geany/plugins/geanylua', 'geanylua/docs/*.html')
@@ -316,11 +319,13 @@ def build_lua(bld, p, libs):
 
 
 def build_debug(bld, p, libs):
-	obj					        = bld.new_task_gen('cc', 'program')
-	obj.source			        = [ 'geanydebug/src/ttyhelper.c' ]
-	obj.includes				= p.includes
-	obj.target			        = 'geanydebug_ttyhelper'
-	obj.uselib		            = libs
+	bld.new_task_gen(
+		features	= 'cc cprogram',
+		source		= [ 'geanydebug/src/ttyhelper.c' ],
+		includes	= p.includes,
+		target		= 'geanydebug_ttyhelper',
+		uselib		= libs
+	)
 
 
 def init():
@@ -364,13 +369,15 @@ def shutdown():
 				pass
 
 
-
 # Simple function to execute a command and print its exit status
 def launch(command, status, success_color='GREEN'):
 	ret = 0
 	Utils.pprint(success_color, status)
 	try:
 		ret = subprocess.call(command.split())
+	except OSError, e:
+		ret = 1
+		print str(e), ":", command
 	except:
 		ret = 1
 
