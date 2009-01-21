@@ -96,7 +96,7 @@ plugins = [
 		 [ 'geanyprj/src/geanyprj.c', 'geanyprj/src/menu.c', 'geanyprj/src/project.c',
 		   'geanyprj/src/sidebar.c', 'geanyprj/src/utils.c', 'geanyprj/src/xproject.c' ],
 		 [ 'geanyprj', 'geanyprj/src' ], # include dirs
-		 '0.4'),
+		 '0.5'),
 	Plugin('geanyvc',
 		 [ 'geanyvc/geanyvc.c', 'geanyvc/utils.c', 'geanyvc/externdiff.c',
 		   'geanyvc/vc_git.c', 'geanyvc/vc_cvs.c', 'geanyvc/vc_svn.c',
@@ -151,16 +151,21 @@ def configure(conf):
 			pass
 		return '-1'
 
-	def conf_define_from_opt(define_name, opt_name, default_value, quote=1):
-		if opt_name:
-			if isinstance(opt_name, bool):
-				opt_name = 1
-			conf.define(define_name, opt_name, quote)
-		elif default_value:
-			conf.define(define_name, default_value, quote)
-
+	def set_lib_dir():
+		# use the libdir specified on command line
+		if Options.options.libdir:
+			conf.define('LIBDIR', Options.options.libdir, 1)
+		else:
+			# get Geany's libdir (this should be the default case for most users)
+			libdir = conf.check_cfg(package='geany', args='--variable=libdir')
+			if libdir:
+				conf.define('LIBDIR', libdir.strip(), 1)
+			else:
+				conf.define('LIBDIR', conf.env['PREFIX'] + '/lib', 1)
 
 	conf.check_tool('compiler_cc intltool')
+
+	set_lib_dir()
 
 	conf.check_cfg(package='gtk+-2.0', atleast_version='2.6.0', uselib_store='GTK',
 		mandatory=True, args='--cflags --libs')
@@ -194,13 +199,6 @@ def configure(conf):
 					if l[2]:
 						enabled_plugins.remove(p.name)
 
-	conf_define_from_opt('LIBDIR', Options.options.libdir, conf.env['PREFIX'] + '/lib')
-	# get and define Geany's libdir for use as plugin binary installation dir
-	libdir = conf.check_cfg(package='geany', args='--variable=libdir')
-	if libdir:
-		conf.define('GEANY_LIBDIR', libdir.strip(), 1)
-	else:
-		conf.define('GEANY_LIBDIR', conf.env['LIBDIR'], 1)
 
 	svn_rev = conf_get_svn_rev()
 	conf.define('ENABLE_NLS', 1)
@@ -283,7 +281,7 @@ def build(bld):
 		obj.env['shlib_PATTERN']    = '%s.so'
 		obj.target			        = tgt
 		obj.uselib		            = libs
-		obj.install_path			= '${GEANY_LIBDIR}/geany'
+		obj.install_path			= '${LIBDIR}/geany'
 		# if we are compiling more than one plugin, allow some of to fail
 		#~ Runner.Parallel.error_handler = error_handler
 
