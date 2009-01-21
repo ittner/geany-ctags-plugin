@@ -1,3 +1,10 @@
+2009-01-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/gui.c:
+   Don't enable mnemonics for "Add ... to Dictionary" and "Ignore All"
+   menu items to prevent wrongly displayed labels.
+
+
 2009-01-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/scplugin.c, src/speller.c:

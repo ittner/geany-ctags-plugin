@@ -228,6 +228,21 @@ static void on_menu_addword_item_activate(GtkMenuItem *menuitem, gpointer gdata)
 }
 
 
+/* Create a @c GtkImageMenuItem with a stock image and a custom label.
+ * @param stock_id Stock image ID, e.g. @c GTK_STOCK_OPEN.
+ * @param label Menu item label.
+ * @return The new @c GtkImageMenuItem. */
+static GtkWidget *image_menu_item_new(const gchar *stock_id, const gchar *label)
+{
+	GtkWidget *item = gtk_image_menu_item_new_with_label(label);
+	GtkWidget *image = gtk_image_new_from_stock(stock_id, GTK_ICON_SIZE_MENU);
+
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
+	gtk_widget_show(image);
+	return item;
+}
+
+
 void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 							   GeanyDocument *doc, gpointer user_data)
 {
@@ -305,12 +320,12 @@ void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
 
 		label = g_strdup_printf(_("Add \"%s\" to Dictionary"), search_word);
-		menu_item = ui_image_menu_item_new(GTK_STOCK_ADD, label);
+		menu_item = image_menu_item_new(GTK_STOCK_ADD, label);
 		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
 		g_signal_connect((gpointer) menu_item, "activate",
 			G_CALLBACK(on_menu_addword_item_activate), GINT_TO_POINTER(0));
 
-		menu_item = ui_image_menu_item_new(GTK_STOCK_REMOVE, _("Ignore All"));
+		menu_item = image_menu_item_new(GTK_STOCK_REMOVE, _("Ignore All"));
 		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
 		g_signal_connect((gpointer) menu_item, "activate",
 			G_CALLBACK(on_menu_addword_item_activate), GINT_TO_POINTER(1));
