@@ -59,7 +59,7 @@ GeanyPlugin		*geany_plugin;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
-PLUGIN_VERSION_CHECK(115)
+PLUGIN_VERSION_CHECK(128)
 PLUGIN_SET_INFO(_("Lipsum"), _("Creating dummy text with Geany"), VERSION, _("Frank Lanitz <frank@frank.uvena.de>"));
 
 static GtkWidget *main_menu_item = NULL;
@@ -96,41 +96,14 @@ insert_string(gchar *string)
 void
 lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gdata)
 {
-	GtkWidget *dialog = NULL;
-	GtkWidget *vbox = NULL;
-	GtkWidget *label = NULL;
-	GtkWidget *hbox = NULL;
-	GtkWidget *spin = NULL;
-	GtkTooltips *tooltip = NULL;
 	GeanyDocument *doc = NULL;
-
-	int length = 0;
-
-	tooltip = gtk_tooltips_new();
+	/* Setting default length to 1500 characters */
+	gdouble value = 1500;
 
 	doc = document_get_current();
 
-	dialog = gtk_dialog_new_with_buttons(_("Lipsum-generator"),
- 					GTK_WINDOW(geany->main_widgets->window),
-					GTK_DIALOG_DESTROY_WITH_PARENT,
- 					GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
-	gtk_widget_set_name(dialog, "GeanyDialog");
-	gtk_box_set_spacing(GTK_BOX(vbox), 10);
-
-	label = gtk_label_new(_("characters"));
-	spin = gtk_spin_button_new_with_range(1, 5000, 1);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin), 1500);
-
-	hbox = gtk_hbox_new(FALSE, 5);
-	gtk_box_pack_start(GTK_BOX(hbox), spin, TRUE, TRUE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-
-	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 5);
-
-	gtk_widget_show_all(vbox);
-
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	if (dialogs_show_input_numeric(_("Lipsum-Generator"),
+		_("Enter the length of Lipsum text here"), &value, 1, 5000, 1))
 	{
 
 		int tmp = 0;
@@ -138,27 +111,23 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 		int i = 0;
 		int missing = 0;
 
-		/* Checking for length of string that should be inserted */
-		length = gtk_spin_button_get_value_as_int(
-			GTK_SPIN_BUTTON(spin));
-
 		/* Checking what we have */
 
 		tmp = strlen(lipsum);
 
-		if (tmp > length)
+		if (tmp > value)
 		{
 			x = 0;
-			missing = length - (x * tmp);
+			missing = value - (x * tmp);
 		}
-		else if (tmp == length)
+		else if (tmp == (int)value)
 		{
 			x = 1;
 		}
 		else if (tmp > 0)
 		{
-			x = length / tmp;
-			missing = length - (x * tmp);
+			x = value / tmp;
+			missing = value - (x * tmp);
 		}
 
 		for (i = 0; i < x; i++)
@@ -167,7 +136,6 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 		if (missing > 0)
 			insert_string(g_strndup(lipsum, missing));
 
-		gtk_widget_destroy(dialog);
 	}
 }
 
@@ -213,7 +181,7 @@ plugin_init(G_GNUC_UNUSED GeanyData *data)
 
 	/* init keybindins */
 	keybindings_set_item(plugin_key_group, LIPSUM_KB_INSERT, kblipsum_insert,
-		0, 0, "inster_lipsum", _("Insert Lipsum tex"), menu_lipsum);
+		0, 0, "inster_lipsum", _("Insert Lipsum text"), menu_lipsum);
 
 	main_menu_item = menu_lipsum;
 
