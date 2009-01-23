@@ -41,6 +41,10 @@
 #include "plugindata.h"		/* this defines the plugin API */
 #include "pluginmacros.h"	/* some useful macros to avoid typing geany_data so often */
 
+#ifdef HAVE_LOCALE_H
+# include <locale.h>
+#endif
+
 #include "geanydoc.h"
 
 /* These items are set by Geany before init() is called. */
@@ -52,9 +56,9 @@ static GtkWidget *keyb1;
 static GtkWidget *keyb2;
 
 
-/* Check that Geany supports plugin API version 71 or later, and check
+/* Check that Geany supports plugin API version 128 or later, and check
  * for binary compatibility. */
-PLUGIN_VERSION_CHECK(78)
+PLUGIN_VERSION_CHECK(128)
 /* All plugins must set name, description, version and author. */
 	PLUGIN_SET_INFO(_("Doc"), _("Call documentation viewer on current symbol."), VERSION,
 		_("Yura Siamshka <yurand2@gmail.com>"));
@@ -445,6 +449,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	gchar *kb_label1 = _("Document current word");
 	gchar *kb_label2 = _("Document interactive");
 
+	p_main->locale_init(LOCALEDIR, GETTEXT_PACKAGE);
 
 	config_init();
 
