@@ -77,6 +77,8 @@ to build up your command. It is possible to use one placeholder
 several times. Examples could be:
 	sylpheed --attach "%f" --compose "%r"
 	mutt -s "Sending '%b'" -a "%f" "%r"
+	"C:\Program Files\Mozilla Thunderbird\thunderbird.exe" \
+		-compose to="%r",subject="%b",attachment="%f"
 
 
 Development
