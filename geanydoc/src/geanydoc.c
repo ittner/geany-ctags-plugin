@@ -446,10 +446,12 @@ create_Configure(void)
 void
 plugin_init(G_GNUC_UNUSED GeanyData * data)
 {
-	gchar *kb_label1 = _("Document current word");
-	gchar *kb_label2 = _("Document interactive");
+	gchar *kb_label1;
+	gchar *kb_label2;
 
 	p_main->locale_init(LOCALEDIR, GETTEXT_PACKAGE);
+	kb_label1 = _("Document current word");
+	kb_label2 = _("Document interactive");
 
 	config_init();
 
