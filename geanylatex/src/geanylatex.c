@@ -24,7 +24,7 @@
 
 #include "geanylatex.h"
 
-PLUGIN_VERSION_CHECK(115)
+PLUGIN_VERSION_CHECK(130)
 
 PLUGIN_SET_INFO(_("LaTeX"), _("Plugin to provide better LaTeX support"),
 	"0.3dev","Frank Lanitz <frank@frank.uvena.de>")
@@ -833,6 +833,16 @@ static void kbwizard(G_GNUC_UNUSED guint key_id)
 {
 	insert_bibtex_entry(NULL, NULL);
 }*/
+
+
+void plugin_help()
+{
+	dialogs_show_msgbox(GTK_MESSAGE_INFO,
+		_("GeanyLaTeX is a plugin to improve support for LaTeX in Geany."
+		"\n\nPlease report all bugs or feature requests to one of the "
+		"authors."));
+}
+
 
 void
 plugin_init(G_GNUC_UNUSED GeanyData * data)
