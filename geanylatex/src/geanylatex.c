@@ -26,11 +26,11 @@
 
 PLUGIN_VERSION_CHECK(115)
 
-PLUGIN_SET_INFO(_("LaTeX"), _("Plugin to provide better LaTeX support"), "0.3dev",
-	    "Frank Lanitz <frank@frank.uvena.de>")
+PLUGIN_SET_INFO(_("LaTeX"), _("Plugin to provide better LaTeX support"),
+	"0.3dev","Frank Lanitz <frank@frank.uvena.de>")
 
-GeanyPlugin	*geany_plugin;
-GeanyData	*geany_data;
+GeanyPlugin		*geany_plugin;
+GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
@@ -79,14 +79,18 @@ get_latex_command(gint tab_index)
 	return char_array[tab_index].latex;
 }
 
+
 static void
-char_insert_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata)
+char_insert_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
+					  G_GNUC_UNUSED gpointer gdata)
 {
 	insert_string(get_latex_command(GPOINTER_TO_INT(gdata)));
 }
 
+
 static void
-insert_label_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata)
+insert_label_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
+					   G_GNUC_UNUSED gpointer gdata)
 {
 	GtkWidget *dialog = NULL;
 	GtkWidget *vbox = NULL;
@@ -121,14 +125,17 @@ insert_label_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpoin
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
 		gchar *label_str = NULL;
-		label_str = g_strconcat("\\label{", g_strdup(gtk_entry_get_text(GTK_ENTRY(textbox_label))), "}", NULL);
+		label_str = g_strconcat("\\label{",g_strdup(gtk_entry_get_text(
+			GTK_ENTRY(textbox_label))), "}", NULL);
 		insert_string(label_str);
 	}
 	gtk_widget_destroy(dialog);
 }
 
+
 static void
-insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata)
+insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
+					 G_GNUC_UNUSED gpointer gdata)
 {
 	GtkWidget *dialog;
 	GtkWidget *vbox = NULL;
@@ -180,7 +187,8 @@ insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointe
 	{
 		gchar *ref_string = NULL;
 
-		ref_string = g_strdup(gtk_combo_box_get_active_text(GTK_COMBO_BOX(textbox_ref)));
+		ref_string = g_strdup(gtk_combo_box_get_active_text(
+			GTK_COMBO_BOX(textbox_ref)));
 
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio2)) == FALSE)
 		{
@@ -201,14 +209,17 @@ insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointe
 	gtk_widget_destroy(dialog);
 }
 
-static void character_create_menu_item(GtkWidget *menu, const gchar *label, gint letter, SubMenuCallback callback)
+
+static void character_create_menu_item(GtkWidget *menu, const gchar *label,
+									   gint letter, SubMenuCallback callback)
 {
 	GtkWidget *tmp;
 
 	tmp = gtk_menu_item_new_with_label(label);
 	gtk_widget_show(tmp);
 	gtk_container_add(GTK_CONTAINER(menu), tmp);
-	g_signal_connect((gpointer) tmp, "activate", G_CALLBACK(callback), GINT_TO_POINTER(letter));
+	g_signal_connect((gpointer) tmp, "activate",
+		G_CALLBACK(callback), GINT_TO_POINTER(letter));
 }
 
 /* returns -1, if there are more than gint can work with or any other error
@@ -255,7 +266,9 @@ count_menu_cat_entries(CategoryName *tmp)
 	return i;
 }
 
-void sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template, CategoryName *category_name, SubMenuCallback callback_function)
+void sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template,
+				   CategoryName *category_name,
+				   SubMenuCallback callback_function)
 {
 	gint i;
 	gint j;
@@ -325,7 +338,9 @@ void sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template, Categor
 
 					if (sorted == TRUE)
 					{
-						create_sub_menu(sub_menu_cat[i][0], tmp, tmp_item, g_strconcat(menu_template[j].label, " ... ", menu_template[j + next_split_point-1].label, NULL));
+						create_sub_menu(sub_menu_cat[i][0], tmp, tmp_item,
+						g_strconcat(menu_template[j].label, " ... ",
+						menu_template[j + next_split_point-1].label, NULL));
 
 						sub_menu = tmp;
 					}
@@ -340,9 +355,12 @@ void sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template, Categor
 					}
 				}
 
-				/*  Sets the counter to keep in track if a new submenu needs to be build up */
+				/*  Sets the counter to keep in track if a new ,,
+				 *  submenu needs to be build up */
 				local_count = local_count + 1;
-				character_create_menu_item(sub_menu, g_strconcat(menu_template[j].label, "\t", menu_template[j].latex, NULL), j, callback_function);
+				character_create_menu_item(sub_menu, g_strconcat(
+					menu_template[j].label, "\t", menu_template[j].latex,
+					NULL), j, callback_function);
 			}
 		}
 	}
@@ -370,13 +388,14 @@ show_output(const gchar * output, const gchar * name, const gint local_enc)
 	if (output)
 	{
 		doc = document_new_file(name, ft, output);
-		document_set_encoding(doc, encodings_get_charset_from_index(latex_encodings[local_enc].geany_enc));
+		document_set_encoding(doc, encodings_get_charset_from_index
+			(latex_encodings[local_enc].geany_enc));
 	}
-
 }
 
 static void
-wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata)
+wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
+				 G_GNUC_UNUSED gpointer gdata)
 {
 	gint i;
 	GString *code = NULL;
@@ -428,11 +447,16 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 	documentclass_combobox = gtk_combo_box_new_text();
 	gtk_tooltips_set_tip(tooltip, documentclass_combobox,
 		_("Choose the kind of document you want to write"), NULL);
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 0, _("Book"));
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 1, _("Article"));
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 2, _("Report"));
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 3, _("Letter"));
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 4, _("Presentation"));
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 0,
+		_("Book"));
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 1,
+		_("Article"));
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 2,
+		_("Report"));
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 3,
+		_("Letter"));
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 4,
+		_("Presentation"));
 
 	gtk_combo_box_set_active(GTK_COMBO_BOX(documentclass_combobox), 0);
 
@@ -494,7 +518,9 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 	label_date = gtk_label_new(_("Date:"));
 	date_textbox = gtk_entry_new();
 	gtk_tooltips_set_tip(tooltip, date_textbox,
-		_("Sets the value of the \\date command inside header of your newly created LaTeX-document. Keeping it at \\today is a good decision if you don't need any fixed date."), NULL);
+		_("Sets the value of the \\date command inside header of your\
+		 newly created LaTeX-document. Keeping it at \\today is a good \
+		 decision if you don't need any fixed date."), NULL);
 	gtk_entry_set_text(GTK_ENTRY(date_textbox), "\\today");
 	gtk_misc_set_alignment(GTK_MISC(label_date), 0, 0.5);
 	gtk_table_attach_defaults(GTK_TABLE(table), label_date, 0, 1, 4, 5);
@@ -503,8 +529,8 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 	/*  Title of the new document */
 	label_title = gtk_label_new(_("Title:"));
 	title_textbox = gtk_entry_new();
-	gtk_tooltips_set_tip(tooltip, title_textbox, _("Sets the title of your new document."),
-			     NULL);
+	gtk_tooltips_set_tip(tooltip, title_textbox,
+		_("Sets the title of your new document."), NULL);
 	gtk_misc_set_alignment(GTK_MISC(label_title), 0, 0.5);
 	gtk_table_attach_defaults(GTK_TABLE(table), label_title, 0, 1, 5, 6);
 	gtk_table_attach_defaults(GTK_TABLE(table), title_textbox, 1, 2, 5, 6);
@@ -529,27 +555,29 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 
 	/*  Building the wizard-dialog and showing it */
 	dialog = gtk_dialog_new_with_buttons(_("LaTeX-Wizard"),
-					     GTK_WINDOW(geany->main_widgets->window),
-					     GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
-					     GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
-					     NULL);
+				GTK_WINDOW(geany->main_widgets->window),
+				GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
+				GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+				NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 10);
 	gtk_container_add(GTK_CONTAINER(vbox), table);
 
-	checkbox_KOMA = gtk_check_button_new_with_label(_("Use KOMA-script classes if possible"));
+	checkbox_KOMA = gtk_check_button_new_with_label(
+		_("Use KOMA-script classes if possible"));
 	gtk_tooltips_set_tip(tooltip, checkbox_KOMA,
-			     _
-			     ("Uses the KOMA-script classes by Markus Kohm.\nKeep in mind: To compile your document these classes have to be installed before."),
-			     NULL);
+		_("Uses the KOMA-script classes by Markus Kohm.\n"
+		"Keep in mind: To compile your document these classes"
+		"have to be installed before."), NULL);
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_KOMA), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_KOMA), KOMA_active);
 	gtk_box_pack_start(GTK_BOX(vbox), checkbox_KOMA, FALSE, FALSE, 5);
 
 	checkbox_draft = gtk_check_button_new_with_label(_("Use draft mode"));
 	gtk_tooltips_set_tip(tooltip, checkbox_draft,
-		_("Set the draft flag inside new created documents to get documents with a number of debugging helpers"), NULL);
+		_("Set the draft flag inside new created documents to get "
+		"documents with a number of debugging helpers"), NULL);
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_draft), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_draft), draft_active);
 	gtk_box_pack_start(GTK_BOX(vbox), checkbox_draft, FALSE, FALSE, 5);
@@ -558,15 +586,21 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
-		KOMA_active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_KOMA));
-		draft_active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_draft));
-		documentclass_int = gtk_combo_box_get_active(GTK_COMBO_BOX(documentclass_combobox));
-		encoding_int = gtk_combo_box_get_active(GTK_COMBO_BOX(encoding_combobox));
-		enc_latex_char = g_strconcat("\\usepackage[", latex_encodings[encoding_int].latex,"]{inputenc}\n", NULL);
+		KOMA_active = gtk_toggle_button_get_active(
+			GTK_TOGGLE_BUTTON(checkbox_KOMA));
+		draft_active = gtk_toggle_button_get_active(
+			GTK_TOGGLE_BUTTON(checkbox_draft));
+		documentclass_int = gtk_combo_box_get_active(
+			GTK_COMBO_BOX(documentclass_combobox));
+		encoding_int = gtk_combo_box_get_active(
+			GTK_COMBO_BOX(encoding_combobox));
+		enc_latex_char = g_strconcat("\\usepackage[",
+			latex_encodings[encoding_int].latex,"]{inputenc}\n", NULL);
 		author = g_strdup(gtk_entry_get_text(GTK_ENTRY(author_textbox)));
 		date = g_strdup(gtk_entry_get_text(GTK_ENTRY(date_textbox)));
 		title = g_strdup(gtk_entry_get_text(GTK_ENTRY(title_textbox)));
-		papersize_int = gtk_combo_box_get_active(GTK_COMBO_BOX(papersize_combobox));
+		papersize_int = gtk_combo_box_get_active(
+			GTK_COMBO_BOX(papersize_combobox));
 		switch (papersize_int)
 		{
 			case 0:
@@ -586,7 +620,8 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gd
 			}
 		}
 
-		fontsize_int = gtk_combo_box_get_active(GTK_COMBO_BOX(fontsize_combobox));
+		fontsize_int = gtk_combo_box_get_active(
+			GTK_COMBO_BOX(fontsize_combobox));
 		switch (fontsize_int)
 		{
 			case 0:
@@ -830,36 +865,43 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	menu_latex_menu_special_char = gtk_menu_item_new_with_mnemonic(_("Insert _Special Character"));
 	gtk_tooltips_set_tip(tooltips, menu_latex_menu_special_char,
 			     _("Helps to use some not very common letters and signs"), NULL);
-	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_menu_special_char);
+	gtk_container_add(GTK_CONTAINER(menu_latex_menu),
+		menu_latex_menu_special_char);
 
 	menu_latex_menu_special_char_submenu = gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_latex_menu_special_char), menu_latex_menu_special_char_submenu);
-	sub_menu_init(menu_latex_menu_special_char_submenu, char_array, cat_names, char_insert_activated);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_latex_menu_special_char),
+		menu_latex_menu_special_char_submenu);
+	sub_menu_init(menu_latex_menu_special_char_submenu, char_array, cat_names,
+		char_insert_activated);
 
 	menu_latex_ref = gtk_menu_item_new_with_mnemonic(_("Insert _Reference"));
 	gtk_tooltips_set_tip(tooltips, menu_latex_ref,
 		_("Inserting references to the document"), NULL);
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_ref);
-	g_signal_connect((gpointer) menu_latex_ref, "activate", G_CALLBACK(insert_ref_activated), NULL);
+	g_signal_connect((gpointer) menu_latex_ref, "activate",
+		G_CALLBACK(insert_ref_activated), NULL);
 
 	menu_latex_label = gtk_menu_item_new_with_mnemonic(_("Insert _Label"));
 	gtk_tooltips_set_tip(tooltips, menu_latex_label,
 	     _("Helps at inserting labels to a document"), NULL);
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_label);
-	g_signal_connect((gpointer) menu_latex_label, "activate", G_CALLBACK(insert_label_activated), NULL);
+	g_signal_connect((gpointer) menu_latex_label, "activate",
+		G_CALLBACK(insert_label_activated), NULL);
 
 	menu_latex_bibtex = gtk_menu_item_new_with_mnemonic(_("BibTeX"));
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_bibtex);
 
 	menu_latex_bibtex_submenu = gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_latex_bibtex), menu_latex_bibtex_submenu);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_latex_bibtex),
+		menu_latex_bibtex_submenu);
 
 	for (i = 0; i < N_TYPES; i++)
 	{
 		tmp = NULL;
 		tmp = gtk_menu_item_new_with_mnemonic(_(label_types[i]));
 		gtk_container_add(GTK_CONTAINER(menu_latex_bibtex_submenu), tmp);
-		g_signal_connect((gpointer) tmp, "activate", G_CALLBACK(insert_bibtex_entry), GINT_TO_POINTER(i));
+		g_signal_connect((gpointer) tmp, "activate",
+			G_CALLBACK(insert_bibtex_entry), GINT_TO_POINTER(i));
 	}
 
 	/* init keybindins */

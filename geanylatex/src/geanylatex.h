@@ -33,6 +33,7 @@
 #include "editor.h"
 #include "filetypes.h"
 #include "templates.h"
+#include "dialogs.h"
 #include "utils.h"
 #include "ui_utils.h"
 #include "keybindings.h"
@@ -45,6 +46,7 @@
 #include "latexutils.h"
 #include "reftex.h"
 
+#include <gtk/gtk.h>
 
 #ifdef HAVE_LOCALE_H
 # include <locale.h>

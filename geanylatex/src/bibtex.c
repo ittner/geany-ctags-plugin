@@ -40,7 +40,8 @@ static int get_entry_pos(char *str)
 }
 #endif
 
-void insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata)
+void insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem,
+						 G_GNUC_UNUSED gpointer gdata)
 {
 	int doctype = GPOINTER_TO_INT(gdata);
 	gboolean fields[N_ENTRIES];

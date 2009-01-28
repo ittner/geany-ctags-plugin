@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-19 22:05+0100\n"
+"POT-Creation-Date: 2009-01-28 22:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,205 +24,205 @@ msgstr ""
 msgid "Plugin to provide better LaTeX support"
 msgstr ""
 
-#: src/geanylatex.c:97
+#: src/geanylatex.c:101
 msgid "Insert label"
 msgstr ""
 
-#: src/geanylatex.c:110
+#: src/geanylatex.c:114
 msgid "Label name:"
 msgstr ""
 
-#: src/geanylatex.c:142
+#: src/geanylatex.c:149
 msgid "Insert reference"
 msgstr ""
 
-#: src/geanylatex.c:155
+#: src/geanylatex.c:162
 msgid "Ref name:"
 msgstr ""
 
-#: src/geanylatex.c:166
+#: src/geanylatex.c:173
 msgid "Standard Reference"
 msgstr ""
 
-#: src/geanylatex.c:171
+#: src/geanylatex.c:178
 msgid "Page Reference"
 msgstr ""
 
-#: src/geanylatex.c:336
+#: src/geanylatex.c:351
 msgid "More"
 msgstr ""
 
 #. Documentclass
-#: src/geanylatex.c:427
+#: src/geanylatex.c:446
 msgid "Documentclass:"
 msgstr ""
 
-#: src/geanylatex.c:430
+#: src/geanylatex.c:449
 msgid "Choose the kind of document you want to write"
 msgstr ""
 
-#: src/geanylatex.c:431 src/bibtexlabels.c:27
+#: src/geanylatex.c:451 src/bibtexlabels.c:27
 msgid "Book"
 msgstr ""
 
-#: src/geanylatex.c:432 src/bibtexlabels.c:26
+#: src/geanylatex.c:453 src/bibtexlabels.c:26
 msgid "Article"
 msgstr ""
 
-#: src/geanylatex.c:433
+#: src/geanylatex.c:455
 msgid "Report"
 msgstr ""
 
-#: src/geanylatex.c:434
+#: src/geanylatex.c:457
 msgid "Letter"
 msgstr ""
 
-#: src/geanylatex.c:435
+#: src/geanylatex.c:459
 msgid "Presentation"
 msgstr ""
 
 #. Encoding
-#: src/geanylatex.c:445
+#: src/geanylatex.c:469
 msgid "Encoding:"
 msgstr ""
 
-#: src/geanylatex.c:449
+#: src/geanylatex.c:473
 msgid "Set the encoding for your new document"
 msgstr ""
 
 #. fontsize
-#: src/geanylatex.c:464
+#: src/geanylatex.c:488
 msgid "Fontsize:"
 msgstr ""
 
-#: src/geanylatex.c:467
+#: src/geanylatex.c:491
 msgid "Set the default fontsize of your new document"
 msgstr ""
 
 #. Author
-#: src/geanylatex.c:480
+#: src/geanylatex.c:504
 msgid "Author:"
 msgstr ""
 
-#: src/geanylatex.c:483
+#: src/geanylatex.c:507
 msgid ""
 "Sets the value of the \\author command. In most cases this should be your "
 "name"
 msgstr ""
 
 #. Date
-#: src/geanylatex.c:494
+#: src/geanylatex.c:518
 msgid "Date:"
 msgstr ""
 
-#: src/geanylatex.c:497
+#: src/geanylatex.c:521
 msgid ""
-"Sets the value of the \\date command inside header of your newly created "
-"LaTeX-document. Keeping it at \\today is a good decision if you don't need "
-"any fixed date."
+"Sets the value of the \\date command inside header of your\t\t newly created "
+"LaTeX-document. Keeping it at \\today is a good \t\t decision if you don't "
+"need any fixed date."
 msgstr ""
 
 #. Title of the new document
-#: src/geanylatex.c:504
+#: src/geanylatex.c:530
 msgid "Title:"
 msgstr ""
 
-#: src/geanylatex.c:506
+#: src/geanylatex.c:533
 msgid "Sets the title of your new document."
 msgstr ""
 
 #. Papersize
-#: src/geanylatex.c:513
+#: src/geanylatex.c:539
 msgid "Paper size:"
 msgstr ""
 
-#: src/geanylatex.c:516
+#: src/geanylatex.c:542
 msgid "Choose the paper format for the newly created document"
 msgstr ""
 
 #. Building the wizard-dialog and showing it
-#: src/geanylatex.c:531
+#: src/geanylatex.c:557
 msgid "LaTeX-Wizard"
 msgstr ""
 
-#: src/geanylatex.c:541
+#: src/geanylatex.c:568
 msgid "Use KOMA-script classes if possible"
 msgstr ""
 
-#: src/geanylatex.c:544
+#: src/geanylatex.c:570
 msgid ""
 "Uses the KOMA-script classes by Markus Kohm.\n"
-"Keep in mind: To compile your document these classes have to be installed "
+"Keep in mind: To compile your document these classeshave to be installed "
 "before."
 msgstr ""
 
-#: src/geanylatex.c:550
+#: src/geanylatex.c:577
 msgid "Use draft mode"
 msgstr ""
 
-#: src/geanylatex.c:552
+#: src/geanylatex.c:579
 msgid ""
 "Set the draft flag inside new created documents to get documents with a "
 "number of debugging helpers"
 msgstr ""
 
-#: src/geanylatex.c:772
+#: src/geanylatex.c:807
 msgid "Dear Sir or Madame"
 msgstr ""
 
-#: src/geanylatex.c:773
+#: src/geanylatex.c:808
 msgid "With kind regards"
 msgstr ""
 
-#: src/geanylatex.c:815
+#: src/geanylatex.c:850
 msgid "_LaTeX"
 msgstr ""
 
-#: src/geanylatex.c:822
+#: src/geanylatex.c:857
 msgid "LaTeX-_Wizard"
 msgstr ""
 
-#: src/geanylatex.c:825
+#: src/geanylatex.c:860
 msgid "Starts a Wizard to easily create LaTeX-documents"
 msgstr ""
 
-#: src/geanylatex.c:830
+#: src/geanylatex.c:865
 msgid "Insert _Special Character"
 msgstr ""
 
-#: src/geanylatex.c:832
+#: src/geanylatex.c:867
 msgid "Helps to use some not very common letters and signs"
 msgstr ""
 
-#: src/geanylatex.c:839
+#: src/geanylatex.c:877
 msgid "Insert _Reference"
 msgstr ""
 
-#: src/geanylatex.c:841
+#: src/geanylatex.c:879
 msgid "Inserting references to the document"
 msgstr ""
 
-#: src/geanylatex.c:845
+#: src/geanylatex.c:884
 msgid "Insert _Label"
 msgstr ""
 
-#: src/geanylatex.c:847
+#: src/geanylatex.c:886
 msgid "Helps at inserting labels to a document"
 msgstr ""
 
-#: src/geanylatex.c:851
+#: src/geanylatex.c:891
 msgid "BibTeX"
 msgstr ""
 
-#: src/geanylatex.c:868
+#: src/geanylatex.c:910
 msgid "Run LaTeX-Wizard"
 msgstr ""
 
-#: src/geanylatex.c:870
+#: src/geanylatex.c:912
 msgid "Insert \\label"
 msgstr ""
 
-#: src/geanylatex.c:872
+#: src/geanylatex.c:914
 msgid "Insert \\ref"
 msgstr ""
 
@@ -262,15 +262,15 @@ msgstr ""
 msgid "ISO-8859-10 (Latin-10)"
 msgstr ""
 
-#: src/latexencodings.c:52
+#: src/latexencodings.c:53
 msgid "IBM 850 code page"
 msgstr ""
 
-#: src/latexencodings.c:53
+#: src/latexencodings.c:55
 msgid "IBM 852 code page"
 msgstr ""
 
-#: src/latexencodings.c:54 src/letters.c:41 src/bibtexlabels.c:35
+#: src/latexencodings.c:57 src/letters.c:41 src/bibtexlabels.c:35
 msgid "Misc"
 msgstr ""
 
