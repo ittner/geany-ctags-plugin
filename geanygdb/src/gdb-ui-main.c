@@ -505,6 +505,7 @@ load_click(GtkWidget * btn, gpointer user_data)
 							{
 								if (access(fn, X_OK) == 0)
 								{
+									gchar *base_path;
 									gchar *ldd =
 										g_strconcat("ldd ",
 											    fn,
@@ -545,6 +546,10 @@ load_click(GtkWidget * btn, gpointer user_data)
 										pipe_click(pipe_chk,
 											   NULL);
 									}
+									/* set working dir after loading */
+									base_path = g_path_get_dirname(fn);
+									gdbio_send_cmd("-environment-cd %s\n", base_path);
+									g_free(base_path);
 								}
 								else
 								{
