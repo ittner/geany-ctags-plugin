@@ -4,14 +4,15 @@
 	ROADMAP/TODO
 *********************
 
-for 0.3
-* Little bibTeX-Support
+for 0.4
+* Improving support for bibTeX
     * Parsing of *.bib
     * Inserting of \cite
+    * Dialog for inserting bibTeX entries
 * Adding support for diff. letter classes
 * Replacing of environments
 
-for 0.4
+for 0.5
 * Parsing document for »TOC«
     * Navigation throught document
     * "Graphical" support while using \ref, \pageref ...

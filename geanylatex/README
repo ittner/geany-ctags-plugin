@@ -1,14 +1,17 @@
-GeanyLaTeX Plugin
-(Version post 0.2)
+GeanyLaTeX Plugin v0.3
 
 
 About
 ------
 
 GeanyLaTeX is a little plugin to improve support of LaTeX at Geany. It
-implements a wizard to create new LaTeX documents in a fast and easy
-way. Also it implements a front end for add labels and refs as well as
-special characters to an open document.
+implements a couple of maybe useful functions:
+ * Wizard to create new LaTeX documents in a fast and easy way with a
+   bunch of templates available
+ * A front end for add labels \label{} and refs \ref{} and \pageref{}
+   with getting suggestion from aux file of document
+ * Inserting special characters through menu
+ * Help entering the right field for bibTeX entries by providing templates
 
 
 Requirements
@@ -24,7 +27,7 @@ installed from the sources, you should be ready to go. If you used a
 prepared package e.g. from your distribution you probably need to
 install an additional package, this might be called geany-dev or
 geany-devel. Please note that in order to compile and use this plugin,
-you need Geany 0.16 or later (Geany Plugin API v111 or higher).
+you need Geany 0.16 or later (Geany Plugin API v130 or higher).
 
 Furthermore you need, of course, a C compiler (that is supporting C99)
 and the Make tool. The GNU versions of these tools are recommended.

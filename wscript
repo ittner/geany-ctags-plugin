@@ -86,7 +86,7 @@ plugins = [
 		   'geanylatex/src/bibtexlabels.c', 'geanylatex/src/reftex.c',
 		   'geanylatex/src/latexutils.c'],
 		 [ 'geanylatex' ], # include dirs
-		 '0.3dev'),
+		 '0.3'),
 	Plugin('geanylua',
 		 [ 'geanylua/geanylua.c' ], # the other source files are listed in build_lua()
 		 [ 'geanylua' ], # include dirs
