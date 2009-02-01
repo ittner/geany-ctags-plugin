@@ -34,17 +34,6 @@
 # include <locale.h>
 #endif
 
-
-/* For your templates you can use:
- * {{TITLE_S}}: Start for title e.g <H1>
- * {{TITLE_E}}: End of title e.g. </H1>
- * {{T_CONTENT}}: Content for the title
- * {{SUBTITLE_S}}: Start of subtitle e.g. <H2>
- * {{SUBTITLE_S}}: End of subtitle e.g. </H2>
- * {{S_CONTENT}}: Content of subtitle
- * {{B_CONTENT}}: Content of Body
-*/
-
 #define LOREMIPSUM "\
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy\
 eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam\
@@ -59,7 +48,7 @@ GeanyPlugin		*geany_plugin;
 GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
-PLUGIN_VERSION_CHECK(128)
+PLUGIN_VERSION_CHECK(130)
 PLUGIN_SET_INFO(_("Lipsum"), _("Creating dummy text with Geany"), VERSION, _("Frank Lanitz <frank@frank.uvena.de>"));
 
 static GtkWidget *main_menu_item = NULL;
@@ -97,6 +86,7 @@ void
 lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gdata)
 {
 	GeanyDocument *doc = NULL;
+
 	/* Setting default length to 1500 characters */
 	gdouble value = 1500;
 
@@ -112,7 +102,6 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 		int missing = 0;
 
 		/* Checking what we have */
-
 		tmp = strlen(lipsum);
 
 		if (tmp > value)
@@ -130,15 +119,19 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 			missing = value - (x * tmp);
 		}
 
+		/* Insert lipsum snippet as often as needed ... */
 		for (i = 0; i < x; i++)
 			insert_string(lipsum);
 
+		/* .. and insert a little more if needed */
 		if (missing > 0)
 			insert_string(g_strndup(lipsum, missing));
 
 	}
 }
 
+
+/* Called when keystroke were pressed */
 static void kblipsum_insert(G_GNUC_UNUSED guint key_id)
 {
 	lipsum_activated(NULL, NULL);
@@ -160,7 +153,7 @@ plugin_init(G_GNUC_UNUSED GeanyData *data)
 		G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
 		"geanylipsum", G_DIR_SEPARATOR_S, "lipsum.conf", NULL);
 
-	/* Initialising options from config file */
+	/* Initialising options from config file  if there is any*/
 	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 	lipsum = g_key_file_get_string(config, "snippets", "lipsumtext", NULL);
 
@@ -171,6 +164,7 @@ plugin_init(G_GNUC_UNUSED GeanyData *data)
 	}
 	g_key_file_free(config);
 
+	/* Building menu entry */
 	menu_lipsum = gtk_image_menu_item_new_with_mnemonic(_("_Lipsum"));
 	gtk_tooltips_set_tip(tooltips, menu_lipsum,
 			     _("Include Pseudotext to your code"), NULL);
@@ -179,11 +173,11 @@ plugin_init(G_GNUC_UNUSED GeanyData *data)
 			 G_CALLBACK(lipsum_activated), NULL);
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_lipsum);
 
-	/* init keybindins */
+	main_menu_item = menu_lipsum;
+
+	/* init keybindings */
 	keybindings_set_item(plugin_key_group, LIPSUM_KB_INSERT, kblipsum_insert,
 		0, 0, "inster_lipsum", _("Insert Lipsum text"), menu_lipsum);
-
-	main_menu_item = menu_lipsum;
 
 }
 
@@ -192,5 +186,8 @@ void plugin_cleanup(void)
 {
 	/* remove the menu item added in plugin_init() */
 	gtk_widget_destroy(main_menu_item);
+
+	/* free lipsum snippet */
+	g_free(lipsum);
 }
 
