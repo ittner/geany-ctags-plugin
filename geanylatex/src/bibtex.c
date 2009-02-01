@@ -30,6 +30,7 @@
 static int get_entry_pos(char *str)
 {
 	int i;
+
 	if(str != NULL) {
 		for (i = 0; i < N_ENTRIES; i++) {
 			if (utils_str_casecmp(str, label_entry[i]) == 0)
@@ -132,7 +133,9 @@ void insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem,
 			output = g_strconcat(output, label_entry_keywords[i], "= {},\n", NULL);
 		}
 	}
+
 	output = g_strconcat(output, "}\n", NULL);
 	insert_string(output);
+
 	g_free(output);
 }

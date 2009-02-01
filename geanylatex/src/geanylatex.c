@@ -129,6 +129,7 @@ insert_label_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 			GTK_ENTRY(textbox_label))), "}", NULL);
 		insert_string(label_str);
 	}
+
 	gtk_widget_destroy(dialog);
 }
 
@@ -232,6 +233,7 @@ count_menu_entries(SubMenuTemplate *tmp, gint categorie)
 	/* TODO: Reset max value to stop before it's too late */
 	gint i;
 	gint count = 0;
+
 	if (categorie == -1)
 	{
 		for (i =1; tmp[i].label != NULL; i++)
@@ -809,6 +811,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 
 		output = g_string_free(code, FALSE);
 		show_output(output, NULL, encoding_int);
+		g_free(output);
 	}
 	gtk_widget_destroy(dialog);
 }
