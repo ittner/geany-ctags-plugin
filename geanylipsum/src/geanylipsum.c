@@ -49,7 +49,7 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 PLUGIN_VERSION_CHECK(130)
-PLUGIN_SET_INFO(_("Lipsum"), _("Creating dummy text with Geany"), VERSION, _("Frank Lanitz <frank@frank.uvena.de>"));
+PLUGIN_SET_INFO(_("Lipsum"), _("Creating dummy text with Geany"), VERSION, "Frank Lanitz <frank@frank.uvena.de>");
 
 static GtkWidget *main_menu_item = NULL;
 static gchar *config_file = NULL;
