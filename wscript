@@ -127,15 +127,15 @@ update-po:
 	@./waf --update-po
 
 install:
-	@if test -n "\$(DESTDIR)"; then \\
-		./waf install --destdir="\$(DESTDIR)"; \\
+	@if test -n "$(DESTDIR)"; then \\
+		./waf install --destdir="$(DESTDIR)"; \\
 	else \\
 		./waf install; \\
 	fi;
 
 uninstall:
-	@if test -n "\$(DESTDIR)"; then \\
-		./waf uninstall --destdir="\$(DESTDIR)"; \\
+	@if test -n "$(DESTDIR)"; then \\
+		./waf uninstall --destdir="$(DESTDIR)"; \\
 	else \\
 		./waf uninstall; \\
 	fi;
@@ -323,6 +323,12 @@ def build(bld):
 			uselib		= libs
 		)
 
+	def install_docs(bld, pname, files):
+		for file in files:
+			if os.path.exists(os.path.join(p.name, file)):
+				bld.install_files('${DATADIR}/doc/geany-plugins/%s' % pname, '%s/%s' % (pname, file))
+
+
 	# Build the plugins
 	bld.env['shlib_PATTERN']    = '%s.so'
 	for p in plugins:
@@ -357,6 +363,7 @@ def build(bld):
 				podir		= os.path.join(p.name, 'po'),
 				appname		= p.name
 			)
+		install_docs(bld, p.name, 'AUTHORS ChangeLog COPYING NEWS README THANKS TODO'.split())
 
 
 def init():
