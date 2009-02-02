@@ -41,6 +41,7 @@
 #include "keybindings.h"
 #include "utils.h"
 #include "ui_utils.h"
+#include "filetypes.h"
 
 #include "geanyfunctions.h"
 
@@ -279,6 +280,22 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	gtk_widget_show_all(vbox);
 
 	return vbox;
+}
+
+
+void plugin_help(void)
+{
+	gchar *readme = g_build_filename(DOCDIR, "README", NULL);
+
+	if (g_file_test(readme, G_FILE_TEST_EXISTS))
+	{
+		document_open_file(readme, FALSE, filetypes_index(GEANY_FILETYPES_REST), NULL);
+	}
+	else
+	{
+		utils_open_browser("http://plugins.geany.org/spellcheck/");
+	}
+	g_free(readme);
 }
 
 
