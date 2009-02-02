@@ -117,6 +117,35 @@ plugins = [
 		 '0.2')
 ]
 
+makefile_template = '''#!/usr/bin/make -f
+# Waf Makefile wrapper
+
+all:
+	@./waf build
+
+update-po:
+	@./waf --update-po
+
+install:
+	@if test -n "\$(DESTDIR)"; then \\
+		./waf install --destdir="\$(DESTDIR)"; \\
+	else \\
+		./waf install; \\
+	fi;
+
+uninstall:
+	@if test -n "\$(DESTDIR)"; then \\
+		./waf uninstall --destdir="\$(DESTDIR)"; \\
+	else \\
+		./waf uninstall; \\
+	fi;
+
+clean:
+	@./waf clean
+
+.PHONY: clean uninstall install all
+'''
+
 
 preproc.go_absolute = True
 preproc.standard_includes = []
@@ -232,6 +261,11 @@ def configure(conf):
 
 	conf.env.append_value('enabled_plugins', enabled_plugins)
 	conf.env.append_value('CCFLAGS', '-DHAVE_CONFIG_H'.split())
+
+	# write a simply Makefile
+	f = open('Makefile', 'w')
+	print >>f, makefile_template
+	f.close
 
 
 def set_options(opt):
