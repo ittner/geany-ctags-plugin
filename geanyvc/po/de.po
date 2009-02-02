@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geanyvc 0.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-07 20:48+0100\n"
-"PO-Revision-Date: 2008-11-07 20:53+0100\n"
-"Last-Translator: Enrico Tröger <enrico@xfce.org>\n"
+"POT-Creation-Date: 2009-01-27 23:32+0100\n"
+"PO-Revision-Date: 2009-01-27 23:37+0100\n"
+"Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -35,70 +35,70 @@ msgid ""
 msgstr ""
 "Yura Siamashka <yurand2@gmail.com>, Frank Lanitz <frank@frank.uvena.de>"
 
-#: ../geanyvc.c:404
+#: ../geanyvc.c:402
 msgid "Could not parse the output of command"
 msgstr "Kann die Ausgabe des Befehls nicht einlesen."
 
-#: ../geanyvc.c:464
+#: ../geanyvc.c:462
 #, c-format
 msgid "geanyvc: s_spawn_sync error: %s"
 msgstr "geanyvc: s_spawn_sync error: %s"
 
-#: ../geanyvc.c:600 ../geanyvc.c:611
+#: ../geanyvc.c:596 ../geanyvc.c:607
 #, c-format
 msgid "geanyvc: vcdiff_file_activated: Unable to rename '%s' to '%s'"
 msgstr "geanyvc: vcdiff_file_activated: Kann »%s« nicht in »%s« umbenennen."
 
-#: ../geanyvc.c:637 ../geanyvc.c:672 ../geanyvc.c:716
+#: ../geanyvc.c:633 ../geanyvc.c:668 ../geanyvc.c:712
 msgid "No changes were made."
 msgstr "Es wurden keine Änderungen vorgenommen."
 
-#: ../geanyvc.c:742
+#: ../geanyvc.c:738
 msgid "No history avaible"
 msgstr "Keine Historie verfügbar"
 
-#: ../geanyvc.c:907
+#: ../geanyvc.c:900
 #, c-format
 msgid "Do you really want to revert: %s?"
 msgstr "Möchten Sie wirklich »%s« zurücksetzen?"
 
-#: ../geanyvc.c:919
+#: ../geanyvc.c:908
 #, c-format
 msgid "Do you really want to add: %s?"
 msgstr "Möchten Sie wirklich »%s« hinzufügen?"
 
-#: ../geanyvc.c:928
+#: ../geanyvc.c:915
 #, c-format
 msgid "Do you really want to remove: %s?"
 msgstr "Möchten Sie wirklich »%s« entfernen?"
 
-#: ../geanyvc.c:953
+#: ../geanyvc.c:939
 msgid "Do you really want to update?"
 msgstr "Möchten Sie wirklich »%s« aktualisieren?"
 
-#: ../geanyvc.c:1235
+#: ../geanyvc.c:1218
 msgid "Commit"
 msgstr "Übertragen"
 
-#: ../geanyvc.c:1306
+#: ../geanyvc.c:1289
 msgid "<b>Commit message:</b>"
 msgstr "<b>Commitnachricht:</b>"
 
-#. Commit
-#: ../geanyvc.c:1319 ../geanyvc.c:2038
+#. Commit all changes
+#: ../geanyvc.c:1302 ../geanyvc.c:2109
 msgid "_Commit"
 msgstr "Ü_bertragen"
 
-#: ../geanyvc.c:1389
+#: ../geanyvc.c:1372
 msgid "Nothing to commit."
 msgstr "Nichts zum Übertragen."
 
-#: ../geanyvc.c:1435
+#: ../geanyvc.c:1418
 #, c-format
 msgid "Error initializing spell checking: %s"
 msgstr "Fehler beim Initialisieren der Rechtschreibprüfung: %s"
 
-#: ../geanyvc.c:1447
+#: ../geanyvc.c:1430
 #, c-format
 msgid ""
 "Error while setting up language for spellchecking. Please check "
@@ -107,15 +107,15 @@ msgstr ""
 "Fehler beim Auswählen der Sprache für die Rechtschreibprüfung. Bitte "
 "überprüfen Sie Ihre Konfiguration. Fehlermeldung: %s"
 
-#: ../geanyvc.c:1652
+#: ../geanyvc.c:1642
 msgid "Plugin configuration directory could not be created."
 msgstr "Plugin-Konfigurationsverzeichnis konnte nicht erstellt werden."
 
-#: ../geanyvc.c:1685
+#: ../geanyvc.c:1675
 msgid "Set Changed-flag for document tabs created by the plugin"
 msgstr "Markiere vom Plugin erstelle Dokumente als geändert"
 
-#: ../geanyvc.c:1688
+#: ../geanyvc.c:1678
 msgid ""
 "If this option is activated, every new by the VC-plugin created document tab "
 "will be marked as changed. Even this option is useful in some cases, it "
@@ -126,203 +126,222 @@ msgstr ""
 "der Speichern Dialog geöffnet wird. Auch wenn diese Option von Zeit zu Zeit "
 "sehr nützlich sein kann, kann Sie ab und an einfach nur stören."
 
-#: ../geanyvc.c:1696
+#: ../geanyvc.c:1686
 msgid "Confirm adding new files to a VCS"
 msgstr "Hinzufügen von Dateien zur Versionsverwaltung immer bestätigen"
 
-#: ../geanyvc.c:1699
+#: ../geanyvc.c:1689
 msgid "Shows a confirmation dialog on adding a new (created) file to VCS."
 msgstr ""
 "Zeigt einen Bestätigungsdialog wenn Dateien zu einem Versionskontrollsystem "
 "hinzugefügt werden sollen."
 
-#: ../geanyvc.c:1706
+#: ../geanyvc.c:1696
 msgid "Maximize commit dialog"
 msgstr "Commit-Dialog maximieren"
 
-#: ../geanyvc.c:1707
+#: ../geanyvc.c:1697
 msgid "Show commit dialog maximize."
 msgstr "Commit-Dialog beim Anzeigen maximieren"
 
-#: ../geanyvc.c:1714
+#: ../geanyvc.c:1704
 msgid "Use external diff viewer"
 msgstr "Externes Diff-Programm benutzen"
 
-#: ../geanyvc.c:1716
+#: ../geanyvc.c:1706
 msgid "Use external diff viewer for file diff."
 msgstr "Externes Diff-Programm benutzen zum Vergleich von zwei Dateien."
 
-#: ../geanyvc.c:1722
+#: ../geanyvc.c:1712
 msgid "Enable CVS"
 msgstr "CVS aktivieren"
 
-#: ../geanyvc.c:1727
+#: ../geanyvc.c:1717
 msgid "Enable GIT"
 msgstr "GIT aktivieren"
 
-#: ../geanyvc.c:1732
+#: ../geanyvc.c:1722
 msgid "Enable SVN"
 msgstr "SVN aktivieren"
 
-#: ../geanyvc.c:1737
+#: ../geanyvc.c:1727
 msgid "Enable SVK"
 msgstr "SVK aktivieren"
 
-#: ../geanyvc.c:1742
+#: ../geanyvc.c:1732
 msgid "Enable Bazaar"
 msgstr "Bazaar aktivieren"
 
-#: ../geanyvc.c:1747
+#: ../geanyvc.c:1737
 msgid "Enable Mercurial"
 msgstr "Mercurial aktivieren"
 
-#: ../geanyvc.c:1753
+#: ../geanyvc.c:1743
 msgid "Spellcheck language"
 msgstr "Sprache"
 
-#: ../geanyvc.c:1914
-msgid "_VC"
-msgstr "_VC"
+#: ../geanyvc.c:1892
+msgid "Current _File"
+msgstr "_Aktuelle Datei"
 
-#. Single file
-#: ../geanyvc.c:1923
-msgid "Diff From Current File"
-msgstr "Diff von der aktuellen Datei"
+#. Diff of current file
+#. Diff of the current dir
+#. Complete diff of base directory
+#: ../geanyvc.c:1896 ../geanyvc.c:1971 ../geanyvc.c:2002
+msgid "_Diff"
+msgstr "_Unterscheide anzeigen"
 
-#: ../geanyvc.c:1926
+#: ../geanyvc.c:1899
 msgid "Make a diff from the current active file"
 msgstr "Erstellt ein Diff für die aktuelle Datei."
 
-#. Directory
-#: ../geanyvc.c:1932
-msgid "Diff From Current Directory"
-msgstr "Diff vom aktuellen Verzeichnis"
+#. Revert current file
+#: ../geanyvc.c:1905
+msgid "_Revert"
+msgstr "_Zurücksetzen"
 
-#: ../geanyvc.c:1935
-msgid "Make a diff from the directory of the current active file"
-msgstr "Erstellt ein Diff für das Verzeichnis der aktuellen Datei."
-
-#. Base directory
-#: ../geanyvc.c:1941
-msgid "Diff From Base Directory"
-msgstr "Diff vom Grundverzeichnis"
-
-#: ../geanyvc.c:1944
-msgid "Make a diff from the top VC directory"
-msgstr "Erstellt ein Diff für die gesamte Arbeitskopie"
-
-#. Blame for current file
-#: ../geanyvc.c:1952
-msgid "Blame From Current File"
-msgstr "Blame von aktueller Datei"
-
-#: ../geanyvc.c:1955
-msgid "Shows the changes made at one file per revision and author."
-msgstr "Zeigt alle Änderungen einer Datei nach Autor und Revision."
-
-#. Log
-#: ../geanyvc.c:1963
-msgid "Log Of Current File"
-msgstr "Historie der aktuellen Datei"
-
-#: ../geanyvc.c:1966
-msgid "Shows the log of the current file"
-msgstr "Zeigt die Versionshistorie der aktuellen Datei an."
-
-#: ../geanyvc.c:1971
-msgid "Log Of Current Directory"
-msgstr "Historie vom aktuellen Verzeichnis"
-
-#: ../geanyvc.c:1974
-msgid "Shows the log of the current directory"
-msgstr "Zeigt die Versionshistorie für das aktuelle Verzeichnis."
-
-#: ../geanyvc.c:1979
-msgid "Log Of Base Directory"
-msgstr "Historie vom aktuellen Grundverzeichnis"
-
-#: ../geanyvc.c:1982
-msgid "Shows the log of the top VC directory"
-msgstr "Zeigt die Versionsgeschichte für die gesamte Arbeitskopie"
-
-#. Status
-#: ../geanyvc.c:1990
-msgid "_Status"
-msgstr "_Status"
-
-#: ../geanyvc.c:1992
-msgid "Show status."
-msgstr "Zeigt den Status der Arbeitskopie."
-
-#. Revert file
-#: ../geanyvc.c:2000
-msgid "_Revert File"
-msgstr "Änderungen _verwerfen"
-
-#: ../geanyvc.c:2003
+#: ../geanyvc.c:1908
 msgid "Restore pristine working copy file (undo local edits)."
 msgstr ""
 "Stellt den ursprünglichen Zustand der Datei wieder her (verwirft lokale "
 "Änderungen)."
 
-#. Add file
-#: ../geanyvc.c:2011
-msgid "_Add File"
-msgstr "Datei _hinzufügen"
+#. Blame for current file
+#: ../geanyvc.c:1918
+msgid "_Blame"
+msgstr "Ä_nderungsverfolgung"
 
-#: ../geanyvc.c:2013
+#: ../geanyvc.c:1921
+msgid "Shows the changes made at one file per revision and author."
+msgstr "Zeigt alle Änderungen einer Datei nach Autor und Revision."
+
+#. History/log of current file
+#. History/log of the current dir
+#. Complete History/Log of base directory
+#: ../geanyvc.c:1929 ../geanyvc.c:1981 ../geanyvc.c:2015
+msgid "_History"
+msgstr "_Versionsgeschichte"
+
+#: ../geanyvc.c:1932
+msgid "Shows the log of the current file"
+msgstr "Zeigt die Versionshistorie der aktuellen Datei an."
+
+#. add current file
+#: ../geanyvc.c:1941
+msgid "_Add to Version Control"
+msgstr "Zur _Versionskontrolle hinzufügen"
+
+#: ../geanyvc.c:1943
 msgid "Add file to repository."
 msgstr "Fügt eine Datei zum Repositorium _hinzu."
 
-#. Remove file
-#: ../geanyvc.c:2019
-msgid "Remove File"
-msgstr "Datei entfernen"
+#. revert current file
+#: ../geanyvc.c:1949
+msgid "_Remove from Version Control"
+msgstr "Aus Versionskontrolle entfernen"
 
-#: ../geanyvc.c:2022
+#: ../geanyvc.c:1952
 msgid "Remove file from repository."
 msgstr "Entfernt eine Datei aus dem Repositorium."
 
-#. Update
-#: ../geanyvc.c:2030
-msgid "Update"
-msgstr "Aktualisieren"
+#: ../geanyvc.c:1968
+msgid "Current _Directory"
+msgstr "Aktueller _Dokumentenordner"
+
+#: ../geanyvc.c:1974
+msgid "Make a diff from the directory of the current active file"
+msgstr "Erstellt ein Diff für das Verzeichnis der aktuellen Datei."
+
+#: ../geanyvc.c:1984
+msgid "Shows the log of the current directory"
+msgstr "Zeigt die Versionshistorie für das aktuelle Verzeichnis."
+
+#: ../geanyvc.c:1998
+msgid "Current _Basedirectory"
+msgstr "Aktuelles _Basisverzeichnis"
+
+#: ../geanyvc.c:2005
+msgid "Make a diff from the top VC directory"
+msgstr "Erstellt ein Diff für die gesamte Arbeitskopie"
+
+#: ../geanyvc.c:2018
+msgid "Shows the log of the top VC directory"
+msgstr "Zeigt die Versionsgeschichte für die gesamte Arbeitskopie"
 
 #: ../geanyvc.c:2032
-msgid "Update from remote repositary."
-msgstr "Aus dem Repository aktualisieren"
-
-#: ../geanyvc.c:2040
-msgid "Commit changes."
-msgstr "Änderungen übertragen."
-
-#: ../geanyvc.c:2049
 msgid "Show diff of file"
 msgstr "Diff von der aktuellen Datei"
 
-#: ../geanyvc.c:2051
+#: ../geanyvc.c:2035
 msgid "Show diff of diretory"
 msgstr "Diff vom aktuellen Verzeichnis"
 
-#: ../geanyvc.c:2053
+#: ../geanyvc.c:2037
 msgid "Show diff of basedir"
 msgstr "Diff vom Grundverzeichnis"
 
-#: ../geanyvc.c:2055
+#: ../geanyvc.c:2040
 msgid "Commit changes"
 msgstr "Änderungen übertragen"
 
-#: ../geanyvc.c:2057
+#: ../geanyvc.c:2042
 msgid "Show status"
 msgstr "Status der Arbeitskopie anzeigen"
 
-#: ../geanyvc.c:2059
+#: ../geanyvc.c:2044
 msgid "Revert changes"
 msgstr "Änderungen verwerfen"
 
-#: ../geanyvc.c:2061
+#: ../geanyvc.c:2046
 msgid "Update file"
 msgstr "Datei aktualisieren"
+
+#: ../geanyvc.c:2071
+msgid "_VC"
+msgstr "_VC"
+
+#. Status of basedir
+#: ../geanyvc.c:2091
+msgid "_Status"
+msgstr "_Status"
+
+#: ../geanyvc.c:2093
+msgid "Show status."
+msgstr "Zeigt den Status der Arbeitskopie."
+
+#. complete update
+#: ../geanyvc.c:2100
+msgid "Update"
+msgstr "Aktualisieren"
+
+#: ../geanyvc.c:2102
+msgid "Update from remote repositary."
+msgstr "Aus dem Repository aktualisieren"
+
+#: ../geanyvc.c:2111
+msgid "Commit changes."
+msgstr "Änderungen übertragen."
+
+#~ msgid "Diff From Current File"
+#~ msgstr "Diff von der aktuellen Datei"
+
+#~ msgid "Diff From Current Directory"
+#~ msgstr "Diff vom aktuellen Verzeichnis"
+
+#~ msgid "Diff From Base Directory"
+#~ msgstr "Diff vom Grundverzeichnis"
+
+#~ msgid "Blame From Current File"
+#~ msgstr "Blame von aktueller Datei"
+
+#~ msgid "Log Of Base Directory"
+#~ msgstr "Historie vom aktuellen Grundverzeichnis"
+
+#~ msgid "_Add File"
+#~ msgstr "Datei _hinzufügen"
+
+#~ msgid "Remove File"
+#~ msgstr "Datei entfernen"
 
 #~ msgid "Diff From Current Project"
 #~ msgstr "Diff vom aktuellen Projekt"

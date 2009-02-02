@@ -37,6 +37,7 @@ extern GeanyData *geany_data;
 static const gchar *BZR_CMD_DIFF_FILE[] = { "bzr", "diff", BASENAME, NULL };
 static const gchar *BZR_CMD_DIFF_DIR[] = { "bzr", "diff", ABS_DIRNAME, NULL };
 static const gchar *BZR_CMD_REVERT_FILE[] = { "bzr", "revert", BASENAME, NULL };
+static const gchar *BZR_CMD_REVERT_DIR[] = { "bzr", NULL };
 static const gchar *BZR_CMD_STATUS[] = { "bzr", "status", NULL };
 static const gchar *BZR_CMD_ADD[] = { "bzr", "add", BASENAME, NULL };
 static const gchar *BZR_CMD_REMOVE[] = { "bzr", "remove", BASENAME, NULL };
@@ -61,6 +62,11 @@ static const VC_COMMAND commands[] = {
 	{
 	 .startdir = VC_COMMAND_STARTDIR_FILE,
 	 .command = BZR_CMD_REVERT_FILE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = BZR_CMD_REVERT_DIR,
 	 .env = NULL,
 	 .function = NULL},
 	{

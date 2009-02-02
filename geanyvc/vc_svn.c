@@ -38,6 +38,7 @@ static const gchar *SVN_CMD_DIFF_FILE[] =
 	{ "svn", "diff", "--non-interactive", BASE_FILENAME, NULL };
 static const gchar *SVN_CMD_DIFF_DIR[] = { "svn", "diff", "--non-interactive", BASE_DIRNAME, NULL };
 static const gchar *SVN_CMD_REVERT_FILE[] = { "svn", "revert", BASENAME, NULL };
+static const gchar *SVN_CMD_REVERT_DIR[] = { "svn", "revert", BASE_DIRNAME, "-R", NULL };
 static const gchar *SVN_CMD_STATUS[] = { "svn", "status", NULL };
 static const gchar *SVN_CMD_ADD[] = { "svn", "add", BASENAME, NULL };
 static const gchar *SVN_CMD_REMOVE[] = { "svn", "rm", BASENAME, NULL };
@@ -46,7 +47,7 @@ static const gchar *SVN_CMD_LOG_DIR[] = { "svn", "log", ABS_DIRNAME, NULL };
 static const gchar *SVN_CMD_COMMIT[] =
 	{ "svn", "commit", "--non-interactive", "-m", MESSAGE, FILE_LIST, NULL };
 static const gchar *SVN_CMD_BLAME[] = { "svn", "blame", BASENAME, NULL };
-static const gchar *SVN_CMD_SHOW[] = { "svn", "cat", BASENAME, NULL };
+static const gchar *SVN_CMD_SHOW[] = { "svn", "cat", "-rBASE", BASENAME, NULL };
 static const gchar *SVN_CMD_UPDATE[] = { "svn", "up", NULL };
 
 static const VC_COMMAND commands[] = {
@@ -63,6 +64,11 @@ static const VC_COMMAND commands[] = {
 	{
 	 .startdir = VC_COMMAND_STARTDIR_FILE,
 	 .command = SVN_CMD_REVERT_FILE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = SVN_CMD_REVERT_DIR,
 	 .env = NULL,
 	 .function = NULL},
 	{

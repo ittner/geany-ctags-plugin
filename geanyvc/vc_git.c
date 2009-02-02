@@ -89,6 +89,7 @@ git_show(gchar ** std_out, gchar ** std_err, const gchar * filename,
 static const gchar *GIT_CMD_DIFF_FILE[] = { "git", "diff", "HEAD", "--", BASENAME, NULL };
 static const gchar *GIT_CMD_DIFF_DIR[] = { "git", "diff", "HEAD", NULL };
 static const gchar *GIT_CMD_REVERT_FILE[] = { "git", "checkout", "--", BASENAME, NULL };
+static const gchar *GIT_CMD_REVERT_DIR[] = { "git", NULL };
 static const gchar *GIT_CMD_STATUS[] = { "git", "status", NULL };
 static const gchar *GIT_CMD_ADD[] = { "git", "add", "--", BASENAME, NULL };
 static const gchar *GIT_CMD_REMOVE[] =
@@ -103,6 +104,7 @@ static const gchar *GIT_CMD_UPDATE[] = { "git", "pull", NULL };
 static const gchar *GIT_ENV_DIFF_FILE[] = { "PAGER=cat", NULL };
 static const gchar *GIT_ENV_DIFF_DIR[] = { "PAGER=cat", NULL };
 static const gchar *GIT_ENV_REVERT_FILE[] = { "PAGER=cat", NULL };
+static const gchar *GIT_ENV_REVERT_DIR[] = { "PAGER=cat", NULL };
 static const gchar *GIT_ENV_STATUS[] = { "PAGER=cat", NULL };
 static const gchar *GIT_ENV_ADD[] = { "PAGER=cat", NULL };
 static const gchar *GIT_ENV_REMOVE[] = { "PAGER=cat", NULL };
@@ -111,7 +113,7 @@ static const gchar *GIT_ENV_LOG_DIR[] = { "PAGER=cat", NULL };
 static const gchar *GIT_ENV_BLAME[] = { "PAGER=cat", NULL };
 static const gchar *GIT_ENV_UPDATE[] = { "PAGER=cat", NULL };
 
-static const VC_COMMAND commands[] = {
+static const VC_COMMAND commands[VC_COMMAND_COUNT] = {
 	{
 	 .startdir = VC_COMMAND_STARTDIR_FILE,
 	 .command = GIT_CMD_DIFF_FILE,
@@ -126,6 +128,11 @@ static const VC_COMMAND commands[] = {
 	 .startdir = VC_COMMAND_STARTDIR_FILE,
 	 .command = GIT_CMD_REVERT_FILE,
 	 .env = GIT_ENV_REVERT_FILE,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = GIT_CMD_REVERT_DIR,
+	 .env = GIT_ENV_REVERT_DIR,
 	 .function = NULL},
 	{
 	 .startdir = VC_COMMAND_STARTDIR_FILE,

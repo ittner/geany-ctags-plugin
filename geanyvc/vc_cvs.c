@@ -34,6 +34,7 @@
 static const gchar *CVS_CMD_DIFF_FILE[] = { "cvs", "diff", "-u", BASE_FILENAME, NULL };
 static const gchar *CVS_CMD_DIFF_DIR[] = { "cvs", "diff", "-u", NULL };
 static const gchar *CVS_CMD_REVERT_FILE[] = { "cvs", "update", "-C", BASE_FILENAME, NULL };
+static const gchar *CVS_CMD_REVERT_DIR[] = { "cvs", NULL };
 static const gchar *CVS_CMD_STATUS[] = { "cvs", "status", NULL };
 static const gchar *CVS_CMD_ADD[] = { "cvs", "add", BASE_FILENAME, NULL };
 static const gchar *CVS_CMD_REMOVE[] = { "cvs", "remove", BASE_FILENAME, NULL };
@@ -58,6 +59,11 @@ static const VC_COMMAND commands[] = {
 	{
 	 .startdir = VC_COMMAND_STARTDIR_FILE,
 	 .command = CVS_CMD_REVERT_FILE,
+	 .env = NULL,
+	 .function = NULL},
+	{
+	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .command = CVS_CMD_REVERT_DIR,
 	 .env = NULL,
 	 .function = NULL},
 	{

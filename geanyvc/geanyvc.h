@@ -27,6 +27,7 @@ enum
 	VC_COMMAND_DIFF_FILE,
 	VC_COMMAND_DIFF_DIR,
 	VC_COMMAND_REVERT_FILE,
+	VC_COMMAND_REVERT_DIR,
 	VC_COMMAND_STATUS,
 	VC_COMMAND_ADD,
 	VC_COMMAND_REMOVE,
@@ -51,9 +52,15 @@ enum
 	VC_COMMAND_STARTDIR_FILE
 };
 
-#define P_ABS_DIRNAME "*<?geanyvcDIRNAME>*"
-#define P_ABS_FILENAME "*<?geanyvcFILENAME>*"
-#define P_BASENAME "*<?geanyvcBASE_FILENAME>*"
+#define FLAG_RELOAD         (1<<0)
+#define FLAG_FORCE_ASK      (1<<1)
+#define FLAG_FILE           (1<<2)
+#define FLAG_DIR            (1<<3)
+#define FLAG_BASEDIR        (1<<4)
+
+#define P_ABS_DIRNAME       "*<?geanyvcDIRNAME>*"
+#define P_ABS_FILENAME      "*<?geanyvcFILENAME>*"
+#define P_BASENAME          "*<?geanyvcBASE_FILENAME>*"
 
 /* The addresses of these strings act as enums, their contents are not used. */
 

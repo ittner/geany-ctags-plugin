@@ -126,14 +126,14 @@ enum
 	VC_COMMIT,
 	VC_STATUS,
 	VC_UPDATE,
-	VC_REVERT,
+	VC_REVERT_FILE,
+	VC_REVERT_DIR,
+	VC_REVERT_BASEDIR,
 	COUNT_KB
 };
 
 PLUGIN_KEY_GROUP(geanyvc, COUNT_KB)
-
-GSList *
-get_commit_files_null(G_GNUC_UNUSED const gchar * dir)
+GSList *get_commit_files_null(G_GNUC_UNUSED const gchar * dir)
 {
 	return NULL;
 }
@@ -374,7 +374,8 @@ get_cmd(const gchar ** argv, const gchar * dir, const gchar * filename, GSList *
 
 /* name should be in UTF-8, and can have a path. */
 static void
-show_output(const gchar * std_output, const gchar * name, const gchar * force_encoding)
+show_output(const gchar * std_output, const gchar * name,
+		const gchar * force_encoding, GeanyFiletype *ftype)
 {
 	gint page;
 	GtkNotebook *book;
@@ -386,11 +387,13 @@ show_output(const gchar * std_output, const gchar * name, const gchar * force_en
 		doc = document_find_by_filename(name);
 		if (doc == NULL)
 		{
-			doc = document_new_file(name, NULL, std_output);
+			doc = document_new_file(name, ftype, std_output);
 		}
 		else
 		{
 			sci_set_text(doc->editor->sci, std_output);
+			if(ftype)
+				document_set_filetype(doc, ftype);
 			book = GTK_NOTEBOOK(geany->main_widgets->notebook);
 			page = gtk_notebook_page_num(book, GTK_WIDGET(doc->editor->sci));
 			gtk_notebook_set_current_page(book, page);
@@ -439,30 +442,29 @@ execute_custom_command(const gchar * dir, const gchar ** argv, const gchar ** en
 	{
 		return 0;
 	}
-
 	for (cur = largv; cur != NULL; cur = g_slist_next(cur))
 	{
 		argv = cur->data;
 		if (cur != g_slist_last(largv))
 		{
 			utils_spawn_sync(dir, cur->data, (gchar **) env,
-					    G_SPAWN_SEARCH_PATH | G_SPAWN_STDOUT_TO_DEV_NULL |
-					    G_SPAWN_STDERR_TO_DEV_NULL, NULL, NULL, NULL, NULL,
-					    &exit_code, &error);
+					 G_SPAWN_SEARCH_PATH | G_SPAWN_STDOUT_TO_DEV_NULL |
+					 G_SPAWN_STDERR_TO_DEV_NULL, NULL, NULL, NULL, NULL,
+					 &exit_code, &error);
 		}
 		else
 		{
 			utils_spawn_sync(dir, cur->data, (gchar **) env,
-					    G_SPAWN_SEARCH_PATH | (std_out ? 0 :
-								   G_SPAWN_STDOUT_TO_DEV_NULL) |
-					    (std_err ? 0 : G_SPAWN_STDERR_TO_DEV_NULL), NULL, NULL,
-					    std_out, std_err, &exit_code, &error);
+					 G_SPAWN_SEARCH_PATH | (std_out ? 0 :
+								G_SPAWN_STDOUT_TO_DEV_NULL) |
+					 (std_err ? 0 : G_SPAWN_STDERR_TO_DEV_NULL), NULL, NULL,
+					 std_out, std_err, &exit_code, &error);
 		}
 		if (error)
 		{
 			g_warning("geanyvc: s_spawn_sync error: %s", error->message);
 			ui_set_statusbar(FALSE, _("geanyvc: s_spawn_sync error: %s"),
-					    error->message);
+					 error->message);
 			g_error_free(error);
 		}
 
@@ -478,8 +480,7 @@ execute_custom_command(const gchar * dir, const gchar ** argv, const gchar ** en
 			if (!g_utf8_validate(*std_out, -1, NULL))
 			{
 				setptr(*std_out, encodings_convert_to_utf8(*std_out,
-									      strlen(*std_out),
-									      NULL));
+									   strlen(*std_out), NULL));
 			}
 			if (!NZV(*std_out))
 			{
@@ -497,8 +498,7 @@ execute_custom_command(const gchar * dir, const gchar ** argv, const gchar ** en
 			if (!g_utf8_validate(*std_err, -1, NULL))
 			{
 				setptr(*std_err, encodings_convert_to_utf8(*std_err,
-									      strlen(*std_err),
-									      NULL));
+									   strlen(*std_err), NULL));
 			}
 			if (!NZV(*std_err))
 			{
@@ -626,7 +626,7 @@ vcdiff_file_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpoint
 		else
 		{
 			name = g_strconcat(doc->file_name, ".vc.diff", NULL);
-			show_output(text, name, doc->encoding);
+			show_output(text, name, doc->encoding, NULL);
 			g_free(text);
 			g_free(name);
 		}
@@ -638,52 +638,14 @@ vcdiff_file_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpoint
 	}
 }
 
-/* Make a diff from the current directory */
-static void
-vcdiff_dir_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata)
-{
-	gchar *base_name = NULL;
-	gchar *text = NULL;
-	const VC_RECORD *vc;
-	GeanyDocument *doc;
-
-	doc = document_get_current();
-	g_return_if_fail(doc != NULL && doc->file_name != NULL);
-
-	if (doc->changed)
-	{
-		document_save_file(doc, FALSE);
-	}
-
-	base_name = g_path_get_dirname(doc->file_name);
-
-	vc = find_vc(base_name);
-	g_return_if_fail(vc);
-
-	execute_command(vc, &text, NULL, base_name, VC_COMMAND_DIFF_DIR, NULL, NULL);
-	if (text)
-	{
-		setptr(base_name, g_strconcat(base_name, ".vc.diff", NULL));
-		show_output(text, base_name, NULL);
-		g_free(text);
-	}
-	else
-	{
-		ui_set_statusbar(FALSE, _("No changes were made."));
-	}
-
-	g_free(base_name);
-}
 
 
 /* Callback if menu item for the base directory was activated */
 static void
-vcdiff_basedir_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata)
+vcdiff_dir_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, gint flags)
 {
 	gchar *text = NULL;
-	gchar *name;
-	gchar *basedir;
-	gchar *base_name;
+	gchar *dir;
 	const VC_RECORD *vc;
 	GeanyDocument *doc;
 
@@ -698,16 +660,24 @@ vcdiff_basedir_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpo
 	vc = find_vc(doc->file_name);
 	g_return_if_fail(vc);
 
-	basedir = vc->get_base_dir(doc->file_name);
-	g_return_if_fail(basedir);
+	if (flags & FLAG_BASEDIR)
+	{
+		dir = vc->get_base_dir(doc->file_name);
+	}
+	else if (flags & FLAG_DIR)
+	{
+		dir = g_path_get_dirname(doc->file_name);
+	}
+	else
+		return;
+	g_return_if_fail(dir);
 
-	execute_command(vc, &text, NULL, basedir, VC_COMMAND_DIFF_DIR, NULL, NULL);
+	execute_command(vc, &text, NULL, dir, VC_COMMAND_DIFF_DIR, NULL, NULL);
 	if (text)
 	{
-		base_name = g_path_get_dirname(doc->file_name);
-		name = g_strconcat(base_name, ".vc.diff", NULL);
-		show_output(text, name, NULL);
-		g_free(base_name);
+		gchar *name;
+		name = g_strconcat(dir, ".vc.diff", NULL);
+		show_output(text, name, doc->encoding, NULL);
 		g_free(text);
 		g_free(name);
 	}
@@ -715,7 +685,7 @@ vcdiff_basedir_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpo
 	{
 		ui_set_statusbar(FALSE, _("No changes were made."));
 	}
-	g_free(basedir);
+	g_free(dir);
 }
 
 static void
@@ -734,7 +704,7 @@ vcblame_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer g
 	execute_command(vc, &text, NULL, doc->file_name, VC_COMMAND_BLAME, NULL, NULL);
 	if (text)
 	{
-		show_output(text, "*VC-BLAME*", NULL);
+		show_output(text, "*VC-BLAME*", NULL, doc->file_type);
 		g_free(text);
 	}
 	else
@@ -760,7 +730,7 @@ vclog_file_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointe
 	execute_command(vc, &output, NULL, doc->file_name, VC_COMMAND_LOG_FILE, NULL, NULL);
 	if (output)
 	{
-		show_output(output, "*VC-LOG*", NULL);
+		show_output(output, "*VC-LOG*", NULL, NULL);
 		g_free(output);
 	}
 }
@@ -784,7 +754,7 @@ vclog_dir_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer
 	execute_command(vc, &text, NULL, base_name, VC_COMMAND_LOG_DIR, NULL, NULL);
 	if (text)
 	{
-		show_output(text, "*VC-LOG*", NULL);
+		show_output(text, "*VC-LOG*", NULL, NULL);
 		g_free(text);
 	}
 
@@ -811,7 +781,7 @@ vclog_basedir_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpoi
 	execute_command(vc, &text, NULL, basedir, VC_COMMAND_LOG_DIR, NULL, NULL);
 	if (text)
 	{
-		show_output(text, "*VC-LOG*", NULL);
+		show_output(text, "*VC-LOG*", NULL, NULL);
 		g_free(text);
 	}
 	g_free(basedir);
@@ -842,15 +812,39 @@ vcstatus_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 	execute_command(vc, &text, NULL, base_name, VC_COMMAND_STATUS, NULL, NULL);
 	if (text)
 	{
-		show_output(text, "*VC-STATUS*", NULL);
+		show_output(text, "*VC-STATUS*", NULL, NULL);
 		g_free(text);
 	}
 
 	g_free(base_name);
 }
 
+static void
+vcshow_file_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata)
+{
+	gchar *output = NULL;
+	const VC_RECORD *vc;
+	GeanyDocument *doc;
+
+	doc = document_get_current();
+	g_return_if_fail(doc != NULL && doc->file_name != NULL);
+
+	vc = find_vc(doc->file_name);
+	g_return_if_fail(vc);
+
+	execute_command(vc, &output, NULL, doc->file_name, VC_COMMAND_SHOW, NULL, NULL);
+	if (output)
+	{
+		gchar *name;
+		name = g_strconcat(doc->file_name, ".vc.orig", NULL);
+		show_output(output, name, doc->encoding, doc->file_type);
+		g_free(name);
+		g_free(output);
+	}
+}
+
 static gboolean
-command_with_question_activated(gchar ** text, gint cmd, const gchar * question, gboolean ask)
+command_with_question_activated(gchar ** text, gint cmd, const gchar * question, gint flags)
 {
 	GtkWidget *dialog;
 	gint result;
@@ -861,17 +855,27 @@ command_with_question_activated(gchar ** text, gint cmd, const gchar * question,
 	doc = document_get_current();
 	g_return_val_if_fail(doc != NULL && doc->file_name != NULL, FALSE);
 
+	dir = g_path_get_dirname(doc->file_name);
+	vc = find_vc(dir);
+	g_return_val_if_fail(vc, FALSE);
+
+	if (flags & FLAG_BASEDIR)
+	{
+		dir = vc->get_base_dir(dir);
+	}
+	
 	if (doc->changed)
 	{
 		document_save_file(doc, FALSE);
 	}
 
-	if (ask)
+	if ((flags & FLAG_FORCE_ASK) || set_add_confirmation)
 	{
 		dialog = gtk_message_dialog_new(GTK_WINDOW(geany->main_widgets->window),
 						GTK_DIALOG_DESTROY_WITH_PARENT,
 						GTK_MESSAGE_QUESTION,
-						GTK_BUTTONS_YES_NO, question, doc->file_name);
+						GTK_BUTTONS_YES_NO, question,
+						(flags & (FLAG_DIR|FLAG_BASEDIR) ? dir : doc->file_name));
 		result = gtk_dialog_run(GTK_DIALOG(dialog));
 		gtk_widget_destroy(dialog);
 	}
@@ -882,52 +886,49 @@ command_with_question_activated(gchar ** text, gint cmd, const gchar * question,
 
 	if (result == GTK_RESPONSE_YES)
 	{
-		dir = g_path_get_dirname(doc->file_name);
-		vc = find_vc(dir);
-		g_return_val_if_fail(vc, FALSE);
-
-		execute_command(vc, text, NULL, doc->file_name, cmd, NULL, NULL);
-		g_free(dir);
+		if (flags & FLAG_FILE)
+			execute_command(vc, text, NULL, doc->file_name, cmd, NULL, NULL);
+		if (flags & (FLAG_DIR|FLAG_BASEDIR))
+			execute_command(vc, text, NULL, dir, cmd, NULL, NULL);
+		if (flags & FLAG_RELOAD)
+			document_reload_file(doc, NULL);
 	}
-	return (result == GTK_RESPONSE_YES) ? TRUE : FALSE;
+	g_free(dir);
+	return (result == GTK_RESPONSE_YES);
 }
 
 static void
 vcrevert_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata)
 {
-	gboolean ret;
-	GeanyDocument *doc;
-
-	doc = document_get_current();
-	g_return_if_fail(doc != NULL && doc->file_name != NULL);
-
-	ret = command_with_question_activated(NULL, VC_COMMAND_REVERT_FILE,
-					      _("Do you really want to revert: %s?"), TRUE);
-	if (ret)
-	{
-		document_reload_file(doc, NULL);
-	}
+	command_with_question_activated(NULL, VC_COMMAND_REVERT_FILE,
+					_("Do you really want to revert: %s?"),
+					FLAG_RELOAD | FLAG_FILE | FLAG_FORCE_ASK);
 }
 
+static void
+vcrevert_dir_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, gint flags)
+{
+	command_with_question_activated(NULL, VC_COMMAND_REVERT_DIR,
+					_("Do you really want to revert: %s?"),
+					FLAG_RELOAD | flags | FLAG_FORCE_ASK);
+}
 
 static void
 vcadd_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata)
 {
 	command_with_question_activated(NULL, VC_COMMAND_ADD,
-					_("Do you really want to add: %s?"), set_add_confirmation);
+					_("Do you really want to add: %s?"), FLAG_FILE);
 }
 
 static void
 vcremove_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata)
 {
-	gboolean ret;
-
-	ret = command_with_question_activated(NULL, VC_COMMAND_REMOVE,
-					      _("Do you really want to remove: %s?"), TRUE);
-	if (ret)
+	if (command_with_question_activated(NULL, VC_COMMAND_REMOVE,
+					    _("Do you really want to remove: %s?"),
+					    FLAG_FORCE_ASK | FLAG_FILE))
 	{
 		document_remove_page(gtk_notebook_get_current_page
-				    (GTK_NOTEBOOK(geany->main_widgets->notebook)));
+				     (GTK_NOTEBOOK(geany->main_widgets->notebook)));
 	}
 }
 
@@ -946,17 +947,14 @@ vcupdate_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 		document_save_file(doc, FALSE);
 	}
 
-	ret = command_with_question_activated(&text, VC_COMMAND_UPDATE,
-					      _("Do you really want to update?"),
-					      set_add_confirmation);
-	if (ret)
+	if (command_with_question_activated(&text, VC_COMMAND_UPDATE,
+					    _("Do you really want to update?"), FLAG_FILE))
 	{
 		document_reload_file(doc, NULL);
 
 		if (NZV(text))
-			show_output(text, "*VC-UPDATE*", NULL);
-		if (text)
-			g_free(text);
+			show_output(text, "*VC-UPDATE*", NULL, NULL);
+		g_free(text);
 	}
 }
 
@@ -1430,7 +1428,7 @@ vccommit_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 	if (speller == NULL)
 	{
 		ui_set_statusbar(FALSE, _("Error initializing spell checking: %s"),
-				    spellcheck_error->message);
+				 spellcheck_error->message);
 		g_error_free(spellcheck_error);
 		spellcheck_error = NULL;
 	}
@@ -1440,9 +1438,9 @@ vccommit_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 		if (spellcheck_error != NULL)
 		{
 			ui_set_statusbar(TRUE,
-					    _
-					    ("Error while setting up language for spellchecking. Please check configuration. Error message was: %s"),
-					    spellcheck_error->message);
+					 _
+					 ("Error while setting up language for spellchecking. Please check configuration. Error message was: %s"),
+					 spellcheck_error->message);
 			g_error_free(spellcheck_error);
 			spellcheck_error = NULL;
 		}
@@ -1484,10 +1482,13 @@ static GtkWidget *menu_vc_log_dir = NULL;
 static GtkWidget *menu_vc_log_basedir = NULL;
 static GtkWidget *menu_vc_status = NULL;
 static GtkWidget *menu_vc_revert_file = NULL;
+static GtkWidget *menu_vc_revert_dir = NULL;
+static GtkWidget *menu_vc_revert_basedir = NULL;
 static GtkWidget *menu_vc_add_file = NULL;
 static GtkWidget *menu_vc_remove_file = NULL;
 static GtkWidget *menu_vc_update = NULL;
 static GtkWidget *menu_vc_commit = NULL;
+static GtkWidget *menu_vc_show_file = NULL;
 
 static void
 update_menu_items()
@@ -1527,46 +1528,69 @@ update_menu_items()
 	gtk_widget_set_sensitive(menu_vc_status, d_have_vc);
 
 	gtk_widget_set_sensitive(menu_vc_revert_file, f_have_vc);
+	gtk_widget_set_sensitive(menu_vc_revert_dir, f_have_vc);
+	gtk_widget_set_sensitive(menu_vc_revert_basedir, f_have_vc);
 
 	gtk_widget_set_sensitive(menu_vc_remove_file, f_have_vc);
 	gtk_widget_set_sensitive(menu_vc_add_file, d_have_vc && !f_have_vc);
 
 	gtk_widget_set_sensitive(menu_vc_update, d_have_vc);
 	gtk_widget_set_sensitive(menu_vc_commit, d_have_vc);
+	
+	gtk_widget_set_sensitive(menu_vc_show_file, f_have_vc);
 }
 
 
-static void kbdiff_file(G_GNUC_UNUSED guint key_id)
+static void
+kbdiff_file(G_GNUC_UNUSED guint key_id)
 {
 	vcdiff_file_activated(NULL, NULL);
 }
 
-static void kbdiff_dir(G_GNUC_UNUSED guint key_id)
+static void
+kbdiff_dir(G_GNUC_UNUSED guint key_id)
 {
-	vcdiff_dir_activated(NULL, NULL);
+	vcdiff_dir_activated(NULL, FLAG_DIR);
 }
 
-static void kbdiff_basedir(G_GNUC_UNUSED guint key_id)
+static void
+kbdiff_basedir(G_GNUC_UNUSED guint key_id)
 {
-	vcdiff_basedir_activated(NULL, NULL);
+	vcdiff_dir_activated(NULL, FLAG_BASEDIR);
 }
 
-static void kbstatus(G_GNUC_UNUSED guint key_id)
+static void
+kbstatus(G_GNUC_UNUSED guint key_id)
 {
 	vcstatus_activated(NULL, NULL);
 }
 
-static void kbcommit(G_GNUC_UNUSED guint key_id)
+static void
+kbcommit(G_GNUC_UNUSED guint key_id)
 {
 	vccommit_activated(NULL, NULL);
 }
 
-static void kbrevert(G_GNUC_UNUSED guint key_id)
+static void
+kbrevert_file(G_GNUC_UNUSED guint key_id)
 {
 	vcrevert_activated(NULL, NULL);
 }
 
-static void kbupdate(G_GNUC_UNUSED guint key_id)
+static void
+kbrevert_dir(G_GNUC_UNUSED guint key_id)
+{
+	vcrevert_dir_activated(NULL, FLAG_DIR);
+}
+
+static void
+kbrevert_basedir(G_GNUC_UNUSED guint key_id)
+{
+	vcrevert_dir_activated(NULL, FLAG_BASEDIR);
+}
+
+static void
+kbupdate(G_GNUC_UNUSED guint key_id)
 {
 	vcupdate_activated(NULL, NULL);
 }
@@ -1645,8 +1669,8 @@ on_configure_response(G_GNUC_UNUSED GtkDialog * dialog, gint response,
 		    && utils_mkdir(config_dir, TRUE) != 0)
 		{
 			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
-					       _
-					       ("Plugin configuration directory could not be created."));
+					    _
+					    ("Plugin configuration directory could not be created."));
 		}
 		else
 		{
@@ -1889,12 +1913,208 @@ registrate()
 	REGISTER_VC(HG, enable_hg);
 }
 
+static void
+do_current_file_menu(GtkWidget ** parent_menu, GtkTooltips ** tooltips)
+{
+	GtkWidget *cur_file_menu = NULL;
+	/* Menu which will hold the items in the current file menu */
+	cur_file_menu = gtk_menu_new();
+
+	*parent_menu = gtk_image_menu_item_new_with_mnemonic(_("Current _File"));
+	g_signal_connect((gpointer) * parent_menu, "activate", G_CALLBACK(update_menu_items), NULL);
+
+	/* Diff of current file */
+	menu_vc_diff_file = gtk_menu_item_new_with_mnemonic(_("_Diff"));
+	gtk_container_add(GTK_CONTAINER(cur_file_menu), menu_vc_diff_file);
+	gtk_tooltips_set_tip(*tooltips, menu_vc_diff_file,
+			     _("Make a diff from the current active file"), NULL);
+
+	g_signal_connect((gpointer) menu_vc_diff_file, "activate",
+			 G_CALLBACK(vcdiff_file_activated), NULL);
+
+	/* Revert current file */
+	menu_vc_revert_file = gtk_menu_item_new_with_mnemonic(_("_Revert"));
+	gtk_container_add(GTK_CONTAINER(cur_file_menu), menu_vc_revert_file);
+	gtk_tooltips_set_tip(*tooltips, menu_vc_revert_file,
+			     _("Restore pristine working copy file (undo local edits)."), NULL);
+
+	g_signal_connect((gpointer) menu_vc_revert_file, "activate",
+			 G_CALLBACK(vcrevert_activated), NULL);
+
+
+	gtk_container_add(GTK_CONTAINER(cur_file_menu), gtk_separator_menu_item_new());
+
+
+	/* Blame for current file */
+	menu_vc_blame = gtk_menu_item_new_with_mnemonic(_("_Blame"));
+	gtk_container_add(GTK_CONTAINER(cur_file_menu), menu_vc_blame);
+	gtk_tooltips_set_tip(*tooltips, menu_vc_blame,
+			     _("Shows the changes made at one file per revision and author."),
+			     NULL);
+
+	g_signal_connect((gpointer) menu_vc_blame, "activate", G_CALLBACK(vcblame_activated), NULL);
+
+	gtk_container_add(GTK_CONTAINER(cur_file_menu), gtk_separator_menu_item_new());
+
+	/* History/log of current file */
+	menu_vc_log_file = gtk_menu_item_new_with_mnemonic(_("_History"));
+	gtk_container_add(GTK_CONTAINER(cur_file_menu), menu_vc_log_file);
+	gtk_tooltips_set_tip(*tooltips, menu_vc_log_file,
+			     _("Shows the log of the current file"), NULL);
+
+	g_signal_connect((gpointer) menu_vc_log_file, "activate",
+			 G_CALLBACK(vclog_file_activated), NULL);
+
+	/* base version of the current file */
+	menu_vc_show_file = gtk_menu_item_new_with_mnemonic(_("_Original"));
+	gtk_container_add(GTK_CONTAINER(cur_file_menu), menu_vc_show_file);
+	gtk_tooltips_set_tip(*tooltips, menu_vc_log_file,
+			     _("Shows the orignal of the current file"), NULL);
+
+	g_signal_connect((gpointer) menu_vc_show_file, "activate",
+			 G_CALLBACK(vcshow_file_activated), NULL);
+
+
+	gtk_container_add(GTK_CONTAINER(cur_file_menu), gtk_separator_menu_item_new());
+
+	/* add current file */
+	menu_vc_add_file = gtk_menu_item_new_with_mnemonic(_("_Add to Version Control"));
+	gtk_container_add(GTK_CONTAINER(cur_file_menu), menu_vc_add_file);
+	gtk_tooltips_set_tip(*tooltips, menu_vc_add_file, _("Add file to repository."), NULL);
+
+	g_signal_connect((gpointer) menu_vc_add_file, "activate",
+			 G_CALLBACK(vcadd_activated), NULL);
+
+	/* remove current file */
+	menu_vc_remove_file = gtk_menu_item_new_with_mnemonic(_("_Remove from Version Control"));
+	gtk_container_add(GTK_CONTAINER(cur_file_menu), menu_vc_remove_file);
+	gtk_tooltips_set_tip(*tooltips, menu_vc_remove_file,
+			     _("Remove file from repository."), NULL);
+
+	g_signal_connect((gpointer) menu_vc_remove_file, "activate",
+			 G_CALLBACK(vcremove_activated), NULL);
+
+	/* connect to parent menu */
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(*parent_menu), cur_file_menu);
+}
+
+static void
+do_current_dir_menu(GtkWidget ** parent_menu, GtkTooltips ** tooltips)
+{
+	GtkWidget *cur_dir_menu = NULL;
+	/* Menu which will hold the items in the current file menu */
+	cur_dir_menu = gtk_menu_new();
+
+	*parent_menu = gtk_image_menu_item_new_with_mnemonic(_("Current _Directory"));
+	g_signal_connect((gpointer) * parent_menu, "activate", G_CALLBACK(update_menu_items), NULL);
+	/* Diff of the current dir */
+	menu_vc_diff_dir = gtk_menu_item_new_with_mnemonic(_("_Diff"));
+	gtk_container_add(GTK_CONTAINER(cur_dir_menu), menu_vc_diff_dir);
+	gtk_tooltips_set_tip(*tooltips, menu_vc_diff_dir,
+			     _("Make a diff from the directory of the current active file"), NULL);
+
+	g_signal_connect((gpointer) menu_vc_diff_dir, "activate",
+			 G_CALLBACK(vcdiff_dir_activated), (gpointer)FLAG_DIR);
+
+	/* Revert current dir */
+	menu_vc_revert_dir = gtk_menu_item_new_with_mnemonic(_("_Revert"));
+	gtk_container_add(GTK_CONTAINER(cur_dir_menu), menu_vc_revert_dir);
+	gtk_tooltips_set_tip(*tooltips, menu_vc_revert_dir,
+			     _("Restore original files in the current folder (undo local edits)."), NULL);
+
+	g_signal_connect((gpointer) menu_vc_revert_dir, "activate",
+			 G_CALLBACK(vcrevert_dir_activated), (gpointer)FLAG_DIR);
+
+	gtk_container_add(GTK_CONTAINER(cur_dir_menu), gtk_separator_menu_item_new());
+	/* History/log of the current dir */
+	menu_vc_log_dir = gtk_menu_item_new_with_mnemonic(_("_History"));
+	gtk_container_add(GTK_CONTAINER(cur_dir_menu), menu_vc_log_dir);
+	gtk_tooltips_set_tip(*tooltips, menu_vc_log_dir,
+			     _("Shows the log of the current directory"), NULL);
+
+
+	/* connect to parent menu */
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(*parent_menu), cur_dir_menu);
+}
+
+static void
+do_basedir_menu(GtkWidget ** parent_menu, GtkTooltips ** tooltips)
+{
+	GtkWidget *basedir_menu = NULL;
+	/* Menu which will hold the items in the current file menu */
+	basedir_menu = gtk_menu_new();
+
+	*parent_menu = gtk_image_menu_item_new_with_mnemonic(_("Current _Basedirectory"));
+	g_signal_connect((gpointer) * parent_menu, "activate", G_CALLBACK(update_menu_items), NULL);
+
+	/* Complete diff of base directory */
+	menu_vc_diff_basedir = gtk_menu_item_new_with_mnemonic(_("_Diff"));
+	gtk_container_add(GTK_CONTAINER(basedir_menu), menu_vc_diff_basedir);
+	gtk_tooltips_set_tip(*tooltips, menu_vc_diff_basedir,
+			     _("Make a diff from the top VC directory"), NULL);
+
+	g_signal_connect((gpointer) menu_vc_diff_basedir, "activate",
+			 G_CALLBACK(vcdiff_dir_activated), (gpointer)FLAG_BASEDIR);
+
+	/* Revert everything */
+	menu_vc_revert_basedir = gtk_menu_item_new_with_mnemonic(_("_Revert"));
+	gtk_container_add(GTK_CONTAINER(basedir_menu), menu_vc_revert_basedir);
+	gtk_tooltips_set_tip(*tooltips, menu_vc_revert_basedir,
+			     _("Revert any local edits."), NULL);
+
+	g_signal_connect((gpointer) menu_vc_revert_basedir, "activate",
+			 G_CALLBACK(vcrevert_dir_activated), (gpointer)FLAG_BASEDIR);
+
+	gtk_container_add(GTK_CONTAINER(basedir_menu), gtk_separator_menu_item_new());
+	g_signal_connect((gpointer) menu_vc_log_dir, "activate",
+			 G_CALLBACK(vclog_dir_activated), NULL);
+
+	/* Complete History/Log of base directory */
+	menu_vc_log_basedir = gtk_menu_item_new_with_mnemonic(_("_History"));
+	gtk_container_add(GTK_CONTAINER(basedir_menu), menu_vc_log_basedir);
+	gtk_tooltips_set_tip(*tooltips, menu_vc_log_basedir,
+			     _("Shows the log of the top VC directory"), NULL);
+
+	g_signal_connect((gpointer) menu_vc_log_basedir, "activate",
+			 G_CALLBACK(vclog_basedir_activated), NULL);
+
+	/* connect to parent menu */
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(*parent_menu), basedir_menu);
+}
+
+static void
+init_keybindings(void)
+{
+	/* init keybindins */
+	keybindings_set_item(plugin_key_group, VC_DIFF_FILE, 	kbdiff_file, 	0, 0,
+		"vc_show_diff_of_file", 	_("Show diff of file"), 	menu_vc_diff_file);
+	keybindings_set_item(plugin_key_group, VC_DIFF_DIR, 	kbdiff_dir,		0, 0,
+		"vc_show_diff_of_dir", 		_("Show diff of diretory"), menu_vc_diff_dir);
+	keybindings_set_item(plugin_key_group, VC_DIFF_BASEDIR, kbdiff_basedir, 0, 0,
+		"vc_show_diff_of_basedir", 	_("Show diff of basedir"), 	menu_vc_diff_basedir);
+	keybindings_set_item(plugin_key_group, VC_COMMIT, 		kbcommit, 		0, 0,
+		"vc_commit", 				_("Commit changes"), 		menu_vc_commit);
+	keybindings_set_item(plugin_key_group, VC_STATUS, 		kbstatus, 		0, 0,
+		"vc_status", 				_("Show status"), 			menu_vc_status);
+	keybindings_set_item(plugin_key_group, VC_REVERT_FILE, 	kbrevert_file, 		0, 0,
+		"vc_revert_file", 			_("Revert single file"), 	menu_vc_revert_file);
+	keybindings_set_item(plugin_key_group, VC_REVERT_DIR, 	kbrevert_dir, 	0, 0,
+		"vc_revert_dir", 			_("Revert whole directory"),menu_vc_revert_dir);
+	keybindings_set_item(plugin_key_group, VC_REVERT_BASEDIR, kbrevert_basedir, 0, 0,
+		"vc_revert_basedir", 		_("Revert whole tree"), 	menu_vc_revert_basedir);
+	keybindings_set_item(plugin_key_group, VC_UPDATE, kbupdate, 			0, 0,
+		"vc_update", 				_("Update file"), 			menu_vc_update);
+}
+
 /* Called by Geany to initialize the plugin */
 void
 plugin_init(G_GNUC_UNUSED GeanyData * data)
 {
 	GtkWidget *menu_vc = NULL;
 	GtkWidget *menu_vc_menu = NULL;
+	GtkWidget *menu_vc_file = NULL;
+	GtkWidget *menu_vc_dir = NULL;
+	GtkWidget *menu_vc_basedir = NULL;
 	GtkTooltips *tooltips = NULL;
 
 	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
@@ -1916,74 +2136,18 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	menu_vc_menu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_vc), menu_vc_menu);
 
-	// Single file
-	menu_vc_diff_file = gtk_menu_item_new_with_mnemonic(_("Diff From Current File"));
-	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_diff_file);
-	gtk_tooltips_set_tip(tooltips, menu_vc_diff_file,
-			     _("Make a diff from the current active file"), NULL);
-
-	g_signal_connect((gpointer) menu_vc_diff_file, "activate",
-			 G_CALLBACK(vcdiff_file_activated), NULL);
-
-	// Directory
-	menu_vc_diff_dir = gtk_menu_item_new_with_mnemonic(_("Diff From Current Directory"));
-	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_diff_dir);
-	gtk_tooltips_set_tip(tooltips, menu_vc_diff_dir,
-			     _("Make a diff from the directory of the current active file"), NULL);
-
-	g_signal_connect((gpointer) menu_vc_diff_dir, "activate",
-			 G_CALLBACK(vcdiff_dir_activated), NULL);
-
-	// Base directory
-	menu_vc_diff_basedir = gtk_menu_item_new_with_mnemonic(_("Diff From Base Directory"));
-	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_diff_basedir);
-	gtk_tooltips_set_tip(tooltips, menu_vc_diff_basedir,
-			     _("Make a diff from the top VC directory"), NULL);
-
-	g_signal_connect((gpointer) menu_vc_diff_basedir, "activate",
-			 G_CALLBACK(vcdiff_basedir_activated), NULL);
+	/* Create the current file Submenu */
+	do_current_file_menu(&menu_vc_file, &tooltips);
+	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_file);
+	/* Create the current directory Submenu */
+	do_current_dir_menu(&menu_vc_dir, &tooltips);
+	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_dir);
+	/* Create the current base directory Submenu */
+	do_basedir_menu(&menu_vc_basedir, &tooltips);
+	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_basedir);
 
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), gtk_separator_menu_item_new());
-
-	// Blame for current file
-	menu_vc_blame = gtk_menu_item_new_with_mnemonic(_("Blame From Current File"));
-	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_blame);
-	gtk_tooltips_set_tip(tooltips, menu_vc_blame,
-			     _("Shows the changes made at one file per revision and author."),
-			     NULL);
-
-	g_signal_connect((gpointer) menu_vc_blame, "activate", G_CALLBACK(vcblame_activated), NULL);
-
-	gtk_container_add(GTK_CONTAINER(menu_vc_menu), gtk_separator_menu_item_new());
-
-	// Log
-	menu_vc_log_file = gtk_menu_item_new_with_mnemonic(_("Log Of Current File"));
-	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_log_file);
-	gtk_tooltips_set_tip(tooltips, menu_vc_log_file,
-			     _("Shows the log of the current file"), NULL);
-
-	g_signal_connect((gpointer) menu_vc_log_file, "activate",
-			 G_CALLBACK(vclog_file_activated), NULL);
-
-	menu_vc_log_dir = gtk_menu_item_new_with_mnemonic(_("Log Of Current Directory"));
-	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_log_dir);
-	gtk_tooltips_set_tip(tooltips, menu_vc_log_dir,
-			     _("Shows the log of the current directory"), NULL);
-
-	g_signal_connect((gpointer) menu_vc_log_dir, "activate",
-			 G_CALLBACK(vclog_dir_activated), NULL);
-
-	menu_vc_log_basedir = gtk_menu_item_new_with_mnemonic(_("Log Of Base Directory"));
-	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_log_basedir);
-	gtk_tooltips_set_tip(tooltips, menu_vc_log_basedir,
-			     _("Shows the log of the top VC directory"), NULL);
-
-	g_signal_connect((gpointer) menu_vc_log_basedir, "activate",
-			 G_CALLBACK(vclog_basedir_activated), NULL);
-
-	gtk_container_add(GTK_CONTAINER(menu_vc_menu), gtk_separator_menu_item_new());
-
-	// Status
+	/* Status of basedir */
 	menu_vc_status = gtk_menu_item_new_with_mnemonic(_("_Status"));
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_status);
 	gtk_tooltips_set_tip(tooltips, menu_vc_status, _("Show status."), NULL);
@@ -1991,39 +2155,8 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	g_signal_connect((gpointer) menu_vc_status, "activate",
 			 G_CALLBACK(vcstatus_activated), NULL);
 
-	gtk_container_add(GTK_CONTAINER(menu_vc_menu), gtk_separator_menu_item_new());
 
-	// Revert file
-	menu_vc_revert_file = gtk_menu_item_new_with_mnemonic(_("_Revert File"));
-	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_revert_file);
-	gtk_tooltips_set_tip(tooltips, menu_vc_revert_file,
-			     _("Restore pristine working copy file (undo local edits)."), NULL);
-
-	g_signal_connect((gpointer) menu_vc_revert_file, "activate",
-			 G_CALLBACK(vcrevert_activated), NULL);
-
-	gtk_container_add(GTK_CONTAINER(menu_vc_menu), gtk_separator_menu_item_new());
-
-	// Add file
-	menu_vc_add_file = gtk_menu_item_new_with_mnemonic(_("_Add File"));
-	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_add_file);
-	gtk_tooltips_set_tip(tooltips, menu_vc_add_file, _("Add file to repository."), NULL);
-
-	g_signal_connect((gpointer) menu_vc_add_file, "activate",
-			 G_CALLBACK(vcadd_activated), NULL);
-
-	// Remove file
-	menu_vc_remove_file = gtk_menu_item_new_with_mnemonic(_("Remove File"));
-	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_remove_file);
-	gtk_tooltips_set_tip(tooltips, menu_vc_remove_file,
-			     _("Remove file from repository."), NULL);
-
-	g_signal_connect((gpointer) menu_vc_remove_file, "activate",
-			 G_CALLBACK(vcremove_activated), NULL);
-
-	gtk_container_add(GTK_CONTAINER(menu_vc_menu), gtk_separator_menu_item_new());
-
-	// Update
+	/* complete update */
 	menu_vc_update = gtk_menu_item_new_with_mnemonic(_("Update"));
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_update);
 	gtk_tooltips_set_tip(tooltips, menu_vc_update, _("Update from remote repositary."), NULL);
@@ -2031,7 +2164,8 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	g_signal_connect((gpointer) menu_vc_update, "activate",
 			 G_CALLBACK(vcupdate_activated), NULL);
 
-	// Commit
+
+	/* Commit all changes */
 	menu_vc_commit = gtk_menu_item_new_with_mnemonic(_("_Commit"));
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_commit);
 	gtk_tooltips_set_tip(tooltips, menu_vc_commit, _("Commit changes."), NULL);
@@ -2039,27 +2173,17 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	g_signal_connect((gpointer) menu_vc_commit, "activate",
 			 G_CALLBACK(vccommit_activated), NULL);
 
-	gtk_widget_show_all(menu_vc);
 
-	/* init keybindins */
-	keybindings_set_item(plugin_key_group, VC_DIFF_FILE, kbdiff_file,
-	0, 0, "vc_show_diff_of_file", _("Show diff of file"), menu_vc_diff_file);
-	keybindings_set_item(plugin_key_group, VC_DIFF_DIR, kbdiff_dir,
-	0, 0, "vc_show_diff_of_dir", _("Show diff of diretory"), menu_vc_diff_dir);
-	keybindings_set_item(plugin_key_group, VC_DIFF_BASEDIR, kbdiff_basedir,
-	0, 0, "vc_show_diff_of_basedir", _("Show diff of basedir"), menu_vc_diff_basedir);
-	keybindings_set_item(plugin_key_group, VC_COMMIT, kbcommit,
-	0, 0, "vc_commit", _("Commit changes"), menu_vc_commit);
-	keybindings_set_item(plugin_key_group, VC_STATUS, kbstatus,
-	0, 0, "vc_status", _("Show status") , menu_vc_status);
-	keybindings_set_item(plugin_key_group, VC_REVERT, kbrevert,
-	0, 0, "vc_revert", _("Revert changes"), menu_vc_revert_file);
-	keybindings_set_item(plugin_key_group, VC_UPDATE, kbupdate,
-	0, 0, "vc_update", _("Update file"), menu_vc_update);
+	gtk_widget_show_all(menu_vc);
+	gtk_widget_show_all(menu_vc_file);
+	gtk_widget_show_all(menu_vc_dir);
+	gtk_widget_show_all(menu_vc_basedir);
+
+	/* initialize keybindings */
+	init_keybindings();
 
 	plugin_fields->menu_item = menu_vc;
 	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
-
 }
 
 
