@@ -32,12 +32,12 @@ If you need additional checks for header files, functions in libraries or
 need to check for library packages (using pkg-config), please ask Enrico
 before committing changes. Thanks.
 
-Requires WAF 1.5 (SVN r4830 or later) and Python 2.4 (or later).
+Requires WAF 1.5.3 and Python 2.4 (or later).
 """
 
 
-import Build, Configure, Options, Runner, Utils, preproc
-import sys, os, subprocess
+import Build, Options, Utils, preproc
+import sys, os
 
 
 APPNAME = 'geany-plugins'
@@ -139,7 +139,7 @@ def configure(conf):
 		# try SVN
 		elif os.path.exists('.svn'):
 			try:
-				stdout = Utils.cmd_output('svn info --non-interactive', {'LANG' : 'C'})
+				stdout = Utils.cmd_output(cmd='svn info --non-interactive', env={'LANG' : 'C'})
 				lines = stdout.splitlines(True)
 				for line in lines:
 					if line.startswith('Last Changed Rev'):
@@ -226,12 +226,12 @@ def configure(conf):
 	print_message(conf, 'Using Geany version', geany_version)
 	if svn_rev != '-1':
 		print_message(conf, 'Compiling Subversion revision', svn_rev)
-		conf.env.append_value('CCFLAGS', '-g -O0') # -DGEANY_DISABLE_DEPRECATED')
+		conf.env.append_value('CCFLAGS', '-g -O0 -DDEBUG'.split()) # -DGEANY_DISABLE_DEPRECATED')
 
 	print_message(conf, 'Plugins to compile', ' '.join(enabled_plugins))
 
 	conf.env.append_value('enabled_plugins', enabled_plugins)
-	conf.env.append_value('CCFLAGS', '-DHAVE_CONFIG_H')
+	conf.env.append_value('CCFLAGS', '-DHAVE_CONFIG_H'.split())
 
 
 def set_options(opt):
@@ -247,17 +247,50 @@ def set_options(opt):
 	opt.add_option('--list-plugins', action='store_true', default=False,
 		help='list plugins which can be built', dest='list_plugins')
 
-	# enable-plugins should only be used for configure
-	if 'configure' in sys.argv:
-		opt.add_option('--enable-plugins', action='store', default='',
-			help='plugins to be built [plugins in CSV format, e.g. "%(1)s,%(2)s"]' % \
-			{ '1' : plugins[0].name, '2' : plugins[1].name }, dest='enable_plugins')
-		opt.add_option('--skip-plugins', action='store', default='',
-			help='plugins which should not be built, ignored when --enable-plugins is set, same format as --enable-plugins' % \
-			{ '1' : plugins[0].name, '2' : plugins[1].name }, dest='skip_plugins')
+	opt.add_option('--enable-plugins', action='store', default='',
+		help='plugins to be built [plugins in CSV format, e.g. "%(1)s,%(2)s"]' % \
+		{ '1' : plugins[0].name, '2' : plugins[1].name }, dest='enable_plugins')
+	opt.add_option('--skip-plugins', action='store', default='',
+		help='plugins which should not be built, ignored when --enable-plugins is set, same format as --enable-plugins' % \
+		{ '1' : plugins[0].name, '2' : plugins[1].name }, dest='skip_plugins')
 
 
 def build(bld):
+	def build_lua(bld, p, libs):
+		lua_sources = [ 'geanylua/glspi_init.c', 'geanylua/glspi_app.c', 'geanylua/glspi_dlg.c',
+						'geanylua/glspi_doc.c', 'geanylua/glspi_kfile.c', 'geanylua/glspi_run.c',
+						'geanylua/glspi_sci.c', 'geanylua/gsdlg_lua.c' ]
+
+		bld.new_task_gen(
+			features		= 'cc cshlib',
+			source			= lua_sources,
+			includes		= p.includes,
+			target			= 'libgeanylua',
+			uselib			= libs,
+			install_path	= '${DATADIR}/geany/plugins/geanylua'
+		)
+
+		# install docs
+		bld.install_files('${DATADIR}/doc/geany/plugins/geanylua', 'geanylua/docs/*.html')
+		# install examples (Waf doesn't support installing files recursively, yet)
+		bld.install_files('${DATADIR}/geany/plugins/geanylua/examples/dialogs', 'geanylua/examples/dialogs/*.lua')
+		bld.install_files('${DATADIR}/geany/plugins/geanylua/examples/edit', 'geanylua/examples/edit/*.lua')
+		bld.install_files('${DATADIR}/geany/plugins/geanylua/examples/info', 'geanylua/examples/info/*.lua')
+		bld.install_files('${DATADIR}/geany/plugins/geanylua/examples/scripting', 'geanylua/examples/scripting/*.lua')
+		bld.install_files('${DATADIR}/geany/plugins/geanylua/examples/work', 'geanylua/examples/work/*.lua')
+
+
+	def build_debug(bld, p, libs):
+		bld.new_task_gen(
+			features	= 'cc cprogram',
+			source		= [ 'geanydebug/src/ttyhelper.c' ],
+			includes	= p.includes,
+			target		= 'geanydebug_ttyhelper',
+			uselib		= libs
+		)
+
+	# Build the plugins
+	bld.env['shlib_PATTERN']    = '%s.so'
 	for p in plugins:
 		if not p.name in bld.env['enabled_plugins']:
 			continue;
@@ -275,8 +308,6 @@ def build(bld):
 		if p.name == 'geany-mini-script': tgt = 'gms'
 		else: tgt = p.name
 
-		bld.env['shlib_PATTERN']    = '%s.so'
-
 		bld.new_task_gen(
 			features		= 'cc cshlib',
 			source			= p.sources,
@@ -286,46 +317,12 @@ def build(bld):
 			install_path	= '${LIBDIR}/geany'
 		)
 
-		# TODO update waf and use new syntax
 		if os.path.exists(os.path.join(p.name, 'po')):
-			obj		    = bld.new_task_gen('intltool_po')
-			obj.podir   = os.path.join(p.name, 'po')
-			obj.appname = p.name
-
-
-
-def build_lua(bld, p, libs):
-	lua_sources = [ 'geanylua/glspi_init.c', 'geanylua/glspi_app.c', 'geanylua/glspi_dlg.c',
-					'geanylua/glspi_doc.c', 'geanylua/glspi_kfile.c', 'geanylua/glspi_run.c',
-					'geanylua/glspi_sci.c', 'geanylua/gsdlg_lua.c' ]
-
-	bld.new_task_gen(
-		features		= 'cc cshlib',
-		source			= lua_sources,
-		includes		= p.includes,
-		target			= 'libgeanylua',
-		uselib			= libs,
-		install_path	= '${DATADIR}/geany/plugins/geanylua'
-	)
-
-	# install docs
-	bld.install_files('${DATADIR}/doc/geany/plugins/geanylua', 'geanylua/docs/*.html')
-	# install examples (Waf doesn't support installing files recursively, yet)
-	bld.install_files('${DATADIR}/geany/plugins/geanylua/examples/dialogs', 'geanylua/examples/dialogs/*.lua')
-	bld.install_files('${DATADIR}/geany/plugins/geanylua/examples/edit', 'geanylua/examples/edit/*.lua')
-	bld.install_files('${DATADIR}/geany/plugins/geanylua/examples/info', 'geanylua/examples/info/*.lua')
-	bld.install_files('${DATADIR}/geany/plugins/geanylua/examples/scripting', 'geanylua/examples/scripting/*.lua')
-	bld.install_files('${DATADIR}/geany/plugins/geanylua/examples/work', 'geanylua/examples/work/*.lua')
-
-
-def build_debug(bld, p, libs):
-	bld.new_task_gen(
-		features	= 'cc cprogram',
-		source		= [ 'geanydebug/src/ttyhelper.c' ],
-		includes	= p.includes,
-		target		= 'geanydebug_ttyhelper',
-		uselib		= libs
-	)
+			bld.new_task_gen(
+				features	= 'intltool_po',
+				podir		= os.path.join(p.name, 'po'),
+				appname		= p.name
+			)
 
 
 def init():
@@ -354,7 +351,7 @@ def shutdown():
 						size_old = os.stat(p.name + '.pot').st_size
 					except:
 						size_old = 0
-					subprocess.call(['intltool-update', '--pot', 'g', p.name])
+					Utils.exec_command('intltool-update --pot -g %s' % p.name)
 					size_new = os.stat(p.name + '.pot').st_size
 					if size_new != size_old:
 						Utils.pprint('CYAN', 'Updated POT file for %s.' % p.name)
@@ -374,7 +371,7 @@ def launch(command, status, success_color='GREEN'):
 	ret = 0
 	Utils.pprint(success_color, status)
 	try:
-		ret = subprocess.call(command.split())
+		ret = Utils.exec_command(command)
 	except OSError, e:
 		ret = 1
 		print str(e), ":", command
