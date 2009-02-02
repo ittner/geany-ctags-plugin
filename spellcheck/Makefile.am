@@ -1,6 +1,8 @@
 
 SUBDIRS = src po
 
+DOCDIR = $(DESTDIR)$(docdir)
+
 EXTRA_DIST =				\
 	autogen.sh				\
 	makefile.win32			\
@@ -18,3 +20,12 @@ sign:
 
 html:
 	rst2html README index.html
+
+install-data-local:
+	$(mkinstalldirs) $(DOCDIR)
+	$(INSTALL_DATA) $(top_srcdir)/README $(DOCDIR)
+	$(INSTALL_DATA) $(top_srcdir)/ChangeLog $(DOCDIR)
+	$(INSTALL_DATA) $(top_srcdir)/NEWS $(DOCDIR)
+	$(INSTALL_DATA) $(top_srcdir)/COPYING $(DOCDIR)
+	$(INSTALL_DATA) $(top_srcdir)/AUTHORS $(DOCDIR)
+

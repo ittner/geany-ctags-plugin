@@ -1,3 +1,9 @@
+2009-02-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * configure.in, Makefile.am:
+   Install documentation files into the geany-plugins doc dir.
+
+
 2009-01-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/gui.c:

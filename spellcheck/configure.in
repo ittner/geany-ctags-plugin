@@ -48,8 +48,9 @@ if test "x$install_sh" = "x"; then
 fi
 
 # get the plugin installed at the correct location for Geany
-# TODO find a way to NOT override --libdir command line option if given
+# TODO find a way to NOT override --libdir/--docdir command line option if given
 libdir="`$PKG_CONFIG --variable=libdir geany`/geany"
+docdir="${datarootdir}/doc/geany-plugins/${PACKAGE}"
 
 
 AC_OUTPUT([
