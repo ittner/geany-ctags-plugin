@@ -241,6 +241,7 @@ def configure(conf):
 			conf.define('VERSION', p.version, 1)
 			conf.define('PACKAGE', p.name, 1)
 			conf.define('PREFIX', conf.env['PREFIX'], 1)
+			conf.define('DOCDIR', '%s/doc/geany-plugins/%s' % (conf.env['DATADIR'], p.name), 1)
 			if os.path.exists(os.path.join(p.name, 'po')):
 				conf.define('GETTEXT_PACKAGE', p.name, 1)
 				conf.define('ENABLE_NLS', 1)
