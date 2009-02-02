@@ -80,7 +80,7 @@ AC_HELP_STRING([--enable-sys-install],[install plugin for all users [[default=no
   SYS_INSTALL=yes
   PLUGIN_DEST_DIR="${prefix}/lib/geany"
   DATA_DEST_DIR="${prefix}/share/geany/plugins/${PACKAGE}"
-  DOC_DEST_DIR="${prefix}/share/doc/geany/plugins/${PACKAGE}"
+  DOC_DEST_DIR="${prefix}/share/doc/geany-plugins/${PACKAGE}"
  ],
  [
   SYS_INSTALL=no
@@ -114,7 +114,7 @@ case "${host_os}" in
     LIBEXT="so"
     USER_CMD="'make'"
   ;;
-esac  
+esac
 
 LIBRARY="libgeanylua"
 
