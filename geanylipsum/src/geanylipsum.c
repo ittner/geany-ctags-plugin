@@ -30,6 +30,7 @@
 #include "keybindings.h"
 #include "geanyfunctions.h"
 
+#include <string.h>
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
 #endif
