@@ -67,7 +67,7 @@ static const VC_COMMAND commands[] = {
 	 .env = NULL,
 	 .function = NULL},
 	{
-	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .startdir = VC_COMMAND_STARTDIR_BASE,
 	 .command = SVN_CMD_REVERT_DIR,
 	 .env = NULL,
 	 .function = NULL},
