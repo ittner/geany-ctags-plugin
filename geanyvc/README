@@ -32,10 +32,16 @@ Bazaar, GIT, Mercurial, Subversion, SVK::
  * log project
  * status
  * revert file
+ * show unmodified original file
  * add file
  * remove file
  * update
  * commit
+
+Currently Subversion only:
+
+ * revert directory
+ * revert project
 
 CVS::
 
