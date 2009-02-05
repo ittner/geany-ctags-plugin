@@ -37,7 +37,7 @@ extern GeanyData *geany_data;
 static const gchar *SVK_CMD_DIFF_FILE[] = { "svk", "diff", ABS_FILENAME, NULL };
 static const gchar *SVK_CMD_DIFF_DIR[] = { "svk", "diff", ABS_DIRNAME, NULL };
 static const gchar *SVK_CMD_REVERT_FILE[] = { "svk", "revert", BASENAME, NULL };
-static const gchar *SVK_CMD_REVERT_DIR[] = { "svk", NULL };
+static const gchar *SVK_CMD_REVERT_DIR[] = { "svk", "revert", "--recursive", BASE_DIRNAME, NULL };
 static const gchar *SVK_CMD_STATUS[] = { "svk", "status", NULL };
 static const gchar *SVK_CMD_ADD[] = { "svk", "add", BASENAME, NULL };
 static const gchar *SVK_CMD_REMOVE[] = { "svk", "remove", BASENAME, NULL };
@@ -65,7 +65,7 @@ static const VC_COMMAND commands[] = {
 	 .env = NULL,
 	 .function = NULL},
 	{
-	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .startdir = VC_COMMAND_STARTDIR_BASE,
 	 .command = SVK_CMD_REVERT_DIR,
 	 .env = NULL,
 	 .function = NULL},
