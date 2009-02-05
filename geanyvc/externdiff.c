@@ -82,6 +82,6 @@ vc_external_diff(const gchar * src, const gchar * dest)
 	argv[2] = (gchar *) dest;
 
 	utils_spawn_sync(NULL, argv, NULL,
-			    G_SPAWN_SEARCH_PATH | G_SPAWN_STDOUT_TO_DEV_NULL |
-			    G_SPAWN_STDERR_TO_DEV_NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+			 G_SPAWN_SEARCH_PATH | G_SPAWN_STDOUT_TO_DEV_NULL |
+			 G_SPAWN_STDERR_TO_DEV_NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }

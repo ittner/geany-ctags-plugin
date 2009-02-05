@@ -133,7 +133,7 @@ enum
 };
 
 PLUGIN_KEY_GROUP(geanyvc, COUNT_KB)
-GSList *get_commit_files_null(G_GNUC_UNUSED const gchar * dir)
+     GSList *get_commit_files_null(G_GNUC_UNUSED const gchar * dir)
 {
 	return NULL;
 }
@@ -375,7 +375,7 @@ get_cmd(const gchar ** argv, const gchar * dir, const gchar * filename, GSList *
 /* name should be in UTF-8, and can have a path. */
 static void
 show_output(const gchar * std_output, const gchar * name,
-		const gchar * force_encoding, GeanyFiletype *ftype)
+	    const gchar * force_encoding, GeanyFiletype * ftype)
 {
 	gint page;
 	GtkNotebook *book;
@@ -392,7 +392,7 @@ show_output(const gchar * std_output, const gchar * name,
 		else
 		{
 			sci_set_text(doc->editor->sci, std_output);
-			if(ftype)
+			if (ftype)
 				document_set_filetype(doc, ftype);
 			book = GTK_NOTEBOOK(geany->main_widgets->notebook);
 			page = gtk_notebook_page_num(book, GTK_WIDGET(doc->editor->sci));
@@ -863,7 +863,7 @@ command_with_question_activated(gchar ** text, gint cmd, const gchar * question,
 	{
 		dir = vc->get_base_dir(dir);
 	}
-	
+
 	if (doc->changed)
 	{
 		document_save_file(doc, FALSE);
@@ -875,7 +875,8 @@ command_with_question_activated(gchar ** text, gint cmd, const gchar * question,
 						GTK_DIALOG_DESTROY_WITH_PARENT,
 						GTK_MESSAGE_QUESTION,
 						GTK_BUTTONS_YES_NO, question,
-						(flags & (FLAG_DIR|FLAG_BASEDIR) ? dir : doc->file_name));
+						(flags & (FLAG_DIR | FLAG_BASEDIR) ? dir : doc->
+						 file_name));
 		result = gtk_dialog_run(GTK_DIALOG(dialog));
 		gtk_widget_destroy(dialog);
 	}
@@ -888,7 +889,7 @@ command_with_question_activated(gchar ** text, gint cmd, const gchar * question,
 	{
 		if (flags & FLAG_FILE)
 			execute_command(vc, text, NULL, doc->file_name, cmd, NULL, NULL);
-		if (flags & (FLAG_DIR|FLAG_BASEDIR))
+		if (flags & (FLAG_DIR | FLAG_BASEDIR))
 			execute_command(vc, text, NULL, dir, cmd, NULL, NULL);
 		if (flags & FLAG_RELOAD)
 			document_reload_file(doc, NULL);
@@ -1536,7 +1537,7 @@ update_menu_items()
 
 	gtk_widget_set_sensitive(menu_vc_update, d_have_vc);
 	gtk_widget_set_sensitive(menu_vc_commit, d_have_vc);
-	
+
 	gtk_widget_set_sensitive(menu_vc_show_file, f_have_vc);
 }
 
@@ -2014,16 +2015,17 @@ do_current_dir_menu(GtkWidget ** parent_menu, GtkTooltips ** tooltips)
 			     _("Make a diff from the directory of the current active file"), NULL);
 
 	g_signal_connect((gpointer) menu_vc_diff_dir, "activate",
-			 G_CALLBACK(vcdiff_dir_activated), (gpointer)FLAG_DIR);
+			 G_CALLBACK(vcdiff_dir_activated), (gpointer) FLAG_DIR);
 
 	/* Revert current dir */
 	menu_vc_revert_dir = gtk_menu_item_new_with_mnemonic(_("_Revert"));
 	gtk_container_add(GTK_CONTAINER(cur_dir_menu), menu_vc_revert_dir);
 	gtk_tooltips_set_tip(*tooltips, menu_vc_revert_dir,
-			     _("Restore original files in the current folder (undo local edits)."), NULL);
+			     _("Restore original files in the current folder (undo local edits)."),
+			     NULL);
 
 	g_signal_connect((gpointer) menu_vc_revert_dir, "activate",
-			 G_CALLBACK(vcrevert_dir_activated), (gpointer)FLAG_DIR);
+			 G_CALLBACK(vcrevert_dir_activated), (gpointer) FLAG_DIR);
 
 	gtk_container_add(GTK_CONTAINER(cur_dir_menu), gtk_separator_menu_item_new());
 	/* History/log of the current dir */
@@ -2054,16 +2056,15 @@ do_basedir_menu(GtkWidget ** parent_menu, GtkTooltips ** tooltips)
 			     _("Make a diff from the top VC directory"), NULL);
 
 	g_signal_connect((gpointer) menu_vc_diff_basedir, "activate",
-			 G_CALLBACK(vcdiff_dir_activated), (gpointer)FLAG_BASEDIR);
+			 G_CALLBACK(vcdiff_dir_activated), (gpointer) FLAG_BASEDIR);
 
 	/* Revert everything */
 	menu_vc_revert_basedir = gtk_menu_item_new_with_mnemonic(_("_Revert"));
 	gtk_container_add(GTK_CONTAINER(basedir_menu), menu_vc_revert_basedir);
-	gtk_tooltips_set_tip(*tooltips, menu_vc_revert_basedir,
-			     _("Revert any local edits."), NULL);
+	gtk_tooltips_set_tip(*tooltips, menu_vc_revert_basedir, _("Revert any local edits."), NULL);
 
 	g_signal_connect((gpointer) menu_vc_revert_basedir, "activate",
-			 G_CALLBACK(vcrevert_dir_activated), (gpointer)FLAG_BASEDIR);
+			 G_CALLBACK(vcrevert_dir_activated), (gpointer) FLAG_BASEDIR);
 
 	gtk_container_add(GTK_CONTAINER(basedir_menu), gtk_separator_menu_item_new());
 	g_signal_connect((gpointer) menu_vc_log_dir, "activate",
@@ -2086,24 +2087,25 @@ static void
 init_keybindings(void)
 {
 	/* init keybindins */
-	keybindings_set_item(plugin_key_group, VC_DIFF_FILE, 	kbdiff_file, 	0, 0,
-		"vc_show_diff_of_file", 	_("Show diff of file"), 	menu_vc_diff_file);
-	keybindings_set_item(plugin_key_group, VC_DIFF_DIR, 	kbdiff_dir,		0, 0,
-		"vc_show_diff_of_dir", 		_("Show diff of diretory"), menu_vc_diff_dir);
+	keybindings_set_item(plugin_key_group, VC_DIFF_FILE, kbdiff_file, 0, 0,
+			     "vc_show_diff_of_file", _("Show diff of file"), menu_vc_diff_file);
+	keybindings_set_item(plugin_key_group, VC_DIFF_DIR, kbdiff_dir, 0, 0,
+			     "vc_show_diff_of_dir", _("Show diff of diretory"), menu_vc_diff_dir);
 	keybindings_set_item(plugin_key_group, VC_DIFF_BASEDIR, kbdiff_basedir, 0, 0,
-		"vc_show_diff_of_basedir", 	_("Show diff of basedir"), 	menu_vc_diff_basedir);
-	keybindings_set_item(plugin_key_group, VC_COMMIT, 		kbcommit, 		0, 0,
-		"vc_commit", 				_("Commit changes"), 		menu_vc_commit);
-	keybindings_set_item(plugin_key_group, VC_STATUS, 		kbstatus, 		0, 0,
-		"vc_status", 				_("Show status"), 			menu_vc_status);
-	keybindings_set_item(plugin_key_group, VC_REVERT_FILE, 	kbrevert_file, 		0, 0,
-		"vc_revert_file", 			_("Revert single file"), 	menu_vc_revert_file);
-	keybindings_set_item(plugin_key_group, VC_REVERT_DIR, 	kbrevert_dir, 	0, 0,
-		"vc_revert_dir", 			_("Revert whole directory"),menu_vc_revert_dir);
+			     "vc_show_diff_of_basedir", _("Show diff of basedir"),
+			     menu_vc_diff_basedir);
+	keybindings_set_item(plugin_key_group, VC_COMMIT, kbcommit, 0, 0, "vc_commit",
+			     _("Commit changes"), menu_vc_commit);
+	keybindings_set_item(plugin_key_group, VC_STATUS, kbstatus, 0, 0, "vc_status",
+			     _("Show status"), menu_vc_status);
+	keybindings_set_item(plugin_key_group, VC_REVERT_FILE, kbrevert_file, 0, 0,
+			     "vc_revert_file", _("Revert single file"), menu_vc_revert_file);
+	keybindings_set_item(plugin_key_group, VC_REVERT_DIR, kbrevert_dir, 0, 0, "vc_revert_dir",
+			     _("Revert whole directory"), menu_vc_revert_dir);
 	keybindings_set_item(plugin_key_group, VC_REVERT_BASEDIR, kbrevert_basedir, 0, 0,
-		"vc_revert_basedir", 		_("Revert whole tree"), 	menu_vc_revert_basedir);
-	keybindings_set_item(plugin_key_group, VC_UPDATE, kbupdate, 			0, 0,
-		"vc_update", 				_("Update file"), 			menu_vc_update);
+			     "vc_revert_basedir", _("Revert whole tree"), menu_vc_revert_basedir);
+	keybindings_set_item(plugin_key_group, VC_UPDATE, kbupdate, 0, 0, "vc_update",
+			     _("Update file"), menu_vc_update);
 }
 
 /* Called by Geany to initialize the plugin */
