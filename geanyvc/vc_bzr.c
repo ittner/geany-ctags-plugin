@@ -37,7 +37,7 @@ extern GeanyData *geany_data;
 static const gchar *BZR_CMD_DIFF_FILE[] = { "bzr", "diff", BASENAME, NULL };
 static const gchar *BZR_CMD_DIFF_DIR[] = { "bzr", "diff", ABS_DIRNAME, NULL };
 static const gchar *BZR_CMD_REVERT_FILE[] = { "bzr", "revert", BASENAME, NULL };
-static const gchar *BZR_CMD_REVERT_DIR[] = { "bzr", NULL };
+static const gchar *BZR_CMD_REVERT_DIR[] = { "bzr", "revert", BASE_DIRNAME, NULL };
 static const gchar *BZR_CMD_STATUS[] = { "bzr", "status", NULL };
 static const gchar *BZR_CMD_ADD[] = { "bzr", "add", BASENAME, NULL };
 static const gchar *BZR_CMD_REMOVE[] = { "bzr", "remove", BASENAME, NULL };
@@ -65,7 +65,7 @@ static const VC_COMMAND commands[] = {
 	 .env = NULL,
 	 .function = NULL},
 	{
-	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .startdir = VC_COMMAND_STARTDIR_BASE,
 	 .command = BZR_CMD_REVERT_DIR,
 	 .env = NULL,
 	 .function = NULL},
@@ -127,7 +127,7 @@ static gboolean
 in_vc_bzr(const gchar * filename)
 {
 	gint exit_code;
-	gchar *argv[] = { "bzr", "ls", NULL, NULL };
+	gchar *argv[] = { "bzr", "log", NULL, NULL };
 	gchar *dir;
 	gchar *base_name;
 	gboolean ret = FALSE;
@@ -144,13 +144,13 @@ in_vc_bzr(const gchar * filename)
 	argv[2] = base_name;
 
 	exit_code = execute_custom_command(dir, (const gchar **) argv, NULL, &std_output, NULL,
-					   dir, NULL, NULL);
+					   filename, NULL, NULL);
 
 	if (NZV(std_output))
 	{
 		ret = TRUE;
-		g_free(std_output);
 	}
+	g_free(std_output);
 
 	g_free(base_name);
 	g_free(dir);
