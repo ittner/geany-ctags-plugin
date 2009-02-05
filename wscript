@@ -318,9 +318,9 @@ def build(bld):
 	def build_debug(bld, p, libs):
 		bld.new_task_gen(
 			features	= 'cc cprogram',
-			source		= [ 'geanydebug/src/ttyhelper.c' ],
+			source		= [ 'geanygdb/src/ttyhelper.c' ],
 			includes	= p.includes,
-			target		= 'geanydebug_ttyhelper',
+			target		= 'geanygdb_ttyhelper',
 			uselib		= libs
 		)
 
@@ -343,7 +343,7 @@ def build(bld):
 		if p.name == 'geanylua':
 			build_lua(bld, p, libs) # build additional lib for the lua plugin
 
-		if p.name == 'geanydebug':
+		if p.name == 'geanygdb':
 			build_debug(bld, p, libs) # build additional binary for the debug plugin
 
 		if p.name == 'geany-mini-script': tgt = 'gms'
