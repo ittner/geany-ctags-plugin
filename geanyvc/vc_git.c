@@ -89,7 +89,9 @@ git_show(gchar ** std_out, gchar ** std_err, const gchar * filename,
 static const gchar *GIT_CMD_DIFF_FILE[] = { "git", "diff", "HEAD", "--", BASENAME, NULL };
 static const gchar *GIT_CMD_DIFF_DIR[] = { "git", "diff", "HEAD", NULL };
 static const gchar *GIT_CMD_REVERT_FILE[] = { "git", "checkout", "--", BASENAME, NULL };
-static const gchar *GIT_CMD_REVERT_DIR[] = { "git", NULL };
+static const gchar *GIT_CMD_REVERT_DIR[] = { "git", "reset", "--", BASE_DIRNAME,
+	CMD_SEPARATOR, "git", "checkout", "HEAD", "--", BASE_DIRNAME, NULL
+};
 static const gchar *GIT_CMD_STATUS[] = { "git", "status", NULL };
 static const gchar *GIT_CMD_ADD[] = { "git", "add", "--", BASENAME, NULL };
 static const gchar *GIT_CMD_REMOVE[] =
@@ -130,7 +132,7 @@ static const VC_COMMAND commands[VC_COMMAND_COUNT] = {
 	 .env = GIT_ENV_REVERT_FILE,
 	 .function = NULL},
 	{
-	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .startdir = VC_COMMAND_STARTDIR_BASE,
 	 .command = GIT_CMD_REVERT_DIR,
 	 .env = GIT_ENV_REVERT_DIR,
 	 .function = NULL},
