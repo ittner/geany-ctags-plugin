@@ -37,7 +37,7 @@ extern GeanyData *geany_data;
 static const gchar *HG_CMD_DIFF_FILE[] = { "hg", "diff", ABS_FILENAME, NULL };
 static const gchar *HG_CMD_DIFF_DIR[] = { "hg", "diff", ABS_DIRNAME, NULL };
 static const gchar *HG_CMD_REVERT_FILE[] = { "hg", "revert", BASENAME, NULL };
-static const gchar *HG_CMD_REVERT_DIR[] = { "hg", NULL };
+static const gchar *HG_CMD_REVERT_DIR[] = { "hg", "revert", BASE_DIRNAME, NULL };
 static const gchar *HG_CMD_STATUS[] = { "hg", "status", NULL };
 static const gchar *HG_CMD_ADD[] = { "hg", "add", BASENAME, NULL };
 static const gchar *HG_CMD_REMOVE[] = { "hg", "remove", BASENAME, NULL };
@@ -65,7 +65,7 @@ static const VC_COMMAND commands[] = {
 	 .env = NULL,
 	 .function = NULL},
 	{
-	 .startdir = VC_COMMAND_STARTDIR_FILE,
+	 .startdir = VC_COMMAND_STARTDIR_BASE,
 	 .command = HG_CMD_REVERT_DIR,
 	 .env = NULL,
 	 .function = NULL},
