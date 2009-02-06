@@ -875,8 +875,8 @@ command_with_question_activated(gchar ** text, gint cmd, const gchar * question,
 						GTK_DIALOG_DESTROY_WITH_PARENT,
 						GTK_MESSAGE_QUESTION,
 						GTK_BUTTONS_YES_NO, question,
-						(flags & (FLAG_DIR | FLAG_BASEDIR) ? dir : doc->
-						 file_name));
+						(flags & (FLAG_DIR | FLAG_BASEDIR) ? dir :
+						 doc->file_name));
 		result = gtk_dialog_run(GTK_DIALOG(dialog));
 		gtk_widget_destroy(dialog);
 	}
@@ -1921,7 +1921,7 @@ do_current_file_menu(GtkWidget ** parent_menu, GtkTooltips ** tooltips)
 	/* Menu which will hold the items in the current file menu */
 	cur_file_menu = gtk_menu_new();
 
-	*parent_menu = gtk_image_menu_item_new_with_mnemonic(_("Current _File"));
+	*parent_menu = gtk_image_menu_item_new_with_mnemonic(_("_File"));
 	g_signal_connect((gpointer) * parent_menu, "activate", G_CALLBACK(update_menu_items), NULL);
 
 	/* Diff of current file */
@@ -2006,7 +2006,7 @@ do_current_dir_menu(GtkWidget ** parent_menu, GtkTooltips ** tooltips)
 	/* Menu which will hold the items in the current file menu */
 	cur_dir_menu = gtk_menu_new();
 
-	*parent_menu = gtk_image_menu_item_new_with_mnemonic(_("Current _Directory"));
+	*parent_menu = gtk_image_menu_item_new_with_mnemonic(_("_Directory"));
 	g_signal_connect((gpointer) * parent_menu, "activate", G_CALLBACK(update_menu_items), NULL);
 	/* Diff of the current dir */
 	menu_vc_diff_dir = gtk_menu_item_new_with_mnemonic(_("_Diff"));
@@ -2046,7 +2046,7 @@ do_basedir_menu(GtkWidget ** parent_menu, GtkTooltips ** tooltips)
 	/* Menu which will hold the items in the current file menu */
 	basedir_menu = gtk_menu_new();
 
-	*parent_menu = gtk_image_menu_item_new_with_mnemonic(_("Current _Basedirectory"));
+	*parent_menu = gtk_image_menu_item_new_with_mnemonic(_("_Base Directory"));
 	g_signal_connect((gpointer) * parent_menu, "activate", G_CALLBACK(update_menu_items), NULL);
 
 	/* Complete diff of base directory */
