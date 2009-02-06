@@ -57,15 +57,22 @@ CVS::
 Requirements
 ============
 
-For compiling geanyvc you need Geany sources, you can get them at
-http://geany.uvena.de/, you will need the GTK (>= 2.6.0) libraries
+For compiling the plugin yourself, you will need the GTK (>= 2.6.0) libraries
 and header files. You will also need its dependency libraries and header
 files, such as Pango, Glib and ATK. All these files are available at
-http://www.gtk.org. If you like to use spellchecking for your commit
+http://www.gtk.org.
+If you like to use spellchecking for your commit
 messages you will also need gtkspell (>=2.0), but this is only optional.
 
-Furthermore you need, of course, a C compiler and the Make tool; The
-GNU versions of these tools are recommended.
+And obviously, you will need have Geany installed. If you have Geany installed
+from the sources, you should be ready to go.
+If you used a prepared package e.g. from your distribution you probably need
+to install an additional package, this might be called geany-dev or geany-devel.
+Please note that in order to compile and use this plugin, you need Geany 0.15
+or later.
+
+Furthermore you need, of course, a C compiler and the Make tool.
+The GNU versions of these tools are recommended.
 
 Usage
 =====
