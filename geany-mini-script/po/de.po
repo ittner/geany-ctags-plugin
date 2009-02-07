@@ -7,23 +7,23 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-07 15:15+0100\n"
-"PO-Revision-Date: 2009-02-07 16:09+0100\n"
+"POT-Creation-Date: 2009-02-07 18:59+0100\n"
+"PO-Revision-Date: 2009-02-07 19:01+0100\n"
 "Last-Translator: Burlot Pascal <prublot(at)users(dot)sourceforge(dot)net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/gms_gui.c:284
+#: ../src/gms_gui.c:259
 msgid "Load Mini-Script File"
 msgstr "Laden des mini Skriptes"
 
-#: ../src/gms_gui.c:342
+#: ../src/gms_gui.c:317
 msgid "Save Mini-Script File"
 msgstr "Schutz des mini Skriptes "
 
-#: ../src/gms_gui.c:412
+#: ../src/gms_gui.c:362
 msgid ""
 "<b>GMS : Geany Mini-Script filter Plugin</b>\n"
 "This plugin is a tools to apply a script filter on :\n"
@@ -71,43 +71,71 @@ msgstr ""
 "Software Foundation; either version 2 of the License, \n"
 "or (at your option) any later version."
 
-#: ../src/gms_gui.c:488
+#: ../src/gms_gui.c:452
 msgid "Mini-Script Filter"
 msgstr "Filter mini Skript"
 
+#: ../src/gms_gui.c:480
+msgid "Clear the mini-script window"
+msgstr "Klären Sie das Minihandschrift-Fenster"
+
+#: ../src/gms_gui.c:485
+msgid "Load a mini-script into this window"
+msgstr "Laden Sie eine Minihandschrift in dieses Fenster"
+
+#: ../src/gms_gui.c:490
+msgid "Save the mini-script into a file"
+msgstr "Sparen(Retten) Sie die Minihandschrift in eine Datei"
+
+#: ../src/gms_gui.c:495
+msgid "Display a information about the mini-script plugin"
+msgstr "Zeigen Sie eine Information über die Steck- Minihandschrift"
+
+#: ../src/gms_gui.c:503
+msgid "select the mini-script type"
+msgstr "wählen Sie den Minihandschrift-Typ aus"
+
 #. Hbox : Radio bouttons for choosing the input:
 #. selection/current document/all documents of the current session
-#: ../src/gms_gui.c:562
+#: ../src/gms_gui.c:534
 msgid "filter input"
 msgstr "Eingangsfilter "
 
-#: ../src/gms_gui.c:569
+#: ../src/gms_gui.c:536
+msgid "select the input of mini-script filter"
+msgstr "wählen Sie den Eingang des Minihandschrift-Filters aus"
+
+#: ../src/gms_gui.c:542
 msgid "selection"
 msgstr "Auswahl"
 
-#: ../src/gms_gui.c:570
+#: ../src/gms_gui.c:543
 msgid "document"
 msgstr "dokument"
 
-#: ../src/gms_gui.c:571
+#: ../src/gms_gui.c:544
 msgid "session"
 msgstr "session"
 
 #. Hbox : Radio bouttons for choosing the output:
 #. current document/ or new document
-#: ../src/gms_gui.c:580
+#: ../src/gms_gui.c:553
 msgid "filter output"
 msgstr " filtrede herausgenommen"
 
-#: ../src/gms_gui.c:587
+#: ../src/gms_gui.c:555
+msgid "select the output of mini-script filter"
+msgstr "wählen Sie die Produktion(Output) des Minihandschrift-Filters aus"
+
+#: ../src/gms_gui.c:561
 msgid "Current Doc."
 msgstr " übliche Dok."
 
-#: ../src/gms_gui.c:588
+#: ../src/gms_gui.c:562
 msgid "New Doc."
 msgstr "neues Dok."
 
-#: ../src/gms_gui.c:811
+#: ../src/gms_gui.c:788
 msgid "script configuration"
 msgstr "Gestalt des Skriptes "
 
@@ -121,7 +149,7 @@ msgid "GMS (Geany Mini-Script filter plugin)"
 msgstr "GMS (Geany Steck- Minihandschrift-Filter )"
 
 #: ../src/gms.c:74
-msgid "Pascal BURLOT, a Geany fan"
+msgid "Pascal BURLOT, a Geany user"
 msgstr "Pascal BURLOT, der Benutzer von Geany "
 
 #. Add an item to the Tools menu

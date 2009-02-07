@@ -71,7 +71,7 @@ PLUGIN_VERSION_CHECK(100)
 
 /* All plugins must set name, description, version and author. */
 PLUGIN_SET_INFO(_("geany mini-script"), _("GMS (Geany Mini-Script filter plugin)"),
-                    VERSION , _("Pascal BURLOT, a Geany fan"))
+                    VERSION , _("Pascal BURLOT, a Geany user"))
 
 static GtkWidget     *gms_item   = NULL ;
 static gms_handle_t gms_hnd     = NULL ;

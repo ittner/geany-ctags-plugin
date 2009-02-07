@@ -1,3 +1,7 @@
+2009-02-07 V0.3
+            * localization
+			* add Tips on each button
+			
 2009-01-03 V0.2
 			* using autotools
 			* adding a help document ( ./doc/gms_help.pdf ) 
