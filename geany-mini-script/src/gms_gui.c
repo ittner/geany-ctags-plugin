@@ -36,6 +36,9 @@
 #include    <sys/types.h>
 #include    <unistd.h>
 
+#include 	<libintl.h>
+#include 	<locale.h>
+ 
 #include    <pango/pango.h>
 
 /* geany headers */
@@ -53,11 +56,12 @@
 #include    "gms_debug.h"
 #include    "gms.h"
 #include    "gms_gui.h"
-
+  
 /*
  * *****************************************************************************
  *  Local Macro and new local type definition
  */
+
 //! \brief Number of script type
 #define GMS_NB_TYPE_SCRIPT  6
 //! \brief Number of char of the line buffer
@@ -122,34 +126,41 @@ static const gchar *default_script_cmd[GMS_NB_TYPE_SCRIPT] = {
 const gchar *label_script_cmd[GMS_NB_TYPE_SCRIPT] = {
     "Shell", "Perl", "Python", "Sed", "Awk", "User" };
 
-///< \brief It's the information string for the information dialog box
-static const gchar str_info[] = "<b>GMS : Geany Mini-Script filter Plugin</b>\n\
-This plugin is a tools to apply a script filter on :\n\
-   o the text selection,\n\
-   o the current document,\n\
-   o all documents of the current session.\n\
-\n\
-The filter type can be : \n\
-   o Unix shell script, \n\
-   o perl script, \n\
-   o python script, \n\
-   o sed commands,\n\
-   o awk script.\n\
-\n\
-<b>AUTHOR</b>\n\
-   Written by Pascal BURLOT (December,2008)\n\
-\n\
-<b>LICENSE:</b>\n\
-This program is free software; you can redistribute\n\
-it and/or modify it under the terms of the GNU \n\
-General Public License as published by the Free\n\
-Software Foundation; either version 2 of the License,\n\
-or (at your option) any later version.";
-
 /*
  * *****************************************************************************
  *  Local functions
  */
+
+/**
+ * \brief the function initializes the localization for the gms plugin
+ */
+
+static void locale_init(void)
+{
+#ifdef ENABLE_NLS
+	gchar *locale_dir = NULL;
+
+#ifdef HAVE_LOCALE_H
+	setlocale(LC_ALL, "");
+#endif
+
+#ifdef G_OS_WIN32
+	gchar *install_dir = g_win32_get_package_installation_directory("geany", NULL);
+	/* e.g. C:\Program Files\geany\lib\locale */
+	locale_dir = g_strconcat(install_dir, "\\share\\locale", NULL);
+	g_free(install_dir);
+#else
+	locale_dir = g_strdup(LOCALEDIR);
+#endif
+
+	//g_print( "%s %s\n",GETTEXT_PACKAGE,locale_dir ) ;
+	
+	bindtextdomain(GETTEXT_PACKAGE, locale_dir);
+	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+	textdomain(GETTEXT_PACKAGE);
+	g_free(locale_dir);
+#endif
+}
 
 /**
  * \brief the function loads the preferences file
@@ -170,8 +181,10 @@ static void load_prefs_file(
             int  ii ;
             for ( ii = 0 ; ii <GMS_NB_TYPE_SCRIPT ;ii++ )
             {
-                fgets(bufline,GMS_MAX_LINE,fd);
-                fgets(bufline,GMS_MAX_LINE,fd);
+                if ( fgets(bufline,GMS_MAX_LINE,fd) == NULL )
+					break ;
+                if ( fgets(bufline,GMS_MAX_LINE,fd) == NULL )
+					break ;
                 bufline[strlen(bufline)-1] = 0 ;
                 g_string_assign(this->script_cmd[ii] , bufline ) ;
             }
@@ -240,7 +253,10 @@ static void gms_cb_load(
     )
 {
     gms_private_t *this = GMS_PRIVATE(data) ;
-    GtkWidget    *p_dialog = gtk_file_chooser_dialog_new ("Load Mini-Script File",
+    GtkWidget    *p_dialog ;
+	
+	locale_init();
+	p_dialog = gtk_file_chooser_dialog_new (_("Load Mini-Script File"),
                                     GTK_WINDOW(this->mw) ,
                                     GTK_FILE_CHOOSER_ACTION_OPEN,
                                     GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -295,7 +311,10 @@ static void gms_cb_save(
     )
 {
     gms_private_t *this = GMS_PRIVATE(data) ;
-    GtkWidget    *p_dialog = gtk_file_chooser_dialog_new ("Save Mini-Script File",
+    GtkWidget    *p_dialog ;
+	
+	locale_init();
+	p_dialog = gtk_file_chooser_dialog_new (_("Save Mini-Script File"),
                                     GTK_WINDOW(this->mw) ,
                                     GTK_FILE_CHOOSER_ACTION_SAVE,
                                     GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -335,12 +354,40 @@ static void gms_cb_info(
     )
 {
     gms_private_t *this = GMS_PRIVATE(data) ;
+	gchar *info_msg ;
+	
+	locale_init();
+
+    info_msg = _(
+"<b>GMS : Geany Mini-Script filter Plugin</b>\n"
+"This plugin is a tools to apply a script filter on :\n"
+"   o the text selection,\n"
+"   o the current document,\n"
+"   o all documents of the current session.\n"
+"\n"
+"The filter type can be : \n"
+"   o Unix shell script, \n"
+"   o perl script, \n"
+"   o python script, \n"
+"   o sed commands,\n"
+"   o awk script.\n"
+"\n"
+"<b>AUTHOR</b>\n"
+"   Written by Pascal BURLOT (December,2008)\n"
+"\n"
+"<b>LICENSE:</b>\n"
+"This program is free software; you can redistribute\n"
+"it and/or modify it under the terms of the GNU \n"
+"General Public License as published by the Free\n"
+"Software Foundation; either version 2 of the License,\n"
+"or (at your option) any later version." ) ;
 
     GtkWidget *dlg = gtk_message_dialog_new_with_markup( GTK_WINDOW(this->mw),
                                 GTK_DIALOG_DESTROY_WITH_PARENT,
                                 GTK_MESSAGE_INFO,
                                 GTK_BUTTONS_CLOSE,
-                                str_info);
+                                _(info_msg),NULL );
+								
     gtk_dialog_run(GTK_DIALOG(dlg));
     GMS_FREE_WIDGET(dlg);
 }
@@ -360,6 +407,8 @@ gms_handle_t gms_new(
     )
 {
     gms_private_t *this = GMS_G_MALLOC0(gms_private_t,1);
+
+	locale_init() ;
 
     if ( this != NULL )
     {
@@ -708,6 +757,7 @@ GtkWidget   *gms_configure_gui(
     GtkWidget  *t_script      ; //!< table for configuration script
     GtkWidget  *w ;
 
+	locale_init() ;
     vb_pref= gtk_vbox_new(FALSE, 6);
     f_script = gtk_frame_new (_("script configuration") );
     gtk_box_pack_start( GTK_BOX (vb_pref), f_script, FALSE, FALSE, 0);

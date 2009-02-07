@@ -42,6 +42,8 @@
 #include    <stdlib.h>
 #include    <glib.h>
 #include    <glib/gstdio.h>
+#include 	<libintl.h>
+#include 	<locale.h>
 
 /* geany headers */
 #include    "geany.h"
@@ -162,7 +164,7 @@ static gint run_filter( ScintillaObject *sci )
                         GTK_DIALOG_DESTROY_WITH_PARENT,
                         GTK_MESSAGE_ERROR,
                         GTK_BUTTONS_CLOSE,
-                        result);
+                        result,NULL);
 
         gtk_dialog_run(GTK_DIALOG(dlg));
         gtk_widget_destroy(GTK_WIDGET(dlg)) ;
