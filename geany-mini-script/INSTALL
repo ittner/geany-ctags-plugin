@@ -6,7 +6,8 @@ At the time of this writing, building the plugin requires a recent geany (0.15)
 installed.
 
  % autoreconf -i
- % configure
+ % intltoolize
+ % ./configure
  % make clean
  % make
  % sudo make install

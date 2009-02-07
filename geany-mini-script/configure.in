@@ -6,15 +6,16 @@ dnl AC_CONFIG_SRCDIR([src/gms.c  srcgms_gui.c])
 AM_INIT_AUTOMAKE([1.9 foreign])
 
 AM_CONFIG_HEADER(config.h)
-
+#AC_CONFIG_MACRO_DIR([m4])
 AC_PROG_CC
 
 AC_DISABLE_STATIC
 AM_PROG_LIBTOOL
 LIBTOOL="$LIBTOOL --silent"
 
+#AM_GNU_GETTEXT([external])
 AC_PROG_INSTALL
-#AC_PROG_INTLTOOL
+AC_PROG_INTLTOOL
 AC_PROG_MAKE_SET
 
 # checking for Geany
@@ -26,17 +27,17 @@ GEANY_VERSION=`$PKG_CONFIG --modversion geany`
 GTK_VERSION=`$PKG_CONFIG --modversion gtk+-2.0`
 
 # i18n
-#GETTEXT_PACKAGE=gms
-#AC_SUBST(GETTEXT_PACKAGE)
-#AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package.])
+GETTEXT_PACKAGE=gms
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package.])
 
-#ALL_LINGUAS="`sed -e '/^#/d' $srcdir/po/LINGUAS`" # take all languages found in file po/LINGUAS
+ALL_LINGUAS="`sed -e '/^#/d' $srcdir/po/LINGUAS`" # take all languages found in file po/LINGUAS
 
-#AM_GLIB_GNU_GETTEXT
+AM_GLIB_GNU_GETTEXT
 # workaround for intltool bug (http://bugzilla.gnome.org/show_bug.cgi?id=490845)
-#if test "x$MSGFMT" = "xno"; then
-#	AC_MSG_ERROR([msgfmt not found. Please install the gettext package.])
-#fi
+if test "x$MSGFMT" = "xno"; then
+	AC_MSG_ERROR([msgfmt not found. Please install the gettext package.])
+fi
 
 # intltool hack to define install_sh on Debian/Ubuntu systems
 if test "x$install_sh" = "x"; then
@@ -49,7 +50,7 @@ fi
 libdir="`$PKG_CONFIG --variable=libdir geany`/geany"
 
 
-AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile po/Makefile.in src/Makefile])
 AC_OUTPUT
 
 echo "----------------------------------------"
