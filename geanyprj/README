@@ -126,11 +126,11 @@ Download
 
 The current version is:
 
-============= =============== ============================================================
-Geany Version Geanyvc Version Download
-============= =============== ============================================================
-0.16              |(version)| http://users.cosmostv.by/yurand/geanyprj/geanyprj-0.5.tar.gz
-============= =============== ============================================================
+============= ================ ============================================================
+Geany Version GeanyPrj Version Download
+============= ================ ============================================================
+0.16               |(version)| http://users.cosmostv.by/yurand/geanyprj/geanyprj-0.5.tar.gz
+============= ================ ============================================================
 
 Up to date source code can be downloaded here::
 
@@ -139,15 +139,15 @@ Up to date source code can be downloaded here::
 If you have old version of Geany installed you need old version of plugin as well. These versions of plugin
 are no longer supported and if you find bug in one of them, it won't be fixed unless you do it yourself.
 
-============= =============== ==========================================================
-Geany Version Geanyvc Version Download
-============= =============== ==========================================================
-0.15                      0.4 http://users.cosmostv.by/yurand/geanyprj/geanyprj-0.4.tar.gz
+============= ================ ============================================================
+Geany Version GeanyPrj Version Download
+============= ================ ============================================================
+0.15                       0.4 http://users.cosmostv.by/yurand/geanyprj/geanyprj-0.4.tar.gz
 
-0.14                      0.3 http://users.cosmostv.by/yurand/geanyprj/geanyprj-0.3.tar.gz
+0.14                       0.3 http://users.cosmostv.by/yurand/geanyprj/geanyprj-0.3.tar.gz
 
-0.13                      0.2 http://users.cosmostv.by/yurand/geanyprj/geanyprj-0.2.tar.gz
-============= =============== ==========================================================
+0.13                       0.2 http://users.cosmostv.by/yurand/geanyprj/geanyprj-0.2.tar.gz
+============= ================ ============================================================
 
 
 Gentoo
