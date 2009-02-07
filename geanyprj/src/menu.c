@@ -340,7 +340,6 @@ on_find_in_project(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 		return;
 
 	dir = g_path_get_dirname(g_current_project->path);
-	setptr(dir, g_build_filename(dir, g_current_project->base_path, NULL));
 	search_show_find_in_files_dialog(dir);
 	g_free(dir);
 }
