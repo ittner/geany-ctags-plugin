@@ -1,0 +1,109 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-02-07 15:15+0100\n"
+"PO-Revision-Date: 2009-02-07 16:10+0100\n"
+"Last-Translator: Burlot Pascal <prublot(at)users(dot)sourceforge(dot)net>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../src/gms_gui.c:284
+msgid "Load Mini-Script File"
+msgstr ""
+
+#: ../src/gms_gui.c:342
+msgid "Save Mini-Script File"
+msgstr ""
+
+#: ../src/gms_gui.c:412
+msgid ""
+"<b>GMS : Geany Mini-Script filter Plugin</b>\n"
+"This plugin is a tools to apply a script filter on :\n"
+"   o the text selection,\n"
+"   o the current document,\n"
+"   o all documents of the current session.\n"
+"\n"
+"The filter type can be : \n"
+"   o Unix shell script, \n"
+"   o perl script, \n"
+"   o python script, \n"
+"   o sed commands,\n"
+"   o awk script.\n"
+"\n"
+"<b>AUTHOR</b>\n"
+"   Written by Pascal BURLOT (December,2008)\n"
+"\n"
+"<b>LICENSE:</b>\n"
+"This program is free software; you can redistribute\n"
+"it and/or modify it under the terms of the GNU \n"
+"General Public License as published by the Free\n"
+"Software Foundation; either version 2 of the License,\n"
+"or (at your option) any later version."
+msgstr ""
+
+#: ../src/gms_gui.c:488
+msgid "Mini-Script Filter"
+msgstr ""
+
+#. Hbox : Radio bouttons for choosing the input:
+#. selection/current document/all documents of the current session
+#: ../src/gms_gui.c:562
+msgid "filter input"
+msgstr ""
+
+#: ../src/gms_gui.c:569
+msgid "selection"
+msgstr ""
+
+#: ../src/gms_gui.c:570
+msgid "document"
+msgstr ""
+
+#: ../src/gms_gui.c:571
+msgid "session"
+msgstr ""
+
+#. Hbox : Radio bouttons for choosing the output:
+#. current document/ or new document
+#: ../src/gms_gui.c:580
+msgid "filter output"
+msgstr ""
+
+#: ../src/gms_gui.c:587
+msgid "Current Doc."
+msgstr ""
+
+#: ../src/gms_gui.c:588
+msgid "New Doc."
+msgstr ""
+
+#: ../src/gms_gui.c:811
+msgid "script configuration"
+msgstr ""
+
+#. All plugins must set name, description, version and author.
+#: ../src/gms.c:73
+msgid "geany mini-script"
+msgstr ""
+
+#: ../src/gms.c:73
+msgid "GMS (Geany Mini-Script filter plugin)"
+msgstr ""
+
+#: ../src/gms.c:74
+msgid "Pascal BURLOT, a Geany fan"
+msgstr ""
+
+#. Add an item to the Tools menu
+#: ../src/gms.c:261
+msgid "_Mini-Script"
+msgstr ""
+
