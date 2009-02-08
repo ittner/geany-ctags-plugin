@@ -112,7 +112,7 @@ void gui_toolbar_update(void)
 			sc->toolbar_button = gtk_toggle_tool_button_new_from_stock(GTK_STOCK_SPELL_CHECK);
 #if GTK_CHECK_VERSION(2, 12, 0)
 			gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(sc->toolbar_button),
-				_("Toggle spell check while typing."));
+				_("Toggle spell check while typing"));
 #endif
 			gtk_widget_show(GTK_WIDGET(sc->toolbar_button));
 			plugin_add_toolbar_item(geany_plugin, sc->toolbar_button);
@@ -307,7 +307,7 @@ void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 			}
 			menu_item = gtk_menu_item_new_with_label(suggs[i]);
 			gtk_container_add(GTK_CONTAINER(menu), menu_item);
-			g_signal_connect((gpointer) menu_item, "activate",
+			g_signal_connect(menu_item, "activate",
 				G_CALLBACK(menu_suggestion_item_activate_cb), NULL);
 		}
 		if (suggs == NULL)
@@ -322,12 +322,12 @@ void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 		label = g_strdup_printf(_("Add \"%s\" to Dictionary"), search_word);
 		menu_item = image_menu_item_new(GTK_STOCK_ADD, label);
 		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
-		g_signal_connect((gpointer) menu_item, "activate",
+		g_signal_connect(menu_item, "activate",
 			G_CALLBACK(on_menu_addword_item_activate), GINT_TO_POINTER(0));
 
 		menu_item = image_menu_item_new(GTK_STOCK_REMOVE, _("Ignore All"));
 		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
-		g_signal_connect((gpointer) menu_item, "activate",
+		g_signal_connect(menu_item, "activate",
 			G_CALLBACK(on_menu_addword_item_activate), GINT_TO_POINTER(1));
 
 		gtk_widget_show(sc->edit_menu);
@@ -461,7 +461,7 @@ GtkWidget *gui_create_menu(GtkWidget *sp_item)
 
 	subitem = gtk_menu_item_new_with_mnemonic(_("Default"));
 	gtk_container_add(GTK_CONTAINER(menu), subitem);
-	g_signal_connect((gpointer) subitem, "activate", G_CALLBACK(menu_item_activate_cb), NULL);
+	g_signal_connect(subitem, "activate", G_CALLBACK(menu_item_activate_cb), NULL);
 
 	subitem = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(menu), subitem);
@@ -472,7 +472,7 @@ GtkWidget *gui_create_menu(GtkWidget *sp_item)
 
 		menu_item = gtk_menu_item_new_with_label(g_ptr_array_index(sc->dicts, i));
 		gtk_container_add(GTK_CONTAINER(menu), menu_item);
-		g_signal_connect((gpointer) menu_item, "activate",
+		g_signal_connect(menu_item, "activate",
 			G_CALLBACK(menu_item_activate_cb), g_ptr_array_index(sc->dicts, i));
 	}
 
