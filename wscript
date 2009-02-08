@@ -306,7 +306,7 @@ def build(bld):
 		)
 
 		# install docs
-		bld.install_files('${DATADIR}/doc/geany/plugins/geanylua', 'geanylua/docs/*.html')
+		bld.install_files('${DATADIR}/doc/geany-plugins/geanylua', 'geanylua/docs/*.html')
 		# install examples (Waf doesn't support installing files recursively, yet)
 		bld.install_files('${DATADIR}/geany/plugins/geanylua/examples/dialogs', 'geanylua/examples/dialogs/*.lua')
 		bld.install_files('${DATADIR}/geany/plugins/geanylua/examples/edit', 'geanylua/examples/edit/*.lua')
@@ -346,14 +346,11 @@ def build(bld):
 		if p.name == 'geanygdb':
 			build_debug(bld, p, libs) # build additional binary for the debug plugin
 
-		if p.name == 'geany-mini-script': tgt = 'gms'
-		else: tgt = p.name
-
 		bld.new_task_gen(
 			features		= 'cc cshlib',
 			source			= p.sources,
 			includes		= p.includes,
-			target			= tgt,
+			target			= p.name,
 			uselib			= libs,
 			install_path	= '${LIBDIR}/geany'
 		)
