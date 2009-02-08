@@ -101,8 +101,7 @@ void gui_toolbar_update(void)
 	{
 		if (sc->toolbar_button != NULL)
 		{
-			gtk_widget_destroy(GTK_WIDGET(sc->toolbar_button));
-			sc->toolbar_button = NULL;
+			gtk_widget_hide(GTK_WIDGET(sc->toolbar_button));
 		}
 	}
 	else
@@ -114,13 +113,13 @@ void gui_toolbar_update(void)
 			gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(sc->toolbar_button),
 				_("Toggle spell check while typing"));
 #endif
-			gtk_widget_show(GTK_WIDGET(sc->toolbar_button));
 			plugin_add_toolbar_item(geany_plugin, sc->toolbar_button);
 			ui_add_document_sensitive(GTK_WIDGET(sc->toolbar_button));
 
 			g_signal_connect(sc->toolbar_button, "toggled",
 				G_CALLBACK(toolbar_item_toggled_cb), NULL);
 		}
+		gtk_widget_show(GTK_WIDGET(sc->toolbar_button));
 
 		ignore_sc_callback = TRUE;
 		gtk_toggle_tool_button_set_active(

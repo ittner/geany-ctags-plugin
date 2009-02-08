@@ -2,6 +2,8 @@
 
  * src/gui.c:
    Remove unnecessary gpointer casts.
+   If the toolbar item is disabled, just hide it instead of destroying
+   it.
 
 
 2009-02-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
