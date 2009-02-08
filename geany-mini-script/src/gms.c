@@ -38,15 +38,19 @@
  * - it will be loaded at next startup.
  */
 
+#include    "geany.h"
+
 /* headers */
 #include    <stdlib.h>
 #include    <glib.h>
 #include    <glib/gstdio.h>
-#include 	<libintl.h>
-#include 	<locale.h>
+
+#ifdef HAVE_LOCALE_H
+#include    <locale.h>
+#endif
+
 
 /* geany headers */
-#include    "geany.h"
 #include    "support.h"
 #include    "plugindata.h"
 #include    "editor.h"
@@ -61,9 +65,11 @@
 #include    "gms_gui.h"
 #include    "gms_debug.h"
 
+
 GeanyPlugin     *geany_plugin;
 GeanyData       *geany_data;
 GeanyFunctions  *geany_functions;
+
 
 /* Check that the running Geany supports the plugin API used below, and check
  * for binary compatibility. */
@@ -246,12 +252,43 @@ static void item_activate(GtkMenuItem *menuitem, gpointer gdata)
 
 }
 
+ /**
+ * \brief the function initializes the localization for the gms plugin
+ */
+static void locale_init(void)
+{
+#ifdef ENABLE_NLS
+	gchar *locale_dir = NULL;
+
+#ifdef HAVE_LOCALE_H
+	setlocale(LC_ALL, "");
+#endif
+
+#ifdef G_OS_WIN32
+	gchar *install_dir = g_win32_get_package_installation_directory("geany", NULL);
+	/* e.g. C:\Program Files\geany\lib\locale */
+	locale_dir = g_strconcat(install_dir, "\\share\\locale", NULL);
+	g_free(install_dir);
+#else
+	locale_dir = g_strdup(LOCALEDIR);
+#endif
+
+	bindtextdomain(GETTEXT_PACKAGE, locale_dir);
+	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+	textdomain(GETTEXT_PACKAGE);
+	g_free(locale_dir);
+#endif
+}
+
+
 /**
  * \brief Called by Geany to initialize the plugin.
  * \note data is the same as geany_data.
  */
 void plugin_init(GeanyData *data)
 {
+    locale_init();
+
     gms_hnd = gms_new(geany->main_widgets->window,
                     data->interface_prefs->editor_font ,
                     data->editor_prefs->indentation->width

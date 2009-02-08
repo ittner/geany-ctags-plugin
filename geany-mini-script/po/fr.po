@@ -1,16 +1,17 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# French translation of the geany-mini-script package.
+# Copyright (C) 2009 Pascal BURLOT
+# This file is distributed under the same license as the geany-mini-script package.
+# Burlot Pascal <prublot(at)users(dot)sourceforge(dot)net>, 2009.
 #
+
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: geany-mini-script 0.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-07 18:59+0100\n"
 "PO-Revision-Date: 2009-02-07 19:00+0100\n"
 "Last-Translator: Burlot Pascal <prublot(at)users(dot)sourceforge(dot)net>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: French <prublot(at)users(dot)sourceforge(dot)net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -58,7 +59,7 @@ msgstr ""
 "   o tous les documents de la session courante.\n"
 "\n"
 "Le type du script peut être : \n"
-"   o un script d'un shell UNIX, \n"
+"   o un script shell UNIX, \n"
 "   o un script PERL, \n"
 "   o un script PYTHON, \n"
 "   o une liste de commandes SED,\n"
