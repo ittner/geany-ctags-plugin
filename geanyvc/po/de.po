@@ -231,7 +231,7 @@ msgstr "Zeigt die Versionshistorie der aktuellen Datei an."
 #. base version of the current file
 #: ../geanyvc.c:1970
 msgid "_Original"
-msgstr "&Original"
+msgstr "_Original"
 
 #: ../geanyvc.c:1973
 msgid "Shows the orignal of the current file"
@@ -275,7 +275,7 @@ msgstr "Zeigt die Versionshistorie für das aktuelle Verzeichnis."
 
 #: ../geanyvc.c:2049
 msgid "_Base Directory"
-msgstr "&Basisordner"
+msgstr "_Basisordner"
 
 #: ../geanyvc.c:2056
 msgid "Make a diff from the top VC directory"
@@ -311,15 +311,15 @@ msgstr "Status der Arbeitskopie anzeigen"
 
 #: ../geanyvc.c:2102
 msgid "Revert single file"
-msgstr "Änderungen verwerfen"
+msgstr "Datei zurücksetzen"
 
 #: ../geanyvc.c:2104
-msgid "Revert whole directory"
+msgid "Revert directory"
 msgstr "Verzeichnis zurücksetzen"
 
 #: ../geanyvc.c:2106
-msgid "Revert whole tree"
-msgstr ""
+msgid "Revert base directory"
+msgstr "Alle Änderungen verwerfen"
 
 #: ../geanyvc.c:2108
 msgid "Update file"

@@ -2101,9 +2101,9 @@ init_keybindings(void)
 	keybindings_set_item(plugin_key_group, VC_REVERT_FILE, kbrevert_file, 0, 0,
 			     "vc_revert_file", _("Revert single file"), menu_vc_revert_file);
 	keybindings_set_item(plugin_key_group, VC_REVERT_DIR, kbrevert_dir, 0, 0, "vc_revert_dir",
-			     _("Revert whole directory"), menu_vc_revert_dir);
+			     _("Revert directory"), menu_vc_revert_dir);
 	keybindings_set_item(plugin_key_group, VC_REVERT_BASEDIR, kbrevert_basedir, 0, 0,
-			     "vc_revert_basedir", _("Revert whole tree"), menu_vc_revert_basedir);
+			     "vc_revert_basedir", _("Revert base directory"), menu_vc_revert_basedir);
 	keybindings_set_item(plugin_key_group, VC_UPDATE, kbupdate, 0, 0, "vc_update",
 			     _("Update file"), menu_vc_update);
 }
