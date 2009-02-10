@@ -1,7 +1,7 @@
 /*
  *      geanyvc.c - Plugin to geany light IDE to work with vc
  *
- *      Copyright 2007, 2008 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
+ *      Copyright 2007-2009 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
  *      Copyright 2007, 2008 Enrico Tröger <enrico.troeger@uvena.de>
  *      Copyright 2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *      Copyright 2007, 2008 Yura Siamashka <yurand2@gmail.com>
@@ -1149,24 +1149,24 @@ add_commit_columns(GtkTreeView * treeview)
 	renderer = gtk_cell_renderer_toggle_new();
 	g_signal_connect(renderer, "toggled", G_CALLBACK(commit_toggled), treeview);
 
-	column = gtk_tree_view_column_new_with_attributes("Commit?",
+	column = gtk_tree_view_column_new_with_attributes(_("Commit Y/N"),
 							  renderer, "active", COLUMN_COMMIT, NULL);
 
-	/* set this column to a fixed sizing (of 50 pixels) */
+	/* set this column to a fixed sizing (of 80 pixels) */
 	gtk_tree_view_column_set_sizing(GTK_TREE_VIEW_COLUMN(column), GTK_TREE_VIEW_COLUMN_FIXED);
-	gtk_tree_view_column_set_fixed_width(GTK_TREE_VIEW_COLUMN(column), 70);
+	gtk_tree_view_column_set_fixed_width(GTK_TREE_VIEW_COLUMN(column), 80);
 	gtk_tree_view_append_column(treeview, column);
 
-	/* column for bug numbers */
+	/* column for status */
 	renderer = gtk_cell_renderer_text_new();
-	column = gtk_tree_view_column_new_with_attributes("Status",
+	column = gtk_tree_view_column_new_with_attributes(_("Status"),
 							  renderer, "text", COLUMN_STATUS, NULL);
 	gtk_tree_view_column_set_sort_column_id(column, COLUMN_STATUS);
 	gtk_tree_view_append_column(treeview, column);
 
-	/* column for severities */
+	/* column for path of file to commit */
 	renderer = gtk_cell_renderer_text_new();
-	column = gtk_tree_view_column_new_with_attributes("Path",
+	column = gtk_tree_view_column_new_with_attributes(_("Path"),
 							  renderer, "text", COLUMN_PATH, NULL);
 	gtk_tree_view_column_set_sort_column_id(column, COLUMN_PATH);
 	gtk_tree_view_append_column(treeview, column);
