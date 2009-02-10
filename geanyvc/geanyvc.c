@@ -938,7 +938,6 @@ vcupdate_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 {
 	gchar *text = NULL;
 	GeanyDocument *doc;
-	gboolean ret;
 
 	doc = document_get_current();
 	g_return_if_fail(doc != NULL && doc->file_name != NULL);
