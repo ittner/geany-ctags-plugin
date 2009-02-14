@@ -75,7 +75,7 @@ plugins = [
 	Plugin('geanysendmail',
 		 [ 'geanysendmail/src/geanysendmail.c' ], # source files
 		 [ 'geanysendmail', 'geanysendmail/src' ], # include dirs
-		 '0.5svn'),
+		 '0.4.1'),
 	Plugin('geanydoc',
 		 [ 'geanydoc/src/config.c', 'geanydoc/src/geanydoc.c' ], # source files
 		 [ 'geanydoc', 'geanydoc/src' ], # include dirs
