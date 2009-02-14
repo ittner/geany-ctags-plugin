@@ -1,7 +1,7 @@
 /*
  *      geanylatex.c - Plugin to let Geany better work together with LaTeX
  *
- *      Copyright 2007-2008 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
+ *      Copyright 2007-2009 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
  *      For long list of friendly supporters please have a look at THANKS.
  *
  *      This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,7 @@
 PLUGIN_VERSION_CHECK(130)
 
 PLUGIN_SET_INFO(_("LaTeX"), _("Plugin to provide better LaTeX support"),
-	"0.3dev","Frank Lanitz <frank@frank.uvena.de>")
+	"0.3","Frank Lanitz <frank@frank.uvena.de>")
 
 GeanyPlugin		*geany_plugin;
 GeanyData		*geany_data;
