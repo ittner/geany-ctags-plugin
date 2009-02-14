@@ -257,7 +257,7 @@ static struct
 pref_widgets;
 
 static void
-on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
+on_configure_response(G_GNUC_UNUSED GtkDialog *dialog, gint response, G_GNUC_UNUSED  gpointer user_data)
 {
 	if (response == GTK_RESPONSE_OK || response == GTK_RESPONSE_APPLY)
 	{
