@@ -178,6 +178,8 @@ void speller_check_document(GeanyDocument *doc)
 	g_return_if_fail(speller_dict != NULL);
 	g_return_if_fail(doc != NULL);
 
+	ui_progress_bar_start(_("Checking"));
+
 	enchant_dict_describe(speller_dict, dict_describe, &dict_string);
 
 	if (sci_has_selection(doc->editor->sci))
@@ -211,10 +213,15 @@ void speller_check_document(GeanyDocument *doc)
 
 		suggestions_found += speller_process_line(doc, i, line);
 
+		/* process other GTK events to keep the GUI being responsive */
+		while (g_main_context_iteration(NULL, FALSE));
+
 		g_free(line);
 	}
 	if (suggestions_found == 0 && sc->use_msgwin)
 		msgwin_msg_add(COLOR_BLUE, -1, NULL, _("The checked text is spelled correctly."));
+
+	ui_progress_bar_stop();
 }
 
 
