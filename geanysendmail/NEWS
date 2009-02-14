@@ -1,3 +1,8 @@
+GeanySendMail 0.4.1 (16. February 2009):
+	* Update to Geany pugin API v116
+	* Minor improvments on wording and cleanup of code
+
+
 GeanySendMail 0.4 (22. October 2008):
 
 	* Adding support for creating a mail with recipients email

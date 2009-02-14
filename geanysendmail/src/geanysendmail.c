@@ -1,7 +1,7 @@
 /*
  *      geanysendmail.c
  *
- *      Copyright 2007, 2008 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
+ *      Copyright 2007-2009 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
  *      Copyright 2007 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
  *      Copyright 2007, 2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *      Copyright 2008 Timothy Boronczyk <tboronczyk(at)gmail(dot)com>
@@ -82,9 +82,7 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
 	gchar 		*config_dir = g_path_get_dirname(config_file);
 	gchar 		*data;
 
-
 	doc = document_get_current();
-
 
 	if (doc->file_name == NULL)
 	{
@@ -137,7 +135,8 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
  					g_key_file_set_string(config, "tools", "address", address);
  				}
 
-				if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && utils_mkdir(config_dir, TRUE) != 0)
+				if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) &&
+				      utils_mkdir(config_dir, TRUE) != 0)
  				{
  					dialogs_show_msgbox(GTK_MESSAGE_ERROR,
  						_("Plugin configuration directory could not be created."));
@@ -154,12 +153,14 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
  			}
 
 			if (! utils_string_replace_all(cmd_str, "%f", locale_filename))
-				ui_set_statusbar(FALSE, _("Filename placeholder not found. The executed command might have failed."));
+				ui_set_statusbar(FALSE,
+				_("Filename placeholder not found. The executed command might have failed."));
 
 			if (use_address_dialog == TRUE && address != NULL)
 			{
 				if (! utils_string_replace_all(cmd_str, "%r", address))
- 					ui_set_statusbar(FALSE, _("Recipient address placeholder not found. The executed command might have failed."));
+ 					ui_set_statusbar(FALSE,
+					_("Recipient address placeholder not found. The executed command might have failed."));
 			}
 			else
 				/* Removes %r if option was not activ but was included into command */
@@ -266,12 +267,14 @@ on_configure_response(GtkDialog *dialog, gint response, gpointer user_data)
 		g_free(mailer);
 		mailer = g_strdup(gtk_entry_get_text(GTK_ENTRY(pref_widgets.entry)));
 
-		if (icon_in_toolbar == FALSE && gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.checkbox_icon_to_toolbar)) == TRUE)
+		if (icon_in_toolbar == FALSE &&
+		    gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.checkbox_icon_to_toolbar)) == TRUE)
 		{
 			icon_in_toolbar = TRUE;
 			show_icon();
 		}
-		else if (icon_in_toolbar == TRUE && gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.checkbox_icon_to_toolbar)) == FALSE)
+		else if (icon_in_toolbar == TRUE &&
+		    gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.checkbox_icon_to_toolbar)) == FALSE)
 		{
 			cleanup_icon();
 			icon_in_toolbar = FALSE;
@@ -359,7 +362,6 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	gtk_container_add(GTK_CONTAINER(vbox), label2);
 	gtk_box_pack_start(GTK_BOX(vbox), pref_widgets.checkbox_icon_to_toolbar, TRUE, FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(vbox), pref_widgets.checkbox_use_addressdialog, TRUE, FALSE, 2);
-
 
 	gtk_widget_show(vbox);
 
