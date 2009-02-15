@@ -1,7 +1,7 @@
 These installation instructions are written for a Linux system.
 
 At the time of this writing, building the plugin requires a recent SVN
-checkout of the Geany sources (Geany Plugin API v104).
+checkout of the Geany sources (Geany Plugin API v130).
 
 You need for compliling the plugin the Geany header files installed.
 For configuring and installing just run
