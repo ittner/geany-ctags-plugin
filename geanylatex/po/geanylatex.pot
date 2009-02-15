@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-28 22:23+0100\n"
+"POT-Creation-Date: 2009-02-15 23:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,98 +24,98 @@ msgstr ""
 msgid "Plugin to provide better LaTeX support"
 msgstr ""
 
-#: src/geanylatex.c:101
+#: src/geanylatex.c:109
 msgid "Insert label"
 msgstr ""
 
-#: src/geanylatex.c:114
+#: src/geanylatex.c:122
 msgid "Label name:"
 msgstr ""
 
-#: src/geanylatex.c:149
+#: src/geanylatex.c:158
 msgid "Insert reference"
 msgstr ""
 
-#: src/geanylatex.c:162
+#: src/geanylatex.c:171
 msgid "Ref name:"
 msgstr ""
 
-#: src/geanylatex.c:173
+#: src/geanylatex.c:182
 msgid "Standard Reference"
 msgstr ""
 
-#: src/geanylatex.c:178
+#: src/geanylatex.c:187
 msgid "Page Reference"
 msgstr ""
 
-#: src/geanylatex.c:351
+#: src/geanylatex.c:363
 msgid "More"
 msgstr ""
 
 #. Documentclass
-#: src/geanylatex.c:446
+#: src/geanylatex.c:458
 msgid "Documentclass:"
 msgstr ""
 
-#: src/geanylatex.c:449
+#: src/geanylatex.c:461
 msgid "Choose the kind of document you want to write"
 msgstr ""
 
-#: src/geanylatex.c:451 src/bibtexlabels.c:27
+#: src/geanylatex.c:463 src/bibtexlabels.c:27
 msgid "Book"
 msgstr ""
 
-#: src/geanylatex.c:453 src/bibtexlabels.c:26
+#: src/geanylatex.c:465 src/bibtexlabels.c:26
 msgid "Article"
 msgstr ""
 
-#: src/geanylatex.c:455
+#: src/geanylatex.c:467
 msgid "Report"
 msgstr ""
 
-#: src/geanylatex.c:457
+#: src/geanylatex.c:469
 msgid "Letter"
 msgstr ""
 
-#: src/geanylatex.c:459
+#: src/geanylatex.c:471
 msgid "Presentation"
 msgstr ""
 
 #. Encoding
-#: src/geanylatex.c:469
+#: src/geanylatex.c:481
 msgid "Encoding:"
 msgstr ""
 
-#: src/geanylatex.c:473
+#: src/geanylatex.c:485
 msgid "Set the encoding for your new document"
 msgstr ""
 
 #. fontsize
-#: src/geanylatex.c:488
+#: src/geanylatex.c:500
 msgid "Fontsize:"
 msgstr ""
 
-#: src/geanylatex.c:491
+#: src/geanylatex.c:503
 msgid "Set the default fontsize of your new document"
 msgstr ""
 
 #. Author
-#: src/geanylatex.c:504
+#: src/geanylatex.c:516
 msgid "Author:"
 msgstr ""
 
-#: src/geanylatex.c:507
+#: src/geanylatex.c:519
 msgid ""
 "Sets the value of the \\author command. In most cases this should be your "
 "name"
 msgstr ""
 
 #. Date
-#: src/geanylatex.c:518
+#: src/geanylatex.c:530
 msgid "Date:"
 msgstr ""
 
-#: src/geanylatex.c:521
+#: src/geanylatex.c:533
 msgid ""
 "Sets the value of the \\date command inside header of your\t\t newly created "
 "LaTeX-document. Keeping it at \\today is a good \t\t decision if you don't "
@@ -123,107 +123,122 @@ msgid ""
 msgstr ""
 
 #. Title of the new document
-#: src/geanylatex.c:530
+#: src/geanylatex.c:542
 msgid "Title:"
 msgstr ""
 
-#: src/geanylatex.c:533
+#: src/geanylatex.c:545
 msgid "Sets the title of your new document."
 msgstr ""
 
 #. Papersize
-#: src/geanylatex.c:539
+#: src/geanylatex.c:551
 msgid "Paper size:"
 msgstr ""
 
-#: src/geanylatex.c:542
+#: src/geanylatex.c:554
 msgid "Choose the paper format for the newly created document"
 msgstr ""
 
 #. Building the wizard-dialog and showing it
-#: src/geanylatex.c:557
+#: src/geanylatex.c:569
 msgid "LaTeX-Wizard"
 msgstr ""
 
-#: src/geanylatex.c:568
+#: src/geanylatex.c:580
 msgid "Use KOMA-script classes if possible"
 msgstr ""
 
-#: src/geanylatex.c:570
+#: src/geanylatex.c:582
 msgid ""
 "Uses the KOMA-script classes by Markus Kohm.\n"
 "Keep in mind: To compile your document these classeshave to be installed "
 "before."
 msgstr ""
 
-#: src/geanylatex.c:577
+#: src/geanylatex.c:589
 msgid "Use draft mode"
 msgstr ""
 
-#: src/geanylatex.c:579
+#: src/geanylatex.c:591
 msgid ""
 "Set the draft flag inside new created documents to get documents with a "
 "number of debugging helpers"
 msgstr ""
 
-#: src/geanylatex.c:807
+#: src/geanylatex.c:819
 msgid "Dear Sir or Madame"
 msgstr ""
 
-#: src/geanylatex.c:808
+#: src/geanylatex.c:820
 msgid "With kind regards"
 msgstr ""
 
-#: src/geanylatex.c:850
+#: src/geanylatex.c:859
+msgid ""
+"GeanyLaTeX is a plugin to improve support for LaTeX in Geany.\n"
+"\n"
+"Please report all bugs or feature requests to one of the authors."
+msgstr ""
+
+#: src/geanylatex.c:878
 msgid "_LaTeX"
 msgstr ""
 
-#: src/geanylatex.c:857
+#: src/geanylatex.c:885
 msgid "LaTeX-_Wizard"
 msgstr ""
 
-#: src/geanylatex.c:860
+#: src/geanylatex.c:888
 msgid "Starts a Wizard to easily create LaTeX-documents"
 msgstr ""
 
-#: src/geanylatex.c:865
+#: src/geanylatex.c:893
 msgid "Insert _Special Character"
 msgstr ""
 
-#: src/geanylatex.c:867
+#: src/geanylatex.c:895
 msgid "Helps to use some not very common letters and signs"
 msgstr ""
 
-#: src/geanylatex.c:877
+#: src/geanylatex.c:905
 msgid "Insert _Reference"
 msgstr ""
 
-#: src/geanylatex.c:879
+#: src/geanylatex.c:907
 msgid "Inserting references to the document"
 msgstr ""
 
-#: src/geanylatex.c:884
+#: src/geanylatex.c:912
 msgid "Insert _Label"
 msgstr ""
 
-#: src/geanylatex.c:886
+#: src/geanylatex.c:914
 msgid "Helps at inserting labels to a document"
 msgstr ""
 
-#: src/geanylatex.c:891
+#: src/geanylatex.c:919
 msgid "BibTeX"
 msgstr ""
 
-#: src/geanylatex.c:910
+#: src/geanylatex.c:935
+msgid "Format"
+msgstr ""
+
+#: src/geanylatex.c:953
 msgid "Run LaTeX-Wizard"
 msgstr ""
 
-#: src/geanylatex.c:912
+#: src/geanylatex.c:955
 msgid "Insert \\label"
 msgstr ""
 
-#: src/geanylatex.c:914
+#: src/geanylatex.c:957
 msgid "Insert \\ref"
+msgstr ""
+
+#: src/geanylatex.c:959
+msgid "Insert linebreak \\\\ "
 msgstr ""
 
 #: src/latexencodings.c:37
@@ -546,4 +561,32 @@ msgstr ""
 
 #: src/bibtexlabels.c:124
 msgid "Year of publication or creation if unpublished"
+msgstr ""
+
+#: src/formatpatterns.c:35
+msgid "Italic"
+msgstr ""
+
+#: src/formatpatterns.c:36
+msgid "Boldfont"
+msgstr ""
+
+#: src/formatpatterns.c:37
+msgid "Underline"
+msgstr ""
+
+#: src/formatpatterns.c:38
+msgid "Slanted"
+msgstr ""
+
+#: src/formatpatterns.c:39
+msgid "Typewriter"
+msgstr ""
+
+#: src/formatpatterns.c:40
+msgid "Small Caps"
+msgstr ""
+
+#: src/formatpatterns.c:41
+msgid "Emphasis"
 msgstr ""

@@ -28,7 +28,7 @@
 
 #include "geany.h"
 #include "support.h"
-#include "plugindata.h"
+
 #include "document.h"
 #include "editor.h"
 #include "filetypes.h"
@@ -38,13 +38,15 @@
 #include "ui_utils.h"
 #include "keybindings.h"
 #include "prefs.h"
-#include "geanyfunctions.h"
 #include "datatypes.h"
 #include "letters.h"
 #include "latexencodings.h"
 #include "bibtex.h"
 #include "latexutils.h"
 #include "reftex.h"
+#include "formatutils.h"
+#include "plugindata.h"
+#include "geanyfunctions.h"
 
 #include <gtk/gtk.h>
 

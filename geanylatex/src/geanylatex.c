@@ -43,6 +43,8 @@ GtkWidget *menu_latex_ref = NULL;
 GtkWidget *menu_latex_label = NULL;
 GtkWidget *menu_latex_bibtex = NULL;
 GtkWidget *menu_latex_bibtex_submenu = NULL;
+GtkWidget *menu_latex_format_insert = NULL;
+GtkWidget *menu_latex_format_insert_submenu = NULL;
 
 static GtkWidget *main_menu_item = NULL;
 
@@ -930,15 +932,30 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 			G_CALLBACK(insert_bibtex_entry), GINT_TO_POINTER(i));
 	}
 
-	/* init keybindins */
+	menu_latex_format_insert = gtk_menu_item_new_with_mnemonic(_("Format"));
+	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_format_insert);
 
+	menu_latex_format_insert_submenu = gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_latex_format_insert),
+		menu_latex_format_insert_submenu);
+
+	for (i = 0; i < LATEX_STYLES_END; i++)
+	{
+		tmp = NULL;
+		tmp = gtk_menu_item_new_with_mnemonic(_(format_labels[i]));
+		gtk_container_add(GTK_CONTAINER(menu_latex_format_insert_submenu), tmp);
+		g_signal_connect((gpointer) tmp, "activate",
+			G_CALLBACK(insert_latex_format), GINT_TO_POINTER(i));
+	}
+
+	/* init keybindins */
 	keybindings_set_item(plugin_key_group, LATEX_WIZZARD_KB, kbwizard,
 		0, 0, "run_latex_wizard", _("Run LaTeX-Wizard"), menu_latex_wizzard);
 	keybindings_set_item(plugin_key_group, LATEX_INSERT_LABEL_KB, kblabel_insert,
 		0, 0, "insert_latex_label", _("Insert \\label"), menu_latex_label);
 	keybindings_set_item(plugin_key_group, LATEX_INSERT_REF_KB, kbref_insert,
 		0, 0, "insert_latex_ref", _("Insert \\ref"), menu_latex_ref);
-	keybindings_set_item(plugin_key_group, LATEX_INSERT_NEWLINE, kb_insert_newline, 
+	keybindings_set_item(plugin_key_group, LATEX_INSERT_NEWLINE, kb_insert_newline,
 		0, 0, "insert_new_line", _("Insert linebreak \\\\ "), NULL);
 /*	keybindings_set_item(plugin_key_group, LATEX_INSERT_BIBTEX_ENTRY_KB,
 		kb_bibtex_entry_insert, 0, 0, "insert_latex_bibtex_entry", _("Add BiBTeX entry"),

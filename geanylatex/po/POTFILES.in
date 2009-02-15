@@ -3,3 +3,5 @@ src/latexencodings.c
 src/letters.c
 src/bibtex.c
 src/bibtexlabels.c
+src/formatutils.c
+src/formatpatterns.c
