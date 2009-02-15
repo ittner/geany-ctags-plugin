@@ -852,6 +852,18 @@ static void kb_insert_newline(G_GNUC_UNUSED guint key_id)
 	insert_bibtex_entry(NULL, NULL);
 }*/
 
+void init_keybindings()
+{
+	/* init keybindins */
+	keybindings_set_item(plugin_key_group, LATEX_WIZZARD_KB, kbwizard,
+		0, 0, "run_latex_wizard", _("Run LaTeX-Wizard"), menu_latex_wizzard);
+	keybindings_set_item(plugin_key_group, LATEX_INSERT_LABEL_KB, kblabel_insert,
+		0, 0, "insert_latex_label", _("Insert \\label"), menu_latex_label);
+	keybindings_set_item(plugin_key_group, LATEX_INSERT_REF_KB, kbref_insert,
+		0, 0, "insert_latex_ref", _("Insert \\ref"), menu_latex_ref);
+	keybindings_set_item(plugin_key_group, LATEX_INSERT_NEWLINE, kb_insert_newline,
+		0, 0, "insert_new_line", _("Insert linebreak \\\\ "), NULL);
+}
 
 void plugin_help()
 {
@@ -948,18 +960,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 			G_CALLBACK(insert_latex_format), GINT_TO_POINTER(i));
 	}
 
-	/* init keybindins */
-	keybindings_set_item(plugin_key_group, LATEX_WIZZARD_KB, kbwizard,
-		0, 0, "run_latex_wizard", _("Run LaTeX-Wizard"), menu_latex_wizzard);
-	keybindings_set_item(plugin_key_group, LATEX_INSERT_LABEL_KB, kblabel_insert,
-		0, 0, "insert_latex_label", _("Insert \\label"), menu_latex_label);
-	keybindings_set_item(plugin_key_group, LATEX_INSERT_REF_KB, kbref_insert,
-		0, 0, "insert_latex_ref", _("Insert \\ref"), menu_latex_ref);
-	keybindings_set_item(plugin_key_group, LATEX_INSERT_NEWLINE, kb_insert_newline,
-		0, 0, "insert_new_line", _("Insert linebreak \\\\ "), NULL);
-/*	keybindings_set_item(plugin_key_group, LATEX_INSERT_BIBTEX_ENTRY_KB,
-		kb_bibtex_entry_insert, 0, 0, "insert_latex_bibtex_entry", _("Add BiBTeX entry"),
-		menu_latex_bibtex); */
+	init_keybindings();
 
 	ui_add_document_sensitive(menu_latex_menu_special_char);
 	ui_add_document_sensitive(menu_latex_ref);
