@@ -52,23 +52,29 @@ enum
 	LATEX_WIZZARD_KB,
 	LATEX_INSERT_LABEL_KB,
 	LATEX_INSERT_REF_KB,
-/*	LATEX_INSERT_BIBTEX_ENTRY_KB,*/
+	LATEX_INSERT_NEWLINE,
 	COUNT_KB
 };
 
 PLUGIN_KEY_GROUP(geanylatex, COUNT_KB)
 
 void
-insert_string(gchar *string)
+insert_string(gchar *string, gboolean reset_position)
 {
 	GeanyDocument *doc = NULL;
 
+
 	doc = document_get_current();
 
-	if (doc != NULL)
+	if (doc != NULL && string != NULL)
 	{
 		gint pos = sci_get_current_position(doc->editor->sci);
 		sci_insert_text(doc->editor->sci, pos, string);
+		if (reset_position == TRUE)
+		{
+			gint len = strlen(string);
+			sci_set_current_position(doc->editor->sci, pos + len, TRUE);
+		}
 	}
 }
 
@@ -84,7 +90,7 @@ static void
 char_insert_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 					  G_GNUC_UNUSED gpointer gdata)
 {
-	insert_string(get_latex_command(GPOINTER_TO_INT(gdata)));
+	insert_string(get_latex_command(GPOINTER_TO_INT(gdata)), TRUE);
 }
 
 
@@ -127,7 +133,7 @@ insert_label_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 		gchar *label_str = NULL;
 		label_str = g_strconcat("\\label{",g_strdup(gtk_entry_get_text(
 			GTK_ENTRY(textbox_label))), "}", NULL);
-		insert_string(label_str);
+		insert_string(label_str, TRUE);
 	}
 
 	gtk_widget_destroy(dialog);
@@ -202,7 +208,7 @@ insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 
 		if (ref_string != NULL)
 		{
-			insert_string(ref_string);
+			insert_string(ref_string, TRUE);
 			g_free(ref_string);
 		}
 	}
@@ -222,6 +228,7 @@ static void character_create_menu_item(GtkWidget *menu, const gchar *label,
 	g_signal_connect((gpointer) tmp, "activate",
 		G_CALLBACK(callback), GINT_TO_POINTER(letter));
 }
+
 
 /* returns -1, if there are more than gint can work with or any other error
  * returns 0, if categorie is empty
@@ -267,6 +274,7 @@ count_menu_cat_entries(CategoryName *tmp)
 	for (i = 0; tmp[i].label != NULL; i++);
 	return i;
 }
+
 
 void sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template,
 				   CategoryName *category_name,
@@ -832,6 +840,11 @@ static void kbwizard(G_GNUC_UNUSED guint key_id)
 	wizard_activated(NULL, NULL);
 }
 
+static void kb_insert_newline(G_GNUC_UNUSED guint key_id)
+{
+	insert_string("\\\\\n", TRUE);
+}
+
 /*static void kb_bibtex_entry_insert(G_GNUC_UNUSED guint key_id)
 {
 	insert_bibtex_entry(NULL, NULL);
@@ -925,6 +938,8 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 		0, 0, "insert_latex_label", _("Insert \\label"), menu_latex_label);
 	keybindings_set_item(plugin_key_group, LATEX_INSERT_REF_KB, kbref_insert,
 		0, 0, "insert_latex_ref", _("Insert \\ref"), menu_latex_ref);
+	keybindings_set_item(plugin_key_group, LATEX_INSERT_NEWLINE, kb_insert_newline, 
+		0, 0, "insert_new_line", _("Insert linebreak \\\\ "), NULL);
 /*	keybindings_set_item(plugin_key_group, LATEX_INSERT_BIBTEX_ENTRY_KB,
 		kb_bibtex_entry_insert, 0, 0, "insert_latex_bibtex_entry", _("Add BiBTeX entry"),
 		menu_latex_bibtex); */

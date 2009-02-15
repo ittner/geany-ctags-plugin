@@ -135,7 +135,7 @@ void insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	}
 
 	output = g_strconcat(output, "}\n", NULL);
-	insert_string(output);
+	insert_string(output, FALSE);
 
 	g_free(output);
 }

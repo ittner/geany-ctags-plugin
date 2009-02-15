@@ -1,3 +1,10 @@
+2009-02-14  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Added a keyboard shortcut for inserting a new line ( \\ ).
+ * Make cursor placed behind inserted text for most cases. 
+   (Inserting BibTeX entries will not reset the cursor)
+
+
 2009-01-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Improved reference dialog to offer labels based on aux file
