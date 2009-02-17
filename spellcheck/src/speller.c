@@ -59,12 +59,15 @@ static void dict_describe(const gchar* const lang, const gchar* const name,
 }
 
 
-static gint speller_check_word(GeanyDocument *doc, gint line_number, const gchar *word,
+gint speller_check_word(GeanyDocument *doc, gint line_number, const gchar *word,
 					    gint start_pos, gint end_pos)
 {
 	gsize n_suggs = 0;
 
 	g_return_val_if_fail(speller_dict != NULL, 0);
+	g_return_val_if_fail(doc != NULL, 0);
+	g_return_val_if_fail(word != NULL, 0);
+	g_return_val_if_fail(start_pos >= 0 && end_pos >= 0, 0);
 
 	if (! NZV(word))
 		return 0;
@@ -81,12 +84,9 @@ static gint speller_check_word(GeanyDocument *doc, gint line_number, const gchar
 	if (enchant_dict_check(speller_dict, word, -1) == 0)
 		return 0;
 
-	if (start_pos == -1)
-		start_pos = end_pos - strlen(word);
-
 	editor_indicator_set_on_range(doc->editor, GEANY_INDICATOR_ERROR, start_pos, end_pos);
 
-	if (sc->use_msgwin)
+	if (sc->use_msgwin && line_number != -1)
 	{
 		gsize j;
 		gchar **suggs;
@@ -119,7 +119,7 @@ static gint speller_check_word(GeanyDocument *doc, gint line_number, const gchar
 }
 
 
-gint speller_process_line(GeanyDocument *doc, gint line_number, const gchar *line)
+static gint speller_process_line(GeanyDocument *doc, gint line_number, const gchar *line)
 {
 	gint pos_start, pos_end;
 	gint wstart, wend;
@@ -134,7 +134,6 @@ gint speller_process_line(GeanyDocument *doc, gint line_number, const gchar *lin
 	str = g_string_sized_new(256);
 
 	pos_start = sci_get_position_from_line(doc->editor->sci, line_number);
-	/* TODO use SCI_GETLINEENDPOSITION */
 	pos_end = sci_get_position_from_line(doc->editor->sci, line_number + 1);
 
 	while (pos_start < pos_end)

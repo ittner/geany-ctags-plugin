@@ -129,20 +129,6 @@ void gui_toolbar_update(void)
 }
 
 
-static void clear_indicators_on_line(GeanyDocument *doc, gint line_number)
-{
-	gint start_pos, length;
-
-	g_return_if_fail(doc != NULL);
-
-	start_pos = sci_get_position_from_line(doc->editor->sci, line_number);
-	length = sci_get_line_length(doc->editor->sci, line_number);
-
-	sci_indicator_clear(doc->editor->sci, start_pos, length);
-}
-
-
-
 static void menu_suggestion_item_activate_cb(GtkMenuItem *menuitem, gpointer gdata)
 {
 	const gchar *sugg;
@@ -345,51 +331,42 @@ void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 }
 
 
-/* Checks only the last word before the current cursor position -> check as you type. */
-gboolean gui_key_release_cb(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
+static void indicator_clear_on_range(GeanyEditor *editor, gint start, gint len)
 {
-	gint line_number;
-	GString *str = g_string_sized_new(256);
-	gchar *line;
-	GeanyDocument *doc;
-	static time_t time_prev = 0;
-	time_t time_now = time(NULL);
-	GtkWidget *focusw;
+	sci_indicator_set(editor->sci, GEANY_INDICATOR_ERROR);
+	sci_indicator_clear(editor->sci, start, len);
+}
 
-	if (! sc->check_while_typing)
-		return FALSE;
-	/* check only once a second */
-	if (time_now == time_prev)
-		return FALSE;
-	/* set current time for the next key press */
-	time_prev = time_now;
 
-	doc = document_get_current();
-	/* bail out if we don't have a document or if we are not in the editor widget */
-	focusw = gtk_window_get_focus(GTK_WINDOW(geany->main_widgets->window));
-	if (doc == NULL || focusw != GTK_WIDGET(doc->editor->sci))
-		return FALSE;
+gboolean gui_editor_notify_cb(GObject *obj, GeanyEditor *editor, SCNotification *nt, gpointer data)
+{
+	gint start_pos, end_pos, pos;
+	gchar *word;
 
-	if (ev->keyval == '\r' &&
-		scintilla_send_message(doc->editor->sci, SCI_GETEOLMODE, 0, 0) == SC_EOL_CRLF)
-	{	/* prevent double line checking */
+	if (! sc->check_while_typing ||	nt->nmhdr.code != SCN_MODIFIED ||
+		! (nt->modificationType & (SC_MOD_INSERTTEXT | SC_MOD_DELETETEXT)))
+	{
 		return FALSE;
 	}
 
-	line_number = sci_get_current_line(doc->editor->sci);
-	if (ev->keyval == '\n' || ev->keyval == '\r')
-		line_number--; /* check previous line if we start a new one */
-	line = sci_get_line(doc->editor->sci, line_number);
+	pos = nt->position;
 
-	clear_indicators_on_line(doc, line_number);
-	if (speller_process_line(doc, line_number, line) != 0)
+	/* retrieve the word at the position */
+	word = editor_get_word_at_pos(editor, pos, GEANY_WORDCHARS);
+	if (word == NULL)
+		return FALSE;
+
+	start_pos = scintilla_send_message(editor->sci, SCI_WORDSTARTPOSITION, pos, 0);
+	end_pos = start_pos + strlen(word);
+
+	indicator_clear_on_range(editor, start_pos, end_pos - start_pos);
+	if (speller_check_word(editor->document, -1, word, start_pos, end_pos) != 0)
 	{
 		if (sc->use_msgwin)
 			msgwin_switch_tab(MSG_MESSAGE, FALSE);
 	}
 
-	g_string_free(str, TRUE);
-	g_free(line);
+	g_free(word);
 
 	return FALSE;
 }
