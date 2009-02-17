@@ -37,6 +37,7 @@ typedef struct
 	gboolean show_toolbar_item;
 	GPtrArray *dicts;
 	GtkWidget *menu_item;
+	GtkWidget *submenu_item_default;
 	GtkWidget *edit_menu;
 	GtkWidget *edit_menu_sep;
 	GtkWidget *edit_menu_sub;

@@ -194,7 +194,7 @@ void plugin_init(GeanyData *data)
 
 	/* setup keybindings */
 	keybindings_set_item(plugin_key_group, KB_SPELL_CHECK, gui_kb_run_activate_cb,
-		0, 0, "spell_check", _("Run Spell Check"), NULL);
+		0, 0, "spell_check", _("Run Spell Check"), sc->submenu_item_default);
 	keybindings_set_item(plugin_key_group, KB_SPELL_TOOGLE_TYPING,
 		gui_kb_toggle_typing_activate_cb, 0, 0, "spell_toggle_typing",
 		_("Toggle Check While Typing"), NULL);

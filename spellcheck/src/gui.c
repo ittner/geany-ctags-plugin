@@ -427,7 +427,7 @@ void gui_create_edit_menu(void)
 
 GtkWidget *gui_create_menu(GtkWidget *sp_item)
 {
-	GtkWidget *menu, *subitem;
+	GtkWidget *menu, *menu_item;
 	guint i;
 
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), sp_item);
@@ -435,17 +435,15 @@ GtkWidget *gui_create_menu(GtkWidget *sp_item)
 	menu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(sp_item), menu);
 
-	subitem = gtk_menu_item_new_with_mnemonic(_("Default"));
-	gtk_container_add(GTK_CONTAINER(menu), subitem);
-	g_signal_connect(subitem, "activate", G_CALLBACK(menu_item_activate_cb), NULL);
+	sc->submenu_item_default = gtk_menu_item_new_with_mnemonic(_("Default"));
+	gtk_container_add(GTK_CONTAINER(menu), sc->submenu_item_default);
+	g_signal_connect(sc->submenu_item_default, "activate", G_CALLBACK(menu_item_activate_cb), NULL);
 
-	subitem = gtk_separator_menu_item_new();
-	gtk_container_add(GTK_CONTAINER(menu), subitem);
+	menu_item = gtk_separator_menu_item_new();
+	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 
 	for (i = 0; i < sc->dicts->len; i++)
 	{
-		GtkWidget *menu_item;
-
 		menu_item = gtk_menu_item_new_with_label(g_ptr_array_index(sc->dicts, i));
 		gtk_container_add(GTK_CONTAINER(menu), menu_item);
 		g_signal_connect(menu_item, "activate",

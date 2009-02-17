@@ -9,6 +9,8 @@
    typing.
    These changes should increase the usability and accuracy of the
    'check while typing' feature while not being much slower (if ever).
+ * src/gui.c, src/scplugin.c, src/scplugin.h:
+   Display accelerator on the 'Default' menu item.
 
 
 2009-02-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
