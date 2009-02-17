@@ -27,31 +27,31 @@
 #define SC_SPELLER_H 1
 
 
-gint speller_check_word(GeanyDocument *doc, gint line_number, const gchar *word,
-					    gint start_pos, gint end_pos);
+gint sc_speller_check_word(GeanyDocument *doc, gint line_number, const gchar *word,
+						   gint start_pos, gint end_pos);
 
-void speller_check_document(GeanyDocument *doc);
+void sc_speller_check_document(GeanyDocument *doc);
 
-void speller_reinit_enchant_dict(void);
+void sc_speller_reinit_enchant_dict(void);
 
-gchar *speller_get_default_lang(void);
+gchar *sc_speller_get_default_lang(void);
 
-void speller_dict_free_string_list(gchar **tmp_suggs);
+void sc_speller_dict_free_string_list(gchar **tmp_suggs);
 
-void speller_add_word(const gchar *word);
+void sc_speller_add_word(const gchar *word);
 
-gboolean speller_dict_check(const gchar *word);
+gboolean sc_speller_dict_check(const gchar *word);
 
-gchar **speller_dict_suggest(const gchar *word, gsize *n_suggs);
+gchar **sc_speller_dict_suggest(const gchar *word, gsize *n_suggs);
 
-gboolean speller_is_text(GeanyDocument *doc, gint pos);
+gboolean sc_speller_is_text(GeanyDocument *doc, gint pos);
 
-void speller_add_word_to_session(const gchar *word);
+void sc_speller_add_word_to_session(const gchar *word);
 
-void speller_store_replacement(const gchar *old_word, const gchar *new_word);
+void sc_speller_store_replacement(const gchar *old_word, const gchar *new_word);
 
-void speller_init(void);
+void sc_speller_init(void);
 
-void speller_free(void);
+void sc_speller_free(void);
 
 #endif

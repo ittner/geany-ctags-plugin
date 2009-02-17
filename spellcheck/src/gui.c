@@ -60,22 +60,9 @@ static gboolean ignore_sc_callback = FALSE;
 
 
 
-void gui_perform_check(GeanyDocument *doc)
-{
-	editor_indicator_clear(doc->editor, GEANY_INDICATOR_ERROR);
-	if (sc->use_msgwin)
-	{
-		msgwin_clear_tab(MSG_MESSAGE);
-		msgwin_switch_tab(MSG_MESSAGE, FALSE);
-	}
-
-	speller_check_document(doc);
-}
-
-
 static void print_typing_changed_message(void)
 {
-	if (sc->check_while_typing)
+	if (sc_info->check_while_typing)
 		ui_set_statusbar(FALSE, _("Spell checking while typing is now enabled"));
 	else
 		ui_set_statusbar(FALSE, _("Spell checking while typing is now disabled"));
@@ -87,43 +74,43 @@ static void toolbar_item_toggled_cb(GtkToggleToolButton *button, gpointer user_d
 	if (ignore_sc_callback)
 		return;
 
-	sc->check_while_typing = gtk_toggle_tool_button_get_active(button);
+	sc_info->check_while_typing = gtk_toggle_tool_button_get_active(button);
 
 	print_typing_changed_message();
 
 }
 
 
-void gui_toolbar_update(void)
+void sc_gui_toolbar_update(void)
 {
 	/* toolbar item is not requested, so remove the item if it exists */
-	if (! sc->show_toolbar_item)
+	if (! sc_info->show_toolbar_item)
 	{
-		if (sc->toolbar_button != NULL)
+		if (sc_info->toolbar_button != NULL)
 		{
-			gtk_widget_hide(GTK_WIDGET(sc->toolbar_button));
+			gtk_widget_hide(GTK_WIDGET(sc_info->toolbar_button));
 		}
 	}
 	else
 	{
-		if (sc->toolbar_button == NULL)
+		if (sc_info->toolbar_button == NULL)
 		{
-			sc->toolbar_button = gtk_toggle_tool_button_new_from_stock(GTK_STOCK_SPELL_CHECK);
+			sc_info->toolbar_button = gtk_toggle_tool_button_new_from_stock(GTK_STOCK_SPELL_CHECK);
 #if GTK_CHECK_VERSION(2, 12, 0)
-			gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(sc->toolbar_button),
+			gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(sc_info->toolbar_button),
 				_("Toggle spell check while typing"));
 #endif
-			plugin_add_toolbar_item(geany_plugin, sc->toolbar_button);
-			ui_add_document_sensitive(GTK_WIDGET(sc->toolbar_button));
+			plugin_add_toolbar_item(geany_plugin, sc_info->toolbar_button);
+			ui_add_document_sensitive(GTK_WIDGET(sc_info->toolbar_button));
 
-			g_signal_connect(sc->toolbar_button, "toggled",
+			g_signal_connect(sc_info->toolbar_button, "toggled",
 				G_CALLBACK(toolbar_item_toggled_cb), NULL);
 		}
-		gtk_widget_show(GTK_WIDGET(sc->toolbar_button));
+		gtk_widget_show(GTK_WIDGET(sc_info->toolbar_button));
 
 		ignore_sc_callback = TRUE;
 		gtk_toggle_tool_button_set_active(
-			GTK_TOGGLE_TOOL_BUTTON(sc->toolbar_button), sc->check_while_typing);
+			GTK_TOGGLE_TOOL_BUTTON(sc_info->toolbar_button), sc_info->check_while_typing);
 		ignore_sc_callback = FALSE;
 	}
 }
@@ -158,7 +145,7 @@ static void menu_suggestion_item_activate_cb(GtkMenuItem *menuitem, gpointer gda
 		sci_replace_sel(sci, sugg);
 
 		/* store the replacement for future checks */
-		speller_store_replacement(word, sugg);
+		sc_speller_store_replacement(word, sugg);
 
 		/* remove indicator */
 		sci_indicator_clear(sci, startword, endword - startword);
@@ -168,7 +155,7 @@ static void menu_suggestion_item_activate_cb(GtkMenuItem *menuitem, gpointer gda
 }
 
 
-static void on_menu_addword_item_activate(GtkMenuItem *menuitem, gpointer gdata)
+static void menu_addword_item_activate_cd(GtkMenuItem *menuitem, gpointer gdata)
 {
 	gint startword, endword, i, doc_len;
 	ScintillaObject *sci;
@@ -181,10 +168,10 @@ static void on_menu_addword_item_activate(GtkMenuItem *menuitem, gpointer gdata)
 	/* if we ignore the word, we add it to the current session, to ignore it
 	 * also for further checks*/
 	if (ignore)
-		speller_add_word_to_session(clickinfo.word);
+		sc_speller_add_word_to_session(clickinfo.word);
 	/* if we do not ignore the word, we add the word to the personal dictionary */
 	else
-		speller_add_word(clickinfo.word);
+		sc_speller_add_word(clickinfo.word);
 
 	/* Remove all indicators on the added/ignored word */
 	sci = clickinfo.doc->editor->sci;
@@ -228,16 +215,16 @@ static GtkWidget *image_menu_item_new(const gchar *stock_id, const gchar *label)
 }
 
 
-void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
-							   GeanyDocument *doc, gpointer user_data)
+void sc_gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
+								  GeanyDocument *doc, gpointer user_data)
 {
 	gchar *search_word;
 
 	g_return_if_fail(doc != NULL && doc->is_valid);
 
 	/* hide the submenu in any case, we will reshow it again if we actually found something */
-	gtk_widget_hide(sc->edit_menu);
-	gtk_widget_hide(sc->edit_menu_sep);
+	gtk_widget_hide(sc_info->edit_menu);
+	gtk_widget_hide(sc_info->edit_menu_sep);
 
 	/* if we have a selection, prefer it over the current word */
 	if (sci_has_selection(doc->editor->sci))
@@ -250,30 +237,30 @@ void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 		search_word = g_strdup(word);
 
 	/* ignore numbers or words starting with digits and non-text */
-	if (! NZV(search_word) || isdigit(*search_word) || ! speller_is_text(doc, pos))
+	if (! NZV(search_word) || isdigit(*search_word) || ! sc_speller_is_text(doc, pos))
 	{
 		g_free(search_word);
 		return;
 	}
 
-	if (speller_dict_check(search_word) != 0)
+	if (sc_speller_dict_check(search_word) != 0)
 	{
 		GtkWidget *menu_item, *menu;
 		gchar *label;
 		gsize n_suggs, i;
 		gchar **suggs;
 
-		suggs = speller_dict_suggest(search_word, &n_suggs);
+		suggs = sc_speller_dict_suggest(search_word, &n_suggs);
 
 		clickinfo.pos = pos;
 		clickinfo.doc = doc;
 		setptr(clickinfo.word, search_word);
 
-		if (sc->edit_menu_sub != NULL && GTK_IS_WIDGET(sc->edit_menu_sub))
-			gtk_widget_destroy(sc->edit_menu_sub);
+		if (sc_info->edit_menu_sub != NULL && GTK_IS_WIDGET(sc_info->edit_menu_sub))
+			gtk_widget_destroy(sc_info->edit_menu_sub);
 
-		sc->edit_menu_sub = menu = gtk_menu_new();
-		gtk_menu_item_set_submenu(GTK_MENU_ITEM(sc->edit_menu), sc->edit_menu_sub);
+		sc_info->edit_menu_sub = menu = gtk_menu_new();
+		gtk_menu_item_set_submenu(GTK_MENU_ITEM(sc_info->edit_menu), sc_info->edit_menu_sub);
 
 		for (i = 0; i < n_suggs; i++)
 		{
@@ -299,28 +286,28 @@ void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 		{
 			menu_item = gtk_menu_item_new_with_label(_("(No Suggestions)"));
 			gtk_widget_set_sensitive(menu_item, FALSE);
-			gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
+			gtk_container_add(GTK_CONTAINER(sc_info->edit_menu_sub), menu_item);
 		}
 		menu_item = gtk_separator_menu_item_new();
-		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
+		gtk_container_add(GTK_CONTAINER(sc_info->edit_menu_sub), menu_item);
 
 		label = g_strdup_printf(_("Add \"%s\" to Dictionary"), search_word);
 		menu_item = image_menu_item_new(GTK_STOCK_ADD, label);
-		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
+		gtk_container_add(GTK_CONTAINER(sc_info->edit_menu_sub), menu_item);
 		g_signal_connect(menu_item, "activate",
-			G_CALLBACK(on_menu_addword_item_activate), GINT_TO_POINTER(0));
+			G_CALLBACK(menu_addword_item_activate_cd), GINT_TO_POINTER(0));
 
 		menu_item = image_menu_item_new(GTK_STOCK_REMOVE, _("Ignore All"));
-		gtk_container_add(GTK_CONTAINER(sc->edit_menu_sub), menu_item);
+		gtk_container_add(GTK_CONTAINER(sc_info->edit_menu_sub), menu_item);
 		g_signal_connect(menu_item, "activate",
-			G_CALLBACK(on_menu_addword_item_activate), GINT_TO_POINTER(1));
+			G_CALLBACK(menu_addword_item_activate_cd), GINT_TO_POINTER(1));
 
-		gtk_widget_show(sc->edit_menu);
-		gtk_widget_show(sc->edit_menu_sep);
-		gtk_widget_show_all(sc->edit_menu_sub);
+		gtk_widget_show(sc_info->edit_menu);
+		gtk_widget_show(sc_info->edit_menu_sep);
+		gtk_widget_show_all(sc_info->edit_menu_sub);
 
 		if (suggs != NULL)
-			speller_dict_free_string_list(suggs);
+			sc_speller_dict_free_string_list(suggs);
 
 		g_free(label);
 	}
@@ -338,12 +325,12 @@ static void indicator_clear_on_range(GeanyEditor *editor, gint start, gint len)
 }
 
 
-gboolean gui_editor_notify_cb(GObject *obj, GeanyEditor *editor, SCNotification *nt, gpointer data)
+gboolean sc_gui_editor_notify_cb(GObject *obj, GeanyEditor *editor, SCNotification *nt, gpointer data)
 {
 	gint start_pos, end_pos, pos;
 	gchar *word;
 
-	if (! sc->check_while_typing ||	nt->nmhdr.code != SCN_MODIFIED ||
+	if (! sc_info->check_while_typing ||	nt->nmhdr.code != SCN_MODIFIED ||
 		! (nt->modificationType & (SC_MOD_INSERTTEXT | SC_MOD_DELETETEXT)))
 	{
 		return FALSE;
@@ -360,9 +347,9 @@ gboolean gui_editor_notify_cb(GObject *obj, GeanyEditor *editor, SCNotification 
 	end_pos = start_pos + strlen(word);
 
 	indicator_clear_on_range(editor, start_pos, end_pos - start_pos);
-	if (speller_check_word(editor->document, -1, word, start_pos, end_pos) != 0)
+	if (sc_speller_check_word(editor->document, -1, word, start_pos, end_pos) != 0)
 	{
-		if (sc->use_msgwin)
+		if (sc_info->use_msgwin)
 			msgwin_switch_tab(MSG_MESSAGE, FALSE);
 	}
 
@@ -380,52 +367,52 @@ static void menu_item_activate_cb(GtkMenuItem *menuitem, gpointer gdata)
 
 	/* Another language was chosen from the menu item, so make it default for this session. */
     if (gdata != NULL)
-		setptr(sc->default_language, g_strdup(gdata));
+		setptr(sc_info->default_language, g_strdup(gdata));
 
-	speller_reinit_enchant_dict();
+	sc_speller_reinit_enchant_dict();
 
 	editor_indicator_clear(doc->editor, GEANY_INDICATOR_ERROR);
-	if (sc->use_msgwin)
+	if (sc_info->use_msgwin)
 	{
 		msgwin_clear_tab(MSG_MESSAGE);
 		msgwin_switch_tab(MSG_MESSAGE, FALSE);
 	}
 
-	speller_check_document(doc);
+	sc_speller_check_document(doc);
 }
 
 
-void gui_kb_run_activate_cb(guint key_id)
+void sc_gui_kb_run_activate_cb(guint key_id)
 {
 	menu_item_activate_cb(NULL, NULL);
 }
 
 
-void gui_kb_toggle_typing_activate_cb(guint key_id)
+void sc_gui_kb_toggle_typing_activate_cb(guint key_id)
 {
-	sc->check_while_typing = ! sc->check_while_typing;
+	sc_info->check_while_typing = ! sc_info->check_while_typing;
 
 	print_typing_changed_message();
 
-	gui_toolbar_update();
+	sc_gui_toolbar_update();
 }
 
 
-void gui_create_edit_menu(void)
+void sc_gui_create_edit_menu(void)
 {
-	sc->edit_menu = ui_image_menu_item_new(GTK_STOCK_SPELL_CHECK, _("Spelling Suggestions"));
-	gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), sc->edit_menu);
-	gtk_menu_reorder_child(GTK_MENU(geany->main_widgets->editor_menu), sc->edit_menu, 0);
+	sc_info->edit_menu = ui_image_menu_item_new(GTK_STOCK_SPELL_CHECK, _("Spelling Suggestions"));
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), sc_info->edit_menu);
+	gtk_menu_reorder_child(GTK_MENU(geany->main_widgets->editor_menu), sc_info->edit_menu, 0);
 
-	sc->edit_menu_sep = gtk_separator_menu_item_new();
-	gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), sc->edit_menu_sep);
-	gtk_menu_reorder_child(GTK_MENU(geany->main_widgets->editor_menu), sc->edit_menu_sep, 1);
+	sc_info->edit_menu_sep = gtk_separator_menu_item_new();
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), sc_info->edit_menu_sep);
+	gtk_menu_reorder_child(GTK_MENU(geany->main_widgets->editor_menu), sc_info->edit_menu_sep, 1);
 
-	gtk_widget_show_all(sc->edit_menu);
+	gtk_widget_show_all(sc_info->edit_menu);
 }
 
 
-GtkWidget *gui_create_menu(GtkWidget *sp_item)
+GtkWidget *sc_gui_create_menu(GtkWidget *sp_item)
 {
 	GtkWidget *menu, *menu_item;
 	guint i;
@@ -435,32 +422,32 @@ GtkWidget *gui_create_menu(GtkWidget *sp_item)
 	menu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(sp_item), menu);
 
-	sc->submenu_item_default = gtk_menu_item_new_with_mnemonic(_("Default"));
-	gtk_container_add(GTK_CONTAINER(menu), sc->submenu_item_default);
-	g_signal_connect(sc->submenu_item_default, "activate", G_CALLBACK(menu_item_activate_cb), NULL);
+	sc_info->submenu_item_default = gtk_menu_item_new_with_mnemonic(_("Default"));
+	gtk_container_add(GTK_CONTAINER(menu), sc_info->submenu_item_default);
+	g_signal_connect(sc_info->submenu_item_default, "activate", G_CALLBACK(menu_item_activate_cb), NULL);
 
 	menu_item = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 
-	for (i = 0; i < sc->dicts->len; i++)
+	for (i = 0; i < sc_info->dicts->len; i++)
 	{
-		menu_item = gtk_menu_item_new_with_label(g_ptr_array_index(sc->dicts, i));
+		menu_item = gtk_menu_item_new_with_label(g_ptr_array_index(sc_info->dicts, i));
 		gtk_container_add(GTK_CONTAINER(menu), menu_item);
 		g_signal_connect(menu_item, "activate",
-			G_CALLBACK(menu_item_activate_cb), g_ptr_array_index(sc->dicts, i));
+			G_CALLBACK(menu_item_activate_cb), g_ptr_array_index(sc_info->dicts, i));
 	}
 
 	return sp_item;
 }
 
 
-void gui_init(void)
+void sc_gui_init(void)
 {
 	clickinfo.word = NULL;
 }
 
 
-void gui_free(void)
+void sc_gui_free(void)
 {
 	g_free(clickinfo.word);
 }

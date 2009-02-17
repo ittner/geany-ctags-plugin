@@ -46,8 +46,8 @@
 
 
 
-static EnchantBroker *speller_broker = NULL;
-static EnchantDict *speller_dict = NULL;
+static EnchantBroker *sc_speller_broker = NULL;
+static EnchantDict *sc_speller_dict = NULL;
 
 
 
@@ -59,12 +59,12 @@ static void dict_describe(const gchar* const lang, const gchar* const name,
 }
 
 
-gint speller_check_word(GeanyDocument *doc, gint line_number, const gchar *word,
-					    gint start_pos, gint end_pos)
+gint sc_speller_check_word(GeanyDocument *doc, gint line_number, const gchar *word,
+						   gint start_pos, gint end_pos)
 {
 	gsize n_suggs = 0;
 
-	g_return_val_if_fail(speller_dict != NULL, 0);
+	g_return_val_if_fail(sc_speller_dict != NULL, 0);
 	g_return_val_if_fail(doc != NULL, 0);
 	g_return_val_if_fail(word != NULL, 0);
 	g_return_val_if_fail(start_pos >= 0 && end_pos >= 0, 0);
@@ -77,23 +77,23 @@ gint speller_check_word(GeanyDocument *doc, gint line_number, const gchar *word,
 		return 0;
 
 	/* ignore non-text */
-	if (! speller_is_text(doc, start_pos))
+	if (! sc_speller_is_text(doc, start_pos))
 		return 0;
 
 	/* early out if the word is spelled correctly */
-	if (enchant_dict_check(speller_dict, word, -1) == 0)
+	if (enchant_dict_check(sc_speller_dict, word, -1) == 0)
 		return 0;
 
 	editor_indicator_set_on_range(doc->editor, GEANY_INDICATOR_ERROR, start_pos, end_pos);
 
-	if (sc->use_msgwin && line_number != -1)
+	if (sc_info->use_msgwin && line_number != -1)
 	{
 		gsize j;
 		gchar **suggs;
 		GString *str;
 
 		str = g_string_sized_new(256);
-		suggs = enchant_dict_suggest(speller_dict, word, -1, &n_suggs);
+		suggs = enchant_dict_suggest(sc_speller_dict, word, -1, &n_suggs);
 		if (suggs != NULL)
 		{
 			g_string_append_printf(str, "line %d: %s | ",  line_number + 1, word);
@@ -110,7 +110,7 @@ gint speller_check_word(GeanyDocument *doc, gint line_number, const gchar *word,
 			msgwin_msg_add(COLOR_RED, line_number + 1, doc, "%s", str->str);
 
 			if (suggs != NULL && n_suggs > 0)
-				enchant_dict_free_string_list(speller_dict, suggs);
+				enchant_dict_free_string_list(sc_speller_dict, suggs);
 		}
 		g_string_free(str, TRUE);
 	}
@@ -127,7 +127,7 @@ static gint speller_process_line(GeanyDocument *doc, gint line_number, const gch
 	gint suggestions_found = 0;
 	gchar c;
 
-	g_return_val_if_fail(speller_dict != NULL, 0);
+	g_return_val_if_fail(sc_speller_dict != NULL, 0);
 	g_return_val_if_fail(doc != NULL, 0);
 	g_return_val_if_fail(line != NULL, 0);
 
@@ -156,7 +156,7 @@ static gint speller_process_line(GeanyDocument *doc, gint line_number, const gch
 
 		sci_get_text_range(doc->editor->sci, wstart, wend, str->str);
 
-		suggestions_found += speller_check_word(doc, line_number, str->str, wstart, wend);
+		suggestions_found += sc_speller_check_word(doc, line_number, str->str, wstart, wend);
 
 		pos_start = wend + 1;
 	}
@@ -166,7 +166,7 @@ static gint speller_process_line(GeanyDocument *doc, gint line_number, const gch
 }
 
 
-void speller_check_document(GeanyDocument *doc)
+void sc_speller_check_document(GeanyDocument *doc)
 {
 	gchar *line;
 	gint i;
@@ -174,12 +174,12 @@ void speller_check_document(GeanyDocument *doc)
 	gchar *dict_string = NULL;
 	gint suggestions_found = 0;
 
-	g_return_if_fail(speller_dict != NULL);
+	g_return_if_fail(sc_speller_dict != NULL);
 	g_return_if_fail(doc != NULL);
 
 	ui_progress_bar_start(_("Checking"));
 
-	enchant_dict_describe(speller_dict, dict_describe, &dict_string);
+	enchant_dict_describe(sc_speller_dict, dict_describe, &dict_string);
 
 	if (sci_has_selection(doc->editor->sci))
 	{
@@ -188,7 +188,7 @@ void speller_check_document(GeanyDocument *doc)
 		last_line = sci_get_line_from_position(
 			doc->editor->sci, sci_get_selection_end(doc->editor->sci));
 
-		if (sc->use_msgwin)
+		if (sc_info->use_msgwin)
 			msgwin_msg_add(COLOR_BLUE, -1, NULL,
 				_("Checking file \"%s\" (lines %d to %d using %s):"),
 				DOC_FILENAME(doc), first_line + 1, last_line + 1, dict_string);
@@ -199,7 +199,7 @@ void speller_check_document(GeanyDocument *doc)
 	{
 		first_line = 0;
 		last_line = sci_get_line_count(doc->editor->sci);
-		if (sc->use_msgwin)
+		if (sc_info->use_msgwin)
 			msgwin_msg_add(COLOR_BLUE, -1, NULL, _("Checking file \"%s\" (using %s):"),
 				DOC_FILENAME(doc), dict_string);
 		g_message("Checking file \"%s\" (using %s):", DOC_FILENAME(doc), dict_string);
@@ -217,7 +217,7 @@ void speller_check_document(GeanyDocument *doc)
 
 		g_free(line);
 	}
-	if (suggestions_found == 0 && sc->use_msgwin)
+	if (suggestions_found == 0 && sc_info->use_msgwin)
 		msgwin_msg_add(COLOR_BLUE, -1, NULL, _("The checked text is spelled correctly."));
 
 	ui_progress_bar_stop();
@@ -226,7 +226,7 @@ void speller_check_document(GeanyDocument *doc)
 
 static void broker_init_failed(void)
 {
-	const gchar *err = enchant_broker_get_error(speller_broker);
+	const gchar *err = enchant_broker_get_error(sc_speller_broker);
 	dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 		_("The Enchant library couldn't be initialized (%s)."),
 		(err != NULL) ? err : _("unknown error (maybe the chosen language is not available)"));
@@ -237,7 +237,7 @@ static void dict_compare(gpointer data, gpointer user_data)
 {
 	gboolean *supported = user_data;
 
-	if (utils_str_equal(sc->default_language, data))
+	if (utils_str_equal(sc_info->default_language, data))
 		*supported = TRUE;
 }
 
@@ -246,49 +246,49 @@ static gboolean check_default_lang(void)
 {
 	gboolean supported = FALSE;
 
-	g_ptr_array_foreach(sc->dicts, dict_compare, &supported);
+	g_ptr_array_foreach(sc_info->dicts, dict_compare, &supported);
 
 	return supported;
 }
 
 
-void speller_reinit_enchant_dict(void)
+void sc_speller_reinit_enchant_dict(void)
 {
-	gchar *lang = sc->default_language;
+	gchar *lang = sc_info->default_language;
 
 	/* Release a previous dict object */
-	if (speller_dict != NULL)
-		enchant_broker_free_dict(speller_broker, speller_dict);
+	if (sc_speller_dict != NULL)
+		enchant_broker_free_dict(sc_speller_broker, sc_speller_dict);
 
 	/* Check if the stored default dictionary is (still) avaiable, fall back to the first
 	 * one in the list if not */
 	if (! check_default_lang())
 	{
-		if (sc->dicts->len > 0)
+		if (sc_info->dicts->len > 0)
 		{
-			lang = g_ptr_array_index(sc->dicts, 0);
+			lang = g_ptr_array_index(sc_info->dicts, 0);
 			g_warning("Stored language ('%s') could not be loaded. Falling back to '%s'",
-				sc->default_language, lang);
+				sc_info->default_language, lang);
 		}
 		else
-			g_warning("Stored language ('%s') could not be loaded.", sc->default_language);
+			g_warning("Stored language ('%s') could not be loaded.", sc_info->default_language);
 	}
 
 	/* Request new dict object */
-	speller_dict = enchant_broker_request_dict(speller_broker, lang);
-	if (speller_dict == NULL)
+	sc_speller_dict = enchant_broker_request_dict(sc_speller_broker, lang);
+	if (sc_speller_dict == NULL)
 	{
 		broker_init_failed();
-		gtk_widget_set_sensitive(sc->menu_item, FALSE);
+		gtk_widget_set_sensitive(sc_info->menu_item, FALSE);
 	}
 	else
 	{
-		gtk_widget_set_sensitive(sc->menu_item, TRUE);
+		gtk_widget_set_sensitive(sc_info->menu_item, TRUE);
 	}
 }
 
 
-gchar *speller_get_default_lang(void)
+gchar *sc_speller_get_default_lang(void)
 {
 	const gchar *lang = g_getenv("LANG");
 	gchar *result = NULL;
@@ -327,13 +327,13 @@ static void add_dict_array(const gchar* const lang_tag, const gchar* const provi
 	}
 
 	/* find duplicates and skip them */
-	for (i = 0; i < sc->dicts->len; i++)
+	for (i = 0; i < sc_info->dicts->len; i++)
 	{
-		if (utils_str_equal(g_ptr_array_index(sc->dicts, i), result))
+		if (utils_str_equal(g_ptr_array_index(sc_info->dicts, i), result))
 			return;
 	}
 
-	g_ptr_array_add(sc->dicts, result);
+	g_ptr_array_add(sc_info->dicts, result);
 }
 
 
@@ -345,86 +345,86 @@ static gint sort_dicts(gconstpointer a, gconstpointer b)
 
 static void create_dicts_array(void)
 {
-	sc->dicts = g_ptr_array_new();
+	sc_info->dicts = g_ptr_array_new();
 
-	enchant_broker_list_dicts(speller_broker, add_dict_array, sc->dicts);
+	enchant_broker_list_dicts(sc_speller_broker, add_dict_array, sc_info->dicts);
 
-	g_ptr_array_sort(sc->dicts, sort_dicts);
+	g_ptr_array_sort(sc_info->dicts, sort_dicts);
 }
 
 
-void speller_dict_free_string_list(gchar **tmp_suggs)
+void sc_speller_dict_free_string_list(gchar **tmp_suggs)
 {
-	g_return_if_fail(speller_dict != NULL);
+	g_return_if_fail(sc_speller_dict != NULL);
 
-	enchant_dict_free_string_list(speller_dict, tmp_suggs);
+	enchant_dict_free_string_list(sc_speller_dict, tmp_suggs);
 }
 
 
-void speller_add_word(const gchar *word)
+void sc_speller_add_word(const gchar *word)
 {
-	g_return_if_fail(speller_dict != NULL);
+	g_return_if_fail(sc_speller_dict != NULL);
 	g_return_if_fail(word != NULL);
 
-	enchant_dict_add_to_pwl(speller_dict, word, -1);
+	enchant_dict_add_to_pwl(sc_speller_dict, word, -1);
 }
 
-gboolean speller_dict_check(const gchar *word)
+gboolean sc_speller_dict_check(const gchar *word)
 {
-	g_return_val_if_fail(speller_dict != NULL, FALSE);
+	g_return_val_if_fail(sc_speller_dict != NULL, FALSE);
 	g_return_val_if_fail(word != NULL, FALSE);
 
-	return enchant_dict_check(speller_dict, word, -1);
+	return enchant_dict_check(sc_speller_dict, word, -1);
 }
 
 
-gchar **speller_dict_suggest(const gchar *word, gsize *n_suggs)
+gchar **sc_speller_dict_suggest(const gchar *word, gsize *n_suggs)
 {
-	g_return_val_if_fail(speller_dict != NULL, NULL);
+	g_return_val_if_fail(sc_speller_dict != NULL, NULL);
 	g_return_val_if_fail(word != NULL, NULL);
 
-	return enchant_dict_suggest(speller_dict, word, -1, n_suggs);
+	return enchant_dict_suggest(sc_speller_dict, word, -1, n_suggs);
 }
 
 
-void speller_add_word_to_session(const gchar *word)
+void sc_speller_add_word_to_session(const gchar *word)
 {
-	g_return_if_fail(speller_dict != NULL);
+	g_return_if_fail(sc_speller_dict != NULL);
 	g_return_if_fail(word != NULL);
 
-	enchant_dict_add_to_session(speller_dict, word, -1);
+	enchant_dict_add_to_session(sc_speller_dict, word, -1);
 }
 
 
-void speller_store_replacement(const gchar *old_word, const gchar *new_word)
+void sc_speller_store_replacement(const gchar *old_word, const gchar *new_word)
 {
-	g_return_if_fail(speller_dict != NULL);
+	g_return_if_fail(sc_speller_dict != NULL);
 	g_return_if_fail(old_word != NULL);
 	g_return_if_fail(new_word != NULL);
 
-	enchant_dict_store_replacement(speller_dict, old_word, -1, new_word, -1);
+	enchant_dict_store_replacement(sc_speller_dict, old_word, -1, new_word, -1);
 }
 
 
-void speller_init(void)
+void sc_speller_init(void)
 {
-	speller_broker = enchant_broker_init();
+	sc_speller_broker = enchant_broker_init();
 
 	create_dicts_array();
 
-	speller_reinit_enchant_dict();
+	sc_speller_reinit_enchant_dict();
 }
 
 
-void speller_free(void)
+void sc_speller_free(void)
 {
-	if (speller_dict != NULL)
-		enchant_broker_free_dict(speller_broker, speller_dict);
-	enchant_broker_free(speller_broker);
+	if (sc_speller_dict != NULL)
+		enchant_broker_free_dict(sc_speller_broker, sc_speller_dict);
+	enchant_broker_free(sc_speller_broker);
 }
 
 
-gboolean speller_is_text(GeanyDocument *doc, gint pos)
+gboolean sc_speller_is_text(GeanyDocument *doc, gint pos)
 {
 	gint lexer, style;
 

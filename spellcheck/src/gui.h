@@ -28,28 +28,29 @@
 
 
 
-void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
+void sc_gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 						   GeanyDocument *doc, gpointer user_data);
 
-gboolean gui_key_release_cb(GtkWidget *widget, GdkEventKey *ev, gpointer user_data);
+gboolean sc_gui_key_release_cb(GtkWidget *widget, GdkEventKey *ev, gpointer user_data);
 
-gboolean gui_editor_notify_cb(GObject *obj, GeanyEditor *editor, SCNotification *nt, gpointer data);
+gboolean sc_gui_editor_notify_cb(GObject *obj, GeanyEditor *editor,
+								 SCNotification *nt, gpointer data);
 
-void gui_kb_run_activate_cb(guint key_id);
+void sc_gui_kb_run_activate_cb(guint key_id);
 
-void gui_kb_toggle_typing_activate_cb(guint key_id);
+void sc_gui_kb_toggle_typing_activate_cb(guint key_id);
 
-void gui_create_edit_menu(void);
+void sc_gui_create_edit_menu(void);
 
-GtkWidget *gui_create_menu(GtkWidget *sp_item);
+GtkWidget *sc_gui_create_menu(GtkWidget *sp_item);
 
-void gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
+void sc_gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 								  GeanyDocument *doc, gpointer user_data);
 
-void gui_toolbar_update(void);
+void sc_gui_toolbar_update(void);
 
-void gui_init(void);
+void sc_gui_init(void);
 
-void gui_free(void);
+void sc_gui_free(void);
 
 #endif

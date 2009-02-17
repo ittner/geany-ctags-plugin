@@ -45,7 +45,7 @@ typedef struct
 } SpellCheck;
 
 
-extern SpellCheck *sc;
+extern SpellCheck		*sc_info;
 extern GeanyPlugin		*geany_plugin;
 extern GeanyData		*geany_data;
 extern GeanyFunctions	*geany_functions;
