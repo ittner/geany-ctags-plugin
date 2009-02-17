@@ -431,15 +431,30 @@ gboolean sc_speller_is_text(GeanyDocument *doc, gint pos)
 	g_return_val_if_fail(doc != NULL, FALSE);
 	g_return_val_if_fail(pos >= 0, FALSE);
 
-	lexer = scintilla_send_message(doc->editor->sci, SCI_GETLEXER, 0, 0);
 	style = sci_get_style_at(doc->editor->sci, pos);
+	/* early out for the default style */
+	if (style == STYLE_DEFAULT)
+		return TRUE;
 
+	lexer = scintilla_send_message(doc->editor->sci, SCI_GETLEXER, 0, 0);
 	switch (lexer)
 	{
-		/* early out for the default style */
-		if (style == STYLE_DEFAULT)
-			return TRUE;
-
+		case SCLEX_ADA:
+		{
+			switch (style)
+			{
+				case SCE_ADA_DEFAULT:
+				case SCE_ADA_COMMENTLINE:
+				case SCE_ADA_STRING:
+				case SCE_ADA_STRINGEOL:
+				case SCE_ADA_CHARACTER:
+				case SCE_ADA_CHARACTEREOL:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
 		case SCLEX_ASM:
 		{
 			switch (style)
@@ -500,6 +515,22 @@ gboolean sc_speller_is_text(GeanyDocument *doc, gint pos)
 				case SCE_C_CHARACTER:
 				case SCE_C_STRINGEOL:
 				case SCE_C_COMMENTLINEDOC:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_CMAKE:
+		{
+			switch (style)
+			{
+				case SCE_CMAKE_DEFAULT:
+				case SCE_CMAKE_COMMENT:
+				case SCE_CMAKE_STRINGDQ:
+				case SCE_CMAKE_STRINGLQ:
+				case SCE_CMAKE_STRINGRQ:
+				case SCE_CMAKE_STRINGVAR:
 					return TRUE;
 				default:
 					return FALSE;
@@ -718,6 +749,23 @@ gboolean sc_speller_is_text(GeanyDocument *doc, gint pos)
 			}
 			break;
 		}
+		case SCLEX_NSIS:
+		{
+			switch (style)
+			{
+				case SCE_NSIS_DEFAULT:
+				case SCE_NSIS_COMMENT:
+				case SCE_NSIS_STRINGDQ:
+				case SCE_NSIS_STRINGLQ:
+				case SCE_NSIS_STRINGRQ:
+				case SCE_NSIS_STRINGVAR:
+				case SCE_NSIS_COMMENTBOX:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
 		case SCLEX_PERL:
 		{
 			switch (style)
@@ -850,6 +898,19 @@ gboolean sc_speller_is_text(GeanyDocument *doc, gint pos)
 				case SCE_VHDL_COMMENTLINEBANG:
 				case SCE_VHDL_STRING:
 				case SCE_VHDL_STRINGEOL:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+		case SCLEX_YAML:
+		{
+			switch (style)
+			{
+				case SCE_YAML_DEFAULT:
+				case SCE_YAML_COMMENT:
+				case SCE_YAML_TEXT:
 					return TRUE;
 				default:
 					return FALSE;
