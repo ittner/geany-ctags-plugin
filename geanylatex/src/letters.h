@@ -23,10 +23,17 @@
 #ifndef LETTERS_H
 #define LETTER_H
 
+#include "geanylatex.h"
 #include "datatypes.h"
+#include "ui_utils.h"
+#include "support.h"
+#include "utils.h"
 
 extern SubMenuTemplate glatex_char_array[];
 
 extern CategoryName glatex_cat_names[];
+
+gchar *glatex_get_entity(const gchar *letter);
+
 
 #endif

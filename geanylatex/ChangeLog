@@ -1,6 +1,8 @@
 2009-02-18  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Formating of selected text
+ * Added feature to replace special characters at input with LaTeX
+   replacment
 
 
 2009-02-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

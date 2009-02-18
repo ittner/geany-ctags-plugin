@@ -214,3 +214,21 @@ SubMenuTemplate glatex_char_array[] = {
 	{0, NULL, NULL},
 
 };
+
+
+gchar *glatex_get_entity(const gchar *letter)
+{
+    guint i, len;
+
+    len = G_N_ELEMENTS(glatex_char_array);
+	for (i = 0; i < len; i++)
+	{
+		if (utils_str_equal(glatex_char_array[i].label, letter))
+		{
+			return glatex_char_array[i].latex;
+		}
+	}
+
+	/* if the char is not in the list */
+	return NULL;
+}

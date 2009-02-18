@@ -45,6 +45,7 @@
 #include "latexutils.h"
 #include "reftex.h"
 #include "formatutils.h"
+#include "Scintilla.h"
 #include "plugindata.h"
 #include "geanyfunctions.h"
 

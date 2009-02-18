@@ -46,7 +46,14 @@ GtkWidget *menu_latex_bibtex_submenu = NULL;
 GtkWidget *menu_latex_format_insert = NULL;
 GtkWidget *menu_latex_format_insert_submenu = NULL;
 
+/* doing some global stuff */
+static GtkWidget *menu_latex_replace_toggle = NULL;
+
+/* Function will be deactivated, when only loaded */
+static gboolean toggle_active = FALSE;
+
 static GtkWidget *main_menu_item = NULL;
+
 
 /* Doing some basic keybinding stuff */
 enum
@@ -55,10 +62,82 @@ enum
 	LATEX_INSERT_LABEL_KB,
 	LATEX_INSERT_REF_KB,
 	LATEX_INSERT_NEWLINE,
+	LATEX_TOGGLE_ACTIVE,
 	COUNT_KB
 };
 
 PLUGIN_KEY_GROUP(geanylatex, COUNT_KB)
+
+
+/* Functions to toggle the status of plugin */
+void glatex_set_latextoggle_status(gboolean new_status)
+{
+	/* No more function at the moment.*/
+	if (toggle_active != new_status)
+		toggle_active = new_status;
+}
+
+static void toggle_status(G_GNUC_UNUSED GtkMenuItem * menuitem)
+{
+	if (toggle_active == TRUE)
+		glatex_set_latextoggle_status(FALSE);
+	else
+		glatex_set_latextoggle_status(TRUE);
+}
+
+
+static gboolean ht_editor_notify_cb(G_GNUC_UNUSED GObject *object, GeanyEditor *editor,
+									SCNotification *nt, G_GNUC_UNUSED gpointer data)
+{
+	g_return_val_if_fail(editor != NULL, FALSE);
+
+	if (toggle_active != TRUE)
+		return FALSE;
+
+	if (nt->nmhdr.code == SCN_CHARADDED)
+	{
+		gchar buf[7];
+		gint len;
+
+		len = g_unichar_to_utf8(nt->ch, buf);
+		if (len > 0)
+		{
+			const gchar *entity;
+
+			buf[len] = '\0';
+			entity = glatex_get_entity(buf);
+
+			if (entity != NULL)
+			{
+				gint pos = sci_get_current_position(editor->sci);
+
+				sci_set_selection_start(editor->sci, pos - len);
+				sci_set_selection_end(editor->sci, pos);
+
+				sci_replace_sel(editor->sci, entity);
+			}
+		}
+	}
+
+	return FALSE;
+}
+
+
+/* Called when keys were pressed */
+static void kblatex_toggle(G_GNUC_UNUSED guint key_id)
+{
+	if (toggle_active == TRUE)
+		glatex_set_latextoggle_status(FALSE);
+	else
+		glatex_set_latextoggle_status(TRUE);
+}
+
+
+PluginCallback plugin_callbacks[] =
+{
+	{ "editor-notify", (GCallback) &ht_editor_notify_cb, FALSE, NULL },
+	{ NULL, NULL, FALSE, NULL }
+};
 
 void
 glatex_insert_string(gchar *string, gboolean reset_position)
@@ -863,6 +942,10 @@ void init_keybindings()
 		0, 0, "insert_latex_ref", _("Insert \\ref"), menu_latex_ref);
 	keybindings_set_item(plugin_key_group, LATEX_INSERT_NEWLINE, kb_insert_newline,
 		0, 0, "insert_new_line", _("Insert linebreak \\\\ "), NULL);
+	keybindings_set_item(plugin_key_group, LATEX_TOGGLE_ACTIVE, kblatex_toggle,
+		0, 0, "latex_toggle_status", _("Turn input replacement on/off"),
+		menu_latex_replace_toggle);
+
 }
 
 void plugin_help()
@@ -959,6 +1042,17 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 		g_signal_connect((gpointer) tmp, "activate",
 			G_CALLBACK(glatex_insert_latex_format), GINT_TO_POINTER(i));
 	}
+
+	menu_latex_replace_toggle = gtk_check_menu_item_new_with_mnemonic(_
+		("_Special Characters Replacing"));
+	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM(menu_latex_replace_toggle),
+		toggle_active);
+
+	g_signal_connect((gpointer) menu_latex_replace_toggle, "activate",
+			 G_CALLBACK(toggle_status), NULL);
+
+	gtk_container_add(GTK_CONTAINER(menu_latex_menu),
+			menu_latex_replace_toggle);
 
 	init_keybindings();
 
