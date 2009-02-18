@@ -25,8 +25,32 @@ void glatex_insert_latex_format(G_GNUC_UNUSED GtkMenuItem * menuitem,
                          G_GNUC_UNUSED gpointer gdata)
 {
     gint format = GPOINTER_TO_INT(gdata);
+    GeanyDocument *doc = NULL;
+	doc = document_get_current();
 
-    glatex_insert_string(glatex_format_pattern[format], TRUE);
-    glatex_insert_string("{", TRUE);
-    glatex_insert_string("}", FALSE);
+	if (doc != NULL)
+	{
+        if (sci_has_selection(doc->editor->sci))
+        {
+            gint selection_len = sci_get_selected_text_length(doc->editor->sci);
+            gchar *selection = g_malloc(selection_len + 1);
+            const gchar *replacement = NULL;
+
+            sci_get_selected_text(doc->editor->sci, selection);
+
+            replacement = g_strconcat(glatex_format_pattern[format],"{",
+                selection, "}", NULL);
+
+            sci_replace_sel(doc->editor->sci, replacement);
+            g_free(selection);
+        }
+        else
+        {
+            glatex_insert_string(glatex_format_pattern[format], TRUE);
+            glatex_insert_string("{", TRUE);
+            glatex_insert_string("}", FALSE);
+        }
+    }
 }
+
+
