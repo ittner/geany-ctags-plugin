@@ -93,7 +93,7 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 
 	doc = document_get_current();
 
-	if (dialogs_show_input_numeric(_("Lipsum-Generator"),
+	if (doc != NULL && dialogs_show_input_numeric(_("Lipsum-Generator"),
 		_("Enter the length of Lipsum text here"), &value, 1, 5000, 1))
 	{
 
