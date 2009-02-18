@@ -21,7 +21,7 @@
 
 #include "geanylatex.h"
 
-gchar* format_pattern[] = {
+gchar* glatex_format_pattern[] = {
 	"\\textit",
 	"\\textbf",
 	"\\underline",
@@ -31,7 +31,7 @@ gchar* format_pattern[] = {
 	"\\emph"
 };
 
-const gchar *format_labels[] = {
+const gchar *glatex_format_labels[] = {
 	N_("Italic"),
 	N_("Boldfont"),
 	N_("Underline"),

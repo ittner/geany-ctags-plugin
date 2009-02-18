@@ -75,16 +75,17 @@ enum {
 	N_ENTRIES
 };
 
-extern gchar *label_types[];
+extern gchar *glatex_label_types[];
 
-extern const gchar *label_tooltips[];
+extern const gchar *glatex_label_tooltips[];
 
-extern const gchar *label_entry_keywords[];
+extern const gchar *glatex_label_entry_keywords[];
 
-extern const gchar *label_entry[];
+extern const gchar *glatex_label_entry[];
 
-int push_bibtex_entry(int style, GeanyDocument *doc);
+int glatex_push_bibtex_entry(int style, GeanyDocument *doc);
 
-void insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata);
+void glatex_insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem,
+								G_GNUC_UNUSED gpointer gdata);
 
 #endif

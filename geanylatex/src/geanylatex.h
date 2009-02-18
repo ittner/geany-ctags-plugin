@@ -108,6 +108,6 @@ extern GeanyFunctions	*geany_functions;
 
 #define MAX_MENU_ENTRIES 20
 
-extern void insert_string(gchar *string, gboolean reset_position);
+extern void glatex_insert_string(gchar *string, gboolean reset_position);
 
 #endif

@@ -41,7 +41,7 @@ gchar **geanylatex_read_file_in_array(const gchar *filename)
 	return result;
 }
 
-const gchar *get_aux_file()
+const gchar *glatex_get_aux_file()
 {
 	GeanyDocument *doc = NULL;
 	gchar *locale_filename = NULL;

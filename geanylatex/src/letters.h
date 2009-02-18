@@ -25,8 +25,8 @@
 
 #include "datatypes.h"
 
-extern SubMenuTemplate char_array[];
+extern SubMenuTemplate glatex_char_array[];
 
-extern CategoryName cat_names[];
+extern CategoryName glatex_cat_names[];
 
 #endif

@@ -22,7 +22,7 @@
 #include "geanylatex.h"
 #include "bibtex.h"
 
-gchar *label_types[] = {
+gchar *glatex_label_types[] = {
 	N_("Article"),
 	N_("Book"),
 	N_("Booklet"),
@@ -39,7 +39,7 @@ gchar *label_types[] = {
 	N_("Unpublished")};
 
 
-const gchar *label_entry[] = {
+const gchar *glatex_label_entry[] = {
 	N_("Address"),
 	N_("Annote"),
 	N_("Author"),
@@ -67,7 +67,7 @@ const gchar *label_entry[] = {
 	N_("Volume"),
 	N_("Year")};
 
-const gchar *label_entry_keywords[] = {
+const gchar *glatex_label_entry_keywords[] = {
 	("Address"),
 	("Annote"),
 	("Author"),
@@ -95,7 +95,7 @@ const gchar *label_entry_keywords[] = {
 	("Volume"),
 	("Year")};
 
-const gchar *label_tooltips[] = {
+const gchar *glatex_label_tooltips[] = {
 	N_("Address of publisher"),
 	N_("Annotation for annotated bibliography styles"),
 	N_("Name(s) of the author(s), separated by 'and' if more than one"),

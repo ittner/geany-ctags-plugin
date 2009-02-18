@@ -23,7 +23,7 @@
 #include "reftex.h"
 #include "latexutils.h"
 
-void add_Labels(GtkWidget *combobox, const gchar *file)
+void glatex_add_Labels(GtkWidget *combobox, const gchar *file)
 {
 	gchar **aux_entries = NULL;
 	int i = 0;
@@ -37,7 +37,7 @@ void add_Labels(GtkWidget *combobox, const gchar *file)
 			{
 				if  (g_str_has_prefix(aux_entries[i], "\\newlabel"))
 				{
-					tmp = parseLine(aux_entries[i]);
+					tmp = glatex_parseLine(aux_entries[i]);
 					gtk_combo_box_append_text(GTK_COMBO_BOX(combobox), tmp.label_name);
 				}
 			}
@@ -45,7 +45,7 @@ void add_Labels(GtkWidget *combobox, const gchar *file)
 	}
 }
 
-LaTeXLabel parseLine(const gchar *line)
+LaTeXLabel glatex_parseLine(const gchar *line)
 {
 	LaTeXLabel label;
 

@@ -35,7 +35,7 @@ enum
 	LETTERS_END
 };
 
-CategoryName cat_names[] = {
+CategoryName glatex_cat_names[] = {
 	{ GREEK_LETTERS, N_("Greek letters"), TRUE},
 	{ GERMAN_LETTERS, N_("German umlauts"), TRUE},
 	{ MISC_LETTERS, N_("Misc"), FALSE},
@@ -50,7 +50,7 @@ CategoryName cat_names[] = {
  * AAABBBCCC is valid
  * AAACCCBBB is valid
  * ACABCBACB is _not_ valid and will course trouble */
-SubMenuTemplate char_array[] = {
+SubMenuTemplate glatex_char_array[] = {
 	/* Greek characters */
 	{GREEK_LETTERS, "Α", "\\Alpha" },
 	{GREEK_LETTERS, "α", "\\alpha" },

@@ -25,6 +25,6 @@
 
 gchar **geanylatex_read_file_in_array(const gchar *filename);
 
-const gchar *get_aux_file();
+const gchar *glatex_get_aux_file();
 
 #endif

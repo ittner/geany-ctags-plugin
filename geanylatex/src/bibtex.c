@@ -22,7 +22,7 @@
 #include "bibtex.h"
 #include "reftex.h"
 
-#define set_status(entry_number, flag) \
+#define glatex_set_status(entry_number, flag) \
 	fields[entry_number] = flag;
 
 
@@ -41,7 +41,7 @@ static int get_entry_pos(char *str)
 }
 #endif
 
-void insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem,
+void glatex_insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem,
 						 G_GNUC_UNUSED gpointer gdata)
 {
 	int doctype = GPOINTER_TO_INT(gdata);
@@ -51,91 +51,91 @@ void insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem,
 
 	for (i = 0; i < N_ENTRIES; i++)
 	{
-		set_status(i, FALSE);
+		glatex_set_status(i, FALSE);
 	}
 
 	switch(doctype) {
 	case ARTICLE:
-		set_status(AUTHOR, TRUE);
-		set_status(TITLE, TRUE);
-		set_status(JOURNAL, TRUE);
-		set_status(YEAR, TRUE);
+		glatex_set_status(AUTHOR, TRUE);
+		glatex_set_status(TITLE, TRUE);
+		glatex_set_status(JOURNAL, TRUE);
+		glatex_set_status(YEAR, TRUE);
 		break;
 	case BOOK:
-		set_status(AUTHOR, TRUE);
-		set_status(EDITOR, TRUE);
-		set_status(TITLE, TRUE);
-		set_status(PUBLISHER, TRUE);
-		set_status(YEAR, TRUE);
+		glatex_set_status(AUTHOR, TRUE);
+		glatex_set_status(EDITOR, TRUE);
+		glatex_set_status(TITLE, TRUE);
+		glatex_set_status(PUBLISHER, TRUE);
+		glatex_set_status(YEAR, TRUE);
 		break;
 	case BOOKLET:
-		set_status(TITLE, TRUE);
+		glatex_set_status(TITLE, TRUE);
 		break;
 	case CONFERENCE:
 	case INCOLLECTION:
 	case INPROCEEDINGS:
-		set_status(AUTHOR, TRUE);
-		set_status(TITLE, TRUE);
-		set_status(BOOKTITLE, TRUE);
-		set_status(YEAR, TRUE);
+		glatex_set_status(AUTHOR, TRUE);
+		glatex_set_status(TITLE, TRUE);
+		glatex_set_status(BOOKTITLE, TRUE);
+		glatex_set_status(YEAR, TRUE);
 		break;
 	case INBOOK:
-		set_status(AUTHOR, TRUE);
-		set_status(EDITOR, TRUE);
-		set_status(TITLE, TRUE);
-		set_status(CHAPTER, TRUE);
-		set_status(PAGES, TRUE);
-		set_status(PUBLISHER, TRUE);
-		set_status(YEAR, TRUE);
+		glatex_set_status(AUTHOR, TRUE);
+		glatex_set_status(EDITOR, TRUE);
+		glatex_set_status(TITLE, TRUE);
+		glatex_set_status(CHAPTER, TRUE);
+		glatex_set_status(PAGES, TRUE);
+		glatex_set_status(PUBLISHER, TRUE);
+		glatex_set_status(YEAR, TRUE);
 		break;
 	case MANUAL:
-		set_status(TITLE, TRUE);
+		glatex_set_status(TITLE, TRUE);
 		break;
 	case MASTERSTHESIS:
 	case PHDTHESIS:
-		set_status(AUTHOR, TRUE);
-		set_status(TITLE, TRUE);
-		set_status(SCHOOL, TRUE);
-		set_status(YEAR, TRUE);
+		glatex_set_status(AUTHOR, TRUE);
+		glatex_set_status(TITLE, TRUE);
+		glatex_set_status(SCHOOL, TRUE);
+		glatex_set_status(YEAR, TRUE);
 		break;
 	case MISC:
 		for (i = 0; i < N_ENTRIES; i++)
 		{
-			set_status(i, TRUE);
+			glatex_set_status(i, TRUE);
 		}
 	case TECHREPORT:
-		set_status(AUTHOR, TRUE);
-		set_status(TITLE, TRUE);
-		set_status(INSTITUTION, TRUE);
-		set_status(YEAR, TRUE);
+		glatex_set_status(AUTHOR, TRUE);
+		glatex_set_status(TITLE, TRUE);
+		glatex_set_status(INSTITUTION, TRUE);
+		glatex_set_status(YEAR, TRUE);
 		break;
 	case UNPUBLISHED:
-		set_status(AUTHOR, TRUE);
-		set_status(TITLE, TRUE);
-		set_status(NOTE, TRUE);
+		glatex_set_status(AUTHOR, TRUE);
+		glatex_set_status(TITLE, TRUE);
+		glatex_set_status(NOTE, TRUE);
 		break;
 	case PROCEEDINGS:
-		set_status(TITLE, TRUE);
-		set_status(YEAR, TRUE);
+		glatex_set_status(TITLE, TRUE);
+		glatex_set_status(YEAR, TRUE);
 		break;
 	default:
 		for (i = 0; i < N_ENTRIES; i++)
 		{
-			set_status(i, TRUE);
+			glatex_set_status(i, TRUE);
 		}
 	}
 
-	output = g_strconcat(output, label_types[doctype], "{ \n",NULL);
+	output = g_strconcat(output, glatex_label_types[doctype], "{ \n",NULL);
 	for (i = 0; i < N_ENTRIES; i++)
 	{
 		if (fields[i] == TRUE)
 		{
-			output = g_strconcat(output, label_entry_keywords[i], "= {},\n", NULL);
+			output = g_strconcat(output, glatex_label_entry_keywords[i], "= {},\n", NULL);
 		}
 	}
 
 	output = g_strconcat(output, "}\n", NULL);
-	insert_string(output, FALSE);
+	glatex_insert_string(output, FALSE);
 
 	g_free(output);
 }

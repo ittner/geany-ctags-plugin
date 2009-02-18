@@ -21,12 +21,12 @@
 
 #include "formatutils.h"
 
-void insert_latex_format(G_GNUC_UNUSED GtkMenuItem * menuitem,
+void glatex_insert_latex_format(G_GNUC_UNUSED GtkMenuItem * menuitem,
                          G_GNUC_UNUSED gpointer gdata)
 {
     gint format = GPOINTER_TO_INT(gdata);
 
-    insert_string(format_pattern[format], TRUE);
-    insert_string("{", TRUE);
-    insert_string("}", FALSE);
+    glatex_insert_string(glatex_format_pattern[format], TRUE);
+    glatex_insert_string("{", TRUE);
+    glatex_insert_string("}", FALSE);
 }

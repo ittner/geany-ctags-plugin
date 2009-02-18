@@ -32,7 +32,7 @@ LaTeXEncodings latex_encodings[LATEX_ENCODINGS_MAX];
 		latex_encodings[Charset].latex = LaTeX; \
 		latex_encodings[Charset].geany_enc = GeanyEnc;
 
-void init_encodings_latex(void)
+void glatex_init_encodings_latex(void)
 {
 	fill(LATEX_ENCODING_UTF_8, _("UTF-8"), "utf8", GEANY_ENCODING_UTF_8);
 	fill(LATEX_ENCODING_ASCII, _("US-ASCII"), "ascii", GEANY_ENCODING_ISO_8859_1);

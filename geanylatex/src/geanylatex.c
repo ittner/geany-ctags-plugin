@@ -61,7 +61,7 @@ enum
 PLUGIN_KEY_GROUP(geanylatex, COUNT_KB)
 
 void
-insert_string(gchar *string, gboolean reset_position)
+glatex_insert_string(gchar *string, gboolean reset_position)
 {
 	GeanyDocument *doc = NULL;
 
@@ -84,7 +84,7 @@ insert_string(gchar *string, gboolean reset_position)
 inline gchar*
 get_latex_command(gint tab_index)
 {
-	return char_array[tab_index].latex;
+	return glatex_char_array[tab_index].latex;
 }
 
 
@@ -92,7 +92,7 @@ static void
 char_insert_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 					  G_GNUC_UNUSED gpointer gdata)
 {
-	insert_string(get_latex_command(GPOINTER_TO_INT(gdata)), TRUE);
+	glatex_insert_string(get_latex_command(GPOINTER_TO_INT(gdata)), TRUE);
 }
 
 
@@ -135,7 +135,7 @@ insert_label_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 		gchar *label_str = NULL;
 		label_str = g_strconcat("\\label{",g_strdup(gtk_entry_get_text(
 			GTK_ENTRY(textbox_label))), "}", NULL);
-		insert_string(label_str, TRUE);
+		glatex_insert_string(label_str, TRUE);
 	}
 
 	gtk_widget_destroy(dialog);
@@ -170,7 +170,7 @@ insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 
 	label_ref = gtk_label_new(_("Ref name:"));
 	textbox_ref = gtk_combo_box_entry_new_text();
-	add_Labels(textbox_ref, get_aux_file());
+	glatex_add_Labels(textbox_ref, glatex_get_aux_file());
 
 	gtk_misc_set_alignment(GTK_MISC(label_ref), 0, 0.5);
 
@@ -210,7 +210,7 @@ insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 
 		if (ref_string != NULL)
 		{
-			insert_string(ref_string, TRUE);
+			glatex_insert_string(ref_string, TRUE);
 			g_free(ref_string);
 		}
 	}
@@ -236,7 +236,7 @@ static void character_create_menu_item(GtkWidget *menu, const gchar *label,
  * returns 0, if categorie is empty
  * if gint categorie is -1, function will count every element.
  * Useful, if there is no need for a categorie check.*/
-gint
+static gint
 count_menu_entries(SubMenuTemplate *tmp, gint categorie)
 {
 	/* TODO: Reset max value to stop before it's too late */
@@ -268,7 +268,7 @@ count_menu_entries(SubMenuTemplate *tmp, gint categorie)
 	return count;
 }
 
-gint
+static gint
 count_menu_cat_entries(CategoryName *tmp)
 {
 	gint i;
@@ -278,7 +278,7 @@ count_menu_cat_entries(CategoryName *tmp)
 }
 
 
-void sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template,
+static void sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template,
 				   CategoryName *category_name,
 				   SubMenuCallback callback_function)
 {
@@ -844,7 +844,7 @@ static void kbwizard(G_GNUC_UNUSED guint key_id)
 
 static void kb_insert_newline(G_GNUC_UNUSED guint key_id)
 {
-	insert_string("\\\\\n", TRUE);
+	glatex_insert_string("\\\\\n", TRUE);
 }
 
 /*static void kb_bibtex_entry_insert(G_GNUC_UNUSED guint key_id)
@@ -883,7 +883,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 
 	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
 
-	init_encodings_latex();
+	glatex_init_encodings_latex();
 
 	tooltips = gtk_tooltips_new();
 
@@ -911,7 +911,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	menu_latex_menu_special_char_submenu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_latex_menu_special_char),
 		menu_latex_menu_special_char_submenu);
-	sub_menu_init(menu_latex_menu_special_char_submenu, char_array, cat_names,
+	sub_menu_init(menu_latex_menu_special_char_submenu, glatex_char_array, glatex_cat_names,
 		char_insert_activated);
 
 	menu_latex_ref = gtk_menu_item_new_with_mnemonic(_("Insert _Reference"));
@@ -938,10 +938,10 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	for (i = 0; i < N_TYPES; i++)
 	{
 		tmp = NULL;
-		tmp = gtk_menu_item_new_with_mnemonic(_(label_types[i]));
+		tmp = gtk_menu_item_new_with_mnemonic(_(glatex_label_types[i]));
 		gtk_container_add(GTK_CONTAINER(menu_latex_bibtex_submenu), tmp);
 		g_signal_connect((gpointer) tmp, "activate",
-			G_CALLBACK(insert_bibtex_entry), GINT_TO_POINTER(i));
+			G_CALLBACK(glatex_insert_bibtex_entry), GINT_TO_POINTER(i));
 	}
 
 	menu_latex_format_insert = gtk_menu_item_new_with_mnemonic(_("Format"));
@@ -954,10 +954,10 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	for (i = 0; i < LATEX_STYLES_END; i++)
 	{
 		tmp = NULL;
-		tmp = gtk_menu_item_new_with_mnemonic(_(format_labels[i]));
+		tmp = gtk_menu_item_new_with_mnemonic(_(glatex_format_labels[i]));
 		gtk_container_add(GTK_CONTAINER(menu_latex_format_insert_submenu), tmp);
 		g_signal_connect((gpointer) tmp, "activate",
-			G_CALLBACK(insert_latex_format), GINT_TO_POINTER(i));
+			G_CALLBACK(glatex_insert_latex_format), GINT_TO_POINTER(i));
 	}
 
 	init_keybindings();

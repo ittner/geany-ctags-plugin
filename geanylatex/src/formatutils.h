@@ -35,8 +35,8 @@ enum {
 	LATEX_STYLES_END
 };
 
-extern gchar* format_pattern[];
-extern const gchar *format_labels[];
-void insert_latex_format(GtkMenuItem * menuitem, gpointer gdata);
+extern gchar* glatex_format_pattern[];
+extern const gchar *glatex_format_labels[];
+void glatex_insert_latex_format(GtkMenuItem * menuitem, gpointer gdata);
 
 #endif

@@ -51,6 +51,6 @@ typedef struct
 
 extern LaTeXEncodings latex_encodings[LATEX_ENCODINGS_MAX];
 
-void init_encodings_latex(void);
+void glatex_init_encodings_latex(void);
 
 #endif
