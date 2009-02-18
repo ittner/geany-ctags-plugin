@@ -174,12 +174,14 @@ plugin_init(G_GNUC_UNUSED GeanyData *data)
 			 G_CALLBACK(lipsum_activated), NULL);
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_lipsum);
 
+
+	ui_add_document_sensitive(menu_lipsum);
+
 	main_menu_item = menu_lipsum;
 
 	/* init keybindings */
 	keybindings_set_item(plugin_key_group, LIPSUM_KB_INSERT, kblipsum_insert,
 		0, 0, "inster_lipsum", _("Insert Lipsum text"), menu_lipsum);
-
 }
 
 /* Called by Geany before unloading the plugin. */
