@@ -1,4 +1,4 @@
-.. |(version)| replace:: 0.4
+.. |(version)| replace:: 0.5
 
 ========
 geanydoc
@@ -91,11 +91,13 @@ are no longer supported and if you find bug in one of them, it won't be fixed un
 ============= ================ ============================================================
 Geany Version GeanyDoc Version Download
 ============= ================ ============================================================
-0.15                      0.3  http://users.cosmostv.by/yurand/geanydoc/geanydoc-0.3.tar.gz
+0.16                       0.4 http://users.cosmostv.by/yurand/geanydoc/geanydoc-0.4.tar.gz
 
-0.14                      0.2  http://users.cosmostv.by/yurand/geanydoc/geanydoc-0.2.tar.gz
+0.15                       0.3 http://users.cosmostv.by/yurand/geanydoc/geanydoc-0.3.tar.gz
 
-0.13                      0.1  http://users.cosmostv.by/yurand/geanydoc/geanydoc-0.1.tar.gz
+0.14                       0.2 http://users.cosmostv.by/yurand/geanydoc/geanydoc-0.2.tar.gz
+
+0.13                       0.1 http://users.cosmostv.by/yurand/geanydoc/geanydoc-0.1.tar.gz
 ============= ================ ============================================================
 
 
@@ -112,7 +114,7 @@ A package for Arch Linux is available here: http://aur.archlinux.org/packages.ph
 Windows
 -------
 
-A windows installer is available here: http://users.cosmostv.by/yurand/geanydoc/geanydoc-0.3_setup.exe
+A windows installer is available here: http://users.cosmostv.by/yurand/geanydoc/geanydoc-0.4_setup.exe
 
 Author
 ======
