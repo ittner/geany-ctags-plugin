@@ -1,4 +1,4 @@
-.. |(version)| replace:: 0.5
+.. |(version)| replace:: 0.6
 
 =======
 geanyvc
@@ -149,7 +149,7 @@ The current version is:
 ============= =============== ==========================================================
 Geany Version Geanyvc Version Download
 ============= =============== ==========================================================
-0.16                      0.5 http://users.cosmostv.by/yurand/geanyvc/geanyvc-0.5.tar.gz
+0.16                      0.6 http://users.cosmostv.by/yurand/geanyvc/geanyvc-0.6.tar.gz
 ============= =============== ==========================================================
 
 Up to date source code can be downloaded here::
@@ -162,6 +162,8 @@ are no longer supported and if you find bug in one of them, it won't be fixed un
 ============= =============== ==========================================================
 Geany Version Geanyvc Version Download
 ============= =============== ==========================================================
+0.15                      0.5 http://users.cosmostv.by/yurand/geanyvc/geanyvc-0.5.tar.gz
+
 0.15                      0.4 http://users.cosmostv.by/yurand/geanyvc/geanyvc-0.4.tar.gz
 
 0.14                      0.3 http://users.cosmostv.by/yurand/geanyvc/geanyvc-0.3.tar.gz
@@ -189,7 +191,7 @@ To install geanyvc, just run the following command::
 Windows
 -------
 
-A windows installer is available here: http://users.cosmostv.by/yurand/geanyvc/geanyvc-0.4_setup.exe
+A windows installer is available here: http://users.cosmostv.by/yurand/geanyvc/geanyvc-0.5_setup.exe
 
 --
 2007-2008 by Yura Siamashka and Frank Lanitz

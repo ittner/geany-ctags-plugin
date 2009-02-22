@@ -5,7 +5,7 @@ pkgrel=1
 pkgdesc="Version control systems plugin for Geany IDE"
 arch=(i686 x86_64)
 url="http://geany-plugins.sourceforge.net/geanyvc/"
-license=("GPL3")
+license=("GPL")
 depends=('geany>=0.16')
 makedepends=('intltool')
 conflicts=()
