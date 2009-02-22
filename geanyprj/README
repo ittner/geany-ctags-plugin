@@ -1,4 +1,4 @@
-.. |(version)| replace:: 0.5
+.. |(version)| replace:: 0.6
 
 ========
 geanyprj
@@ -142,6 +142,8 @@ are no longer supported and if you find bug in one of them, it won't be fixed un
 ============= ================ ============================================================
 Geany Version GeanyPrj Version Download
 ============= ================ ============================================================
+0.16                       0.5 http://users.cosmostv.by/yurand/geanyprj/geanyprj-0.5.tar.gz
+
 0.15                       0.4 http://users.cosmostv.by/yurand/geanyprj/geanyprj-0.4.tar.gz
 
 0.14                       0.3 http://users.cosmostv.by/yurand/geanyprj/geanyprj-0.3.tar.gz
@@ -163,7 +165,7 @@ A package for Arch Linux is available here: http://aur.archlinux.org/packages.ph
 Windows
 -------
 
-A windows installer is available here: http://users.cosmostv.by/yurand/geanyprj/geanyprj-0.4_setup.exe
+A windows installer is available here: http://users.cosmostv.by/yurand/geanyprj/geanyprj-0.5_setup.exe
 
 2007-2008 by Yura Siamashka
 yurand2(at)gmail(dot)com
