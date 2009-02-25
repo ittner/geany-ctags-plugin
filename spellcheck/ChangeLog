@@ -1,3 +1,9 @@
+2009-02-26  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * Makefile.am:
+   Fix 'make distcheck' by uninstalling documentation files.
+
+
 2009-02-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/gui.c, src/gui.h, src/scplugin.c, src/scplugin.h, src/speller.c,

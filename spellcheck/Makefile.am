@@ -29,3 +29,5 @@ install-data-local:
 	$(INSTALL_DATA) $(top_srcdir)/COPYING $(DOCDIR)
 	$(INSTALL_DATA) $(top_srcdir)/AUTHORS $(DOCDIR)
 
+uninstall-local:
+	rm -rf $(DOCDIR)
