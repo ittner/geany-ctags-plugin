@@ -49,7 +49,7 @@
 
 #include "geanyvc.h"
 
-#include "config.h"
+#include <config.h>
 
 #ifdef USE_GTKSPELL
 #include <gtkspell/gtkspell.h>
