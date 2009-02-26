@@ -1,0 +1,58 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-02-26 00:44+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/addons.c:53
+msgid "Addons"
+msgstr ""
+
+#: src/addons.c:53
+msgid "Various small addons for Geany."
+msgstr ""
+
+#: src/addons.c:150
+msgid "Plugin configuration directory could not be created."
+msgstr ""
+
+#: src/addons.c:172
+msgid "Show toolbar item to show a list of currently open documents"
+msgstr ""
+
+#. TODO fix the string
+#: src/addons.c:179
+msgid "Show a 'Open URI' menu item in the editor menu"
+msgstr ""
+
+#: src/ao_openuri.c:169
+msgid "Open URI"
+msgstr ""
+
+#: src/ao_openuri.c:175
+msgid "Copy URI"
+msgstr ""
+
+#: src/ao_doclist.c:209
+msgid "Close Ot_her Documents"
+msgstr ""
+
+#: src/ao_doclist.c:214
+msgid "C_lose All"
+msgstr ""
+
+#: src/ao_doclist.c:244
+msgid "Show Document List"
+msgstr ""

@@ -1,0 +1,5 @@
+# List of source files containing translatable strings.
+
+src/addons.c
+src/ao_openuri.c
+src/ao_doclist.c
