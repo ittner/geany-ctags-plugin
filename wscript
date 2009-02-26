@@ -107,7 +107,7 @@ plugins = [
 		   'geanyvc/vc_git.c', 'geanyvc/vc_cvs.c', 'geanyvc/vc_svn.c',
 		   'geanyvc/vc_svk.c', 'geanyvc/vc_bzr.c', 'geanyvc/vc_hg.c' ],
 		 [ 'geanyvc' ], # include dirs
-		 '0.4', [ [ 'gtkspell-2.0', '2.0', False ] ]),
+		 '0.6', [ [ 'gtkspell-2.0', '2.0', False ] ]),
 	Plugin('spellcheck',
 		 [ 'spellcheck/src/gui.c', 'spellcheck/src/scplugin.c', 'spellcheck/src/speller.c' ], # source files
 		 [ 'spellcheck', 'spellcheck/src' ], # include dirs
