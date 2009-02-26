@@ -60,6 +60,10 @@ class Plugin:
 
 # add a new element for your plugin
 plugins = [
+	Plugin('addons',
+		 [ 'addons/src/addons.c', 'addons/src/ao_doclist.c', 'addons/src/ao_openuri.c' ],
+		 [ 'addons', 'addons/src' ],
+		 '0.1'),
 	Plugin('externdbg',
 		 [ 'externdbg/src/dbg.c' ], # source files
 		 [ 'externdbg', 'externdbg/src' ], # include dirs
