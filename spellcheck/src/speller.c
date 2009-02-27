@@ -59,7 +59,7 @@ static void dict_describe(const gchar* const lang, const gchar* const name,
 }
 
 
-gint sc_speller_check_word(GeanyDocument *doc, gint line_number, const gchar *word,
+static gint sc_speller_check_word(GeanyDocument *doc, gint line_number, const gchar *word,
 						   gint start_pos, gint end_pos)
 {
 	gsize n_suggs = 0;
@@ -119,7 +119,7 @@ gint sc_speller_check_word(GeanyDocument *doc, gint line_number, const gchar *wo
 }
 
 
-static gint speller_process_line(GeanyDocument *doc, gint line_number, const gchar *line)
+gint sc_speller_process_line(GeanyDocument *doc, gint line_number, const gchar *line)
 {
 	gint pos_start, pos_end;
 	gint wstart, wend;
@@ -210,7 +210,7 @@ void sc_speller_check_document(GeanyDocument *doc)
 	{
 		line = sci_get_line(doc->editor->sci, i);
 
-		suggestions_found += speller_process_line(doc, i, line);
+		suggestions_found += sc_speller_process_line(doc, i, line);
 
 		/* process other GTK events to keep the GUI being responsive */
 		while (g_main_context_iteration(NULL, FALSE));

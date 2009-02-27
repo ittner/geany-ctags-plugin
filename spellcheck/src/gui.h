@@ -33,8 +33,7 @@ void sc_gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 
 gboolean sc_gui_key_release_cb(GtkWidget *widget, GdkEventKey *ev, gpointer user_data);
 
-gboolean sc_gui_editor_notify_cb(GObject *obj, GeanyEditor *editor,
-								 SCNotification *nt, gpointer data);
+gboolean sc_gui_key_release_cb(GtkWidget *widget, GdkEventKey *ev, gpointer data);
 
 void sc_gui_kb_run_activate_cb(guint key_id);
 

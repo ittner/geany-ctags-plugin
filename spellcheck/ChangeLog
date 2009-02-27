@@ -1,3 +1,13 @@
+2009-02-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/gui.c, src/gui.h, src/scplugin.c, src/scplugin.h, src/speller.c,
+   src/speller.h:
+   Revert back the changes to use the "editor-notify" signal as it
+   makes things worse than before. Instead use the old code to connect
+   to the global "key-press-event" signal but reduce the delay
+   to half a second to make checking while typing smoother.
+
+
 2009-02-26  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * Makefile.am:

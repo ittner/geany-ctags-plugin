@@ -79,7 +79,6 @@ PLUGIN_KEY_GROUP(spellcheck, KB_COUNT)
 PluginCallback plugin_callbacks[] =
 {
 	{ "update-editor-menu", (GCallback) &sc_gui_update_editor_menu_cb, FALSE, NULL },
-	{ "editor-notify", (GCallback) &sc_gui_editor_notify_cb, TRUE, NULL },
 	{ NULL, NULL, FALSE, NULL }
 };
 
@@ -192,6 +191,9 @@ void plugin_init(GeanyData *data)
 	sp_item = sc_gui_create_menu(sc_info->menu_item);
 	gtk_widget_show_all(sp_item);
 
+	sc_info->signal_id = g_signal_connect(geany->main_widgets->window,
+			"key-release-event", G_CALLBACK(sc_gui_key_release_cb), NULL);
+
 	/* setup keybindings */
 	keybindings_set_item(plugin_key_group, KB_SPELL_CHECK, sc_gui_kb_run_activate_cb,
 		0, 0, "spell_check", _("Run Spell Check"), sc_info->submenu_item_default);
@@ -281,6 +283,8 @@ void plugin_cleanup(void)
 		g_free(g_ptr_array_index(sc_info->dicts, i));
 	}
 	g_ptr_array_free(sc_info->dicts, TRUE);
+
+	g_signal_handler_disconnect(geany->main_widgets->window, sc_info->signal_id);
 
 	gtk_widget_destroy(sc_info->edit_menu);
 	gtk_widget_destroy(sc_info->edit_menu_sep);
