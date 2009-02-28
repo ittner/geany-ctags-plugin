@@ -2,6 +2,8 @@
 
  * Don't react on some keybindings in case of no document is open.
  * Added a feature for easy inserting environments to document.
+ * Added keybinding to insert \item into document. Very useful at
+   e.g. writing lists
 
 
 2009-02-18  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

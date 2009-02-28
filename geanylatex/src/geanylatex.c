@@ -65,6 +65,7 @@ enum
 	LATEX_INSERT_NEWLINE,
 	LATEX_TOGGLE_ACTIVE,
 	LATEX_ENVIRONMENT_INSERT,
+	LATEX_INSERT_NEWITEM_KB,
 	COUNT_KB
 };
 
@@ -942,6 +943,13 @@ static void kb_insert_newline(G_GNUC_UNUSED guint key_id)
 	glatex_insert_string("\\\\\n", TRUE);
 }
 
+static void kb_insert_newitem(G_GNUC_UNUSED guint key_id)
+{
+	if (NULL == document_get_current())
+		return;
+	glatex_insert_string("\\item ", TRUE);
+}
+
 /*static void kb_bibtex_entry_insert(G_GNUC_UNUSED guint key_id)
 {
 	insert_bibtex_entry(NULL, NULL);
@@ -964,8 +972,8 @@ void init_keybindings()
 	keybindings_set_item(plugin_key_group, LATEX_ENVIRONMENT_INSERT,
 	 	kbref_insert_environment, 0, 0, "latex_insert_environment",
 		_("Run insert environment dialog"), menu_latex_insert_environment);
-
-
+	keybindings_set_item(plugin_key_group, LATEX_INSERT_NEWITEM_KB,
+		kb_insert_newitem, 0, 0, "latex_insert_item", _("Insert \\item"), NULL);
 }
 
 void plugin_help()
