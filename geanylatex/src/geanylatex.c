@@ -908,21 +908,29 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 
 static void kblabel_insert(G_GNUC_UNUSED guint key_id)
 {
+	if (NULL == document_get_current())
+		return;
 	insert_label_activated(NULL, NULL);
 }
 
 static void kbref_insert(G_GNUC_UNUSED guint key_id)
 {
+	if (NULL == document_get_current())
+		return;
 	insert_ref_activated(NULL, NULL);
 }
 
 static void kbwizard(G_GNUC_UNUSED guint key_id)
 {
+	if (NULL == document_get_current())
+		return;
 	wizard_activated(NULL, NULL);
 }
 
 static void kb_insert_newline(G_GNUC_UNUSED guint key_id)
 {
+	if (NULL == document_get_current())
+		return;
 	glatex_insert_string("\\\\\n", TRUE);
 }
 
