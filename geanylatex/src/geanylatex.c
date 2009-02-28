@@ -922,8 +922,6 @@ static void kbref_insert(G_GNUC_UNUSED guint key_id)
 
 static void kbwizard(G_GNUC_UNUSED guint key_id)
 {
-	if (NULL == document_get_current())
-		return;
 	wizard_activated(NULL, NULL);
 }
 
