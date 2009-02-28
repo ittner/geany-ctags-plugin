@@ -5,3 +5,4 @@ src/bibtex.c
 src/bibtexlabels.c
 src/formatutils.c
 src/formatpatterns.c
+src/latexenvironments.c

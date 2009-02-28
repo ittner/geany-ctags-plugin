@@ -1,3 +1,10 @@
+2009-02-28  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * de.po: Minor update of German translation
+ * POTFILES.in: Added new files for environments to list of files with
+   translatable files
+
+
 2008-11-24  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Another update of German transaltion
