@@ -35,4 +35,12 @@ extern CategoryName glatex_environment_cat_names[];
 
 void glatex_insert_environment(gchar *environment);
 
+void
+glatex_insert_environment_dialog(G_GNUC_UNUSED GtkMenuItem *menuitem,
+                                 G_GNUC_UNUSED gpointer gdata);
+
+void
+glatex_environment_insert_activated (G_GNUC_UNUSED GtkMenuItem *menuitem,
+                              		 G_GNUC_UNUSED gpointer gdata);
+
 #endif
