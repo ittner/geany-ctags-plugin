@@ -1,6 +1,7 @@
 2009-02-28  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Don't react on some keybindings in case of no document is open.
+ * Added a feature for easy inserting environments to document.
 
 
 2009-02-18  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

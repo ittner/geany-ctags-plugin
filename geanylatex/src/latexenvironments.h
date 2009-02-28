@@ -1,7 +1,7 @@
 /*
- * 		letters.h
+ *      latexenvironments.h
  *
- *      Copyright 2008 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
+ *      Copyright 2009 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -19,20 +19,20 @@
  *      MA 02110-1301, USA.
  */
 
-
-#ifndef LETTERS_H
-#define LETTER_H
+#ifndef LATEXENVIRONMENTS_H
+#define LATEXENVIRONMENTS_H
 
 #include "geanylatex.h"
-#include "datatypes.h"
-#include "ui_utils.h"
-#include "support.h"
-#include "utils.h"
 
-extern SubMenuTemplate glatex_char_array[];
+enum {
+    ENVIRONMENT_CAT_DUMMY = 0,
+    ENVIRONMENT_CAT_MAX
+};
 
-extern CategoryName glatex_cat_names[];
+extern SubMenuTemplate glatex_environment_array[];
 
-gchar *glatex_get_entity(const gchar *letter);
+extern CategoryName glatex_environment_cat_names[];
+
+void glatex_insert_environment(gchar *environment);
 
 #endif

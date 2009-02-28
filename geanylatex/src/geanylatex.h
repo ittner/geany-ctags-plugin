@@ -28,7 +28,6 @@
 
 #include "geany.h"
 #include "support.h"
-
 #include "document.h"
 #include "editor.h"
 #include "filetypes.h"
@@ -44,6 +43,7 @@
 #include "bibtex.h"
 #include "latexutils.h"
 #include "reftex.h"
+#include "latexenvironments.h"
 #include "formatutils.h"
 #include "Scintilla.h"
 #include "plugindata.h"
@@ -110,5 +110,6 @@ extern GeanyFunctions	*geany_functions;
 #define MAX_MENU_ENTRIES 20
 
 extern void glatex_insert_string(gchar *string, gboolean reset_position);
+gint glatex_count_menu_entries(SubMenuTemplate *tmp, gint categorie);
 
 #endif

@@ -45,6 +45,7 @@ GtkWidget *menu_latex_bibtex = NULL;
 GtkWidget *menu_latex_bibtex_submenu = NULL;
 GtkWidget *menu_latex_format_insert = NULL;
 GtkWidget *menu_latex_format_insert_submenu = NULL;
+GtkWidget *menu_latex_insert_environment = NULL;
 
 /* doing some global stuff */
 static GtkWidget *menu_latex_replace_toggle = NULL;
@@ -63,6 +64,7 @@ enum
 	LATEX_INSERT_REF_KB,
 	LATEX_INSERT_NEWLINE,
 	LATEX_TOGGLE_ACTIVE,
+	LATEX_ENVIRONMENT_INSERT,
 	COUNT_KB
 };
 
@@ -298,6 +300,77 @@ insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 }
 
 
+static void
+glatex_environment_insert_activated (G_GNUC_UNUSED GtkMenuItem * menuitem,
+                              G_GNUC_UNUSED gpointer gdata)
+{
+    gint env = GPOINTER_TO_INT(gdata);
+    glatex_insert_environment(glatex_environment_array[env].latex);
+}
+
+
+static void
+glatex_insert_environment_dialog(G_GNUC_UNUSED GtkMenuItem * menuitem,
+                                 G_GNUC_UNUSED gpointer gdata)
+{
+    GtkWidget *dialog = NULL;
+    GtkWidget *vbox = NULL;
+	GtkWidget *label_env = NULL;
+	GtkWidget *textbox_env = NULL;
+	GtkWidget *table = NULL;
+    gint i, max;
+
+    dialog = gtk_dialog_new_with_buttons(_("Insert Environment"),
+	    	    GTK_WINDOW(geany->main_widgets->window),
+		        GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
+		        GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+				NULL);
+
+    vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
+	gtk_widget_set_name(dialog, "GeanyDialog");
+	gtk_box_set_spacing(GTK_BOX(vbox), 10);
+
+	table = gtk_table_new(1, 2, FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(table), 6);
+	gtk_table_set_row_spacings(GTK_TABLE(table), 6);
+
+	label_env = gtk_label_new(_("Environment:"));
+	textbox_env = gtk_combo_box_entry_new_text();
+
+    max = glatex_count_menu_entries(glatex_environment_array,
+            ENVIRONMENT_CAT_DUMMY);
+    for (i = 0; i < max; i++)
+    {
+        gtk_combo_box_append_text(GTK_COMBO_BOX(textbox_env),
+                                  glatex_environment_array[i].label);
+    }
+
+	gtk_misc_set_alignment(GTK_MISC(label_env), 0, 0.5);
+
+	gtk_table_attach_defaults(GTK_TABLE(table), label_env, 0, 1, 0, 1);
+	gtk_table_attach_defaults(GTK_TABLE(table), textbox_env, 1, 2, 0, 1);
+	gtk_container_add(GTK_CONTAINER(vbox), table);
+
+	gtk_widget_show_all(vbox);
+
+    if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	{
+        gchar *env_string = NULL;
+
+		env_string = g_strdup(gtk_combo_box_get_active_text(
+			GTK_COMBO_BOX(textbox_env)));
+
+        if (env_string != NULL)
+        {
+            glatex_insert_environment(env_string);
+            g_free(env_string);
+        }
+    }
+
+    gtk_widget_destroy(dialog);
+}
+
+
 static void character_create_menu_item(GtkWidget *menu, const gchar *label,
 									   gint letter, SubMenuCallback callback)
 {
@@ -315,8 +388,8 @@ static void character_create_menu_item(GtkWidget *menu, const gchar *label,
  * returns 0, if categorie is empty
  * if gint categorie is -1, function will count every element.
  * Useful, if there is no need for a categorie check.*/
-static gint
-count_menu_entries(SubMenuTemplate *tmp, gint categorie)
+gint
+glatex_count_menu_entries(SubMenuTemplate *tmp, gint categorie)
 {
 	/* TODO: Reset max value to stop before it's too late */
 	gint i;
@@ -344,7 +417,7 @@ count_menu_entries(SubMenuTemplate *tmp, gint categorie)
 			}
 		}
 	}
-	return count;
+	return count + 1;
 }
 
 static gint
@@ -371,7 +444,7 @@ static void sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template,
 	/* Creates sub menus based on information from letter.h */
 	for (i = 0; i < categories; i++)
 	{
-		if (count_menu_entries(menu_template, i) > 0)
+		if (glatex_count_menu_entries(menu_template, i) > 0)
 		{
 			create_sub_menu(base_menu, sub_menu_cat[i][0],
 			 sub_menu_cat[i][1], category_name[i].label);
@@ -386,7 +459,7 @@ static void sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template,
 		gboolean sorted = category_name[i].sorted;
 		/* To check whether we need to build up a new sub sub menu. */
 		gint local_count = 0;
-		gint item_count = count_menu_entries(menu_template, i);
+		gint item_count = glatex_count_menu_entries(menu_template, i);
 
 		if (item_count < 1)
 			continue;
@@ -920,6 +993,14 @@ static void kbref_insert(G_GNUC_UNUSED guint key_id)
 	insert_ref_activated(NULL, NULL);
 }
 
+
+static void kbref_insert_environment(G_GNUC_UNUSED guint key_id)
+{
+	if (NULL == document_get_current())
+		return;
+	glatex_insert_environment_dialog(NULL, NULL);
+}
+
 static void kbwizard(G_GNUC_UNUSED guint key_id)
 {
 	wizard_activated(NULL, NULL);
@@ -951,6 +1032,10 @@ void init_keybindings()
 	keybindings_set_item(plugin_key_group, LATEX_TOGGLE_ACTIVE, kblatex_toggle,
 		0, 0, "latex_toggle_status", _("Turn input replacement on/off"),
 		menu_latex_replace_toggle);
+	keybindings_set_item(plugin_key_group, LATEX_ENVIRONMENT_INSERT,
+	 	kbref_insert_environment, 0, 0, "latex_insert_environment",
+		_("Run insert environment dialog"), menu_latex_insert_environment);
+
 
 }
 
@@ -1012,10 +1097,18 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 
 	menu_latex_label = gtk_menu_item_new_with_mnemonic(_("Insert _Label"));
 	gtk_tooltips_set_tip(tooltips, menu_latex_label,
-	     _("Helps at inserting labels to a document"), NULL);
+	    _("Helps at inserting labels to a document"), NULL);
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_label);
 	g_signal_connect((gpointer) menu_latex_label, "activate",
 		G_CALLBACK(insert_label_activated), NULL);
+
+	menu_latex_insert_environment = gtk_menu_item_new_with_mnemonic(
+		_("Insert _Environment"));
+	gtk_tooltips_set_tip(tooltips, menu_latex_insert_environment,
+	     _("Helps at inserting an environment a document"), NULL);
+	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_insert_environment);
+	g_signal_connect((gpointer) menu_latex_insert_environment, "activate",
+		G_CALLBACK(glatex_insert_environment_dialog), NULL);
 
 	menu_latex_bibtex = gtk_menu_item_new_with_mnemonic(_("BibTeX"));
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_bibtex);
