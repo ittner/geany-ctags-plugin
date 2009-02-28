@@ -22,16 +22,23 @@
 #include "latexenvironments.h"
 
 CategoryName glatex_environment_cat_names[] = {
-    { ENVIRONMENT_CAT_DUMMY, N_("Environments"), TRUE},
-    { 0, NULL, FALSE}
+	{ ENVIRONMENT_CAT_DUMMY, N_("Environments"), TRUE},
+	{ ENVIRONMENT_CAT_FORMAT, N_("Formating"), TRUE},
+	{ ENVIRONMENT_CAT_STRUCTURE, N_("Document Structure"), TRUE},
+	{ ENVIRONMENT_CAT_LISTS, N_("Lists"), TRUE},
+	{ 0, NULL, FALSE}
 };
 
 
 SubMenuTemplate glatex_environment_array[] = {
-    {0, "document", "document"},
-    {0, "frame", "frame"},
-    {0, "itemize", "itemize"},
-    {0, NULL, NULL},
+	/* General document structure environments */
+	{ENVIRONMENT_CAT_STRUCTURE, "document", "document"},
+	{ENVIRONMENT_CAT_STRUCTURE, "frame", "frame"},
+	/* Lists */
+	{ENVIRONMENT_CAT_LISTS, "itemize", "itemize"},
+	{ENVIRONMENT_CAT_LISTS, "enumerate", "enumerate"},
+	{ENVIRONMENT_CAT_LISTS, "description", "description"},
+	{0, NULL, NULL},
 };
 
 
@@ -41,19 +48,20 @@ void glatex_insert_environment(gchar *environment)
 
 	doc = document_get_current();
 
+	/* Only do anything if it is realy needed to */
 	if (doc != NULL && environment != NULL)
 	{
-       	gint pos = sci_get_current_position(doc->editor->sci);
-       	gint len = strlen(environment);
-       	gchar *tmp = NULL;
+		gint pos = sci_get_current_position(doc->editor->sci);
+		gint len = strlen(environment);
+		gchar *tmp = NULL;
 
-       	tmp = g_strconcat("\\begin{", environment, "}\n\n\\end(",
-		    environment, "}\n", NULL);
+		tmp = g_strconcat("\\begin{", environment, "}\n\n\\end(",
+			environment, "}\n", NULL);
 
-       	sci_insert_text(doc->editor->sci, pos, tmp);
-       	sci_set_current_position(doc->editor->sci, pos + len + 9, TRUE);
+		sci_insert_text(doc->editor->sci, pos, tmp);
+		sci_set_current_position(doc->editor->sci, pos + len + 9, TRUE);
 
-        g_free(tmp);
+		g_free(tmp);
 	}
 }
 
@@ -63,6 +71,7 @@ glatex_environment_insert_activated (G_GNUC_UNUSED GtkMenuItem *menuitem,
                               G_GNUC_UNUSED gpointer gdata)
 {
     gint env = GPOINTER_TO_INT(gdata);
+
     glatex_insert_environment(glatex_environment_array[env].latex);
 }
 
@@ -71,20 +80,20 @@ void
 glatex_insert_environment_dialog(G_GNUC_UNUSED GtkMenuItem *menuitem,
                                  G_GNUC_UNUSED gpointer gdata)
 {
-    GtkWidget *dialog = NULL;
-    GtkWidget *vbox = NULL;
+	GtkWidget *dialog = NULL;
+	GtkWidget *vbox = NULL;
 	GtkWidget *label_env = NULL;
 	GtkWidget *textbox_env = NULL;
 	GtkWidget *table = NULL;
-    gint i, max;
+	gint i, max;
 
-    dialog = gtk_dialog_new_with_buttons(_("Insert Environment"),
-	    	    GTK_WINDOW(geany->main_widgets->window),
-		        GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
-		        GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+	dialog = gtk_dialog_new_with_buttons(_("Insert Environment"),
+				GTK_WINDOW(geany->main_widgets->window),
+				GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
+				GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
 				NULL);
 
-    vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 10);
 
@@ -95,13 +104,12 @@ glatex_insert_environment_dialog(G_GNUC_UNUSED GtkMenuItem *menuitem,
 	label_env = gtk_label_new(_("Environment:"));
 	textbox_env = gtk_combo_box_entry_new_text();
 
-    max = glatex_count_menu_entries(glatex_environment_array,
-            ENVIRONMENT_CAT_DUMMY);
-    for (i = 0; i < max; i++)
-    {
-        gtk_combo_box_append_text(GTK_COMBO_BOX(textbox_env),
-                                  glatex_environment_array[i].label);
-    }
+	max = glatex_count_menu_entries(glatex_environment_array, -1);
+	for (i = 0; i < max; i++)
+	{
+		gtk_combo_box_append_text(GTK_COMBO_BOX(textbox_env),
+								  glatex_environment_array[i].label);
+	}
 
 	gtk_misc_set_alignment(GTK_MISC(label_env), 0, 0.5);
 
@@ -113,18 +121,18 @@ glatex_insert_environment_dialog(G_GNUC_UNUSED GtkMenuItem *menuitem,
 
     if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
-        gchar *env_string = NULL;
+		gchar *env_string = NULL;
 
 		env_string = g_strdup(gtk_combo_box_get_active_text(
 			GTK_COMBO_BOX(textbox_env)));
 
-        if (env_string != NULL)
-        {
-            glatex_insert_environment(env_string);
-            g_free(env_string);
-        }
-    }
+		if (env_string != NULL)
+		{
+			glatex_insert_environment(env_string);
+			g_free(env_string);
+		}
+	}
 
-    gtk_widget_destroy(dialog);
+	gtk_widget_destroy(dialog);
 }
 
