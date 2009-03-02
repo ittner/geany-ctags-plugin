@@ -55,7 +55,7 @@ void glatex_insert_environment(gchar *environment)
 		gint len = strlen(environment);
 		gchar *tmp = NULL;
 
-		tmp = g_strconcat("\\begin{", environment, "}\n\n\\end(",
+		tmp = g_strconcat("\\begin{", environment, "}\n\n\\end{",
 			environment, "}\n", NULL);
 
 		sci_insert_text(doc->editor->sci, pos, tmp);
