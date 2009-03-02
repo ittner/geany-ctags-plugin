@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT([geany-mini-script], [0.3], [burlot.p ascal@wanadoo.fr])
+AC_INIT([geany-mini-script], [0.4], [burlot.p ascal@wanadoo.fr])
 dnl AC_CONFIG_SRCDIR([src/gms.c  src/gms_gui.c])
 
 AM_INIT_AUTOMAKE([1.9 foreign])

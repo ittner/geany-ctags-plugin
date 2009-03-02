@@ -291,7 +291,8 @@ void plugin_init(GeanyData *data)
 
     gms_hnd = gms_new(geany->main_widgets->window,
                     data->interface_prefs->editor_font ,
-                    data->editor_prefs->indentation->width
+                    data->editor_prefs->indentation->width,
+					geany->app->configdir
                     ) ;
 
     /* Add an item to the Tools menu */

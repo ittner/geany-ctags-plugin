@@ -1,3 +1,6 @@
+2009-03-02 V0.4
+            * config_dir (compatibility with geany 0.16)
+			
 2009-02-07 V0.3
             * localization
 			* add Tips on each button

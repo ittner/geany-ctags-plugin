@@ -82,21 +82,22 @@ typedef struct {
     GtkWidget   *rb_ndoc      ; //!< radio button : the filter output is in the current document
 
     GtkWidget   *e_script[GMS_NB_TYPE_SCRIPT] ; //!< entry for script configuration
-   	GtkTooltips *tips         ; //!< tips of button of the top bar
+    GtkTooltips *tips         ; //!< tips of button of the top bar
     PangoFontDescription *fontdesc;
 } gms_gui_t  ;
 
 //! \brief definition of mini-script data structure
 typedef struct {
-    int id ;                                     //!< ID of the instance
-    GString    *cmd ;                            //!< Command string of filtering
-    GtkWidget  *mw ;                             //!< MainWindow of Geany
-    gms_gui_t  w  ;                             //!< Widgets of minis-script gui
-    GString    *input_name ;                     //!< filename of the filter input
+    int         id ;                             //!< ID of the instance
+	gchar      *config_dir  ;                    //!< path of configuration files
+    GString    *cmd         ;                    //!< Command string of filtering
+    GtkWidget  *mw          ;                    //!< MainWindow of Geany
+    gms_gui_t   w           ;                    //!< Widgets of minis-script gui
+    GString    *input_name  ;                    //!< filename of the filter input
     GString    *filter_name ;                    //!< filter filename
     GString    *output_name ;                    //!< filename of the filter output
-    GString    *error_name ;                     //!< errors filename
-    GString    *script_cmd[GMS_NB_TYPE_SCRIPT]; //!< array of script command names
+    GString    *error_name  ;                    //!< errors filename
+    GString    *script_cmd[GMS_NB_TYPE_SCRIPT];  //!< array of script command names
 } gms_private_t  ;
 /*
  * *****************************************************************************
@@ -110,7 +111,6 @@ typedef struct {
 static unsigned char inst_cnt = 0  ; //!< counter of instance
 static gchar bufline[GMS_MAX_LINE+1]; //!< buffer used to read the configuration file
 
-static const gchar geany_d[]         = ".geany"    ; //!< geany directory
 static const gchar pref_filename[]   = "gms.rc"    ; //!< preferences filename
 static const gchar prefix_filename[] = "/tmp/gms"  ; //!< prefix filename
 static const gchar in_ext[]          = ".in"       ; //!< filename extension for the input file
@@ -164,7 +164,7 @@ static void load_prefs_file(
 {
     GString *gms_pref = g_string_new("") ;
 
-    g_string_printf(gms_pref , "%s/%s/%s", getenv("HOME"),geany_d,pref_filename );
+    g_string_printf(gms_pref , "%s/plugins/%s", this->config_dir,pref_filename );
 
     if ( g_file_test( gms_pref->str, G_FILE_TEST_EXISTS ) == TRUE )
     {
@@ -175,9 +175,9 @@ static void load_prefs_file(
             for ( ii = 0 ; ii <GMS_NB_TYPE_SCRIPT ;ii++ )
             {
                 if ( fgets(bufline,GMS_MAX_LINE,fd) == NULL )
-					break ;
+                    break ;
                 if ( fgets(bufline,GMS_MAX_LINE,fd) == NULL )
-					break ;
+                    break ;
                 bufline[strlen(bufline)-1] = 0 ;
                 g_string_assign(this->script_cmd[ii] , bufline ) ;
             }
@@ -195,9 +195,12 @@ static void save_prefs_file(
     )
 {
     GString *gms_pref = g_string_new(getenv("HOME"));
-    g_string_append_c( gms_pref, '/' );
-    g_string_append( gms_pref, geany_d );
 
+    g_string_printf(gms_pref , "%s/plugins", this->config_dir,pref_filename );
+
+    if ( g_file_test( this->config_dir, G_FILE_TEST_EXISTS ) != TRUE )
+        g_mkdir( this->config_dir, 0755 ) ;
+		
     if ( g_file_test( gms_pref->str, G_FILE_TEST_EXISTS ) != TRUE )
         g_mkdir( gms_pref->str, 0755 ) ;
 
@@ -247,8 +250,8 @@ static void gms_cb_load(
 {
     gms_private_t *this = GMS_PRIVATE(data) ;
     GtkWidget    *p_dialog ;
-	
-	p_dialog = gtk_file_chooser_dialog_new (_("Load Mini-Script File"),
+    
+    p_dialog = gtk_file_chooser_dialog_new (_("Load Mini-Script File"),
                                     GTK_WINDOW(this->mw) ,
                                     GTK_FILE_CHOOSER_ACTION_OPEN,
                                     GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -304,8 +307,8 @@ static void gms_cb_save(
 {
     gms_private_t *this = GMS_PRIVATE(data) ;
     GtkWidget    *p_dialog ;
-	
-	p_dialog = gtk_file_chooser_dialog_new (_("Save Mini-Script File"),
+    
+    p_dialog = gtk_file_chooser_dialog_new (_("Save Mini-Script File"),
                                     GTK_WINDOW(this->mw) ,
                                     GTK_FILE_CHOOSER_ACTION_SAVE,
                                     GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -351,7 +354,7 @@ static void gms_cb_info(
                                 GTK_MESSAGE_INFO,
                                 GTK_BUTTONS_CLOSE,
                                 _(geany_info),NULL );
-								
+                                
     gtk_dialog_run(GTK_DIALOG(dlg));
     GMS_FREE_WIDGET(dlg);
 }
@@ -363,24 +366,25 @@ static void gms_cb_info(
 
 static GtkWidget  *new_button_from_stock( gboolean withtext, const gchar *stock_id )
 {
-	GtkWidget  *button ;
-	if ( withtext )
-		button   = gtk_button_new_from_stock( stock_id  ) ;
-	else
-	{
-		button   = gtk_button_new() ;
-		gtk_container_add( GTK_CONTAINER(button),gtk_image_new_from_stock(stock_id , GTK_ICON_SIZE_SMALL_TOOLBAR ) );
-	}
-	return button ;
+    GtkWidget  *button ;
+    if ( withtext )
+        button   = gtk_button_new_from_stock( stock_id  ) ;
+    else
+    {
+        button   = gtk_button_new() ;
+        gtk_container_add( GTK_CONTAINER(button),gtk_image_new_from_stock(stock_id , GTK_ICON_SIZE_SMALL_TOOLBAR ) );
+    }
+    return button ;
 }
 
 /**
  * \brief the function initializes the mini-script gui structure.
  */
 gms_handle_t gms_new(
-    GtkWidget *mw, ///< Geany Main windows
-    gchar *font  , ///< Geany editor font
-    gint tabs      ///< Geany editor tabstop
+    GtkWidget *mw         , ///< Geany Main windows
+    gchar     *font       , ///< Geany editor font
+    gint       tabs       , ///< Geany editor tabstop
+    gchar     *config_dir   ///< Geany Configuration Path
     )
 {
     gms_private_t *this = GMS_G_MALLOC0(gms_private_t,1);
@@ -405,10 +409,11 @@ gms_handle_t gms_new(
         gint        width  = gdk_screen_get_width(ecran) ;
         gint        height = gdk_screen_get_height(ecran) ;
         gint        i , size_pid ;
-		gboolean    mode_txt_icon = FALSE ;
+        gboolean    mode_txt_icon = FALSE ;
 
         this->mw = mw ;
-        this->cmd = g_string_new(""); ;
+        this->cmd = g_string_new("");
+        this->config_dir =config_dir ;
 
         this->w.dlg = gtk_dialog_new_with_buttons(
                         _("Mini-Script Filter"),
@@ -429,32 +434,32 @@ gms_handle_t gms_new(
         gtk_window_set_default_size( GTK_WINDOW(this->w.dlg) , width/2 , height/2 ) ;
 
  
-   		this->w.tips = gtk_tooltips_new ();
-		
+        this->w.tips = gtk_tooltips_new ();
+        
      // Hbox : type de script
         hb_st = gtk_hbox_new (FALSE, 0);
         gtk_container_set_border_width (GTK_CONTAINER (hb_st), 0);
         gtk_box_pack_start( vb_dlg , hb_st, FALSE, FALSE, 0);
 
-		b_new   = new_button_from_stock( mode_txt_icon, GTK_STOCK_CLEAR  ) ;
+        b_new   = new_button_from_stock( mode_txt_icon, GTK_STOCK_CLEAR  ) ;
         gtk_box_pack_start( GTK_BOX (hb_st), b_new, FALSE, FALSE, 0);
         g_signal_connect (G_OBJECT (b_new), "clicked",G_CALLBACK (gms_cb_new), (gpointer) this );
-		gtk_tooltips_set_tip (GTK_TOOLTIPS (this->w.tips), b_new, _("Clear the mini-script window") , "");
+        gtk_tooltips_set_tip (GTK_TOOLTIPS (this->w.tips), b_new, _("Clear the mini-script window") , "");
 
-		b_open   = new_button_from_stock( mode_txt_icon, GTK_STOCK_OPEN  ) ;
+        b_open   = new_button_from_stock( mode_txt_icon, GTK_STOCK_OPEN  ) ;
         gtk_box_pack_start( GTK_BOX (hb_st), b_open, FALSE, FALSE, 0);
         g_signal_connect (G_OBJECT (b_open), "clicked",G_CALLBACK (gms_cb_load), (gpointer) this );
-		gtk_tooltips_set_tip (GTK_TOOLTIPS (this->w.tips), b_open, _("Load a mini-script into this window"), "");
+        gtk_tooltips_set_tip (GTK_TOOLTIPS (this->w.tips), b_open, _("Load a mini-script into this window"), "");
 
-		b_save   = new_button_from_stock( mode_txt_icon, GTK_STOCK_SAVE_AS  ) ;
+        b_save   = new_button_from_stock( mode_txt_icon, GTK_STOCK_SAVE_AS  ) ;
         gtk_box_pack_start( GTK_BOX (hb_st),b_save, FALSE, FALSE, 0);
         g_signal_connect (G_OBJECT (b_save), "clicked",G_CALLBACK (gms_cb_save), (gpointer) this );
-		gtk_tooltips_set_tip (GTK_TOOLTIPS (this->w.tips), b_save, _("Save the mini-script into a file"), "");
+        gtk_tooltips_set_tip (GTK_TOOLTIPS (this->w.tips), b_save, _("Save the mini-script into a file"), "");
 
-		b_info   = new_button_from_stock( mode_txt_icon, GTK_STOCK_INFO  ) ;
+        b_info   = new_button_from_stock( mode_txt_icon, GTK_STOCK_INFO  ) ;
         gtk_box_pack_end( GTK_BOX (hb_st), b_info, FALSE, FALSE, 0);
         g_signal_connect (G_OBJECT (b_info), "clicked",G_CALLBACK (gms_cb_info), (gpointer) this );
-		gtk_tooltips_set_tip (GTK_TOOLTIPS (this->w.tips), b_info, _("Display a information about the mini-script plugin"), "");
+        gtk_tooltips_set_tip (GTK_TOOLTIPS (this->w.tips), b_info, _("Display a information about the mini-script plugin"), "");
 
         this->w.cb_st = gtk_combo_box_new_text() ;
         for ( i=0;i<GMS_NB_TYPE_SCRIPT ; i++ )
@@ -462,7 +467,7 @@ gms_handle_t gms_new(
         gtk_combo_box_set_active(GTK_COMBO_BOX(this->w.cb_st), 0 );
         gtk_box_pack_start(GTK_BOX(hb_st), this->w.cb_st, FALSE, FALSE, 0);
         GTK_WIDGET_SET_FLAGS (this->w.cb_st, GTK_CAN_DEFAULT);
-		gtk_tooltips_set_tip (GTK_TOOLTIPS (this->w.tips), this->w.cb_st, _("select the mini-script type"), "");
+        gtk_tooltips_set_tip (GTK_TOOLTIPS (this->w.tips), this->w.cb_st, _("select the mini-script type"), "");
 
     // Scroll Box : script
         sb_script =  gtk_scrolled_window_new (NULL,NULL);
@@ -495,7 +500,7 @@ gms_handle_t gms_new(
     //                   selection/current document/all documents of the current session
         f_rbi = gtk_frame_new (_("filter input") );
         gtk_box_pack_start( GTK_BOX (hb_rb), f_rbi, FALSE, FALSE, 0);
-		gtk_tooltips_set_tip (GTK_TOOLTIPS (this->w.tips), f_rbi, _("select the input of mini-script filter"), "");
+        gtk_tooltips_set_tip (GTK_TOOLTIPS (this->w.tips), f_rbi, _("select the input of mini-script filter"), "");
 
         hb_rbi = gtk_hbox_new (FALSE, 0);
         gtk_container_set_border_width (GTK_CONTAINER (hb_rbi), 0);
@@ -514,7 +519,7 @@ gms_handle_t gms_new(
     //                   current document/ or new document
         f_rbo = gtk_frame_new (_("filter output") );
         gtk_box_pack_start( GTK_BOX(hb_rb), f_rbo, FALSE, FALSE, 0);
-		gtk_tooltips_set_tip (GTK_TOOLTIPS (this->w.tips), f_rbo, _("select the output of mini-script filter"), "");
+        gtk_tooltips_set_tip (GTK_TOOLTIPS (this->w.tips), f_rbo, _("select the output of mini-script filter"), "");
 
         hb_rbo = gtk_hbox_new (FALSE, 0);
         gtk_container_set_border_width (GTK_CONTAINER(hb_rbo), 0);
@@ -534,7 +539,7 @@ gms_handle_t gms_new(
         this->output_name= g_string_new(prefix_filename) ;
         this->error_name = g_string_new(prefix_filename) ;
 
-		size_pid = (gint)(2*sizeof(pid_t)) ;
+        size_pid = (gint)(2*sizeof(pid_t)) ;
         g_string_append_printf( this->input_name,"%02x_%0*x%s",
                     this->id,size_pid, getpid(), in_ext ) ;
 
@@ -582,7 +587,7 @@ void gms_delete(
 
         for ( i=0;i<GMS_NB_TYPE_SCRIPT ; i++ )
             g_string_free(this->script_cmd[i] ,flag) ;
-		
+        
         GMS_G_FREE( this )  ;
     }
 }

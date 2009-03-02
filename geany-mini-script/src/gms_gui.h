@@ -37,7 +37,7 @@ typedef enum {
     OUT_NEW_DOC        =1
 } gms_output_t ;
 
-gms_handle_t gms_new(  GtkWidget *mw, gchar *font, gint tabs);
+gms_handle_t gms_new(  GtkWidget *mw, gchar *font, gint tabs, gchar *config_dir);
 void        gms_delete( gms_handle_t *hnd );
 int         gms_dlg( gms_handle_t hnd ) ;
 gchar       *gms_get_in_filename( gms_handle_t hnd ) ;
