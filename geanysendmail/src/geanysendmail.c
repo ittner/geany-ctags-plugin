@@ -235,6 +235,9 @@ void show_icon()
 	mailbutton = GTK_WIDGET(gtk_tool_button_new_from_stock(GEANYSENDMAIL_STOCK_MAIL));
 	plugin_add_toolbar_item(geany_plugin, GTK_TOOL_ITEM(mailbutton));
 	ui_add_document_sensitive(mailbutton);
+#if GTK_CHECK_VERSION(2, 12, 0)
+	gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(mailbutton), _("Send by mail"));
+#endif
 	g_signal_connect (G_OBJECT(mailbutton), "clicked", G_CALLBACK(send_as_attachment), NULL);
 	gtk_widget_show_all (mailbutton);
 }
