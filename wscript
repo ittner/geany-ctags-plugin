@@ -3,7 +3,7 @@
 #
 # WAF build script for geany-plugins
 #
-# Copyright 2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+# Copyright 2008-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -294,6 +294,8 @@ def set_options(opt):
 	opt.add_option('--skip-plugins', action='store', default='',
 		help='plugins which should not be built, ignored when --enable-plugins is set, same format as --enable-plugins' % \
 		{ '1' : plugins[0].name, '2' : plugins[1].name }, dest='skip_plugins')
+	opt.add_option('--target-win32', action='store_true', default=False,
+		help='Cross-compile for Win32', dest='target_win32')
 
 
 def build(bld):
@@ -337,7 +339,12 @@ def build(bld):
 
 
 	# Build the plugins
-	bld.env['shlib_PATTERN']    = '%s.so'
+	if Options.options.target_win32:
+		bld.env['shlib_CCFLAGS']    = '' # disable default -fPIC flag
+		bld.env['shlib_PATTERN']    = '%s.dll'
+	else:
+		bld.env['shlib_PATTERN']    = '%s.so'
+
 	for p in plugins:
 		if not p.name in bld.env['enabled_plugins']:
 			continue;
