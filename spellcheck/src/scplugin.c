@@ -260,6 +260,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 
 void plugin_help(void)
 {
+/*
 	gchar *readme = g_build_filename(DOCDIR, "README", NULL);
 
 	if (g_file_test(readme, G_FILE_TEST_EXISTS))
@@ -271,6 +272,8 @@ void plugin_help(void)
 		utils_open_browser("http://plugins.geany.org/spellcheck/");
 	}
 	g_free(readme);
+*/
+	utils_open_browser("http://plugins.geany.org/spellcheck/");
 }
 
 
