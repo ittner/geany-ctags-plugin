@@ -34,10 +34,14 @@ SubMenuTemplate glatex_environment_array[] = {
 	/* General document structure environments */
 	{ENVIRONMENT_CAT_STRUCTURE, "document", "document"},
 	{ENVIRONMENT_CAT_STRUCTURE, "frame", "frame"},
+	{ENVIRONMENT_CAT_STRUCTURE, "table", "table"},
+	{ENVIRONMENT_CAT_STRUCTURE, "tabular", "tabular"},
+	{ENVIRONMENT_CAT_STRUCTURE, "figure", "figure"},
 	/* Lists */
 	{ENVIRONMENT_CAT_LISTS, "itemize", "itemize"},
 	{ENVIRONMENT_CAT_LISTS, "enumerate", "enumerate"},
 	{ENVIRONMENT_CAT_LISTS, "description", "description"},
+   
 	{0, NULL, NULL},
 };
 
