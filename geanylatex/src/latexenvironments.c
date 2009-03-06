@@ -41,7 +41,7 @@ SubMenuTemplate glatex_environment_array[] = {
 	{ENVIRONMENT_CAT_LISTS, "itemize", "itemize"},
 	{ENVIRONMENT_CAT_LISTS, "enumerate", "enumerate"},
 	{ENVIRONMENT_CAT_LISTS, "description", "description"},
-   
+
 	{0, NULL, NULL},
 };
 
@@ -55,17 +55,33 @@ void glatex_insert_environment(gchar *environment)
 	/* Only do anything if it is realy needed to */
 	if (doc != NULL && environment != NULL)
 	{
-		gint pos = sci_get_current_position(doc->editor->sci);
-		gint len = strlen(environment);
-		gchar *tmp = NULL;
+		if (sci_has_selection(doc->editor->sci))
+        {
+			gint selection_len = sci_get_selected_text_length(doc->editor->sci);
+			gchar *selection = g_malloc(selection_len + 1);
+			const gchar *replacement = NULL;
 
-		tmp = g_strconcat("\\begin{", environment, "}\n\n\\end{",
+            sci_get_selected_text(doc->editor->sci, selection);
+
+            replacement = g_strconcat("\\begin{", environment, "}\n",
+                selection,"\n\\end{", environment, "}\n", NULL);
+
+            sci_replace_sel(doc->editor->sci, replacement);
+            g_free(selection);
+		}
+		else
+		{
+			gint pos = sci_get_current_position(doc->editor->sci);
+			gint len = strlen(environment);
+			gchar *tmp = NULL;
+
+			tmp = g_strconcat("\\begin{", environment, "}\n\n\\end{",
 			environment, "}\n", NULL);
 
-		sci_insert_text(doc->editor->sci, pos, tmp);
-		sci_set_current_position(doc->editor->sci, pos + len + 9, TRUE);
-
-		g_free(tmp);
+			sci_insert_text(doc->editor->sci, pos, tmp);
+			sci_set_current_position(doc->editor->sci, pos + len + 9, TRUE);
+			g_free(tmp);
+		}
 	}
 }
 
