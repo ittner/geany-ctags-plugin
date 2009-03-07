@@ -1110,15 +1110,23 @@ set_diff_buff(GtkTextBuffer * buffer, const gchar * txt)
 }
 
 static void
+refresh_diff_view(GtkTreeView *treeview)
+{
+	gchar *diff;
+	GtkWidget *diffView = ui_lookup_widget(GTK_WIDGET(treeview), "textDiff");
+	diff = get_commit_diff(GTK_TREE_VIEW(treeview));
+	set_diff_buff(gtk_text_view_get_buffer(GTK_TEXT_VIEW(diffView)), diff);
+	g_free(diff);
+}
+
+static void
 commit_toggled(G_GNUC_UNUSED GtkCellRendererToggle * cell, gchar * path_str, gpointer data)
 {
 	GtkTreeView *treeview = GTK_TREE_VIEW(data);
-	GtkWidget *diffView = ui_lookup_widget(GTK_WIDGET(treeview), "textDiff");
 	GtkTreeModel *model = gtk_tree_view_get_model(treeview);
 	GtkTreeIter iter;
 	GtkTreePath *path = gtk_tree_path_new_from_string(path_str);
 	gboolean fixed;
-	gchar *diff;
 
 	/* get toggled iter */
 	gtk_tree_model_get_iter(model, &iter, path);
@@ -1130,12 +1138,33 @@ commit_toggled(G_GNUC_UNUSED GtkCellRendererToggle * cell, gchar * path_str, gpo
 	/* set new value */
 	gtk_list_store_set(GTK_LIST_STORE(model), &iter, COLUMN_COMMIT, fixed, -1);
 
-	diff = get_commit_diff(GTK_TREE_VIEW(treeview));
-	set_diff_buff(gtk_text_view_get_buffer(GTK_TEXT_VIEW(diffView)), diff);
+	refresh_diff_view(treeview);
 
 	/* clean up */
 	gtk_tree_path_free(path);
-	g_free(diff);
+}
+
+gboolean
+toggle_all_commit_files (GtkTreeModel *model, GtkTreePath *path,
+        GtkTreeIter *iter, gpointer data)
+{
+	(void)path;
+	gtk_list_store_set(GTK_LIST_STORE(model), iter, COLUMN_COMMIT, *(gint*)data, -1);
+	return FALSE;
+}
+
+static void
+commit_all_toggled(G_GNUC_UNUSED GtkCellRendererToggle *cell, gpointer data)
+{
+	GtkTreeView *treeview = GTK_TREE_VIEW(data);
+	GtkTreeModel *model = gtk_tree_view_get_model(treeview);
+	static gint onoff = 0;
+	gpointer ptr_onoff = &onoff;
+	
+	gtk_tree_model_foreach(model, toggle_all_commit_files, ptr_onoff);
+	/* toggle value */
+	onoff ^= 1;
+	refresh_diff_view(treeview);
 }
 
 static void
@@ -1201,6 +1230,7 @@ create_commitDialog(void)
 	GtkWidget *scrolledwindow1;
 	GtkWidget *treeSelect;
 	GtkWidget *vpaned2;
+	GtkWidget *vpaned3;
 	GtkWidget *scrolledwindow2;
 	GtkWidget *textDiff;
 	GtkWidget *frame1;
@@ -1211,6 +1241,7 @@ create_commitDialog(void)
 	GtkWidget *dialog_action_area1;
 	GtkWidget *btnCancel;
 	GtkWidget *btnCommit;
+	GtkWidget *select_cbox;
 
 	gchar *rcstyle = g_strdup_printf("style \"geanyvc-diff-font\"\n"
 					 "{\n"
@@ -1265,6 +1296,16 @@ create_commitDialog(void)
 				       GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(scrolledwindow2), GTK_SHADOW_IN);
 
+	vpaned3 = gtk_vpaned_new();
+	gtk_widget_show(vpaned3);
+	gtk_paned_pack2(GTK_PANED(vpaned2), vpaned3, FALSE, FALSE);
+
+	select_cbox = gtk_check_button_new_with_mnemonic(_("_De-/select all files"));
+	gtk_toggle_button_set_active((GtkToggleButton*)select_cbox, TRUE);
+	gtk_widget_show(select_cbox);
+	gtk_paned_pack1(GTK_PANED(vpaned3), select_cbox, FALSE, FALSE);
+	g_signal_connect(select_cbox, "toggled", G_CALLBACK(commit_all_toggled), treeSelect);
+
 	textDiff = gtk_text_view_new();
 	gtk_widget_set_name(textDiff, "GeanyVCCommitDialogDiff");
 	gtk_widget_show(textDiff);
@@ -1276,7 +1317,7 @@ create_commitDialog(void)
 
 	frame1 = gtk_frame_new(NULL);
 	gtk_widget_show(frame1);
-	gtk_paned_pack2(GTK_PANED(vpaned2), frame1, TRUE, TRUE);
+	gtk_paned_pack2(GTK_PANED(vpaned3), frame1, TRUE, TRUE);
 	gtk_frame_set_shadow_type(GTK_FRAME(frame1), GTK_SHADOW_NONE);
 
 	alignment1 = gtk_alignment_new(0.5, 0.5, 1, 1);
@@ -1290,6 +1331,7 @@ create_commitDialog(void)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolledwindow3), GTK_POLICY_AUTOMATIC,
 				       GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(scrolledwindow3), GTK_SHADOW_IN);
+
 
 	textCommitMessage = gtk_text_view_new();
 	gtk_widget_show(textCommitMessage);
@@ -1332,6 +1374,7 @@ create_commitDialog(void)
 	GLADE_HOOKUP_OBJECT_NO_REF(commitDialog, dialog_action_area1, "dialog_action_area1");
 	GLADE_HOOKUP_OBJECT(commitDialog, btnCancel, "btnCancel");
 	GLADE_HOOKUP_OBJECT(commitDialog, btnCommit, "btnCommit");
+	GLADE_HOOKUP_OBJECT(commitDialog, select_cbox, "select_cbox");
 
 	return commitDialog;
 }
@@ -1372,10 +1415,9 @@ vccommit_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 	doc = document_get_current();
 	g_return_if_fail(doc);
 	g_return_if_fail(doc->file_name);
-	dir = g_path_get_dirname(doc->file_name);
-
-	vc = find_vc(dir);
+	vc = find_vc(doc->file_name);
 	g_return_if_fail(vc);
+	dir = vc->get_base_dir(doc->file_name);
 
 	lst = vc->get_commit_files(dir);
 	if (!lst)

@@ -92,6 +92,10 @@ msgstr "Pfad"
 msgid "Commit"
 msgstr "Übertragen"
 
+#: ../geanyvc.c:1303
+msgid "_De-/select all files"
+msgstr "Alle _Dateien aus- bzw. abwählen"
+
 #: ../geanyvc.c:1301
 msgid "<b>Commit message:</b>"
 msgstr "<b>Commitnachricht:</b>"
