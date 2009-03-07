@@ -99,7 +99,7 @@ msgstr "<b>Commitnachricht:</b>"
 #. Commit all changes
 #: ../geanyvc.c:1314 ../geanyvc.c:2170
 msgid "_Commit"
-msgstr "Ü_bertragen"
+msgstr "Über_tragen"
 
 #: ../geanyvc.c:1384
 msgid "Nothing to commit."
@@ -353,7 +353,7 @@ msgstr "Zeigt den Status der Arbeitskopie."
 #. complete update
 #: ../geanyvc.c:2161
 msgid "Update"
-msgstr "Aktualisieren"
+msgstr "_Aktualisieren"
 
 #: ../geanyvc.c:2163
 msgid "Update from remote repositary."
