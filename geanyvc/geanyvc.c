@@ -948,7 +948,7 @@ vcupdate_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 	}
 
 	if (command_with_question_activated(&text, VC_COMMAND_UPDATE,
-					    _("Do you really want to update?"), FLAG_FILE))
+					    _("Do you really want to update?"), FLAG_BASEDIR))
 	{
 		document_reload_file(doc, NULL);
 
