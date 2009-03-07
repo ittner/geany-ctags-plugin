@@ -2158,7 +2158,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 
 
 	/* complete update */
-	menu_vc_update = gtk_menu_item_new_with_mnemonic(_("Update"));
+	menu_vc_update = gtk_menu_item_new_with_mnemonic(_("_Update"));
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_update);
 	gtk_tooltips_set_tip(tooltips, menu_vc_update, _("Update from remote repositary."), NULL);
 
