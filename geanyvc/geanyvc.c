@@ -1144,7 +1144,7 @@ commit_toggled(G_GNUC_UNUSED GtkCellRendererToggle * cell, gchar * path_str, gpo
 	gtk_tree_path_free(path);
 }
 
-gboolean
+static gboolean
 toggle_all_commit_files (GtkTreeModel *model, GtkTreePath *path,
         GtkTreeIter *iter, gpointer data)
 {
