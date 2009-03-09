@@ -120,7 +120,11 @@ plugins = [
 	Plugin('geany-mini-script',
 		 [ 'geany-mini-script/src/gms.c', 'geany-mini-script/src/gms_gui.c' ], # source files
 		 [ 'geany-mini-script', 'geany-mini-script/src' ], # include dirs
-		 '0.2')
+		 '0.2'),
+	Plugin('shiftcolumn',
+		 [ 'shiftcolumn/src/shiftcolumn.c'],
+		 [ 'shiftcolumn', 'shiftcolumn/src'],
+		 '0.3')
 ]
 
 makefile_template = '''#!/usr/bin/make -f
