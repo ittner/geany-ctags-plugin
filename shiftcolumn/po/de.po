@@ -1,13 +1,14 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# German translation for shiftcolumn
+# Copyright (C) 2009 YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Andrew Janke <a.janke@gmail.com>, 2009
+# Frank Lanitz <frank@frank.uvena.de>, 2009
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: shiftcolumn 0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-09 03:32+1100\n"
+"POT-Creation-Date: 2009-03-10 00:48+0100\n"
 "PO-Revision-Date: 2009-03-09 20:50+1000\n"
 "Last-Translator: Andrew Janke <a.janke@gmail.com>\n"
 "Language-Team: \n"
@@ -15,19 +16,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/shiftcolumn.c:39
+#: src/shiftcolumn.c:46
 msgid "Shift Column"
-msgstr "spalte rucken"
+msgstr "Auswahl verschieben"
 
-#: src/shiftcolumn.c:40
+#: src/shiftcolumn.c:47
 msgid "Shift a selection left and right"
-msgstr ""
+msgstr "Verschiebt eine Auswahl nach Links oder Rechts"
 
-#: src/shiftcolumn.c:342
+#: src/shiftcolumn.c:363
 msgid "Shift Left"
-msgstr "links rucken"
+msgstr "Auswahl nach Links verschieben"
 
-#: src/shiftcolumn.c:349
+#: src/shiftcolumn.c:370
 msgid "Shift Right"
-msgstr "rechts rucken"
-
+msgstr "Auswahl nach Rechts verschieben"
