@@ -20,6 +20,12 @@
 
 
 #include "geany.h"
+#include "support.h"
+
+#ifdef HAVE_LOCALE_H
+# include <locale.h>
+#endif
+
 #include "ui_utils.h"
 
 #include "sciwrappers.h"
@@ -350,6 +356,10 @@ static void kb_shift_right(G_GNUC_UNUSED guint key_id){
    }
 
 void plugin_init(G_GNUC_UNUSED GeanyData *data){
+
+   /* init gettext and friends */
+   main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
+   
    menu_item_shift_left = gtk_menu_item_new_with_mnemonic(_("Shift Left"));
    gtk_widget_show(menu_item_shift_left);
    gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu),

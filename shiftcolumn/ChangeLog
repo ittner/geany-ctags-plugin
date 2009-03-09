@@ -1,3 +1,9 @@
+
+2009-03-10  Andrew L Janke  <a.janke@gmail.com>
+
+ * Added i18n headers to shiftcolumn.c
+ * Added ru and de translations
+
 2009-03-10  Andrew L Janke  <a.janke@gmail.com>
 
  * Added GPL license and a few patches from Frank
