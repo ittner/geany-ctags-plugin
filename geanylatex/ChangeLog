@@ -1,3 +1,8 @@
+2009-03-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Don't offer insert environment dialog in case of no document is open.
+
+
 2009-03-06  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Insert environment now supports selections by position \begin{} and

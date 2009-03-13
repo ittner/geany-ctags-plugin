@@ -1097,6 +1097,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	ui_add_document_sensitive(menu_latex_label);
 	ui_add_document_sensitive(menu_latex_bibtex);
 	ui_add_document_sensitive(menu_latex_format_insert);
+	ui_add_document_sensitive(menu_latex_insert_environment);
 
 	gtk_widget_set_sensitive(menu_latex_wizzard, TRUE);
 	gtk_widget_show_all(menu_latex);
