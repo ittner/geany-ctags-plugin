@@ -193,10 +193,16 @@ AoOpenUri *ao_open_uri_new(gboolean enable)
 
 static gboolean ao_uri_is_link(const gchar  *uri)
 {
+	gchar *dot;
+
 	g_return_val_if_fail (uri != NULL, FALSE);
 
-	/* this might cause too many matches, maybe we should require two dots */
-	return (strchr(uri, '.') && ! strchr(uri, ' '));
+	if ((dot = strchr(uri, '.')) && *dot != '\0')
+	{	/* we require two dots and don't allow any spaces (www.domain.tld)
+		 * unless we get too many matches */
+		return (strchr(dot + 1, '.') && ! strchr(uri, ' '));
+	}
+	return FALSE;
 }
 
 
