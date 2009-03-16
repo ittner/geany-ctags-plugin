@@ -45,7 +45,7 @@ GeanyFunctions  *geany_functions;
 PLUGIN_VERSION_CHECK(130);
 PLUGIN_SET_INFO(_("Shift Column"),
                 _("Shift a selection left and right"),
-                "0.1", "Andrew L Janke <a.janke@gmail.com>");
+                VERSION, "Andrew L Janke <a.janke@gmail.com>");
 
 
 static GtkWidget *menu_item_shift_left = NULL;

@@ -1,3 +1,7 @@
+2009-03-17  Andrew L Janke  <a.janke@gmail.com>
+
+ * src/shiftcolumn.c: Added VERSION instead of static string
+
 2009-03-12  Andrew L Janke  <a.janke@gmail.com>
 
  * Added dk translation - Thanks Anders
