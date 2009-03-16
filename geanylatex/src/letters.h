@@ -21,7 +21,7 @@
 
 
 #ifndef LETTERS_H
-#define LETTER_H
+#define LETTERS_H
 
 #include "geanylatex.h"
 #include "datatypes.h"
