@@ -55,7 +55,7 @@
 # include <locale.h>
 #endif
 
-
+#include <string.h>
 typedef void (*SubMenuCallback) (G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata);
 
 extern GeanyPlugin	*geany_plugin;

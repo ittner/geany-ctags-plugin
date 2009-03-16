@@ -23,6 +23,7 @@
 #define LATEXENVIRONMENTS_H
 
 #include "geanylatex.h"
+#include <string.h>
 
 enum {
     ENVIRONMENT_CAT_DUMMY = 0,

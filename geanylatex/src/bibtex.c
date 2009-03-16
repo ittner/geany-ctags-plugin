@@ -46,7 +46,7 @@ void glatex_insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem,
 {
 	int doctype = GPOINTER_TO_INT(gdata);
 	gboolean fields[N_ENTRIES];
-	gchar *output = g_strup("@");
+	gchar *output = g_strdup("@");
 	int i;
 
 	for (i = 0; i < N_ENTRIES; i++)
