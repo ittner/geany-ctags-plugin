@@ -66,6 +66,7 @@ enum
 	LATEX_TOGGLE_ACTIVE,
 	LATEX_ENVIRONMENT_INSERT,
 	LATEX_INSERT_NEWITEM_KB,
+	LATEX_REPLACE_SPECIAL_CHARS,
 	COUNT_KB
 };
 
@@ -121,10 +122,52 @@ static gboolean ht_editor_notify_cb(G_GNUC_UNUSED GObject *object, GeanyEditor *
 			}
 		}
 	}
-
 	return FALSE;
 }
 
+
+static void replace_special_character()
+{
+	GeanyDocument *doc = NULL;
+	doc = document_get_current();
+
+	if (doc != NULL && sci_has_selection(doc->editor->sci))
+	{
+		gint selection_len = sci_get_selected_text_length(doc->editor->sci);
+		gchar *selection = g_malloc(selection_len + 1);
+		GString *replacement = g_string_new(NULL);
+		gint i;
+		gchar *new = NULL;
+		gchar *entity = NULL;
+		gchar buf[7];
+		gint len;
+
+		sci_get_selected_text(doc->editor->sci, selection);
+
+		selection_len = sci_get_selected_text_length(doc->editor->sci) - 1;
+		for (i = 0; i < selection_len; i++)
+		{
+			len = g_unichar_to_utf8(g_utf8_get_char(selection + i), buf);
+			i = len - 1 + i;
+			buf[len] = '\0';
+			entity = glatex_get_entity(buf);
+
+			if (entity != NULL)
+			{
+				replacement = g_string_append(replacement, entity);
+			}
+			else
+			{
+				replacement = g_string_append(replacement, buf);
+			}
+		}
+		new = g_string_free(replacement, FALSE);
+		sci_replace_sel(doc->editor->sci, new);
+		g_free(selection);
+		g_free(new);
+		g_free(entity);
+	}
+}
 
 /* Called when keys were pressed */
 static void kblatex_toggle(G_GNUC_UNUSED guint key_id)
@@ -146,7 +189,6 @@ void
 glatex_insert_string(gchar *string, gboolean reset_position)
 {
 	GeanyDocument *doc = NULL;
-
 
 	doc = document_get_current();
 
@@ -950,6 +992,13 @@ static void kb_insert_newitem(G_GNUC_UNUSED guint key_id)
 	glatex_insert_string("\\item ", TRUE);
 }
 
+static void kb_replace_special_chars(G_GNUC_UNUSED guint key_id)
+{
+	if (NULL == document_get_current())
+		return;
+	replace_special_character();
+}
+
 /*static void kb_bibtex_entry_insert(G_GNUC_UNUSED guint key_id)
 {
 	insert_bibtex_entry(NULL, NULL);
@@ -974,6 +1023,8 @@ void init_keybindings()
 		_("Run insert environment dialog"), menu_latex_insert_environment);
 	keybindings_set_item(plugin_key_group, LATEX_INSERT_NEWITEM_KB,
 		kb_insert_newitem, 0, 0, "latex_insert_item", _("Insert \\item"), NULL);
+	keybindings_set_item(plugin_key_group, LATEX_REPLACE_SPECIAL_CHARS,
+		kb_replace_special_chars, 0, 0, "latex_replace_chars", _("Replacement of special characters"), NULL);
 }
 
 void plugin_help()
