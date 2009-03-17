@@ -208,7 +208,7 @@ def configure(conf):
 
 	conf.check_cfg(package='gtk+-2.0', atleast_version='2.6.0', uselib_store='GTK',
 		mandatory=True, args='--cflags --libs')
-	conf.check_cfg(package='geany', atleast_version='0.15', mandatory=True, args='--cflags --libs')
+	conf.check_cfg(package='geany', atleast_version='0.16', mandatory=True, args='--cflags --libs')
 
 	gtk_version = conf.check_cfg(modversion='gtk+-2.0') or 'Unknown'
 	geany_version = conf.check_cfg(modversion='geany') or 'Unknown'
