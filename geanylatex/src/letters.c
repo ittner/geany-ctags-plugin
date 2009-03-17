@@ -128,6 +128,10 @@ SubMenuTemplate glatex_char_array[] = {
 	/* Misc */
 	{MISC_LETTERS, "\\","\\backslash"},
 	{MISC_LETTERS, "€", "\\euro"},
+	{MISC_LETTERS, "»", "\\frqq"},
+	{MISC_LETTERS, "«", "\\flqq"},
+	{MISC_LETTERS, "›", "\\frq"},
+	{MISC_LETTERS, "‹", "\\flq"},
 	{ARROW_CHAR, "←", "\\leftarrow" },
 	{ARROW_CHAR, "↑", "\\uparrow" },
 	{ARROW_CHAR, "→", "\\rightarrow" },
