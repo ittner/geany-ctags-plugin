@@ -46,6 +46,7 @@ GtkWidget *menu_latex_bibtex_submenu = NULL;
 GtkWidget *menu_latex_format_insert = NULL;
 GtkWidget *menu_latex_format_insert_submenu = NULL;
 GtkWidget *menu_latex_insert_environment = NULL;
+GtkWidget *menu_latex_replace_selection = NULL;
 
 /* doing some global stuff */
 static GtkWidget *menu_latex_replace_toggle = NULL;
@@ -1082,6 +1083,14 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_ref);
 	g_signal_connect((gpointer) menu_latex_ref, "activate",
 		G_CALLBACK(insert_ref_activated), NULL);
+
+	menu_latex_replace_selection = gtk_menu_item_new_with_mnemonic(
+		_("Replace special characters"));
+	gtk_tooltips_set_tip(tooltips, menu_latex_replace_selection,
+		_("Replace special cahracters with TeX substitutes"), NULL);
+	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_replace_selection);
+	g_signal_connect((gpointer) menu_latex_replace_selection, "activate",
+		G_CALLBACK(replace_special_character), NULL);
 
 	menu_latex_label = gtk_menu_item_new_with_mnemonic(_("Insert _Label"));
 	gtk_tooltips_set_tip(tooltips, menu_latex_label,
