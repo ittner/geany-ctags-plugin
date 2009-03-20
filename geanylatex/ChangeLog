@@ -2,6 +2,8 @@
 
  * Replace \u-UTF-8 letters by octal coded chars. Huge thanks to
    Dominic Hopf for providing patch and fighting that fight.
+ * Added a menu entry for bulk replace function and fixed a segfault at
+   replacing
 
 
 2009-03-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

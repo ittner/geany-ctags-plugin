@@ -139,7 +139,7 @@ static void replace_special_character()
 		GString *replacement = g_string_new(NULL);
 		gint i;
 		gchar *new = NULL;
-		gchar *entity = NULL;
+		const gchar *entity = NULL;
 		gchar buf[7];
 		gint len;
 
@@ -166,7 +166,6 @@ static void replace_special_character()
 		sci_replace_sel(doc->editor->sci, new);
 		g_free(selection);
 		g_free(new);
-		g_free(entity);
 	}
 }
 
