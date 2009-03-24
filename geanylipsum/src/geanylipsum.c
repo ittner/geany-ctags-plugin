@@ -35,15 +35,6 @@
 # include <locale.h>
 #endif
 
-#define LOREMIPSUM "\
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy\
-eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam\
-voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet \
-clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
-
-enum {
-  PLAIN_LIPSUM = 0,
-};
 
 GeanyPlugin		*geany_plugin;
 GeanyData		*geany_data;
@@ -53,8 +44,12 @@ PLUGIN_VERSION_CHECK(130)
 PLUGIN_SET_INFO(_("Lipsum"), _("Creating dummy text with Geany"), VERSION, "Frank Lanitz <frank@frank.uvena.de>");
 
 static GtkWidget *main_menu_item = NULL;
-static gchar *config_file = NULL;
 static gchar *lipsum = NULL;
+static const gchar *default_loremipsum = "\
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy\
+eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam\
+voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet \
+clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
 
 
 /* Doing some basic keybinding stuff */
@@ -68,13 +63,9 @@ PLUGIN_KEY_GROUP(geanylipsum, COUNT_KB);
 
 
 
-void
-insert_string(gchar *string)
+static void
+insert_string(GeanyDocument *doc, const gchar *string)
 {
-	GeanyDocument *doc = NULL;
-
-	doc = document_get_current();
-
 	if (doc != NULL)
 	{
 		gint pos = sci_get_current_position(doc->editor->sci);
@@ -83,7 +74,7 @@ insert_string(gchar *string)
 }
 
 
-void
+static void
 lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gdata)
 {
 	GeanyDocument *doc = NULL;
@@ -120,14 +111,20 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 			missing = value - (x * tmp);
 		}
 
+		sci_start_undo_action(doc->editor->sci);
+
 		/* Insert lipsum snippet as often as needed ... */
 		for (i = 0; i < x; i++)
-			insert_string(lipsum);
+			insert_string(doc, lipsum);
 
 		/* .. and insert a little more if needed */
 		if (missing > 0)
-			insert_string(g_strndup(lipsum, missing));
-
+		{
+			gchar *missing_text = g_strndup(lipsum, missing);
+			insert_string(doc, missing_text);
+			g_free(missing_text);
+		}
+		sci_end_undo_action(doc->editor->sci);
 	}
 }
 
@@ -146,6 +143,8 @@ plugin_init(G_GNUC_UNUSED GeanyData *data)
 	GtkWidget *menu_lipsum = NULL;
 	GKeyFile *config = g_key_file_new();
 	GtkTooltips *tooltips = NULL;
+	gchar *config_file = NULL;
+
 	tooltips = gtk_tooltips_new();
 
 	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
@@ -156,14 +155,10 @@ plugin_init(G_GNUC_UNUSED GeanyData *data)
 
 	/* Initialising options from config file  if there is any*/
 	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
-	lipsum = g_key_file_get_string(config, "snippets", "lipsumtext", NULL);
+	lipsum = utils_get_setting_string(config, "snippets", "lipsumtext", default_loremipsum);
 
-	/* Setting default value */
-	if (lipsum == NULL)
-	{
-		lipsum = g_strdup(LOREMIPSUM);
-	}
 	g_key_file_free(config);
+	g_free(config_file);
 
 	/* Building menu entry */
 	menu_lipsum = gtk_image_menu_item_new_with_mnemonic(_("_Lipsum"));
