@@ -124,7 +124,11 @@ plugins = [
 	Plugin('shiftcolumn',
 		 [ 'shiftcolumn/src/shiftcolumn.c'],
 		 [ 'shiftcolumn', 'shiftcolumn/src'],
-		 '0.3')
+		 '0.3'),
+	Plugin('tasks',
+		 [ 'tasks/src/tasks.c'],
+		 [ 'tasks', 'tasks/src'],
+		 '1.0')
 ]
 
 makefile_template = '''#!/usr/bin/make -f
