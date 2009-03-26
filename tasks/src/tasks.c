@@ -43,16 +43,36 @@ GeanyPlugin         *geany_plugin;
 GeanyData           *geany_data;
 GeanyFunctions      *geany_functions;
 
-PLUGIN_VERSION_CHECK(GEANY_API_VERSION);
+PLUGIN_VERSION_CHECK(134);
 PLUGIN_SET_INFO(_("Tasks"), _("Task manager"), "1.0", "Bert Vermeulen <bert@biot.com>");
 
 #define DEFAULT_TOKENS { "TODO", "FIXME", NULL };
 
 static GString *linebuf = NULL;
-static unsigned int linebuf_len = 0;
 static char *tokens[] = DEFAULT_TOKENS;
 static GHashTable *globaltasks = NULL;
 static GtkListStore *taskstore = NULL;
+
+
+static void on_document_close(GObject *object, GeanyDocument *doc, gpointer data);
+static void on_document_open(GObject *object, GeanyDocument *doc, gpointer data);
+static void on_document_activate(GObject *object, GeanyDocument *doc, gpointer data);
+static gboolean on_editor_notify(GObject *object, GeanyEditor *editor, SCNotification *nt, gpointer data);
+static gboolean tasks_button_cb(GtkWidget *widget, GdkEventButton *event, gpointer data);
+static gboolean tasks_key_cb(GtkWidget *widget, GdkEventKey *event, gpointer data);
+static void free_editor_tasks(void *editor);
+static void scan_all_documents(void);
+static void scan_document_for_tasks(GeanyDocument *doc);
+static void create_tasks_tab(void);
+static int scan_line_for_tokens(ScintillaObject *sci, unsigned int line);
+static int scan_buf_for_tokens(char *buf);
+static GeanyTask *create_task(unsigned int line, char *description);
+static int find_line(GeanyTask *task, unsigned int *line);
+static void found_token(GeanyEditor *editor, unsigned int line, char *d);
+static void no_token(GeanyEditor *editor, unsigned int line);
+static void lines_moved(GeanyEditor *editor, unsigned int line, int change);
+static int keysort(GeanyTask *a, GeanyTask *b);
+static void render_taskstore(GeanyEditor *editor);
 
 
 void plugin_init(GeanyData *data)
@@ -67,7 +87,6 @@ void plugin_init(GeanyData *data)
 
 void plugin_cleanup(void)
 {
-	GeanyTask *task;
 	GtkWidget *notebook;
 	GList *editors, *editor;
 	int page;
@@ -95,7 +114,7 @@ PluginCallback plugin_callbacks[] =
 };
 
 
-static gboolean on_document_close(GObject *object, GeanyDocument *doc, gpointer data)
+static void on_document_close(GObject *object, GeanyDocument *doc, gpointer data)
 {
 
 	if(doc->is_valid)
@@ -104,7 +123,7 @@ static gboolean on_document_close(GObject *object, GeanyDocument *doc, gpointer 
 }
 
 
-static gboolean on_document_open(GObject *object, GeanyDocument *doc, gpointer data)
+static void on_document_open(GObject *object, GeanyDocument *doc, gpointer data)
 {
 
 	if(doc->is_valid)
@@ -113,7 +132,7 @@ static gboolean on_document_open(GObject *object, GeanyDocument *doc, gpointer d
 }
 
 
-static gboolean on_document_activate(GObject *object, GeanyDocument *doc, gpointer data)
+static void on_document_activate(GObject *object, GeanyDocument *doc, gpointer data)
 {
 
 	if(doc->is_valid)
@@ -126,7 +145,7 @@ static gboolean on_editor_notify(GObject *object, GeanyEditor *editor,
 								 SCNotification *nt, gpointer data)
 {
 	static int mod_line = -1;
-	unsigned int pos, line, line_len, offset;
+	int pos, line, offset;
 
 	switch (nt->nmhdr.code)
 	{
@@ -167,12 +186,12 @@ static gboolean tasks_button_cb(GtkWidget *widget, GdkEventButton *event, gpoint
 	GtkTreeSelection *selection;
 	GtkTreeIter iter;
 	GtkTreeModel *model;
-	gboolean ret;
+	gboolean ret = FALSE;
 	unsigned int line;
 
 	if (event->button == 1)
 	{
-		ret = FALSE;
+		ret = TRUE;
 
 		tv = GTK_TREE_VIEW(ui_lookup_widget(geany->main_widgets->window, "treeview_tasks"));
 		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv));
@@ -202,6 +221,8 @@ static gboolean tasks_key_cb(GtkWidget *widget, GdkEventKey *event, gpointer dat
 		button_event.time = event->time;
 		tv = GTK_TREE_VIEW(ui_lookup_widget(geany->main_widgets->window, "treeview_tasks"));
 		tasks_button_cb(NULL, &button_event, tv);
+
+		return TRUE;
 	}
 
 	return FALSE;
@@ -231,7 +252,7 @@ static void free_editor_tasks(void *editor)
 
 static void scan_all_documents(void)
 {
-	int i;
+	unsigned int i;
 
 	for(i = 0; i < geany->documents_array->len; i++)
 	{
@@ -266,7 +287,6 @@ static void create_tasks_tab(void)
 	GtkWidget *tv, *notebook;
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
-	GtkTreeIter iter;
 	GtkTreeSelection *selection;
 	int page;
 
@@ -322,7 +342,7 @@ static int scan_line_for_tokens(ScintillaObject *sci, unsigned int line)
 static int scan_buf_for_tokens(char *buf)
 {
 	unsigned int t, offset, len, i;
-	char *tok, *entry;
+	char *entry;
 
 	offset = 0;
 	for(t = 0; tokens[t]; t++)
@@ -357,7 +377,6 @@ static int scan_buf_for_tokens(char *buf)
 static GeanyTask *create_task(unsigned int line, char *description)
 {
 	GeanyTask *task;
-	GString *descr;
 
 	task = malloc(sizeof(GeanyTask));
 	g_return_val_if_fail(task != NULL, NULL);
@@ -416,7 +435,6 @@ static void found_token(GeanyEditor *editor, unsigned int line, char *descriptio
 static void no_token(GeanyEditor *editor, unsigned int line)
 {
 	GList *tasklist, *entry;
-	char *old_description;
 
 	tasklist = g_hash_table_lookup(globaltasks, editor);
 	if(tasklist)
