@@ -1,3 +1,9 @@
+2009-03-28  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Use a text field with pull down instead of a normal combo box for
+   font size at LaTeX wizard.
+
+
 2009-03-27  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * doc/geanylatex.tex: Added documentation written in LaTeX.

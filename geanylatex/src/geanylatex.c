@@ -621,15 +621,14 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	gtk_table_attach_defaults(GTK_TABLE(table), encoding_combobox, 1, 2, 1, 2);
 
 	/*  fontsize */
-	label_fontsize = gtk_label_new(_("Fontsize:"));
-	fontsize_combobox = gtk_combo_box_new_text();
-	gtk_tooltips_set_tip(tooltip, fontsize_combobox,
-		_("Set the default fontsize of your new document"), NULL);
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(fontsize_combobox), 0, "10pt");
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(fontsize_combobox), 1, "11pt");
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(fontsize_combobox), 2, "12pt");
 
-	gtk_combo_box_set_active(GTK_COMBO_BOX(fontsize_combobox), 0);
+	label_fontsize = gtk_label_new(_("Font size:"));
+	fontsize_combobox = gtk_combo_box_entry_new_text();
+	gtk_combo_box_append_text(GTK_COMBO_BOX(fontsize_combobox),"10pt");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(fontsize_combobox),"11pt");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(fontsize_combobox),"12pt");
+	gtk_tooltips_set_tip(tooltip, fontsize_combobox,
+		_("Set the default font size of your new document"), NULL);
 
 	gtk_misc_set_alignment(GTK_MISC(label_fontsize), 0, 0.5);
 
@@ -756,26 +755,8 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 			}
 		}
 
-		fontsize_int = gtk_combo_box_get_active(
-			GTK_COMBO_BOX(fontsize_combobox));
-		switch (fontsize_int)
-		{
-			case 0:
-			{
-				fontsize = g_strconcat("10pt", NULL);
-				break;
-			}
-			case 1:
-			{
-				fontsize = g_strconcat("11pt", NULL);
-				break;
-			}
-			case 2:
-			{
-				fontsize = g_strconcat("12pt", NULL);
-				break;
-			}
-		}
+		fontsize = g_strdup(gtk_combo_box_get_active_text(
+			GTK_COMBO_BOX(fontsize_combobox)));
 
 		if (papersize != NULL)
 		{
