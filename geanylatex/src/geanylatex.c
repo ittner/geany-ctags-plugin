@@ -548,7 +548,6 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	gint documentclass_int;
 	gint encoding_int;
 	gint papersize_int;
-	gint fontsize_int;
 	GtkWidget *dialog = NULL;
 	GtkWidget *vbox = NULL;
 	GtkWidget *label_documentclass = NULL;
