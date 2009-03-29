@@ -191,7 +191,7 @@ static void ao_toolbar_item_doclist_clicked_cb(GtkWidget *button, gpointer data)
 			continue;
 
 		base_name = g_path_get_basename(doc->file_name);
-		menu_item = ao_image_menu_item_new(GTK_STOCK_FILE, base_name);
+		menu_item = gtk_menu_item_new_with_label(base_name);
 		gtk_widget_show(menu_item);
 		gtk_container_add(GTK_CONTAINER(menu), menu_item);
 		g_signal_connect(menu_item, "activate", G_CALLBACK(ao_doclist_menu_item_activate_cd), doc);
