@@ -348,10 +348,22 @@ static void shift_right_cb(G_GNUC_UNUSED GtkMenuItem *menuitem,
 
 
 static void kb_shift_left(G_GNUC_UNUSED guint key_id){
+   
+   /* sanity check */
+   if (document_get_current() == NULL){
+       return;
+       }
+   
    shift_left_cb(NULL, NULL);
    }
 
 static void kb_shift_right(G_GNUC_UNUSED guint key_id){
+   
+   /* sanity check */
+   if (document_get_current() == NULL){
+       return;
+       }
+   
    shift_right_cb(NULL, NULL);
    }
 
@@ -373,12 +385,16 @@ void plugin_init(G_GNUC_UNUSED GeanyData *data){
        menu_item_shift_right);
    g_signal_connect(menu_item_shift_right, "activate",
        G_CALLBACK(shift_right_cb), NULL);
+   
+   /* make sure our menu items aren't called when there is no doc open */
+   ui_add_document_sensitive(menu_item_shift_right);
+   ui_add_document_sensitive(menu_item_shift_left);
 
    /* setup keybindings */
    keybindings_set_item(plugin_key_group, KB_SHIFT_LEFT, kb_shift_left,
-      GDK_9, GDK_CONTROL_MASK, "shift_left", _("Shift Left"), NULL);
+      GDK_9, GDK_CONTROL_MASK, "shift_left", _("Shift Left"), menu_item_shift_left);
    keybindings_set_item(plugin_key_group, KB_SHIFT_RIGHT, kb_shift_right,
-      GDK_0, GDK_CONTROL_MASK, "shift_right", _("Shift Right"), NULL);
+      GDK_0, GDK_CONTROL_MASK, "shift_right", _("Shift Right"), menu_item_shift_right);
    }
 
 void plugin_cleanup(void){
