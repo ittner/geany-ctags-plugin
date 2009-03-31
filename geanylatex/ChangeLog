@@ -1,3 +1,8 @@
+2009-03-30  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Moved replacement functions into their own submenu.
+
+
 2009-03-28  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Use a text field with pull down instead of a normal combo box for

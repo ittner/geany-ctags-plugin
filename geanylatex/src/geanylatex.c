@@ -34,21 +34,21 @@ GeanyData		*geany_data;
 GeanyFunctions	*geany_functions;
 
 
-GtkWidget *menu_latex = NULL;
-GtkWidget *menu_latex_menu = NULL;
-GtkWidget *menu_latex_wizzard = NULL;
-GtkWidget *menu_latex_menu_special_char = NULL;
-GtkWidget *menu_latex_menu_special_char_submenu = NULL;
-GtkWidget *menu_latex_ref = NULL;
-GtkWidget *menu_latex_label = NULL;
-GtkWidget *menu_latex_bibtex = NULL;
-GtkWidget *menu_latex_bibtex_submenu = NULL;
-GtkWidget *menu_latex_format_insert = NULL;
-GtkWidget *menu_latex_format_insert_submenu = NULL;
-GtkWidget *menu_latex_insert_environment = NULL;
-GtkWidget *menu_latex_replace_selection = NULL;
-
-/* doing some global stuff */
+static GtkWidget *menu_latex = NULL;
+static GtkWidget *menu_latex_menu = NULL;
+static GtkWidget *menu_latex_wizzard = NULL;
+static GtkWidget *menu_latex_menu_special_char = NULL;
+static GtkWidget *menu_latex_menu_special_char_submenu = NULL;
+static GtkWidget *menu_latex_ref = NULL;
+static GtkWidget *menu_latex_label = NULL;
+static GtkWidget *menu_latex_bibtex = NULL;
+static GtkWidget *menu_latex_bibtex_submenu = NULL;
+static GtkWidget *menu_latex_format_insert = NULL;
+static GtkWidget *menu_latex_format_insert_submenu = NULL;
+static GtkWidget *menu_latex_insert_environment = NULL;
+static GtkWidget *menu_latex_replacement = NULL;
+static GtkWidget *menu_latex_replacement_submenu = NULL;
+static GtkWidget *menu_latex_replace_selection = NULL;
 static GtkWidget *menu_latex_replace_toggle = NULL;
 
 /* Function will be deactivated, when only loaded */
@@ -1065,14 +1065,6 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	g_signal_connect((gpointer) menu_latex_ref, "activate",
 		G_CALLBACK(insert_ref_activated), NULL);
 
-	menu_latex_replace_selection = gtk_menu_item_new_with_mnemonic(
-		_("Replace special characters"));
-	gtk_tooltips_set_tip(tooltips, menu_latex_replace_selection,
-		_("Replace special cahracters with TeX substitutes"), NULL);
-	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_replace_selection);
-	g_signal_connect((gpointer) menu_latex_replace_selection, "activate",
-		G_CALLBACK(replace_special_character), NULL);
-
 	menu_latex_label = gtk_menu_item_new_with_mnemonic(_("Insert _Label"));
 	gtk_tooltips_set_tip(tooltips, menu_latex_label,
 	    _("Helps at inserting labels to a document"), NULL);
@@ -1120,16 +1112,34 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 			G_CALLBACK(glatex_insert_latex_format), GINT_TO_POINTER(i));
 	}
 
-	menu_latex_replace_toggle = gtk_check_menu_item_new_with_mnemonic(_
-		("_Special Characters Replacing"));
+	/* Add menuitem for LaTeX replacement functions*/
+	menu_latex_replacement = gtk_menu_item_new_with_mnemonic(
+		_("_Special Character Replacement"));
+	menu_latex_replacement_submenu = gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_latex_replacement),
+		menu_latex_replacement_submenu);
+	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_replacement);
+
+	/* Add menuitem for bulk replacment */
+	menu_latex_replace_selection = gtk_menu_item_new_with_mnemonic(
+		_("Bulk Replace Special Characters"));
+	gtk_tooltips_set_tip(tooltips, menu_latex_replace_selection,
+		_("Replace selected special cahracters with TeX substitutes"), NULL);
+	gtk_container_add(GTK_CONTAINER(menu_latex_replacement_submenu),
+		menu_latex_replace_selection);
+	g_signal_connect((gpointer) menu_latex_replace_selection, "activate",
+		G_CALLBACK(replace_special_character), NULL);
+
+	/* Add menu entry for toggling input replacment */
+	menu_latex_replace_toggle = gtk_check_menu_item_new_with_mnemonic(
+		_("Toggle _Special Character Replacement"));
 	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM(menu_latex_replace_toggle),
-		toggle_active);
+									toggle_active);
+	gtk_container_add(GTK_CONTAINER(menu_latex_replacement_submenu),
+		menu_latex_replace_toggle);
 
 	g_signal_connect((gpointer) menu_latex_replace_toggle, "activate",
-			 G_CALLBACK(toggle_status), NULL);
-
-	gtk_container_add(GTK_CONTAINER(menu_latex_menu),
-			menu_latex_replace_toggle);
+			 		 G_CALLBACK(toggle_status), NULL);
 
 	init_keybindings();
 
@@ -1139,8 +1149,8 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	ui_add_document_sensitive(menu_latex_bibtex);
 	ui_add_document_sensitive(menu_latex_format_insert);
 	ui_add_document_sensitive(menu_latex_insert_environment);
+	ui_add_document_sensitive(menu_latex_replacement);
 
-	gtk_widget_set_sensitive(menu_latex_wizzard, TRUE);
 	gtk_widget_show_all(menu_latex);
 	main_menu_item = menu_latex;
 }
