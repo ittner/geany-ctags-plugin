@@ -68,6 +68,9 @@ enum
 	KB_LATEX_ENVIRONMENT_INSERT,
 	KB_LATEX_INSERT_NEWITEM,
 	KB_LATEX_REPLACE_SPECIAL_CHARS,
+	KB_LATEX_FORMAT_BOLD,
+	KB_LATEX_FORMAT_ITALIC,
+	KB_LATEX_FORMAT_TYPEWRITER,
 	COUNT_KB
 };
 
@@ -979,6 +982,26 @@ static void kb_replace_special_chars(G_GNUC_UNUSED guint key_id)
 	replace_special_character();
 }
 
+static void kb_format_bold(G_GNUC_UNUSED guint key_id)
+{
+	if (NULL == document_get_current())
+		return;
+	glatex_insert_latex_format(NULL, GINT_TO_POINTER(LATEX_BOLD));
+}
+
+static void kb_format_italic(G_GNUC_UNUSED guint key_id)
+{
+	if (NULL == document_get_current())
+		return;
+	glatex_insert_latex_format(NULL, GINT_TO_POINTER(LATEX_ITALIC));
+}
+
+static void kb_format_typewriter(G_GNUC_UNUSED guint key_id)
+{
+	if (NULL == document_get_current())
+		return;
+	glatex_insert_latex_format(NULL, GINT_TO_POINTER(LATEX_TYPEWRITER));
+}
 /*static void kb_bibtex_entry_insert(G_GNUC_UNUSED guint key_id)
 {
 	insert_bibtex_entry(NULL, NULL);
@@ -1006,6 +1029,12 @@ void init_keybindings()
 		_("Run insert environment dialog"), menu_latex_insert_environment);
 	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_NEWITEM,
 		kb_insert_newitem, 0, 0, "latex_insert_item", _("Insert \\item"), NULL);
+	keybindings_set_item(plugin_key_group, KB_LATEX_FORMAT_BOLD, kb_format_bold,
+		0, 0, "format_bold", _("Format selection in bold font face"), NULL);
+	keybindings_set_item(plugin_key_group, KB_LATEX_FORMAT_ITALIC, kb_format_italic,
+		0, 0, "format_italic", _("Format selection in italic font face"), NULL);
+	keybindings_set_item(plugin_key_group, KB_LATEX_FORMAT_TYPEWRITER, kb_format_typewriter,
+		0, 0, "format_typewriter", _("Format selection in typewriter font face"), NULL);
 
 }
 

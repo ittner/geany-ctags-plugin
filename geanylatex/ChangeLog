@@ -1,6 +1,8 @@
 2009-03-30  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Moved replacement functions into their own submenu.
+ * Added key bindings for formatting text with bold, italic and typewriter
+   font face.
 
 
 2009-03-28  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
