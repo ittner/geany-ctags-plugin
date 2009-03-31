@@ -230,7 +230,7 @@ insert_label_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	GtkWidget *textbox_label = NULL;
 	GtkWidget *table = NULL;
 
-	dialog = gtk_dialog_new_with_buttons(_("Insert label"),
+	dialog = gtk_dialog_new_with_buttons(_("Insert Label"),
 					     GTK_WINDOW(geany->main_widgets->window),
 					     GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
 					     GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
@@ -279,7 +279,7 @@ insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	GtkWidget *radio2 = NULL;
 
 
-	dialog = gtk_dialog_new_with_buttons(_("Insert reference"),
+	dialog = gtk_dialog_new_with_buttons(_("Insert Reference"),
 					     GTK_WINDOW(geany->main_widgets->window),
 					     GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
 					     GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
@@ -292,7 +292,7 @@ insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	gtk_table_set_col_spacings(GTK_TABLE(table), 6);
 	gtk_table_set_row_spacings(GTK_TABLE(table), 6);
 
-	label_ref = gtk_label_new(_("Ref name:"));
+	label_ref = gtk_label_new(_("Reference name:"));
 	textbox_ref = gtk_combo_box_entry_new_text();
 	glatex_add_Labels(textbox_ref, glatex_get_aux_file());
 
@@ -998,13 +998,15 @@ void init_keybindings()
 	keybindings_set_item(plugin_key_group, LATEX_TOGGLE_ACTIVE, kblatex_toggle,
 		0, 0, "latex_toggle_status", _("Turn input replacement on/off"),
 		menu_latex_replace_toggle);
+	keybindings_set_item(plugin_key_group, LATEX_REPLACE_SPECIAL_CHARS,
+		kb_replace_special_chars, 0, 0, "latex_replace_chars",
+		_("Replace special characters"), NULL);
 	keybindings_set_item(plugin_key_group, LATEX_ENVIRONMENT_INSERT,
 	 	kbref_insert_environment, 0, 0, "latex_insert_environment",
 		_("Run insert environment dialog"), menu_latex_insert_environment);
 	keybindings_set_item(plugin_key_group, LATEX_INSERT_NEWITEM_KB,
 		kb_insert_newitem, 0, 0, "latex_insert_item", _("Insert \\item"), NULL);
-	keybindings_set_item(plugin_key_group, LATEX_REPLACE_SPECIAL_CHARS,
-		kb_replace_special_chars, 0, 0, "latex_replace_chars", _("Replacement of special characters"), NULL);
+
 }
 
 void plugin_help()
