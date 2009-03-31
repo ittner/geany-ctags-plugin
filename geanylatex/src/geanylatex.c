@@ -60,14 +60,14 @@ static GtkWidget *main_menu_item = NULL;
 /* Doing some basic keybinding stuff */
 enum
 {
-	LATEX_WIZZARD_KB,
-	LATEX_INSERT_LABEL_KB,
-	LATEX_INSERT_REF_KB,
-	LATEX_INSERT_NEWLINE,
-	LATEX_TOGGLE_ACTIVE,
-	LATEX_ENVIRONMENT_INSERT,
-	LATEX_INSERT_NEWITEM_KB,
-	LATEX_REPLACE_SPECIAL_CHARS,
+	KB_LATEX_WIZZARD,
+	KB_LATEX_INSERT_LABEL,
+	KB_LATEX_INSERT_REF,
+	KB_LATEX_INSERT_NEWLINE,
+	KB_LATEX_TOGGLE_ACTIVE,
+	KB_LATEX_ENVIRONMENT_INSERT,
+	KB_LATEX_INSERT_NEWITEM,
+	KB_LATEX_REPLACE_SPECIAL_CHARS,
 	COUNT_KB
 };
 
@@ -987,24 +987,24 @@ static void kb_replace_special_chars(G_GNUC_UNUSED guint key_id)
 void init_keybindings()
 {
 	/* init keybindins */
-	keybindings_set_item(plugin_key_group, LATEX_WIZZARD_KB, kbwizard,
+	keybindings_set_item(plugin_key_group, KB_LATEX_WIZZARD, kbwizard,
 		0, 0, "run_latex_wizard", _("Run LaTeX-Wizard"), menu_latex_wizzard);
-	keybindings_set_item(plugin_key_group, LATEX_INSERT_LABEL_KB, kblabel_insert,
+	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_LABEL, kblabel_insert,
 		0, 0, "insert_latex_label", _("Insert \\label"), menu_latex_label);
-	keybindings_set_item(plugin_key_group, LATEX_INSERT_REF_KB, kbref_insert,
+	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_REF, kbref_insert,
 		0, 0, "insert_latex_ref", _("Insert \\ref"), menu_latex_ref);
-	keybindings_set_item(plugin_key_group, LATEX_INSERT_NEWLINE, kb_insert_newline,
+	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_NEWLINE, kb_insert_newline,
 		0, 0, "insert_new_line", _("Insert linebreak \\\\ "), NULL);
-	keybindings_set_item(plugin_key_group, LATEX_TOGGLE_ACTIVE, kblatex_toggle,
+	keybindings_set_item(plugin_key_group, KB_LATEX_TOGGLE_ACTIVE, kblatex_toggle,
 		0, 0, "latex_toggle_status", _("Turn input replacement on/off"),
 		menu_latex_replace_toggle);
-	keybindings_set_item(plugin_key_group, LATEX_REPLACE_SPECIAL_CHARS,
+	keybindings_set_item(plugin_key_group, KB_LATEX_REPLACE_SPECIAL_CHARS,
 		kb_replace_special_chars, 0, 0, "latex_replace_chars",
 		_("Replace special characters"), NULL);
-	keybindings_set_item(plugin_key_group, LATEX_ENVIRONMENT_INSERT,
+	keybindings_set_item(plugin_key_group, KB_LATEX_ENVIRONMENT_INSERT,
 	 	kbref_insert_environment, 0, 0, "latex_insert_environment",
 		_("Run insert environment dialog"), menu_latex_insert_environment);
-	keybindings_set_item(plugin_key_group, LATEX_INSERT_NEWITEM_KB,
+	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_NEWITEM,
 		kb_insert_newitem, 0, 0, "latex_insert_item", _("Insert \\item"), NULL);
 
 }
