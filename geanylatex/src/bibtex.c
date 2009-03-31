@@ -130,7 +130,7 @@ void glatex_insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	{
 		if (fields[i] == TRUE)
 		{
-			output = g_strconcat(output, glatex_label_entry_keywords[i], "= {},\n", NULL);
+			output = g_strconcat(output, glatex_label_entry_keywords[i], " = {},\n", NULL);
 		}
 	}
 
