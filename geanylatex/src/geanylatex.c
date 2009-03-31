@@ -1109,7 +1109,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	g_signal_connect((gpointer) menu_latex_insert_environment, "activate",
 		G_CALLBACK(glatex_insert_environment_dialog), NULL);
 
-	menu_latex_bibtex = gtk_menu_item_new_with_mnemonic(_("BibTeX"));
+	menu_latex_bibtex = gtk_menu_item_new_with_mnemonic(_("_BibTeX"));
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_bibtex);
 
 	menu_latex_bibtex_submenu = gtk_menu_new();
@@ -1125,7 +1125,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 			G_CALLBACK(glatex_insert_bibtex_entry), GINT_TO_POINTER(i));
 	}
 
-	menu_latex_format_insert = gtk_menu_item_new_with_mnemonic(_("Format"));
+	menu_latex_format_insert = gtk_menu_item_new_with_mnemonic(_("_Format"));
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_format_insert);
 
 	menu_latex_format_insert_submenu = gtk_menu_new();
@@ -1151,9 +1151,9 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 
 	/* Add menuitem for bulk replacment */
 	menu_latex_replace_selection = gtk_menu_item_new_with_mnemonic(
-		_("Bulk Replace Special Characters"));
+		_("Bulk _Replace Special Characters"));
 	gtk_tooltips_set_tip(tooltips, menu_latex_replace_selection,
-		_("Replace selected special cahracters with TeX substitutes"), NULL);
+		_("_Replace selected special cahracters with TeX substitutes"), NULL);
 	gtk_container_add(GTK_CONTAINER(menu_latex_replacement_submenu),
 		menu_latex_replace_selection);
 	g_signal_connect((gpointer) menu_latex_replace_selection, "activate",
