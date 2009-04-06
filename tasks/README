@@ -37,7 +37,7 @@ The GNU versions of these tools are recommended.
 Installation
 ------------
 Compiling and installing the code is done by the following three commands:
-$ ./autogen.sh
+
 $ ./configure
 $ make
 $ make install

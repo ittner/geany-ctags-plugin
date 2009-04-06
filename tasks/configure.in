@@ -54,8 +54,8 @@ po/Makefile.in
 ])
 
 echo "----------------------------------------"
-echo "Install tasks plugin binary in : ${libdir}"
-echo "Install tasks files in         : ${prefix}"
+echo "Install tasks plugin binary in       : ${libdir}"
+echo "Install tasks files in               : ${prefix}"
 echo "Using Geany version                  : ${GEANY_VERSION}"
 echo "Using GTK version                    : ${GTK_VERSION}"
 echo ""
