@@ -36,28 +36,27 @@
 #include "plugindata.h"
 #include "geanyfunctions.h"
 
+#include "addons.h"
 #include "tasks.h"
 
 
-GeanyPlugin         *geany_plugin;
-GeanyData           *geany_data;
-GeanyFunctions      *geany_functions;
-
-PLUGIN_VERSION_CHECK(134);
-PLUGIN_SET_INFO(_("Tasks"), _("Task manager"), "1.0", "Bert Vermeulen <bert@biot.com>");
-
 #define DEFAULT_TOKENS { "TODO", "FIXME", NULL };
+
+
+typedef struct {
+	unsigned int line;
+	GString *description;
+} GeanyTask;
+
 
 static GString *linebuf = NULL;
 static char *tokens[] = DEFAULT_TOKENS;
 static GHashTable *globaltasks = NULL;
 static GtkListStore *taskstore = NULL;
+static GtkWidget *notebook_page = NULL;
+static gboolean tasks_enabled = FALSE;
 
 
-static void on_document_close(GObject *object, GeanyDocument *doc, gpointer data);
-static void on_document_open(GObject *object, GeanyDocument *doc, gpointer data);
-static void on_document_activate(GObject *object, GeanyDocument *doc, gpointer data);
-static gboolean on_editor_notify(GObject *object, GeanyEditor *editor, SCNotification *nt, gpointer data);
 static gboolean tasks_button_cb(GtkWidget *widget, GdkEventButton *event, gpointer data);
 static gboolean tasks_key_cb(GtkWidget *widget, GdkEventKey *event, gpointer data);
 static void free_editor_tasks(void *editor);
@@ -75,17 +74,17 @@ static int keysort(GeanyTask *a, GeanyTask *b);
 static void render_taskstore(GeanyEditor *editor);
 
 
-void plugin_init(GeanyData *data)
+static void tasks_init(void)
 {
-
 	globaltasks = g_hash_table_new(NULL, NULL);
 	linebuf = g_string_sized_new(256);
 	create_tasks_tab();
 	scan_all_documents();
 
+	tasks_enabled = TRUE;
 }
 
-void plugin_cleanup(void)
+static void tasks_cleanup(void)
 {
 	GtkWidget *notebook;
 	GList *editors, *editor;
@@ -99,53 +98,58 @@ void plugin_cleanup(void)
 	g_hash_table_unref(globaltasks);
 
 	notebook = ui_lookup_widget(geany->main_widgets->window, "notebook_info");
-	page = GPOINTER_TO_INT(ui_lookup_widget(geany->main_widgets->window, "notebook_tasks_page"));
+	page = gtk_notebook_page_num(GTK_NOTEBOOK(notebook), notebook_page);
 	gtk_notebook_remove_page(GTK_NOTEBOOK(notebook), page);
 
+	tasks_enabled = FALSE;
 }
 
-PluginCallback plugin_callbacks[] =
+void tasks_set_enable(gboolean enable)
 {
-	{ "editor-notify", (GCallback) &on_editor_notify, TRUE, NULL },
-	{ "document-open", (GCallback) &on_document_open, TRUE, NULL },
-	{ "document-close", (GCallback) &on_document_close, TRUE, NULL },
-	{ "document-activate", (GCallback) &on_document_activate, TRUE, NULL },
-	{ NULL, NULL, FALSE, NULL }
-};
+	if (tasks_enabled != enable)
+	{
+		if (enable)
+			tasks_init();
+		else
+			tasks_cleanup();
+	}
+}
 
-
-static void on_document_close(GObject *object, GeanyDocument *doc, gpointer data)
+void tasks_on_document_close(GObject *object, GeanyDocument *doc, gpointer data)
 {
 
-	if(doc->is_valid)
+	if(tasks_enabled && doc->is_valid)
 		free_editor_tasks(doc->editor);
 
 }
 
 
-static void on_document_open(GObject *object, GeanyDocument *doc, gpointer data)
+void tasks_on_document_open(GObject *object, GeanyDocument *doc, gpointer data)
 {
 
-	if(doc->is_valid)
+	if(tasks_enabled && doc->is_valid)
 		scan_document_for_tasks(doc);
 
 }
 
 
-static void on_document_activate(GObject *object, GeanyDocument *doc, gpointer data)
+void tasks_on_document_activate(GObject *object, GeanyDocument *doc, gpointer data)
 {
 
-	if(doc->is_valid)
+	if(tasks_enabled && doc->is_valid)
 		render_taskstore(doc->editor);
 
 }
 
 
-static gboolean on_editor_notify(GObject *object, GeanyEditor *editor,
+gboolean tasks_on_editor_notify(GObject *object, GeanyEditor *editor,
 								 SCNotification *nt, gpointer data)
 {
 	static int mod_line = -1;
 	int pos, line, offset;
+
+	if (! tasks_enabled)
+		return FALSE;
 
 	switch (nt->nmhdr.code)
 	{
@@ -305,9 +309,8 @@ static void create_tasks_tab(void)
 
 	notebook = ui_lookup_widget(geany->main_widgets->window, "notebook_info");
 	page = gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), tv, gtk_label_new(_("Tasks")), -1);
-	g_object_set_data(G_OBJECT(geany->main_widgets->window), "notebook_tasks_page", GINT_TO_POINTER(page));
 	gtk_widget_show_all(tv);
-
+	notebook_page = tv;
 }
 
 

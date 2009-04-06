@@ -19,6 +19,13 @@ Adds 'Open URI' and 'Copy URI' menu items to the editor menu when the word under
 the cursor looks like a URI. 'Open URI' uses the browser command configured in
 Geany to open it.
 
+Tasks
+^^^^^
+The tasks plugin goes through a file being edited and picks out lines with
+"TODO" or "FIXME" in them. It collects the text after those words and puts
+them in a new "Tasks" tab in the message window. Clicking on a task in that
+tab takes you to the line in the file where the task was defined.
+
 
 Requirements
 ------------
@@ -70,5 +77,4 @@ program.
 
 Ideas, questions, patches and bug reports
 -----------------------------------------
-Send it to enrico(dot)troeger(at)uvena(dot)de
-or report them at http://sourceforge.net/tracker/?group_id=222729.
+Report them at http://sourceforge.net/tracker/?group_id=222729.

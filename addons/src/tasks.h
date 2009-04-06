@@ -19,9 +19,20 @@
  *      MA 02110-1301, USA.
  */
 
-typedef struct {
-	unsigned int line;
-	GString *description;
-} GeanyTask;
+#ifndef __TASKS_H__
+#define __TASKS_H__
 
 
+void tasks_set_enable(gboolean enable);
+
+
+gboolean tasks_on_editor_notify(GObject *object, GeanyEditor *editor,
+								SCNotification *nt, gpointer data);
+
+void tasks_on_document_open(GObject *object, GeanyDocument *doc, gpointer data);
+
+void tasks_on_document_activate(GObject *object, GeanyDocument *doc, gpointer data);
+
+void tasks_on_document_close(GObject *object, GeanyDocument *doc, gpointer data);
+
+#endif

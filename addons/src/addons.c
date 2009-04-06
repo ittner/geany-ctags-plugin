@@ -41,6 +41,7 @@
 
 #include "ao_doclist.h"
 #include "ao_openuri.h"
+#include "tasks.h"
 
 
 
@@ -51,7 +52,7 @@ GeanyFunctions	*geany_functions;
 
 PLUGIN_VERSION_CHECK(132)
 PLUGIN_SET_INFO(_("Addons"), _("Various small addons for Geany."), "0.1",
-	"Enrico Tröger")
+	"Enrico Tröger, Bert Vermeulen")
 
 
 typedef struct
@@ -60,6 +61,7 @@ typedef struct
 	gchar *config_file;
 	gboolean show_toolbar_doclist_item;
 	gboolean enable_openuri;
+	gboolean enable_tasks;
 
 	/* instances and variables of components */
 	AoDocList *doclist;
@@ -76,7 +78,13 @@ static void ao_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 PluginCallback plugin_callbacks[] =
 {
     { "update-editor-menu", (GCallback) &ao_update_editor_menu_cb, FALSE, NULL },
-    { NULL, NULL, FALSE, NULL }
+
+	{ "editor-notify", (GCallback) &tasks_on_editor_notify, TRUE, NULL },
+	{ "document-open", (GCallback) &tasks_on_document_open, TRUE, NULL },
+	{ "document-close", (GCallback) &tasks_on_document_close, TRUE, NULL },
+	{ "document-activate", (GCallback) &tasks_on_document_activate, TRUE, NULL },
+
+	{ NULL, NULL, FALSE, NULL }
 };
 
 
@@ -114,12 +122,16 @@ void plugin_init(GeanyData *data)
 		"addons", "show_toolbar_doclist_item", TRUE);
 	ao_info->enable_openuri = utils_get_setting_boolean(config,
 		"addons", "enable_openuri", FALSE);
+	ao_info->enable_tasks = utils_get_setting_boolean(config,
+		"addons", "enable_tasks", TRUE);
 
 	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
 	plugin_module_make_resident(geany_plugin);
 
 	ao_info->doclist = ao_doc_list_new(ao_info->show_toolbar_doclist_item);
 	ao_info->openuri = ao_open_uri_new(ao_info->enable_openuri);
+
+	tasks_set_enable(ao_info->enable_tasks);
 }
 
 
@@ -135,14 +147,19 @@ static void ao_configure_response_cb(GtkDialog *dialog, gint response, gpointer 
 			g_object_get_data(G_OBJECT(dialog), "check_doclist"))));
 		ao_info->enable_openuri = (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 			g_object_get_data(G_OBJECT(dialog), "check_openuri"))));
+		ao_info->enable_tasks = (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
+			g_object_get_data(G_OBJECT(dialog), "check_tasks"))));
 
 		g_key_file_load_from_file(config, ao_info->config_file, G_KEY_FILE_NONE, NULL);
 		g_key_file_set_boolean(config, "addons",
 			"show_toolbar_doclist_item", ao_info->show_toolbar_doclist_item);
 		g_key_file_set_boolean(config, "addons", "enable_openuri", ao_info->enable_openuri);
+		g_key_file_set_boolean(config, "addons", "enable_tasks", ao_info->enable_tasks);
 
 		g_object_set(ao_info->doclist, "enable-doclist", ao_info->show_toolbar_doclist_item, NULL);
 		g_object_set(ao_info->openuri, "enable-openuri", ao_info->enable_openuri, NULL);
+
+		tasks_set_enable(ao_info->enable_tasks);
 
 		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && utils_mkdir(config_dir, TRUE) != 0)
 		{
@@ -164,7 +181,7 @@ static void ao_configure_response_cb(GtkDialog *dialog, gint response, gpointer 
 
 GtkWidget *plugin_configure(GtkDialog *dialog)
 {
-	GtkWidget *vbox, *check_doclist, *check_openuri;
+	GtkWidget *vbox, *check_doclist, *check_openuri, *check_tasks;
 
 	vbox = gtk_vbox_new(FALSE, 6);
 
@@ -181,8 +198,15 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		ao_info->enable_openuri);
 	gtk_box_pack_start(GTK_BOX(vbox), check_openuri, FALSE, FALSE, 3);
 
+	check_tasks = gtk_check_button_new_with_label(
+		_("Show available tasks in the Message Window"));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_tasks),
+		ao_info->enable_tasks);
+	gtk_box_pack_start(GTK_BOX(vbox), check_tasks, FALSE, FALSE, 3);
+
 	g_object_set_data(G_OBJECT(dialog), "check_doclist", check_doclist);
 	g_object_set_data(G_OBJECT(dialog), "check_openuri", check_openuri);
+	g_object_set_data(G_OBJECT(dialog), "check_tasks", check_tasks);
 	g_signal_connect(dialog, "response", G_CALLBACK(ao_configure_response_cb), NULL);
 
 	gtk_widget_show_all(vbox);
@@ -195,6 +219,9 @@ void plugin_cleanup(void)
 {
 	g_object_unref(ao_info->doclist);
 	g_object_unref(ao_info->openuri);
+
+	tasks_set_enable(FALSE);
+
 	g_free(ao_info->config_file);
 	g_free(ao_info);
 }

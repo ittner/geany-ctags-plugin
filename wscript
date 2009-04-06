@@ -61,7 +61,8 @@ class Plugin:
 # add a new element for your plugin
 plugins = [
 	Plugin('addons',
-		 [ 'addons/src/addons.c', 'addons/src/ao_doclist.c', 'addons/src/ao_openuri.c' ],
+		 [ 'addons/src/addons.c', 'addons/src/ao_doclist.c', 'addons/src/ao_openuri.c',
+		   'addons/src/tasks.c' ],
 		 [ 'addons', 'addons/src' ],
 		 '0.1'),
 	Plugin('externdbg',
@@ -124,11 +125,7 @@ plugins = [
 	Plugin('shiftcolumn',
 		 [ 'shiftcolumn/src/shiftcolumn.c'],
 		 [ 'shiftcolumn', 'shiftcolumn/src'],
-		 '0.3'),
-	Plugin('tasks',
-		 [ 'tasks/src/tasks.c'],
-		 [ 'tasks', 'tasks/src'],
-		 '1.0')
+		 '0.3')
 ]
 
 makefile_template = '''#!/usr/bin/make -f
