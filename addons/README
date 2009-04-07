@@ -27,6 +27,31 @@ them in a new "Tasks" tab in the message window. Clicking on a task in that
 tab takes you to the line in the file where the task was defined.
 
 
+Downloads
+---------
+
+Addons 0.1
+^^^^^^^^^^
+
+http://plugins.geany.org/addons/addons-0.1.tar.bz2
+
+http://plugins.geany.org/addons/addons-0.1.tar.bz2.sig (GPG-Signature)
+
+or
+
+http://plugins.geany.org/addons/addons-0.1.tar.gz
+
+http://plugins.geany.org/addons/addons-0.1.tar.gz.sig (GPG-Signature)
+
+
+Development Code
+^^^^^^^^^^^^^^^^
+
+Get the code from:
+
+    svn checkout http://geany-plugins.svn.sourceforge.net/svnroot/geany-plugins/trunk/addons
+
+
 Requirements
 ------------
 For compiling the plugin yourself, you will need the GTK (>= 2.8.0) libraries
