@@ -64,7 +64,7 @@ plugins = [
 		 [ 'addons/src/addons.c', 'addons/src/ao_doclist.c', 'addons/src/ao_openuri.c',
 		   'addons/src/tasks.c' ],
 		 [ 'addons', 'addons/src' ],
-		 '0.1'),
+		 '0.2'),
 	Plugin('externdbg',
 		 [ 'externdbg/src/dbg.c' ], # source files
 		 [ 'externdbg', 'externdbg/src' ], # include dirs
