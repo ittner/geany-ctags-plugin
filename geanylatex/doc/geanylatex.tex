@@ -16,14 +16,9 @@ halfparskip,%
 openany,%
 ]{scrartcl}
 \usepackage[utf8]{inputenc}
-\title{Geany\LaTeX -- A \LaTeX plugin for Geany \\[1.5ex]
-	   \normalsize Version 0.4}
-\author{Frank Lanitz \\ \small{frank@frank.uvena.de}}
-\date{\today}
 \usepackage[english]{babel}
 \usepackage{float}
 \usepackage{setspace}
-\usepackage{url}
 \usepackage{mathpazo,courier}
 \usepackage{listings,color}
 \usepackage{courier}
@@ -44,6 +39,17 @@ openany,%
 \lstset{frame=single}
 \setcounter{secnumdepth}{4} % Also numbering of \paragraph
 \setcounter{tocdepth}{2} % Don't add \subsubsection to toc
+
+% including and configuring package for links
+\usepackage{hyperref}
+\definecolor{darkblue}{rgb}{0,0,.5}
+
+\hypersetup{pdftex=true, colorlinks=true, breaklinks=true, linkcolor=black, urlcolor=darkblue}
+
+\title{Geany\LaTeX -- A \LaTeX plugin for Geany \\[1.5ex]
+	   \normalsize Version 0.4}
+\author{Frank Lanitz \\ \small{\href{mailto:frank@frank.uvena.de}{frank@frank.uvena.de}}}
+\date{\today}
 
 \begin{document}
 \pagenumbering{Roman}
@@ -79,7 +85,7 @@ It implements a couple of maybe useful functions:
 For compiling the plugin yourself, you will need the GTK ($>= 2.6.0$)
 libraries and header files. You will also need its dependency
 libraries and header files, such as Pango, Glib and ATK. All these
-files are available at http://www.gtk.org.
+files are available at \url{http://www.gtk.org}.
 
 And obviously, you will need have Geany with its header files
 installed (in case you are compiling the plugin on your own). If you
@@ -406,7 +412,7 @@ New features are always highly welcome. The TODO file inside source
 code archive gives a good idea of current wished features and which
 are being worked on. Also you can have a look onto the feature request
 tracker of geany-plugins project at
-http://sourceforge.net/tracker/?group\_id=222729 whether you find
+\url{http://sourceforge.net/tracker/?group\_id=222729} whether you find
 something interesting. Of course we are also open for not in the
 sources mentioned before listed items. Just contact one of the authors
 (see chapter \ref{contact}).
@@ -440,11 +446,11 @@ After this, just send a diff or complete file to one of the authors.
 \subsection{Propaganda}
 And of course, tell others of Geany and this plugin. If you like to do
 a talk about Geany\LaTeX\ and/or Geany in general, there is some code
-available on http://git.geany.org/talks/ you might can use as a
+available on \url{http://git.geany.org/talks/} you might can use as a
 start point for preparing your own presentation. If your favourite
 language is not yet available there, please feel free to do your own
 translation and in best case send your translation to one of
-Geany's\footnote{Check for addresses http://www.geany.org}
+Geany's\footnote{Check for addresses \url{http://www.geany.org}}
 development team so it can be added to archive.
 
 
@@ -466,7 +472,7 @@ the same conditions as Geany\LaTeX by the copyright owner.
 At time of the the documentation was created no issue were known.
 Since this is only a snapshot, you will find more recent information
 for all reported issues bug tracking system of SF at \\
-http://sourceforge.net/tracker/?group\_id=222729
+\url{http://sourceforge.net/tracker/?group\_id=222729}
 
 \section{Recommendations to improve work with \LaTeX\ and Geany}
 Geany is offering a number of nice features, that can be used to make
@@ -491,34 +497,34 @@ description=\\begin{description}\n%ws%\\item %cursor%\n\\end{description}
 \end{lstlisting}
 \end{figure}
 
-A snapshot of authors' last version for LaTeX can be found on http://www.geany.org/Download/Extras
+A snapshot of authors' last version for LaTeX can be found on
+\url{http://www.geany.org/Download/Extras}
 
 \subsection{Other useful plugins}
 As mentioned before a number of useful functions were already
 implemented with other plugins. Below you will find a list with the
 authors's recommendations. More nice plugins can be found on Geany's
-plugins page at http//www.geany.org.
+plugins page at \url{http//www.geany.org}.
 
 \subsubsection{GeanyLipsum}
 This plugin implements an easy way for inserting Lorem Ipsum text into
 a document. The length of the inserted text if configurable so the
 plugin can be very helpful on testing layout.\\
-\textbf{Homepage:} http://frank.uvena.de/en/Geany/geanylipsum/
+\textbf{Homepage:} \url{http://frank.uvena.de/en/Geany/geanylipsum/}
 
 \subsubsection{geanyVC}
 When working on bigger documents an version control system like
 Subversion could be useful to keep versions. GeanyVC is adding a easy
 to use frontend for a number of popular version controll systems such
 as git, Subversion, CVS, Bazaar or Mercural.\\
-\textbf{Homepage:} http://plugins.geany.org/geanyvc/
+\textbf{Homepage:} \url{http://plugins.geany.org/geanyvc/}
 
-\subsubsection{tasks}
+\subsubsection{tasks out of the addons plugins}
 A plugin that is recognising \texttt{TODO} or \texttt{FIXME} tags
 inside a document and allows to easy jump to these entries. This
 function is similar to the \texttt{todo} package but doesn't require
 recompiling of the document. Recognised tags will be inserted to
 another tab in Geany's message widget.\\
-\textbf{Homepage:} Not yet available
 
 \section{License}
 Geany\LaTeX\ and all its parts is distributed under the terms of the
@@ -534,7 +540,7 @@ able to get a copy by contacting the Free Software Foundation, Inc.,
 \label{contact}
 If you found any bugs or want to provide a patch, please contact Frank
 Lanitz (frank(at)geany(dot)org). Please also do so, if you got any
-questions and visiting http://frank.uvena.de/en/Geany/geanylatex/
+questions and visiting \url{http://frank.uvena.de/en/Geany/geanylatex/}
 didn't help you to figure out the answer. Visiting the website is also
 a good start if you want to check for any update on this plugin.
 
