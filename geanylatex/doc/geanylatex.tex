@@ -46,7 +46,7 @@ openany,%
 
 \hypersetup{pdftex=true, colorlinks=true, breaklinks=true, linkcolor=black, urlcolor=darkblue}
 
-\title{Geany\LaTeX -- A \LaTeX plugin for Geany \\[1.5ex]
+\title{Geany\LaTeX{} -- A \LaTeX{} plugin for Geany \\[1.5ex]
 	   \normalsize Version 0.4}
 \author{Frank Lanitz \\ \small{\href{mailto:frank@frank.uvena.de}{frank@frank.uvena.de}}}
 \date{\today}
@@ -59,11 +59,11 @@ openany,%
 \pagenumbering{arabic}
 \section{About the plugin}
 
-Geany\LaTeX\ is a little plugin to improve support of \LaTeX\ on Geany.
+Geany\LaTeX{} is a little plugin to improve support of \LaTeX{} on Geany.
 It implements a couple of maybe useful functions:
 
 \begin{itemize}
-	\item Wizard to create new \LaTeX\ documents in a fast and easy way
+	\item Wizard to create new \LaTeX{} documents in a fast and easy way
 	 	  with a bunch of templates available
 	\item A front end for add labels \textbackslash label{} and
 		  references \textbackslash ref{} and \textbackslash pageref{}
@@ -126,10 +126,10 @@ page \pageref{contact}.}
 
 \begin{figure}[h!]
 	\centering{\includegraphics[height=7cm]{img/plugin_manager.png}}
-	\caption{Plugin manager with Geany\LaTeX\ of Geany 0.16}
+	\caption{Plugin manager with Geany\LaTeX{} of Geany 0.16}
 \end{figure}
 
-After Geany\LaTeX\ has been installed successfully the plugin can be
+After Geany\LaTeX{} has been installed successfully the plugin can be
 loaded through Geany's plugin manager and a new sub menu in the Tools
 menu will appear as well as new key bindings will be available inside
 Geany's key binding interface. Inside the sub menu you will find entries
@@ -156,7 +156,7 @@ Document types that are currently supported by the wizard are:
 	\item report
 	\item article
 	\item letter (default letter class)
-	\item presentation (\LaTeX\ beamer)
+	\item presentation (\LaTeX{} beamer)
 \end{itemize}
 
 This can be set by choosing the needed entry form
@@ -186,29 +186,29 @@ section \ref{kb_latex_wizard}, page \pageref{kb_latex_wizard}.
 
 \subsection{Inserting and replacing of special characters}
 At replacing a selected text will be parsed and all known special
-characters will be replaced by their \TeX substitute. This can be very
+characters will be replaced by their \TeX{} substitute. This can be very
 useful on importing a large amount of text into your document
-including characters like "o or \frqq. This can be also called using a
+including characters like ö or \frqq. This can be also called using a
 keybinding (see \ref{kb_replacement_of_special_char}, page
 \pageref{kb_replacement_of_special_char}).
 
 
 \subsection{Inserting References and Labels}
 An often used feature on writing of documents is adding and referring
-to labels. Geany\LaTeX\ is adding some support here for more
+to labels. Geany\LaTeX{} is adding some support here for more
 comfortable adding new labels and reference offering a GUI.
 
 \begin{figure}[h!]
 	\centering{\includegraphics[height=2.5cm]{img/insert_label.png}}
-	\caption{Insert label dialog on Geany\LaTeX\ 0.3}
+	\caption{Insert label dialog on Geany\LaTeX{} 0.3}
 \end{figure}
 
-After an label was added Geany\LaTeX\ is offering a dialog for
+After an label was added Geany\LaTeX{} is offering a dialog for
 inserting normal references and page references to an label.
 
 \begin{figure}[h!]
 	\centering{\includegraphics[height=3.5cm]{img/insert_reference.png}}
-	\caption{Insert reference dialog on Geany\LaTeX\ 0.3}
+	\caption{Insert reference dialog on Geany\LaTeX{} 0.3}
 \end{figure}
 
 The suggestions inside the pull down are based on the aux file creating
@@ -224,7 +224,7 @@ can be accessed by key binding also. See chapter \ref{kb_insert_label}
 and \ref{kb_insert_reference} here.
 
 \subsection{BibTeX templates for catalogue entries}
-Geany\LaTeX\ is offering a number of often used templates for BibTeX
+Geany\LaTeX{} is offering a number of often used templates for BibTeX
 catalogue entries. They can be access by the plugin submenu in Geany's
 tools menu:
 \begin{itemize}
@@ -262,7 +262,7 @@ Year = {},
 \end{figure}
 
 \subsection{Replacement of special characters}
-Geany\LaTeX\ is able to replace special characters to their there \TeX\
+Geany\LaTeX{} is able to replace special characters to their there \TeX\
 substitute. This can be done in two different ways:
 
 \begin{enumerate}
@@ -272,9 +272,9 @@ substitute. This can be done in two different ways:
 		  submenu inside.
 	\item \textbf{Bulk replace of selected text:}
 		  A selected text will be parsed and all known special characters
-		  will be replaced by their \TeX substitute. This can be very useful
+		  will be replaced by their \TeX{} substitute. This can be very useful
 		  on importing a large amount of text into your document
-		  including characters like "o or \frqq. This function is
+		  including characters like ö or \frqq. This function is
 		  available through the Replacement of special characters
 		  submenu on plugin's submenu of Geany's Tools menu.
 \end{enumerate}
@@ -282,7 +282,7 @@ substitute. This can be done in two different ways:
 For both functions there are also shortcuts available.
 
 \subsection{Format}
-Geany\LaTeX\ is able to help on formation of text. For doing this its
+Geany\LaTeX{} is able to help on formation of text. For doing this its
 offering you to insert often use format patterns to your document.
 Patterns that are currently supported are:
 
@@ -296,7 +296,7 @@ Patterns that are currently supported are:
 	\item Emphasis
 \end{itemize}
 
-Geany\LaTeX\ will add the correct format pattern to the document. If
+Geany\LaTeX{} will add the correct format pattern to the document. If
 there is an selection active, that pattern will be placed around so
 the selected text will be formatted with this chosen style.
 
@@ -331,15 +331,15 @@ Inserts a a newline \textbackslash\textbackslash\ into the document.
 \label{kb_toggling_input_replacement}
 A shortcut for turning input replacement on or off. When input
 replacement is activated special characters like \v{e} are
-replaced by there \TeX\ substitute like \texttt{\textbackslash
+replaced by there \TeX{} substitute like \texttt{\textbackslash
 v\{e\}}.
 
 \subsubsection{Replacement of special characters}
 \label{kb_replacement_of_special_char}
 A selected text will be parsed and all known special characters will be
-replaced by their \TeX substitute. This can be very useful on
+replaced by their \TeX{} substitute. This can be very useful on
 importing a large amount of text into your document including
-characters like "o or \frqq.
+characters like ö or \frqq.
 
 \subsubsection{Run insert environment dialog}
 Runs a dialog for easy inserting an environment. If there is some text
@@ -418,13 +418,13 @@ sources mentioned before listed items. Just contact one of the authors
 (see chapter \ref{contact}).
 
 \subsection{Testing \& bug reporting}
-Geany\LaTeX\ is tested mainly on x86 and x86\_64 architecture running
+Geany\LaTeX{} is tested mainly on x86 and x86\_64 architecture running
 GNU/Linux. Also it was tested on some Windows 32 versions like XP SP3
 very briefly. Since there are also other systems available, testing on other
 platforms and maybe reporting of issues is highly appreciate.
 
 \subsection{Packaging}
-Geany\LaTeX\ is part of the geany-plugins project even though there
+Geany\LaTeX{} is part of the geany-plugins project even though there
 are releases independent of a major release of the project. Therefor
 there are two things you can do here:
 \begin{enumerate}
@@ -439,13 +439,13 @@ Documentation is never complete. There are spelling mistakes,
 paragraphs that needs to be extended or rewritten because they are not
 clear or topics that were missed out at all.
 
-The documentation is written in \LaTeX\ so all you need is to get the
+The documentation is written in \LaTeX{} so all you need is to get the
 tex file from doc folder and add or update the content.
 After this, just send a diff or complete file to one of the authors.
 
 \subsection{Propaganda}
 And of course, tell others of Geany and this plugin. If you like to do
-a talk about Geany\LaTeX\ and/or Geany in general, there is some code
+a talk about Geany\LaTeX{} and/or Geany in general, there is some code
 available on \url{http://git.geany.org/talks/} you might can use as a
 start point for preparing your own presentation. If your favourite
 language is not yet available there, please feel free to do your own
@@ -464,9 +464,9 @@ http://geany-plugins.svn.sourceforge.net/svnroot/geany-plugins/trunk/geanylatex
 
 \subsubsection{Sending a patch}
 If you want to create a patch, please respect the license of
-Geany\LaTeX\ as well as intellectual property of third. Patches that
+Geany\LaTeX{} as well as intellectual property of third. Patches that
 should be included to the default distribution must be licensed under
-the same conditions as Geany\LaTeX by the copyright owner.
+the same conditions as Geany\LaTeX{} by the copyright owner.
 
 \section{Known issues}
 At time of the the documentation was created no issue were known.
@@ -474,7 +474,7 @@ Since this is only a snapshot, you will find more recent information
 for all reported issues bug tracking system of SF at \\
 \url{http://sourceforge.net/tracker/?group\_id=222729}
 
-\section{Recommendations to improve work with \LaTeX\ and Geany}
+\section{Recommendations to improve work with \LaTeX{} and Geany}
 Geany is offering a number of nice features, that can be used to make
 daily work more easy without need to write a new plugin or extend
 Geany\LaTeX.
@@ -527,7 +527,7 @@ recompiling of the document. Recognised tags will be inserted to
 another tab in Geany's message widget.\\
 
 \section{License}
-Geany\LaTeX\ and all its parts is distributed under the terms of the
+Geany\LaTeX{} and all its parts is distributed under the terms of the
 GNU General Public License as published by the Free Software
 Foundation; either version 2 of the License, or (at your option) any
 later version. A copy of this license can be found in the file COPYING
