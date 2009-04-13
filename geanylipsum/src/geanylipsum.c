@@ -114,16 +114,15 @@ lipsum_activated(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer gda
 		sci_start_undo_action(doc->editor->sci);
 
 		/* Insert lipsum snippet as often as needed ... */
-		for (i = 0; i < x; i++)
-			insert_string(doc, lipsum);
-
-		/* .. and insert a little more if needed */
 		if (missing > 0)
 		{
 			gchar *missing_text = g_strndup(lipsum, missing);
 			insert_string(doc, missing_text);
 			g_free(missing_text);
 		}
+		for (i = 0; i < x; i++)
+			insert_string(doc, lipsum);
+
 		sci_end_undo_action(doc->editor->sci);
 	}
 }
