@@ -280,6 +280,7 @@ insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	GtkWidget *table = NULL;
 	GtkWidget *radio1 = NULL;
 	GtkWidget *radio2 = NULL;
+	GtkTreeModel *model = NULL;
 
 
 	dialog = gtk_dialog_new_with_buttons(_("Insert Reference"),
@@ -298,6 +299,9 @@ insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	label_ref = gtk_label_new(_("Reference name:"));
 	textbox_ref = gtk_combo_box_entry_new_text();
 	glatex_add_Labels(textbox_ref, glatex_get_aux_file());
+	model = gtk_combo_box_get_model(GTK_COMBO_BOX(textbox_ref));
+	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(model), 
+		0, GTK_SORT_ASCENDING);
 
 	gtk_misc_set_alignment(GTK_MISC(label_ref), 0, 0.5);
 

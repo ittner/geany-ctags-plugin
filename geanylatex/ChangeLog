@@ -1,3 +1,8 @@
+2009-04-10  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Sort entries on insert reference dialog by alphabet
+
+
 2009-03-30  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Moved replacement functions into their own submenu.
