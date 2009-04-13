@@ -89,7 +89,7 @@ extern GeanyFunctions	*geany_functions;
 
 #define TEMPLATE_LATEX_BEAMER "\
 \\documentclass[]{{DOCUMENTCLASS}}\n\
-\\usetheme{default}\
+\\usetheme{default}\n\
 {ENCODING}\
 {TITLE}\
 {AUTHOR}\
