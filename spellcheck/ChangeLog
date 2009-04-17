@@ -4,6 +4,7 @@
    List the available languages in the Tools menu as radio items
    to easily indicate which language is currently in use.
    Show the default language also next to the 'Default' menu item.
+   Show the currently used language in the toolbutton tooltip.
 
 
 2009-03-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

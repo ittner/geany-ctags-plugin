@@ -81,6 +81,21 @@ static void toolbar_item_toggled_cb(GtkToggleToolButton *button, gpointer user_d
 }
 
 
+void sc_gui_update_tooltip(void)
+{
+#if GTK_CHECK_VERSION(2, 12, 0)
+	if (sc_info->toolbar_button != NULL)
+	{
+		gchar *text = g_strdup_printf(
+			_("Toggle spell check while typing (current language: %s)"),
+			(sc_info->default_language != NULL) ? sc_info->default_language : _("unknown"));
+		gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(sc_info->toolbar_button), text);
+		g_free(text);
+	}
+#endif
+}
+
+
 void sc_gui_toolbar_update(void)
 {
 	/* toolbar item is not requested, so remove the item if it exists */
@@ -96,10 +111,8 @@ void sc_gui_toolbar_update(void)
 		if (sc_info->toolbar_button == NULL)
 		{
 			sc_info->toolbar_button = gtk_toggle_tool_button_new_from_stock(GTK_STOCK_SPELL_CHECK);
-#if GTK_CHECK_VERSION(2, 12, 0)
-			gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(sc_info->toolbar_button),
-				_("Toggle spell check while typing"));
-#endif
+			sc_gui_update_tooltip();
+
 			plugin_add_toolbar_item(geany_plugin, sc_info->toolbar_button);
 			ui_add_document_sensitive(GTK_WIDGET(sc_info->toolbar_button));
 
@@ -415,6 +428,7 @@ static void menu_item_toggled_cb(GtkCheckMenuItem *menuitem, gpointer gdata)
 	{
 		setptr(sc_info->default_language, g_strdup(gdata));
 		sc_speller_reinit_enchant_dict();
+		sc_gui_update_tooltip();
 	}
 
 	editor_indicator_clear(doc->editor, GEANY_INDICATOR_ERROR);
