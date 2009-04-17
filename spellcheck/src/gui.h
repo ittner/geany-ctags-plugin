@@ -28,9 +28,6 @@
 
 
 
-void sc_gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
-						   GeanyDocument *doc, gpointer user_data);
-
 gboolean sc_gui_key_release_cb(GtkWidget *widget, GdkEventKey *ev, gpointer user_data);
 
 gboolean sc_gui_key_release_cb(GtkWidget *widget, GdkEventKey *ev, gpointer data);
