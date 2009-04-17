@@ -46,7 +46,7 @@ void sc_gui_create_menu(GtkWidget *sp_item);
 void sc_gui_update_editor_menu_cb(GObject *obj, const gchar *word, gint pos,
 								  GeanyDocument *doc, gpointer user_data);
 
-void sc_gui_toolbar_update(void);
+void sc_gui_update_toolbar(void);
 
 void sc_gui_update_menu(void);
 

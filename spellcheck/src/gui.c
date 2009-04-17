@@ -96,7 +96,7 @@ void sc_gui_update_tooltip(void)
 }
 
 
-void sc_gui_toolbar_update(void)
+void sc_gui_update_toolbar(void)
 {
 	/* toolbar item is not requested, so remove the item if it exists */
 	if (! sc_info->show_toolbar_item)
@@ -460,7 +460,7 @@ void sc_gui_kb_toggle_typing_activate_cb(guint key_id)
 
 	print_typing_changed_message();
 
-	sc_gui_toolbar_update();
+	sc_gui_update_toolbar();
 }
 
 

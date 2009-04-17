@@ -135,7 +135,7 @@ static void configure_response_cb(GtkDialog *dialog, gint response, gpointer use
 		g_key_file_set_boolean(config, "spellcheck", "use_msgwin", sc_info->use_msgwin);
 		g_key_file_set_boolean(config, "spellcheck", "show_toolbar_item", sc_info->show_toolbar_item);
 
-		sc_gui_toolbar_update();
+		sc_gui_update_toolbar();
 		sc_gui_update_menu();
 
 		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && utils_mkdir(config_dir, TRUE) != 0)
@@ -183,7 +183,7 @@ void plugin_init(GeanyData *data)
 	sc_info->menu_item = gtk_image_menu_item_new_from_stock(GTK_STOCK_SPELL_CHECK, NULL);
 	ui_add_document_sensitive(sc_info->menu_item);
 
-	sc_gui_toolbar_update();
+	sc_gui_update_toolbar();
 
 	sc_gui_init();
 	sc_speller_init();
