@@ -56,7 +56,7 @@ static SpellClickInfo clickinfo;
 
 /* Flag to indicate that a callback function will be triggered by generating the appropriate event
  * but the callback should be ignored. */
-static gboolean ignore_sc_callback = FALSE;
+static gboolean sc_ignore_callback = FALSE;
 
 
 
@@ -71,7 +71,7 @@ static void print_typing_changed_message(void)
 
 static void toolbar_item_toggled_cb(GtkToggleToolButton *button, gpointer user_data)
 {
-	if (ignore_sc_callback)
+	if (sc_ignore_callback)
 		return;
 
 	sc_info->check_while_typing = gtk_toggle_tool_button_get_active(button);
@@ -108,10 +108,10 @@ void sc_gui_toolbar_update(void)
 		}
 		gtk_widget_show(GTK_WIDGET(sc_info->toolbar_button));
 
-		ignore_sc_callback = TRUE;
+		sc_ignore_callback = TRUE;
 		gtk_toggle_tool_button_set_active(
 			GTK_TOGGLE_TOOL_BUTTON(sc_info->toolbar_button), sc_info->check_while_typing);
-		ignore_sc_callback = FALSE;
+		sc_ignore_callback = FALSE;
 	}
 }
 
@@ -398,17 +398,24 @@ gboolean sc_gui_key_release_cb(GtkWidget *widget, GdkEventKey *ev, gpointer data
 }
 
 
-static void menu_item_activate_cb(GtkMenuItem *menuitem, gpointer gdata)
+static void menu_item_toggled_cb(GtkCheckMenuItem *menuitem, gpointer gdata)
 {
 	GeanyDocument *doc;
+
+	if (sc_ignore_callback)
+		return;
+
+	if (menuitem != NULL && ! gtk_check_menu_item_get_active(menuitem))
+		return;
 
 	doc = document_get_current();
 
 	/* Another language was chosen from the menu item, so make it default for this session. */
     if (gdata != NULL)
+	{
 		setptr(sc_info->default_language, g_strdup(gdata));
-
-	sc_speller_reinit_enchant_dict();
+		sc_speller_reinit_enchant_dict();
+	}
 
 	editor_indicator_clear(doc->editor, GEANY_INDICATOR_ERROR);
 	if (sc_info->use_msgwin)
@@ -418,6 +425,12 @@ static void menu_item_activate_cb(GtkMenuItem *menuitem, gpointer gdata)
 	}
 
 	sc_speller_check_document(doc);
+}
+
+
+static void menu_item_activate_cb(GtkMenuItem *menuitem, gpointer gdata)
+{
+	menu_item_toggled_cb(NULL, gdata);
 }
 
 
@@ -451,32 +464,61 @@ void sc_gui_create_edit_menu(void)
 }
 
 
-GtkWidget *sc_gui_create_menu(GtkWidget *sp_item)
+void sc_gui_update_menu(void)
+{
+	GtkWidget *child, *menu = gtk_menu_item_get_submenu(GTK_MENU_ITEM(sc_info->menu_item));
+	GList *l, *children = gtk_container_get_children(GTK_CONTAINER(menu));
+
+	sc_ignore_callback = TRUE;
+	for (l = children; l != NULL; l = g_list_next(l))
+	{
+		if ((child = GTK_BIN(l->data)->child) != NULL)
+		{
+			if (GTK_IS_LABEL(child))
+			{
+				if (utils_str_equal(sc_info->default_language, gtk_label_get_text(GTK_LABEL(child))))
+					gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(l->data), TRUE);
+			}
+		}
+	}
+	sc_ignore_callback = FALSE;
+}
+
+
+void sc_gui_create_menu(GtkWidget *sp_item)
 {
 	GtkWidget *menu, *menu_item;
 	guint i;
+	GSList *group = NULL;
+	gchar *label;
 
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), sp_item);
 
 	menu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(sp_item), menu);
 
-	sc_info->submenu_item_default = gtk_menu_item_new_with_mnemonic(_("Default"));
+	label = g_strdup_printf(_("Default (%s)"),
+		(sc_info->default_language != NULL) ? sc_info->default_language : _("unknown"));
+	sc_info->submenu_item_default = gtk_menu_item_new_with_label(label);
 	gtk_container_add(GTK_CONTAINER(menu), sc_info->submenu_item_default);
-	g_signal_connect(sc_info->submenu_item_default, "activate", G_CALLBACK(menu_item_activate_cb), NULL);
+	g_signal_connect(sc_info->submenu_item_default, "activate", G_CALLBACK(menu_item_toggled_cb), NULL);
+	g_free(label);
 
 	menu_item = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 
+	sc_ignore_callback = TRUE;
 	for (i = 0; i < sc_info->dicts->len; i++)
 	{
-		menu_item = gtk_menu_item_new_with_label(g_ptr_array_index(sc_info->dicts, i));
+		label = g_ptr_array_index(sc_info->dicts, i);
+		menu_item = gtk_radio_menu_item_new_with_label(group, label);
+		group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(menu_item));
+		if (utils_str_equal(sc_info->default_language, label))
+			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menu_item), TRUE);
 		gtk_container_add(GTK_CONTAINER(menu), menu_item);
-		g_signal_connect(menu_item, "activate",
-			G_CALLBACK(menu_item_activate_cb), g_ptr_array_index(sc_info->dicts, i));
+		g_signal_connect(menu_item, "toggled", G_CALLBACK(menu_item_toggled_cb), label);
 	}
-
-	return sp_item;
+	sc_ignore_callback = FALSE;
 }
 
 

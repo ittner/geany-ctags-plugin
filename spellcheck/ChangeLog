@@ -1,3 +1,11 @@
+2009-04-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/gui.c, src/scplugin.c, src/gui.h:
+   List the available languages in the Tools menu as radio items
+   to easily indicate which language is currently in use.
+   Show the default language also next to the 'Default' menu item.
+
+
 2009-03-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * New release: Spell Check 0.3.

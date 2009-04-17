@@ -135,6 +135,7 @@ static void configure_response_cb(GtkDialog *dialog, gint response, gpointer use
 		g_key_file_set_boolean(config, "spellcheck", "show_toolbar_item", sc_info->show_toolbar_item);
 
 		sc_gui_toolbar_update();
+		sc_gui_update_menu();
 
 		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && utils_mkdir(config_dir, TRUE) != 0)
 		{
@@ -156,7 +157,6 @@ static void configure_response_cb(GtkDialog *dialog, gint response, gpointer use
 
 void plugin_init(GeanyData *data)
 {
-	GtkWidget *sp_item;
 	GKeyFile *config = g_key_file_new();
 	gchar *default_lang;
 
@@ -188,8 +188,8 @@ void plugin_init(GeanyData *data)
 	sc_speller_init();
 
 	sc_gui_create_edit_menu();
-	sp_item = sc_gui_create_menu(sc_info->menu_item);
-	gtk_widget_show_all(sp_item);
+	sc_gui_create_menu(sc_info->menu_item);
+	gtk_widget_show_all(sc_info->menu_item);
 
 	sc_info->signal_id = g_signal_connect(geany->main_widgets->window,
 			"key-release-event", G_CALLBACK(sc_gui_key_release_cb), NULL);
