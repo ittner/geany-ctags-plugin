@@ -1,4 +1,3 @@
-
 This is a plugin to provide integrated debugging from Geany using the GNU
 debugger (gdb). It was developed and tested on openSUSE-10.3 with GDB-6.7.50.
 Other recent versions of GDB will probably work, but operating systems other
@@ -40,9 +39,3 @@ program loaded, the plugin manager might appear to hang for a few seconds,
 while GDB tries to shut down. Again, just be patient, but note that it is
 much better use the "Unload" button in the debug sidebar before trying to
 disable the plugin.
-
-There also seems to be some conflict with the GeanyLua plugin, if you have
-any ~/.geany/plugins/events/ scripts. ( The GeanyLua author tells me it is
-a problem with that plugin, and it will be fixed in the 0.6.2 release. :-)
-
-
