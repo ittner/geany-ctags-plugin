@@ -47,8 +47,6 @@
 
 
 #define unix_name "debugger"
-#define VERSION "0.0.2"
-
 
 
 PLUGIN_VERSION_CHECK(115)
