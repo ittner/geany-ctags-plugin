@@ -1,6 +1,11 @@
+2009-04-17  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Set undo points for better redo/undo on inserting formatings
+
+
 2009-04-12  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
-* Added some new lines into latex beamer template.
+ * Added some new lines into latex beamer template.
 
 
 2009-04-10  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

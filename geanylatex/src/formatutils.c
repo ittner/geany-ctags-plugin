@@ -50,7 +50,7 @@ void glatex_insert_latex_format(G_GNUC_UNUSED GtkMenuItem * menuitem,
             glatex_insert_string(glatex_format_pattern[format], TRUE);
             glatex_insert_string("{", TRUE);
             glatex_insert_string("}", FALSE);
-			sci_stop_undo_action(doc->editor->sci);
+			sci_end_undo_action(doc->editor->sci);
 		}
     }
 }
