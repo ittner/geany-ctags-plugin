@@ -1,6 +1,8 @@
 2009-04-17  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
- * Set undo points for better redo/undo on inserting formatings
+ * Set undo points for better redo/undo on inserting formatings.
+ * Make reference type inside insert reference dialog accessible by
+   keyboard.
 
 
 2009-04-12  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

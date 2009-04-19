@@ -309,13 +309,13 @@ insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	gtk_table_attach_defaults(GTK_TABLE(table), textbox_ref, 1, 2, 0, 1);
 	gtk_container_add(GTK_CONTAINER(vbox), table);
 
-	radio1 = gtk_radio_button_new_with_label(NULL,
-		_("Standard Reference"));
+	radio1 = gtk_radio_button_new_with_mnemonic(NULL,
+		_("_Standard Reference"));
 	gtk_button_set_focus_on_click(GTK_BUTTON(radio1), FALSE);
 	gtk_container_add(GTK_CONTAINER(vbox), radio1);
 
-	radio2 = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(radio1),
-		_("Page Reference"));
+	radio2 = gtk_radio_button_new_with_mnemonic_from_widget(GTK_RADIO_BUTTON(radio1),
+		_("_Page Reference"));
 	gtk_button_set_focus_on_click(GTK_BUTTON(radio2), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio2), FALSE);
 	gtk_container_add(GTK_CONTAINER(vbox), radio2);
