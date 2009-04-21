@@ -3,7 +3,10 @@ SUBDIRS = src po
 EXTRA_DIST =				\
 	autogen.sh				\
 	makefile.win32			\
-	po/LINGUAS
+	po/LINGUAS				\
+	doc/geanylatex.tex		\
+	doc/geanylatex.pdf		\
+	doc/img/*
 
 dist-bzip2: distdir
 	BZIP2=$(BZIP2_ENV) $(AMTAR) --bzip2 -chof $(distdir).tar.bz2 $(distdir)
