@@ -37,7 +37,7 @@ ALL_GTK_LIBS= \
 	-L"$(PREFIX)/lib" \
 	-lgtk-win32-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 \
 	-lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl -liconv
-CCFLAGS=-Wall -O2 -mms-bitfields -DHAVE_CONFIG_H
+CCFLAGS=-Wall -O2 -mms-bitfields -DHAVE_CONFIG_H -DLOCALEDIR=\"share\"
 
 
 all: $(TARGET)
@@ -45,7 +45,7 @@ all: $(TARGET)
 deps.mak:
 	$(CC) -MM $(CCFLAGS) $(INCLUDEDIRS) src/*.c >deps.mak
 
-.c.o:
+$(OBJS):
 	$(CC) $(CCFLAGS) $(INCLUDEDIRS) -c $<
 
 $(TARGET): deps.mak $(OBJS)
