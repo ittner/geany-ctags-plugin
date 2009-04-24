@@ -1,3 +1,9 @@
+2009-04-24  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Applied a patch by Timothy Boronczyk which allows aborting when inserting
+   recipient's email address.
+
+
 2008-10-14  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Applied a patch by Nick to make use of Geany Plugin API r100 and the

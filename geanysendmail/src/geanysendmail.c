@@ -4,7 +4,7 @@
  *      Copyright 2007-2009 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
  *      Copyright 2007 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
  *      Copyright 2007, 2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
- *      Copyright 2008 Timothy Boronczyk <tboronczyk(at)gmail(dot)com>
+ *      Copyright 2008, 2009 Timothy Boronczyk <tboronczyk(at)gmail(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -104,9 +104,13 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
 			{
 				gint tmp;
 
- 				dialog = gtk_dialog_new_with_buttons(_("Recipient's Address"),
- 					GTK_WINDOW(geany->main_widgets->window), GTK_DIALOG_DESTROY_WITH_PARENT,
- 					GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+				dialog = gtk_dialog_new_with_buttons(_("Recipient's Address"),
+										GTK_WINDOW(geany->main_widgets->window),
+										GTK_DIALOG_DESTROY_WITH_PARENT,
+										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+										NULL);
+				gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
  				vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
  				gtk_widget_set_name(dialog, "GeanyDialog");
  				gtk_box_set_spacing(GTK_BOX(vbox), 10);
@@ -125,8 +129,13 @@ send_as_attachment(G_GNUC_UNUSED GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer g
 
  				tmp = gtk_dialog_run(GTK_DIALOG(dialog));
 
- 				if (tmp == GTK_RESPONSE_ACCEPT)
- 				{
+				if (tmp != GTK_RESPONSE_ACCEPT)
+				{
+					gtk_widget_destroy(dialog);
+					return;
+				}
+				else
+				{
 					g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 
 					g_free(address);
