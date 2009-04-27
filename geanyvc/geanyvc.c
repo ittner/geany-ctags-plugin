@@ -1204,9 +1204,9 @@ get_diff_color(G_GNUC_UNUSED GeanyDocument * doc, gint style)
 	const GeanyLexerStyle *s;
 
 	s = highlighting_get_style(GEANY_FILETYPES_DIFF, style);
-	c.red = (s->foreground % 256) * 257;
-	c.green = s->foreground & -16711936;
-	c.blue = (s->foreground & 0xff0000) / 256;
+	c.red = (s->foreground & 0xff) << 0x8;
+	c.green = s->foreground & 0xff00;
+	c.blue = (s->foreground & 0xff0000) >> 0x8;
 
 	return &c;
 }
