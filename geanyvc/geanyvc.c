@@ -1154,16 +1154,13 @@ toggle_all_commit_files (GtkTreeModel *model, GtkTreePath *path,
 }
 
 static void
-commit_all_toggled(G_GNUC_UNUSED GtkCellRendererToggle *cell, gpointer data)
+commit_all_toggled_cb(GtkToggleButton *check_box, gpointer treeview)
 {
-	GtkTreeView *treeview = GTK_TREE_VIEW(data);
-	GtkTreeModel *model = gtk_tree_view_get_model(treeview);
-	static gint onoff = 0;
-	gpointer ptr_onoff = &onoff;
+	GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(treeview));
+	gint toggled = gtk_toggle_button_get_active(check_box);
 	
-	gtk_tree_model_foreach(model, toggle_all_commit_files, ptr_onoff);
-	/* toggle value */
-	onoff ^= 1;
+	gtk_tree_model_foreach(model, toggle_all_commit_files, &toggled);
+
 	refresh_diff_view(treeview);
 }
 
@@ -1300,11 +1297,12 @@ create_commitDialog(void)
 	gtk_widget_show(vpaned3);
 	gtk_paned_pack2(GTK_PANED(vpaned2), vpaned3, FALSE, FALSE);
 
-	select_cbox = gtk_check_button_new_with_mnemonic(_("_De-/select all files"));
-	gtk_toggle_button_set_active((GtkToggleButton*)select_cbox, TRUE);
-	gtk_widget_show(select_cbox);
+	select_cbox = GTK_WIDGET(gtk_check_button_new_with_mnemonic(_("_De-/select all files")));
 	gtk_paned_pack1(GTK_PANED(vpaned3), select_cbox, FALSE, FALSE);
-	g_signal_connect(select_cbox, "toggled", G_CALLBACK(commit_all_toggled), treeSelect);
+	gtk_widget_show(select_cbox);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(select_cbox), TRUE);
+	g_signal_connect(select_cbox, "toggled", G_CALLBACK(commit_all_toggled_cb),
+			treeSelect);
 
 	textDiff = gtk_text_view_new();
 	gtk_widget_set_name(textDiff, "GeanyVCCommitDialogDiff");
