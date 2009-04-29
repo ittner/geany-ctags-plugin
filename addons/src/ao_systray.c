@@ -122,21 +122,9 @@ static void ao_systray_class_init(AoSystrayClass *klass)
 static void icon_activate_cb(GtkStatusIcon *status_icon, gpointer data)
 {
 	if (gtk_window_is_active(GTK_WINDOW(geany->main_widgets->window)))
-	{
-		gtk_window_iconify(GTK_WINDOW(geany->main_widgets->window));
-		gtk_window_set_skip_taskbar_hint(GTK_WINDOW(geany->main_widgets->window), TRUE);
-		gtk_window_set_skip_pager_hint(GTK_WINDOW(geany->main_widgets->window), TRUE);
-	}
+		gtk_widget_hide(geany->main_widgets->window);
 	else
-	{
 		gtk_window_present(GTK_WINDOW(geany->main_widgets->window));
-		gtk_window_set_skip_taskbar_hint(GTK_WINDOW(geany->main_widgets->window), FALSE);
-		gtk_window_set_skip_pager_hint(GTK_WINDOW(geany->main_widgets->window), FALSE);
-#ifdef G_OS_WIN32
-		// ensure that the window is displayed at the top
-		gdk_window_show(geany->main_widgets->window->window);
-#endif
-	}
 }
 
 
