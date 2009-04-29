@@ -62,7 +62,7 @@ class Plugin:
 plugins = [
 	Plugin('addons',
 		 [ 'addons/src/addons.c', 'addons/src/ao_doclist.c', 'addons/src/ao_openuri.c',
-		   'addons/src/tasks.c' ],
+		   'addons/src/ao_systray.c', 'addons/src/tasks.c' ],
 		 [ 'addons', 'addons/src' ],
 		 '0.2'),
 	Plugin('externdbg',

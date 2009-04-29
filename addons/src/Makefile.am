@@ -1,6 +1,11 @@
 
 lib_LTLIBRARIES = addons.la
-addons_la_SOURCES = addons.c addons.h ao_doclist.c ao_doclist.h ao_openuri.c ao_openuri.h tasks.c tasks.h
+addons_la_SOURCES = \
+	addons.c addons.h \
+	ao_doclist.c ao_doclist.h \
+	ao_openuri.c ao_openuri.h \
+	ao_systray.c ao_systray.h \
+	tasks.c tasks.h
 addons_la_LDFLAGS = -module -avoid-version
 addons_la_LIBADD  = @GEANY_LIBS@  $(INTLLIBS)
 

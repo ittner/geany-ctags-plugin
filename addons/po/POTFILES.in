@@ -3,4 +3,5 @@
 src/addons.c
 src/ao_openuri.c
 src/ao_doclist.c
+src/ao_systray.c
 src/tasks.c
