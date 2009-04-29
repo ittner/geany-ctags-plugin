@@ -16,7 +16,7 @@ TARGET = addons.dll
 -include localwin32.mk
 
 
-OBJS =	addons.o ao_openuri.o ao_doclist.o tasks.o
+OBJS =	addons.o ao_openuri.o ao_doclist.o ao_systray.o tasks.o
 INCLUDEDIRS=  -I. \
               -I$(GEANY_SRC) \
               -I$(GEANY_SRC)\src \
