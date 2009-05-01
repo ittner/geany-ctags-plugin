@@ -351,6 +351,10 @@ plugin_init(GeanyData * data)
 
 	gdbui_setup.main_window = geany->main_widgets->window;
 
+	/**
+	 * TODO: detect where this plugin is installed so that the path to
+	 * geanygdb_ttyhelper can be automatically detected.
+	 */
 	gdbio_setup.temp_dir = g_build_filename(geany->app->configdir, "plugins", unix_name, NULL);
 	/*gdbio_setup.tty_helper = g_build_filename(gdbio_setup.temp_dir, "geanygdb_ttyhelper", NULL);*/
 	/* the tty helper binary is installed in $prefix/bin, so use this path */
