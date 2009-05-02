@@ -418,9 +418,12 @@ static void menu_item_toggled_cb(GtkCheckMenuItem *menuitem, gpointer gdata)
 	if (sc_ignore_callback)
 		return;
 
-	if (menuitem != NULL && ! gtk_check_menu_item_get_active(menuitem))
+	if (menuitem != NULL &&
+		GTK_IS_CHECK_MENU_ITEM(menuitem) &&
+		! gtk_check_menu_item_get_active(menuitem))
+	{
 		return;
-
+	}
 	doc = document_get_current();
 
 	/* Another language was chosen from the menu item, so make it default for this session. */
@@ -442,15 +445,9 @@ static void menu_item_toggled_cb(GtkCheckMenuItem *menuitem, gpointer gdata)
 }
 
 
-static void menu_item_activate_cb(GtkMenuItem *menuitem, gpointer gdata)
-{
-	menu_item_toggled_cb(NULL, gdata);
-}
-
-
 void sc_gui_kb_run_activate_cb(guint key_id)
 {
-	menu_item_activate_cb(NULL, NULL);
+	menu_item_toggled_cb(NULL, NULL);
 }
 
 
