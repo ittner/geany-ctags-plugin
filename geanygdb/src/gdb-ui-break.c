@@ -100,6 +100,17 @@ static void
 delete_click(GtkWidget * w, gpointer p)
 {
 	BkPtDlgData *bpd = p;
+
+	if (! bpd->bpi)
+	{
+		GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(gdbui_setup.main_window),
+			GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK,
+			_("No %s selected"), is_watchlist ? _("watchpoint") : _("breakpoint"));
+		gtk_dialog_run(GTK_DIALOG(dialog));
+		gtk_widget_destroy(dialog);
+		return;
+	}
+
 	if (confirm(is_watchlist ? _("Delete selected watchpoint?") : _("Delete selected breakpoint?")))
 	{
 		gdbui_enable(FALSE);
