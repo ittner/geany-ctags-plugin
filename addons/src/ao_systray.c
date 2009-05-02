@@ -171,9 +171,9 @@ static void ao_systray_init(AoSystray *self)
 		GTK_WINDOW(geany->main_widgets->window)));
 
 #if GTK_CHECK_VERSION(2, 16, 0)
-	gtk_status_icon_set_tooltip(priv->icon, "Geany");
-#else
 	gtk_status_icon_set_tooltip_text(priv->icon, "Geany");
+#else
+	gtk_status_icon_set_tooltip(priv->icon, "Geany");
 #endif
 
 	priv->popup_menu = gtk_menu_new();
