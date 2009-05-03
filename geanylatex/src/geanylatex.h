@@ -45,9 +45,11 @@
 #include "reftex.h"
 #include "latexenvironments.h"
 #include "formatutils.h"
+#include "latexkeybindings.h"
 #include "Scintilla.h"
 #include "plugindata.h"
 #include "geanyfunctions.h"
+
 
 #include <gtk/gtk.h>
 
@@ -111,5 +113,11 @@ extern GeanyFunctions	*geany_functions;
 
 extern void glatex_insert_string(gchar *string, gboolean reset_position);
 gint glatex_count_menu_entries(SubMenuTemplate *tmp, gint categorie);
-
+void glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
+	 G_GNUC_UNUSED gpointer gdata);
+void glatex_insert_label_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
+	 G_GNUC_UNUSED gpointer gdata);
+void glatex_insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
+	 G_GNUC_UNUSED gpointer gdata);
+void glatex_replace_special_character();
 #endif

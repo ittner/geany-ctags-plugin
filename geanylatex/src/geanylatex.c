@@ -85,7 +85,7 @@ void glatex_set_latextoggle_status(gboolean new_status)
 		toggle_active = new_status;
 }
 
-static void toggle_status(G_GNUC_UNUSED GtkMenuItem * menuitem)
+void glatex_toggle_status(G_GNUC_UNUSED GtkMenuItem * menuitem)
 {
 	if (toggle_active == TRUE)
 		glatex_set_latextoggle_status(FALSE);
@@ -130,7 +130,7 @@ static gboolean ht_editor_notify_cb(G_GNUC_UNUSED GObject *object, GeanyEditor *
 }
 
 
-static void replace_special_character()
+void glatex_replace_special_character()
 {
 	GeanyDocument *doc = NULL;
 	doc = document_get_current();
@@ -173,7 +173,7 @@ static void replace_special_character()
 }
 
 /* Called when keys were pressed */
-static void kblatex_toggle(G_GNUC_UNUSED guint key_id)
+void glatex_kblatex_toggle(G_GNUC_UNUSED guint key_id)
 {
 	if (toggle_active == TRUE)
 		glatex_set_latextoggle_status(FALSE);
@@ -223,8 +223,8 @@ char_insert_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 }
 
 
-static void
-insert_label_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
+void
+glatex_insert_label_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 					   G_GNUC_UNUSED gpointer gdata)
 {
 	GtkWidget *dialog = NULL;
@@ -269,8 +269,8 @@ insert_label_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 }
 
 
-static void
-insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
+void
+glatex_insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 					 G_GNUC_UNUSED gpointer gdata)
 {
 	GtkWidget *dialog;
@@ -350,7 +350,7 @@ insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 }
 
 
-static void character_create_menu_item(GtkWidget *menu, const gchar *label,
+void glatex_character_create_menu_item(GtkWidget *menu, const gchar *label,
 									   gint letter, SubMenuCallback callback)
 {
 	GtkWidget *tmp;
@@ -409,7 +409,7 @@ count_menu_cat_entries(CategoryName *tmp)
 }
 
 
-static void sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template,
+void glatex_sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template,
 				   CategoryName *category_name,
 				   SubMenuCallback callback_function)
 {
@@ -501,7 +501,7 @@ static void sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template,
 				/*  Sets the counter to keep in track if a new ,,
 				 *  submenu needs to be build up */
 				local_count = local_count + 1;
-				character_create_menu_item(sub_menu, g_strconcat(
+				glatex_character_create_menu_item(sub_menu, g_strconcat(
 					menu_template[j].label, "\t", menu_template[j].latex,
 					NULL), j, callback_function);
 			}
@@ -536,8 +536,8 @@ show_output(const gchar * output, const gchar * name, const gint local_enc)
 	}
 }
 
-static void
-wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
+void
+glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 				 G_GNUC_UNUSED gpointer gdata)
 {
 	gint i;
@@ -938,75 +938,7 @@ wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 }
 
 
-static void kblabel_insert(G_GNUC_UNUSED guint key_id)
-{
-	if (NULL == document_get_current())
-		return;
-	insert_label_activated(NULL, NULL);
-}
-
-static void kbref_insert(G_GNUC_UNUSED guint key_id)
-{
-	if (NULL == document_get_current())
-		return;
-	insert_ref_activated(NULL, NULL);
-}
-
-
-static void kbref_insert_environment(G_GNUC_UNUSED guint key_id)
-{
-	if (NULL == document_get_current())
-		return;
-	glatex_insert_environment_dialog(NULL, NULL);
-}
-
-static void kbwizard(G_GNUC_UNUSED guint key_id)
-{
-	wizard_activated(NULL, NULL);
-}
-
-static void kb_insert_newline(G_GNUC_UNUSED guint key_id)
-{
-	if (NULL == document_get_current())
-		return;
-	glatex_insert_string("\\\\\n", TRUE);
-}
-
-static void kb_insert_newitem(G_GNUC_UNUSED guint key_id)
-{
-	if (NULL == document_get_current())
-		return;
-	glatex_insert_string("\\item ", TRUE);
-}
-
-static void kb_replace_special_chars(G_GNUC_UNUSED guint key_id)
-{
-	if (NULL == document_get_current())
-		return;
-	replace_special_character();
-}
-
-static void kb_format_bold(G_GNUC_UNUSED guint key_id)
-{
-	if (NULL == document_get_current())
-		return;
-	glatex_insert_latex_format(NULL, GINT_TO_POINTER(LATEX_BOLD));
-}
-
-static void kb_format_italic(G_GNUC_UNUSED guint key_id)
-{
-	if (NULL == document_get_current())
-		return;
-	glatex_insert_latex_format(NULL, GINT_TO_POINTER(LATEX_ITALIC));
-}
-
-static void kb_format_typewriter(G_GNUC_UNUSED guint key_id)
-{
-	if (NULL == document_get_current())
-		return;
-	glatex_insert_latex_format(NULL, GINT_TO_POINTER(LATEX_TYPEWRITER));
-}
-/*static void kb_bibtex_entry_insert(G_GNUC_UNUSED guint key_id)
+/*void glatex_kb_bibtex_entry_insert(G_GNUC_UNUSED guint key_id)
 {
 	insert_bibtex_entry(NULL, NULL);
 }*/
@@ -1014,30 +946,30 @@ static void kb_format_typewriter(G_GNUC_UNUSED guint key_id)
 void init_keybindings()
 {
 	/* init keybindins */
-	keybindings_set_item(plugin_key_group, KB_LATEX_WIZZARD, kbwizard,
+	keybindings_set_item(plugin_key_group, KB_LATEX_WIZZARD, glatex_kbwizard,
 		0, 0, "run_latex_wizard", _("Run LaTeX-Wizard"), menu_latex_wizzard);
-	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_LABEL, kblabel_insert,
+	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_LABEL, glatex_kblabel_insert,
 		0, 0, "insert_latex_label", _("Insert \\label"), menu_latex_label);
-	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_REF, kbref_insert,
+	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_REF, glatex_kbref_insert,
 		0, 0, "insert_latex_ref", _("Insert \\ref"), menu_latex_ref);
-	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_NEWLINE, kb_insert_newline,
+	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_NEWLINE, glatex_kb_insert_newline,
 		0, 0, "insert_new_line", _("Insert linebreak \\\\ "), NULL);
-	keybindings_set_item(plugin_key_group, KB_LATEX_TOGGLE_ACTIVE, kblatex_toggle,
+	keybindings_set_item(plugin_key_group, KB_LATEX_TOGGLE_ACTIVE, glatex_kblatex_toggle,
 		0, 0, "latex_toggle_status", _("Turn input replacement on/off"),
 		menu_latex_replace_toggle);
 	keybindings_set_item(plugin_key_group, KB_LATEX_REPLACE_SPECIAL_CHARS,
-		kb_replace_special_chars, 0, 0, "latex_replace_chars",
+		glatex_kb_replace_special_chars, 0, 0, "latex_replace_chars",
 		_("Replace special characters"), NULL);
 	keybindings_set_item(plugin_key_group, KB_LATEX_ENVIRONMENT_INSERT,
-	 	kbref_insert_environment, 0, 0, "latex_insert_environment",
+	 	glatex_kbref_insert_environment, 0, 0, "latex_insert_environment",
 		_("Run insert environment dialog"), menu_latex_insert_environment);
 	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_NEWITEM,
-		kb_insert_newitem, 0, 0, "latex_insert_item", _("Insert \\item"), NULL);
-	keybindings_set_item(plugin_key_group, KB_LATEX_FORMAT_BOLD, kb_format_bold,
+		glatex_kb_insert_newitem, 0, 0, "latex_insert_item", _("Insert \\item"), NULL);
+	keybindings_set_item(plugin_key_group, KB_LATEX_FORMAT_BOLD, glatex_kb_format_bold,
 		0, 0, "format_bold", _("Format selection in bold font face"), NULL);
-	keybindings_set_item(plugin_key_group, KB_LATEX_FORMAT_ITALIC, kb_format_italic,
+	keybindings_set_item(plugin_key_group, KB_LATEX_FORMAT_ITALIC, glatex_kb_format_italic,
 		0, 0, "format_italic", _("Format selection in italic font face"), NULL);
-	keybindings_set_item(plugin_key_group, KB_LATEX_FORMAT_TYPEWRITER, kb_format_typewriter,
+	keybindings_set_item(plugin_key_group, KB_LATEX_FORMAT_TYPEWRITER, glatex_kb_format_typewriter,
 		0, 0, "format_typewriter", _("Format selection in typewriter font face"), NULL);
 
 }
@@ -1077,7 +1009,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 			     _("Starts a Wizard to easily create LaTeX-documents"), NULL);
 
 	g_signal_connect((gpointer) menu_latex_wizzard, "activate",
-			 G_CALLBACK(wizard_activated), NULL);
+			 G_CALLBACK(glatex_wizard_activated), NULL);
 
 	menu_latex_menu_special_char = gtk_menu_item_new_with_mnemonic(_("Insert _Special Character"));
 	gtk_tooltips_set_tip(tooltips, menu_latex_menu_special_char,
@@ -1088,7 +1020,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	menu_latex_menu_special_char_submenu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_latex_menu_special_char),
 		menu_latex_menu_special_char_submenu);
-	sub_menu_init(menu_latex_menu_special_char_submenu, glatex_char_array, glatex_cat_names,
+	glatex_sub_menu_init(menu_latex_menu_special_char_submenu, glatex_char_array, glatex_cat_names,
 		char_insert_activated);
 
 	menu_latex_ref = gtk_menu_item_new_with_mnemonic(_("Insert _Reference"));
@@ -1096,14 +1028,14 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 		_("Inserting references to the document"), NULL);
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_ref);
 	g_signal_connect((gpointer) menu_latex_ref, "activate",
-		G_CALLBACK(insert_ref_activated), NULL);
+		G_CALLBACK(glatex_insert_ref_activated), NULL);
 
 	menu_latex_label = gtk_menu_item_new_with_mnemonic(_("Insert _Label"));
 	gtk_tooltips_set_tip(tooltips, menu_latex_label,
 	    _("Helps at inserting labels to a document"), NULL);
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_label);
 	g_signal_connect((gpointer) menu_latex_label, "activate",
-		G_CALLBACK(insert_label_activated), NULL);
+		G_CALLBACK(glatex_insert_label_activated), NULL);
 
 	menu_latex_insert_environment = gtk_menu_item_new_with_mnemonic(
 		_("Insert _Environment"));
@@ -1161,7 +1093,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	gtk_container_add(GTK_CONTAINER(menu_latex_replacement_submenu),
 		menu_latex_replace_selection);
 	g_signal_connect((gpointer) menu_latex_replace_selection, "activate",
-		G_CALLBACK(replace_special_character), NULL);
+		G_CALLBACK(glatex_replace_special_character), NULL);
 
 	/* Add menu entry for toggling input replacment */
 	menu_latex_replace_toggle = gtk_check_menu_item_new_with_mnemonic(
@@ -1172,7 +1104,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 		menu_latex_replace_toggle);
 
 	g_signal_connect((gpointer) menu_latex_replace_toggle, "activate",
-			 		 G_CALLBACK(toggle_status), NULL);
+			 		 G_CALLBACK(glatex_toggle_status), NULL);
 
 	init_keybindings();
 
