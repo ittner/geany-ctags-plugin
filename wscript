@@ -91,7 +91,8 @@ plugins = [
 		   'geanylatex/src/bibtexlabels.c', 'geanylatex/src/reftex.c',
 		   'geanylatex/src/latexutils.c', 'geanylatex/src/formatutils.c',
 		   'geanylatex/src/formatpatterns.c',
-		   'geanylatex/src/latexenvironments.c'],
+		   'geanylatex/src/latexenvironments.c',
+		   'geanylatex/src/latexkeybindings.c'],
 		 [ 'geanylatex' ], # include dirs
 		 '0.4dev'),
 	Plugin('geanylua',
