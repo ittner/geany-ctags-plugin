@@ -46,7 +46,7 @@
 
 
 
-#define unix_name "debugger"
+#define unix_name "geanygdb"
 
 
 PLUGIN_VERSION_CHECK(115)
@@ -275,17 +275,49 @@ update_settings_cb()
 	g_key_file_set_string(kf, unix_name, "term_cmd", gdbui_setup.options.term_cmd);
 	g_key_file_set_boolean(kf, unix_name, "show_tooltips", gdbui_setup.options.show_tooltips);
 	g_key_file_set_boolean(kf, unix_name, "show_icons", gdbui_setup.options.show_icons);
-	if (utils_mkdir(gdbio_setup.temp_dir, TRUE) != 0)
+
+	if (
+		g_file_test (
+			g_build_filename(geany->app->configdir, "plugins", "debugger", NULL),
+			G_FILE_TEST_IS_DIR
+		)
+		&&
+		!g_file_test (
+			g_build_filename(geany->app->configdir, "plugins", unix_name, NULL),
+			G_FILE_TEST_IS_DIR
+		)
+	)
 	{
-		dialogs_show_msgbox(GTK_MESSAGE_ERROR,
-				       _("Plugin configuration directory could not be created."));
+		g_rename(
+			g_build_filename(geany->app->configdir, "plugins", "debugger", NULL),
+			g_build_filename(geany->app->configdir, "plugins", unix_name, NULL)
+		);
 	}
+
 	else
 	{
-		gchar *data = g_key_file_to_data(kf, NULL, NULL);
-		utils_write_file(config_file, data);
-		g_free(data);
+		if (!g_file_test (
+				g_build_filename(geany->app->configdir, "plugins", unix_name, NULL),
+				G_FILE_TEST_IS_DIR
+			)
+		)
+		{
+			if (utils_mkdir(gdbio_setup.temp_dir, TRUE) != 0)
+			{
+				dialogs_show_msgbox(GTK_MESSAGE_ERROR,
+						   _("Plugin configuration directory could not be created."));
+			}
+
+			else
+			{
+
+				gchar *data = g_key_file_to_data(kf, NULL, NULL);
+				utils_write_file(config_file, data);
+				g_free(data);
+			}
+		}
 	}
+
 	g_key_file_free(kf);
 	gtk_widget_destroy(GTK_BIN(frame)->child);
 	gdbui_create_widgets(frame);
@@ -351,16 +383,24 @@ plugin_init(GeanyData * data)
 
 	gdbui_setup.main_window = geany->main_widgets->window;
 
-	/**
-	 * TODO: detect where this plugin is installed so that the path to
-	 * geanygdb_ttyhelper can be automatically detected.
-	 */
 	gdbio_setup.temp_dir = g_build_filename(geany->app->configdir, "plugins", unix_name, NULL);
-	/*gdbio_setup.tty_helper = g_build_filename(gdbio_setup.temp_dir, "geanygdb_ttyhelper", NULL);*/
-	/* the tty helper binary is installed in $prefix/bin, so use this path */
-	gdbio_setup.tty_helper = g_build_filename(PREFIX, "bin", "geanygdb_ttyhelper", NULL);
+
+	/*
+	 * the tty helper binary is either in the user's config dir or globally
+	 * installed in $PREFIX/$LIBDIR/geany/
+	 */
+	gdbio_setup.tty_helper = g_build_filename(PREFIX, LIBDIR, "geany", "ttyhelper", NULL);
+	if (! (g_file_test(gdbio_setup.tty_helper, G_FILE_TEST_IS_EXECUTABLE) &&
+	       g_file_test(gdbio_setup.tty_helper, G_FILE_TEST_IS_REGULAR)))
+	{
+		setptr(gdbio_setup.tty_helper, g_build_filename(
+			geany->app->configdir, "plugins", unix_name, "ttyhelper", NULL));
+	}
+
+	g_message(gdbio_setup.tty_helper);
 	config_file = g_build_filename(gdbio_setup.temp_dir, "debugger.cfg", NULL);
 	gdbui_opts_init();
+
 	if (g_key_file_load_from_file(kf, config_file, G_KEY_FILE_NONE, NULL))
 	{
 		GET_KEY_STR(mono_font);
@@ -368,6 +408,7 @@ plugin_init(GeanyData * data)
 		GET_KEY_BOOL(show_tooltips);
 		GET_KEY_BOOL(show_icons);
 	}
+
 	g_key_file_free(kf);
 
 	gdbui_setup.warn_func = warn_message_cb;

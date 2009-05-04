@@ -20,7 +20,7 @@ Second
  ./configure
  make
  cp src/.libs/geanygdb.so ~/.config/geany/plugins
- cp src/geanygdb_ttyhelper ~/.config/geany/plugins
+ cp src/geanygdb_ttyhelper ~/.config/geany/plugins/geanygdb/ttyhelper/
 
 
 Third

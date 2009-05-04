@@ -24,5 +24,5 @@ geanygdb_la_LIBADD  = @GEANY_LIBS@  $(INTLLIBS)
 bin_PROGRAMS = geanygdb_ttyhelper
 geanygdb_ttyhelper_SOURCES = ttyhelper.c
 
-AM_CFLAGS = @GEANY_CFLAGS@ -DLOCALEDIR=\""$(localedir)"\" -DPREFIX=\""$(prefix)"\"
+AM_CFLAGS = @GEANY_CFLAGS@ -DLOCALEDIR=\""$(localedir)"\" -DPREFIX=\""$(prefix)"\"  -DLIBDIR=\""$(libdir)"\"
 
