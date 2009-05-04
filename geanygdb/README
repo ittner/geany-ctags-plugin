@@ -2,22 +2,30 @@
 .. |(download_current)| replace:: http://plugins.geany.org/geanygdb/geanygdb-0.0.2.tar.gz
 
 ===============
-Geanygdb Plugin
+GeanyGDB Plugin
 ===============
 
 .. contents::
 
 About
 =====
-This is a plugin to provide integrated debugging from Geany using the GNU
-debugger (gdb). It was developed and tested on openSUSE-10.3 with GDB-6.7.50.
-Other recent versions of GDB will probably work, but operating systems other
-than Linux-PC will not work, at least not without some considerable hacking.
+GeanyGDB is a plugin for Geany which provides integrated debugging support
+within Geany via the GNU Debugger (gdb).
+
+Geany is a small and lightweight integrated development environment using the
+GTK2 toolkit.
+
+The GNU Debugger is a source-level debugger for C, C++, Fortran, Modula 2 and
+Java programs.
+
+It was developed and tested on openSUSE-10.3 with GDB-6.7.50. Other recent
+versions of GDB will probably work, but operating systems other than Linux-PC
+will not work, at least not without some considerable hacking.
 
 
 Current Version
 ===============
-The current stable Geanygdb release is |(version)|.
+The current stable GeanyGDB release is |(version)|.
 
 
 Requirements
@@ -89,11 +97,11 @@ Download
 Current Version
 ---------------
 
-============= ================ ============================================================
-Geany Version Geanygdb Version Download
-============= ================ ============================================================
+============= ================ =================================================
+Geany Version GeanyGDB Version Download
+============= ================ =================================================
 0.16               |(version)| |(download_current)|
-============= ================ ============================================================
+============= ================ =================================================
 
 Up to date source code can be downloaded here::
 
@@ -102,11 +110,11 @@ Up to date source code can be downloaded here::
 previous Versions
 -----------------
 
-======================= ================ ============================================================
-Geany Version           Geanygdb Version Download
-======================= ================ ============================================================
+======================= ================ =========================================================
+Geany Version           GeanyGDB Version Download
+======================= ================ =========================================================
 known to work with 0.14            0.0.1 http://plugins.geany.org/geanygdb/geanydebug-0.0.1.tar.gz
-======================= ================ ============================================================
+======================= ================ =========================================================
 
 
 Contact

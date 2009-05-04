@@ -65,7 +65,7 @@ po/Makefile.in
 ])
 
 echo "----------------------------------------"
-echo "Install geanygdb in                : ${libdir}"
+echo "Install GeanyGDB in                : ${libdir}"
 echo "Using Geany version                : ${GEANY_VERSION}"
 echo "Using GTK version                  : ${GTK_VERSION}"
 echo ""
