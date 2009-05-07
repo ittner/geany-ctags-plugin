@@ -387,9 +387,9 @@ plugin_init(GeanyData * data)
 
 	/*
 	 * the tty helper binary is either in the user's config dir or globally
-	 * installed in $PREFIX/$LIBDIR/geany/
+	 * installed in $LIBDIR/geany/
 	 */
-	gdbio_setup.tty_helper = g_build_filename(PREFIX, LIBDIR, "geany", "ttyhelper", NULL);
+	gdbio_setup.tty_helper = g_build_filename(LIBDIR, "geany", "ttyhelper", NULL);
 	if (! (g_file_test(gdbio_setup.tty_helper, G_FILE_TEST_IS_EXECUTABLE) &&
 	       g_file_test(gdbio_setup.tty_helper, G_FILE_TEST_IS_REGULAR)))
 	{
@@ -397,7 +397,6 @@ plugin_init(GeanyData * data)
 			geany->app->configdir, "plugins", unix_name, "ttyhelper", NULL));
 	}
 
-	g_message(gdbio_setup.tty_helper);
 	config_file = g_build_filename(gdbio_setup.temp_dir, "debugger.cfg", NULL);
 	gdbui_opts_init();
 
