@@ -386,7 +386,7 @@ plugin_init(GeanyData * data)
 		dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 					   _("geanygdb: ttyhelper program not found."));
 
-	config_file = g_build_filename(gdbio_setup.temp_dir, UNIX_NAME ".cfg", NULL);
+	config_file = g_build_filename(gdbio_setup.temp_dir,"debugger.cfg", NULL);
 	gdbui_opts_init();
 
 	if (g_key_file_load_from_file(kf, config_file, G_KEY_FILE_NONE, NULL))
