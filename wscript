@@ -74,7 +74,7 @@ plugins = [
 		   'gdb-io-envir.c', 'gdb-io-frame.c', 'gdb-io-read.c', 'gdb-io-run.c',
 		   'gdb-io-stack.c', 'gdb-lex.c', 'gdb-ui-break.c', 'gdb-ui-envir.c',
 		   'gdb-ui-frame.c',  'gdb-ui-locn.c', 'gdb-ui-main.c',
-		   'geanydebug.c','ttyhelper.c']), # source files
+		   'geanydebug.c']), # source files
 		 [ 'geanygdb', 'geanygdb/src' ], # include dirs
 		 '0.1'),
 	Plugin('geanysendmail',
@@ -336,7 +336,7 @@ def build(bld):
 			includes	= p.includes,
 			target		= 'ttyhelper',
 			uselib		= libs,
-            install_path = '${LIBDIR}/geany'
+			install_path = '${LIBDIR}/geany'
 		)
 
 	def install_docs(bld, pname, files):
