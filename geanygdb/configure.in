@@ -43,9 +43,7 @@ if test "x$install_sh" = "x"; then
 	AC_SUBST(install_sh)
 fi
 
-# get the plugin installed at the correct location for Geany
-# TODO find a way to NOT override --libdir command line option if given
-libdir="`$PKG_CONFIG --variable=libdir geany`/geany"
+libdir="`$PKG_CONFIG --variable=libdir geany`"
 
 dnl unittests
 PKG_CHECK_MODULES([CHECK], [check >= 0.9.4], [

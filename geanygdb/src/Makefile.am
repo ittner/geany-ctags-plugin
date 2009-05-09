@@ -1,5 +1,6 @@
 
-lib_LTLIBRARIES = geanygdb.la
+geanylibdir = $(libdir)/geany
+geanylib_LTLIBRARIES = geanygdb.la
 geanygdb_la_SOURCES = gdb-io-break.c \
     gdb-io-envir.c \
     gdb-io-frame.c \
@@ -21,8 +22,7 @@ geanygdb_la_SOURCES = gdb-io-break.c \
 geanygdb_la_LDFLAGS = -module -avoid-version
 geanygdb_la_LIBADD  = @GEANY_LIBS@  $(INTLLIBS)
 
-geanygdbdir = $(libdir)
-geanygdb_PROGRAMS = ttyhelper
+geanylib_PROGRAMS = ttyhelper
 ttyhelper_SOURCES = ttyhelper.c
 
 
