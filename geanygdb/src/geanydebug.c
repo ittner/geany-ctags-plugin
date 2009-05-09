@@ -46,7 +46,8 @@
 
 
 
-#define unix_name "geanygdb"
+#define UNIX_NAME "geanygdb"
+#define UNIX_NAME_OLD "debugger"
 
 
 PLUGIN_VERSION_CHECK(115)
@@ -93,9 +94,9 @@ warn_message_cb(const gchar * msg)
 //{
 	// FIXME
 //	return 0;
-//      return (
-//              (idx>=0) && ((guint)idx<doc_array->len) && DOCS[idx].is_valid
-//      ) ? gtk_notebook_page_num(NOTEBOOK, GTK_WIDGET(DOCS[idx].sci)):-1;
+//	  return (
+//			  (idx>=0) && ((guint)idx<doc_array->len) && DOCS[idx].is_valid
+//	  ) ? gtk_notebook_page_num(NOTEBOOK, GTK_WIDGET(DOCS[idx].sci)):-1;
 //}
 
 
@@ -271,52 +272,14 @@ static void
 update_settings_cb()
 {
 	GKeyFile *kf = g_key_file_new();
-	g_key_file_set_string(kf, unix_name, "mono_font", gdbui_setup.options.mono_font);
-	g_key_file_set_string(kf, unix_name, "term_cmd", gdbui_setup.options.term_cmd);
-	g_key_file_set_boolean(kf, unix_name, "show_tooltips", gdbui_setup.options.show_tooltips);
-	g_key_file_set_boolean(kf, unix_name, "show_icons", gdbui_setup.options.show_icons);
+	g_key_file_set_string(kf, UNIX_NAME, "mono_font", gdbui_setup.options.mono_font);
+	g_key_file_set_string(kf, UNIX_NAME, "term_cmd", gdbui_setup.options.term_cmd);
+	g_key_file_set_boolean(kf, UNIX_NAME, "show_tooltips", gdbui_setup.options.show_tooltips);
+	g_key_file_set_boolean(kf, UNIX_NAME, "show_icons", gdbui_setup.options.show_icons);
 
-	if (
-		g_file_test (
-			g_build_filename(geany->app->configdir, "plugins", "debugger", NULL),
-			G_FILE_TEST_IS_DIR
-		)
-		&&
-		!g_file_test (
-			g_build_filename(geany->app->configdir, "plugins", unix_name, NULL),
-			G_FILE_TEST_IS_DIR
-		)
-	)
-	{
-		g_rename(
-			g_build_filename(geany->app->configdir, "plugins", "debugger", NULL),
-			g_build_filename(geany->app->configdir, "plugins", unix_name, NULL)
-		);
-	}
-
-	else
-	{
-		if (!g_file_test (
-				g_build_filename(geany->app->configdir, "plugins", unix_name, NULL),
-				G_FILE_TEST_IS_DIR
-			)
-		)
-		{
-			if (utils_mkdir(gdbio_setup.temp_dir, TRUE) != 0)
-			{
-				dialogs_show_msgbox(GTK_MESSAGE_ERROR,
-						   _("Plugin configuration directory could not be created."));
-			}
-
-			else
-			{
-
-				gchar *data = g_key_file_to_data(kf, NULL, NULL);
-				utils_write_file(config_file, data);
-				g_free(data);
-			}
-		}
-	}
+	gchar *data = g_key_file_to_data(kf, NULL, NULL);
+	utils_write_file(config_file, data);
+	g_free(data);
 
 	g_key_file_free(kf);
 	gtk_widget_destroy(GTK_BIN(frame)->child);
@@ -330,12 +293,12 @@ update_settings_cb()
 #define CLEAR() if (err) { g_error_free(err); err=NULL; }
 
 #define GET_KEY_STR(k) { \
-  gchar *tmp=g_key_file_get_string(kf,unix_name,#k"",&err); \
+  gchar *tmp=g_key_file_get_string(kf,UNIX_NAME,#k"",&err); \
   if (tmp) { \
-    if (*tmp && !err) { \
-      g_free(gdbui_setup.options.k); \
-      gdbui_setup.options.k=tmp; \
-    } else { g_free(tmp); } \
+	if (*tmp && !err) { \
+	  g_free(gdbui_setup.options.k); \
+	  gdbui_setup.options.k=tmp; \
+	} else { g_free(tmp); } \
   } \
   CLEAR(); \
 }
@@ -368,7 +331,7 @@ static void locale_init(void)
 
 
 #define GET_KEY_BOOL(k) { \
-  gboolean tmp=g_key_file_get_boolean(kf,unix_name,#k"",&err); \
+  gboolean tmp=g_key_file_get_boolean(kf,UNIX_NAME,#k"",&err); \
   if (err) { CLEAR() } else { gdbui_setup.options.k=tmp; } \
 }
 
@@ -378,26 +341,52 @@ plugin_init(GeanyData * data)
 	GKeyFile *kf = g_key_file_new();
 	GError *err = NULL;
 	geany_data = data;
+	gchar *glob_file;
+	gchar *user_file;
+	gchar *old_config_dir;
 
 	locale_init();
 
 	gdbui_setup.main_window = geany->main_widgets->window;
 
-	gdbio_setup.temp_dir = g_build_filename(geany->app->configdir, "plugins", unix_name, NULL);
+	gdbio_setup.temp_dir = g_build_filename(geany->app->configdir, "plugins", UNIX_NAME, NULL);
+	old_config_dir = g_build_filename(geany->app->configdir, "plugins", UNIX_NAME_OLD, NULL);
+
+	if (g_file_test(old_config_dir, G_FILE_TEST_IS_DIR)
+			&& !g_file_test(gdbio_setup.temp_dir, G_FILE_TEST_EXISTS))
+		g_rename(old_config_dir, gdbio_setup.temp_dir);
 
 	/*
 	 * the tty helper binary is either in the user's config dir or globally
 	 * installed in $LIBDIR/geany/
 	 */
-	gdbio_setup.tty_helper = g_build_filename(LIBDIR, "geany", "ttyhelper", NULL);
-	if (! (g_file_test(gdbio_setup.tty_helper, G_FILE_TEST_IS_EXECUTABLE) &&
-	       g_file_test(gdbio_setup.tty_helper, G_FILE_TEST_IS_REGULAR)))
+	glob_file = g_build_filename(LIBDIR, "geany", "ttyhelper", NULL);
+	user_file = g_build_filename(geany->app->configdir, "plugins", UNIX_NAME, "ttyhelper", NULL);
+	gdbio_setup.tty_helper = NULL;
+
+	if (utils_mkdir(gdbio_setup.temp_dir, TRUE) != 0)
 	{
-		setptr(gdbio_setup.tty_helper, g_build_filename(
-			geany->app->configdir, "plugins", unix_name, "ttyhelper", NULL));
+		dialogs_show_msgbox(GTK_MESSAGE_ERROR,
+					   _("Plugin configuration directory (%s) could not be created."), gdbio_setup.temp_dir);
 	}
 
-	config_file = g_build_filename(gdbio_setup.temp_dir, "debugger.cfg", NULL);
+	/* the global ttyhelper has higher priority */
+	if (!g_file_test(glob_file, G_FILE_TEST_IS_REGULAR))
+	{
+		if (g_file_test(user_file, G_FILE_TEST_IS_REGULAR)
+				&& g_file_test(user_file, G_FILE_TEST_IS_EXECUTABLE))
+		{
+			gdbio_setup.tty_helper = g_strdup(user_file);
+		}
+	}
+	else if (g_file_test(glob_file, G_FILE_TEST_IS_EXECUTABLE))
+		gdbio_setup.tty_helper = g_strdup(glob_file);
+
+	if (NULL == gdbio_setup.tty_helper)
+		dialogs_show_msgbox(GTK_MESSAGE_ERROR,
+					   _("geanygdb: ttyhelper program not found."));
+
+	config_file = g_build_filename(gdbio_setup.temp_dir, UNIX_NAME ".cfg", NULL);
 	gdbui_opts_init();
 
 	if (g_key_file_load_from_file(kf, config_file, G_KEY_FILE_NONE, NULL))
@@ -417,6 +406,9 @@ plugin_init(GeanyData * data)
 	gdbui_setup.line_func = goto_file_line_cb;
 
 
+	g_free(old_config_dir);
+	g_free(glob_file);
+	g_free(user_file);
 	msgbook = GTK_NOTEBOOK(ui_lookup_widget(geany->main_widgets->window, "notebook_info"));
 	compwin = gtk_widget_get_parent(ui_lookup_widget(geany->main_widgets->window, "treeview5"));
 	frame = gtk_frame_new(NULL);
@@ -434,6 +426,7 @@ plugin_cleanup()
 	gdbio_exit();
 	update_settings_cb();
 
+	g_free(config_file);
 	g_free(gdbio_setup.temp_dir);
 	g_free(gdbio_setup.tty_helper);
 
