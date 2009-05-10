@@ -24,6 +24,8 @@
 
 #include "geany.h"
 
+#include <glib/gstdio.h>
+
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
 #endif
@@ -53,7 +55,7 @@
 PLUGIN_VERSION_CHECK(115)
 PLUGIN_SET_INFO(_("Debugger"), _("Integrated debugging with GDB."), VERSION, _("Jeff Pohlmeyer"))
 
-static GeanyData *geany_data;
+GeanyData *geany_data;
 GeanyFunctions *geany_functions;
 
 static GtkNotebook *msgbook;
@@ -272,12 +274,14 @@ static void
 update_settings_cb()
 {
 	GKeyFile *kf = g_key_file_new();
+	gchar *data;
+
 	g_key_file_set_string(kf, UNIX_NAME, "mono_font", gdbui_setup.options.mono_font);
 	g_key_file_set_string(kf, UNIX_NAME, "term_cmd", gdbui_setup.options.term_cmd);
 	g_key_file_set_boolean(kf, UNIX_NAME, "show_tooltips", gdbui_setup.options.show_tooltips);
 	g_key_file_set_boolean(kf, UNIX_NAME, "show_icons", gdbui_setup.options.show_icons);
 
-	gchar *data = g_key_file_to_data(kf, NULL, NULL);
+	data = g_key_file_to_data(kf, NULL, NULL);
 	utils_write_file(config_file, data);
 	g_free(data);
 
@@ -340,7 +344,6 @@ plugin_init(GeanyData * data)
 {
 	GKeyFile *kf = g_key_file_new();
 	GError *err = NULL;
-	geany_data = data;
 	gchar *glob_file;
 	gchar *user_file;
 	gchar *old_config_dir;
