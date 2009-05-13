@@ -68,6 +68,7 @@ static gboolean set_changed_flag;
 static gboolean set_add_confirmation;
 static gboolean set_maximize_commit_dialog;
 static gboolean set_external_diff;
+static gboolean set_editor_menu_entries;
 
 static gchar *config_file;
 
@@ -118,6 +119,8 @@ static GtkWidget *editor_menu_commit = NULL;
 static GtkWidget *menu_item_sep = NULL;
 
 static void registrate();
+static void add_menuitems_to_editor_menu();
+static void remove_menuitems_from_editor_menu();
 
 
 /* Doing some basic keybinding stuff */
@@ -1645,6 +1648,7 @@ static struct
 	GtkWidget *cb_confirm_add;
 	GtkWidget *cb_max_commit;
 	GtkWidget *cb_external_diff;
+	GtkWidget *cb_editor_menu_entries;
 	GtkWidget *cb_cvs;
 	GtkWidget *cb_git;
 	GtkWidget *cb_svn;
@@ -1677,6 +1681,9 @@ on_configure_response(G_GNUC_UNUSED GtkDialog * dialog, gint response,
 		set_external_diff =
 			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widgets.cb_external_diff));
 
+		set_editor_menu_entries =
+			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widgets.cb_editor_menu_entries));
+
 		enable_cvs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widgets.cb_cvs));
 		enable_git = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widgets.cb_git));
 		enable_svn = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widgets.cb_svn));
@@ -1696,6 +1703,7 @@ on_configure_response(G_GNUC_UNUSED GtkDialog * dialog, gint response,
 		g_key_file_set_boolean(config, "VC", "set_external_diff", set_external_diff);
 		g_key_file_set_boolean(config, "VC", "set_maximize_commit_dialog",
 				       set_maximize_commit_dialog);
+		g_key_file_set_boolean(config, "VC", "set_editor_menu_entries", set_editor_menu_entries);
 
 		g_key_file_set_boolean(config, "VC", "enable_cvs", enable_cvs);
 		g_key_file_set_boolean(config, "VC", "enable_git", enable_git);
@@ -1722,6 +1730,12 @@ on_configure_response(G_GNUC_UNUSED GtkDialog * dialog, gint response,
 			utils_write_file(config_file, data);
 			g_free(data);
 		}
+
+		if (set_editor_menu_entries == FALSE)
+			remove_menuitems_from_editor_menu();
+		else
+			add_menuitems_to_editor_menu();
+
 
 		g_free(config_dir);
 		g_key_file_free(config);
@@ -1782,6 +1796,13 @@ plugin_configure(GtkDialog * dialog)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widgets.cb_external_diff),
 				     set_external_diff);
 	gtk_box_pack_start(GTK_BOX(vbox), widgets.cb_external_diff, TRUE, FALSE, 2);
+
+	widgets.cb_editor_menu_entries = gtk_check_button_new_with_label(_("Show VC entries at editor "));
+	gtk_tooltips_set_tip(tooltip, widgets.cb_editor_menu_entries,
+			     _("Show entries for VC functions inside editor menu"), NULL);
+	gtk_button_set_focus_on_click(GTK_BUTTON(widgets.cb_editor_menu_entries), FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widgets.cb_editor_menu_entries), set_editor_menu_entries);
+	gtk_box_pack_start(GTK_BOX(vbox), widgets.cb_editor_menu_entries, TRUE, FALSE, 2);
 
 	widgets.cb_cvs = gtk_check_button_new_with_label(_("Enable CVS"));
 	gtk_button_set_focus_on_click(GTK_BUTTON(widgets.cb_cvs), FALSE);
@@ -1867,6 +1888,15 @@ load_config()
 	{
 		// Set default value
 		set_external_diff = TRUE;
+		g_error_free(error);
+		error = NULL;
+	}
+
+	set_editor_menu_entries = g_key_file_get_boolean(config, "VC", "set_editor_menu_entries", &error);
+	if (error != NULL)
+	{
+		// Set default value
+		set_editor_menu_entries = FALSE;
 		g_error_free(error);
 		error = NULL;
 	}
@@ -2129,6 +2159,56 @@ do_basedir_menu(GtkWidget ** parent_menu, GtkTooltips ** tooltips)
 }
 
 static void
+add_menuitems_to_editor_menu()
+{
+	GtkTooltips *tooltips = NULL;
+	tooltips = gtk_tooltips_new();
+
+	/* Add file menu also to editor menu (at mouse cursor) */
+	if (set_editor_menu_entries == TRUE)
+	{
+		menu_item_sep = gtk_separator_menu_item_new();
+		gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), menu_item_sep);
+		do_current_file_menu(&editor_menu_vc, &tooltips, TRUE);
+		gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), editor_menu_vc);
+	}
+
+	/* Add commit item zo editor menu */
+	if (set_editor_menu_entries == TRUE)
+	{
+		editor_menu_commit = gtk_menu_item_new_with_mnemonic(_("VC _Commit"));
+		gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), editor_menu_commit);
+	}
+
+	g_signal_connect((gpointer) editor_menu_commit, "activate",
+		 G_CALLBACK(vccommit_activated), NULL);
+
+	gtk_widget_show_all(editor_menu_vc);
+	gtk_widget_show_all(editor_menu_commit);
+	gtk_widget_show_all(menu_item_sep);
+}
+
+static void
+remove_menuitems_from_editor_menu()
+{
+	if (editor_menu_vc != NULL)
+	{
+		gtk_widget_destroy(editor_menu_vc);
+		editor_menu_vc = NULL;
+	}
+	if (editor_menu_commit != NULL)
+	{
+		gtk_widget_destroy(editor_menu_commit);
+		editor_menu_commit = NULL;
+	}
+	if (menu_item_sep != NULL)
+	{
+		gtk_widget_destroy(menu_item_sep);
+		menu_item_sep = NULL;
+	}
+}
+
+static void
 init_keybindings(void)
 {
 	/* init keybindins */
@@ -2187,20 +2267,14 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	do_current_file_menu(&menu_vc_file, &tooltips, FALSE);
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_file);
 
-	/* Add file menu also to editor menu (at mouse cursor) */
-	menu_item_sep = gtk_separator_menu_item_new();
-	gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), menu_item_sep);
-	do_current_file_menu(&editor_menu_vc, &tooltips, TRUE);
-	gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), editor_menu_vc);
-
 	/* Create the current directory Submenu */
 	do_current_dir_menu(&menu_vc_dir, &tooltips);
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_dir);
 	/* Create the current base directory Submenu */
 	do_basedir_menu(&menu_vc_basedir, &tooltips);
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_basedir);
-
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), gtk_separator_menu_item_new());
+
 	/* Status of basedir */
 	menu_vc_status = gtk_menu_item_new_with_mnemonic(_("_Status"));
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_status);
@@ -2224,13 +2298,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_commit);
 	gtk_tooltips_set_tip(tooltips, menu_vc_commit, _("Commit changes."), NULL);
 
-	/* Add commit item zo editor menu */
-	editor_menu_commit = gtk_menu_item_new_with_mnemonic(_("VC _Commit"));
-	gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), editor_menu_commit);
-
 	g_signal_connect((gpointer) menu_vc_commit, "activate",
-			 G_CALLBACK(vccommit_activated), NULL);
-	g_signal_connect((gpointer) editor_menu_commit, "activate",
 			 G_CALLBACK(vccommit_activated), NULL);
 
 
@@ -2238,12 +2306,13 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	gtk_widget_show_all(menu_vc_file);
 	gtk_widget_show_all(menu_vc_dir);
 	gtk_widget_show_all(menu_vc_basedir);
-	gtk_widget_show_all(editor_menu_vc);
-	gtk_widget_show_all(editor_menu_commit);
-	gtk_widget_show_all(menu_item_sep);
+
 
 	/* initialize keybindings */
 	init_keybindings();
+
+	/* init entries inside editor menu */
+	add_menuitems_to_editor_menu();
 
 	plugin_fields->menu_item = menu_vc;
 	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
@@ -2256,9 +2325,7 @@ plugin_cleanup()
 {
 	// remove the menu item added in init()
 	gtk_widget_destroy(plugin_fields->menu_item);
-	gtk_widget_destroy(editor_menu_vc);
-	gtk_widget_destroy(editor_menu_commit);
-	gtk_widget_destroy(menu_item_sep);
+	remove_menuitems_from_editor_menu();
 	g_slist_free(VC);
 	VC = NULL;
 	g_free(config_file);
