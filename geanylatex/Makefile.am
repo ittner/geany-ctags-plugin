@@ -6,6 +6,7 @@ EXTRA_DIST =				\
 	po/LINGUAS				\
 	doc/geanylatex.tex		\
 	doc/geanylatex.pdf		\
+	doc/geanylatex.html		\
 	doc/img/*
 
 dist-bzip2: distdir
