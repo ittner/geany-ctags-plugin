@@ -280,6 +280,30 @@ substitute. This can be done in two different ways:
 
 For both functions there are also shortcuts available.
 
+\subsection{Inserting of Environment}
+Geany\LaTeX{} is offering a feature for inserting environments into your
+documents. It can be chosen fro a pulldown menu and will be inserted at
+current position of cursor. If there is a selection activ, the selection
+will be included into environment.
+
+\begin{figure}[h!]
+\begin{lstlisting}
+\begin{your_environment}
+	% ... selected text ...
+\end{your_environment}
+\end{lstlisting}
+\end{figure}
+
+In case of an empty (= no selection) an empty environment with
+\begin{figure}[h!]
+\begin{lstlisting}
+\begin{your_environment}
+...
+\end{your_environment}
+\end{lstlisting}
+\end{figure}
+
+
 \subsection{Format}
 Geany\LaTeX{} is able to help on formation of text. For doing this its
 offering you to insert often use format patterns to your document.
@@ -312,77 +336,39 @@ key bindings using Geany's key binding interface from inside the
 preferences dialog.
 
 \subsection{Key bindings}
+Keybindings which are available:
 
-\subsubsection{Run LaTeX-Wizard}
-\label{kb_latex_wizard}
-Starts the LaTeX-Wizard for creating a new document.
-
-\subsubsection{Insert \textbackslash label}
-\label{kb_insert_label}
-Runs the dialog for inserting a new label into your document.
-
-\subsubsection{Insert \textbackslash ref}
-\label{kb_insert_reference}
-Starts an dialog for easy inserting \texttt{\textbackslash ref} and
-\texttt{\textbackslash pageref} into your document. The dialog is
-supporting easy parsing of aux files so it can suggest a couple of
-already set labels.
-
-\subsubsection{Insert linebreak \textbackslash \textbackslash}
-Inserts a a newline \textbackslash\textbackslash\ into the document.
-
-\subsubsection{Turn input replacement on/off}
-\label{kb_toggling_input_replacement}
-A shortcut for turning input replacement on or off. When input
-replacement is activated special characters like \v{e} are
-replaced by there \TeX{} substitute like \texttt{\textbackslash
-v\{e\}}.
-
-\subsubsection{Replacement of special characters}
-\label{kb_replacement_of_special_char}
-A selected text will be parsed and all known special characters will be
-replaced by their \TeX{} substitute. This can be very useful on
-importing a large amount of text into your document including
-characters like ö or \frqq.
-
-\subsubsection{Run insert environment dialog}
-
-Runs a dialog for easy inserting an environment. If there is some text
-selected, the environment will be placed around
-\begin{figure}[h!]
-\begin{lstlisting}
-\begin{your_environment}
-	% ... selected text ...
-\end{your_environment}
-\end{lstlisting}
-\end{figure}
-
-In case of an empty (= no selection) an empty environment with
-\begin{figure}[h!]
-\begin{lstlisting}
-\begin{your_environment}
-...
-\end{your_environment}
-\end{lstlisting}
-\end{figure}
-empty body will inserted to the document and the cursor placed inside.
-
-\subsubsection{Insert \textbackslash item}
-This shortcut will add an simple \textbackslash item to the document.
+\begin{table}[H]
+\centering
+\begin{tabular}{l|p{9cm}}
+\textbf{Shortcut} & \textbf{Description} \\ \hline\hline
+Run LaTeX-Wizard & Starts the LaTeX-Wizard for creating a new document\\ \hline
+Insert \textbackslash label & Runs the dialog for inserting a new label into your document. \\\hline
+Insert \textbackslash ref & Starts an dialog for easy inserting \texttt{\textbackslash ref} and\texttt{\textbackslash pageref} into your document. The dialog is supporting easy parsing of aux files so it can suggest a couple of already set labels.\\\hline
+Insert linebreak \textbackslash \textbackslash & Inserts a a newline \textbackslash{}\textbackslash{} into the document.\\\hline
+Turn input replacement on/off & A shortcut for turning input replacement on or off. When input replacement is activated special characters like \v{e} are replaced by there \TeX{} substitute like \texttt{\textbackslash{}v\{e\}}\\\hline
+Replacement of special characters & A selected text will be parsed and all known special characters
+will be replaced by their \TeX{} substitute. This can be very useful on importing a large amount of
+text into your document including characters like ö or \frqq. \\\hline
+Run insert environment dialog & Runs a dialog for easy inserting an environment. If there is some text
+selected, the environment will be placed around.\\\hline
+Insert \textbackslash item & This shortcut will add an simple \textbackslash item to the document.
 This can be very useful during writing of lists with a huge number of
-items.
+items.\\\hline
+Format selection in bold font face & Format a selection with bold font face.
+This is done be adding \texttt{\textbackslash textbf\{...\}} around selection. \\\hline
+Format selection in italic font face & Format a selection with italic font face.
+This is done be adding \texttt{\textbackslash textit\{...\}} around selection.\\\hline
+Format selection in typewriter font face & Format a selection with typewriter
+font face. This is done be adding \texttt{\textbackslash texttt\{...\}} around
+selection.\\\hline
 
-\subsubsection{Format selection in bold font face}
-Format a selection with bold font face. This is done be adding
-\texttt{\textbackslash textbf\{...\}} around selection.
+\end{tabular}
+\end{table}
 
-\subsubsection{Format selection in italic font face}
-Format a selection with italic font face. This is done be adding
-\texttt{\textbackslash textit\{...\}} around selection.
+\label{kb_latex_wizard}\label{kb_insert_label}\label{kb_insert_reference}
+\label{kb_toggling_input_replacement} \label{kb_replacement_of_special_char}
 
-\subsubsection{Format selection in typewriter font face}
-Format a selection with typewriter font face. This is done be adding
-\texttt{\textbackslash texttt\{...\}} around selection.
 
 \section{Donating to the plugin}
 If you like the plugin, there are a number of ways, hwo to donate the
