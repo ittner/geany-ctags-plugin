@@ -1797,7 +1797,7 @@ plugin_configure(GtkDialog * dialog)
 				     set_external_diff);
 	gtk_box_pack_start(GTK_BOX(vbox), widgets.cb_external_diff, TRUE, FALSE, 2);
 
-	widgets.cb_editor_menu_entries = gtk_check_button_new_with_label(_("Show VC entries at editor "));
+	widgets.cb_editor_menu_entries = gtk_check_button_new_with_label(_("Show VC entries at editor menu"));
 	gtk_tooltips_set_tip(tooltip, widgets.cb_editor_menu_entries,
 			     _("Show entries for VC functions inside editor menu"), NULL);
 	gtk_button_set_focus_on_click(GTK_BUTTON(widgets.cb_editor_menu_entries), FALSE);
@@ -1994,7 +1994,7 @@ do_current_file_menu(GtkWidget ** parent_menu, GtkTooltips ** tooltips, gboolean
 	cur_file_menu = gtk_menu_new();
 
 	if (editor_menu == TRUE)
-		*parent_menu = gtk_image_menu_item_new_with_mnemonic(_("_VC File actions"));
+		*parent_menu = gtk_image_menu_item_new_with_mnemonic(_("_VC file Actions"));
 	else
 		*parent_menu = gtk_image_menu_item_new_with_mnemonic(_("_File"));
 	g_signal_connect((gpointer) * parent_menu, "activate", G_CALLBACK(update_menu_items), NULL);
@@ -2175,7 +2175,7 @@ add_menuitems_to_editor_menu()
 		gtk_widget_show_all(menu_item_sep);
 	}
 
-	/* Add commit item zo editor menu */
+	/* Add commit item to editor menu */
 	if (set_editor_menu_entries == TRUE && editor_menu_commit == NULL)
 	{
 		editor_menu_commit = gtk_menu_item_new_with_mnemonic(_("VC _Commit"));
