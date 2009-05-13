@@ -2165,27 +2165,27 @@ add_menuitems_to_editor_menu()
 	tooltips = gtk_tooltips_new();
 
 	/* Add file menu also to editor menu (at mouse cursor) */
-	if (set_editor_menu_entries == TRUE)
+	if (set_editor_menu_entries == TRUE && editor_menu_vc == NULL)
 	{
 		menu_item_sep = gtk_separator_menu_item_new();
 		gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), menu_item_sep);
 		do_current_file_menu(&editor_menu_vc, &tooltips, TRUE);
 		gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), editor_menu_vc);
+		gtk_widget_show_all(editor_menu_vc);
+		gtk_widget_show_all(menu_item_sep);
 	}
 
 	/* Add commit item zo editor menu */
-	if (set_editor_menu_entries == TRUE)
+	if (set_editor_menu_entries == TRUE && editor_menu_commit == NULL)
 	{
 		editor_menu_commit = gtk_menu_item_new_with_mnemonic(_("VC _Commit"));
 		gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), editor_menu_commit);
+		g_signal_connect((gpointer) editor_menu_commit, "activate",
+			G_CALLBACK(vccommit_activated), NULL);
+		gtk_widget_show_all(editor_menu_commit);
 	}
 
-	g_signal_connect((gpointer) editor_menu_commit, "activate",
-		 G_CALLBACK(vccommit_activated), NULL);
 
-	gtk_widget_show_all(editor_menu_vc);
-	gtk_widget_show_all(editor_menu_commit);
-	gtk_widget_show_all(menu_item_sep);
 }
 
 static void
