@@ -114,6 +114,7 @@ const gchar FILE_STATUS_DELETED[] = "Deleted";
 const gchar FILE_STATUS_UNKNOWN[] = "Unknown";
 
 static GtkWidget *editor_menu_vc = NULL;
+static GtkWidget *editor_menu_commit = NULL;
 static GtkWidget *menu_item_sep = NULL;
 
 static void registrate();
@@ -2187,12 +2188,10 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_file);
 
 	/* Add file menu also to editor menu (at mouse cursor) */
-	do_current_file_menu(&editor_menu_vc, &tooltips, TRUE);
-	gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), editor_menu_vc);
-	gtk_menu_reorder_child(GTK_MENU(geany->main_widgets->editor_menu), editor_menu_vc, 0);
 	menu_item_sep = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), menu_item_sep);
-	gtk_menu_reorder_child(GTK_MENU(geany->main_widgets->editor_menu), menu_item_sep, 1);
+	do_current_file_menu(&editor_menu_vc, &tooltips, TRUE);
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), editor_menu_vc);
 
 	/* Create the current directory Submenu */
 	do_current_dir_menu(&menu_vc_dir, &tooltips);
@@ -2225,7 +2224,13 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_commit);
 	gtk_tooltips_set_tip(tooltips, menu_vc_commit, _("Commit changes."), NULL);
 
+	/* Add commit item zo editor menu */
+	editor_menu_commit = gtk_menu_item_new_with_mnemonic(_("VC _Commit"));
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), editor_menu_commit);
+
 	g_signal_connect((gpointer) menu_vc_commit, "activate",
+			 G_CALLBACK(vccommit_activated), NULL);
+	g_signal_connect((gpointer) editor_menu_commit, "activate",
 			 G_CALLBACK(vccommit_activated), NULL);
 
 
@@ -2234,6 +2239,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	gtk_widget_show_all(menu_vc_dir);
 	gtk_widget_show_all(menu_vc_basedir);
 	gtk_widget_show_all(editor_menu_vc);
+	gtk_widget_show_all(editor_menu_commit);
 	gtk_widget_show_all(menu_item_sep);
 
 	/* initialize keybindings */
@@ -2251,6 +2257,7 @@ plugin_cleanup()
 	// remove the menu item added in init()
 	gtk_widget_destroy(plugin_fields->menu_item);
 	gtk_widget_destroy(editor_menu_vc);
+	gtk_widget_destroy(editor_menu_commit);
 	gtk_widget_destroy(menu_item_sep);
 	g_slist_free(VC);
 	VC = NULL;
