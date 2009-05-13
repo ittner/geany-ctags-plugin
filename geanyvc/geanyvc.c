@@ -59,7 +59,6 @@ PluginFields *plugin_fields;
 GeanyData *geany_data;
 GeanyFunctions *geany_functions;
 
-
 PLUGIN_VERSION_CHECK(115);
 PLUGIN_SET_INFO(_("VC"), _("Interface to different Version Control systems."), VERSION,
 		_("Yura Siamashka <yurand2@gmail.com>,\nFrank Lanitz <frank@frank.uvena.de>"));
@@ -113,6 +112,9 @@ const gchar FILE_STATUS_MODIFIED[] = "Modified";
 const gchar FILE_STATUS_ADDED[] = "Added";
 const gchar FILE_STATUS_DELETED[] = "Deleted";
 const gchar FILE_STATUS_UNKNOWN[] = "Unknown";
+
+static GtkWidget *editor_menu_vc = NULL;
+static GtkWidget *menu_item_sep = NULL;
 
 static void registrate();
 
@@ -1158,7 +1160,7 @@ commit_all_toggled_cb(GtkToggleButton *check_box, gpointer treeview)
 {
 	GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(treeview));
 	gint toggled = gtk_toggle_button_get_active(check_box);
-	
+
 	gtk_tree_model_foreach(model, toggle_all_commit_files, &toggled);
 
 	refresh_diff_view(treeview);
@@ -1954,13 +1956,16 @@ registrate()
 }
 
 static void
-do_current_file_menu(GtkWidget ** parent_menu, GtkTooltips ** tooltips)
+do_current_file_menu(GtkWidget ** parent_menu, GtkTooltips ** tooltips, gboolean editor_menu)
 {
 	GtkWidget *cur_file_menu = NULL;
 	/* Menu which will hold the items in the current file menu */
 	cur_file_menu = gtk_menu_new();
 
-	*parent_menu = gtk_image_menu_item_new_with_mnemonic(_("_File"));
+	if (editor_menu == TRUE)
+		*parent_menu = gtk_image_menu_item_new_with_mnemonic(_("_VC File actions"));
+	else
+		*parent_menu = gtk_image_menu_item_new_with_mnemonic(_("_File"));
 	g_signal_connect((gpointer) * parent_menu, "activate", G_CALLBACK(update_menu_items), NULL);
 
 	/* Diff of current file */
@@ -2178,8 +2183,17 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_vc), menu_vc_menu);
 
 	/* Create the current file Submenu */
-	do_current_file_menu(&menu_vc_file, &tooltips);
+	do_current_file_menu(&menu_vc_file, &tooltips, FALSE);
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_file);
+
+	/* Add file menu also to editor menu (at mouse cursor) */
+	do_current_file_menu(&editor_menu_vc, &tooltips, TRUE);
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), editor_menu_vc);
+	gtk_menu_reorder_child(GTK_MENU(geany->main_widgets->editor_menu), editor_menu_vc, 0);
+	menu_item_sep = gtk_separator_menu_item_new();
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), menu_item_sep);
+	gtk_menu_reorder_child(GTK_MENU(geany->main_widgets->editor_menu), menu_item_sep, 1);
+
 	/* Create the current directory Submenu */
 	do_current_dir_menu(&menu_vc_dir, &tooltips);
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_dir);
@@ -2219,6 +2233,8 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	gtk_widget_show_all(menu_vc_file);
 	gtk_widget_show_all(menu_vc_dir);
 	gtk_widget_show_all(menu_vc_basedir);
+	gtk_widget_show_all(editor_menu_vc);
+	gtk_widget_show_all(menu_item_sep);
 
 	/* initialize keybindings */
 	init_keybindings();
@@ -2234,6 +2250,8 @@ plugin_cleanup()
 {
 	// remove the menu item added in init()
 	gtk_widget_destroy(plugin_fields->menu_item);
+	gtk_widget_destroy(editor_menu_vc);
+	gtk_widget_destroy(menu_item_sep);
 	g_slist_free(VC);
 	VC = NULL;
 	g_free(config_file);
