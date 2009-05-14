@@ -117,7 +117,6 @@ static void configure_response_cb(GtkDialog *dialog, gint response, gpointer use
 		setptr(sc_info->default_language, gtk_combo_box_get_active_text(GTK_COMBO_BOX(
 			g_object_get_data(G_OBJECT(dialog), "combo"))));
 		sc_speller_reinit_enchant_dict();
-		sc_gui_update_tooltip();
 
 		sc_info->check_while_typing = (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 			g_object_get_data(G_OBJECT(dialog), "check_type"))));

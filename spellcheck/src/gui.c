@@ -83,16 +83,6 @@ static void toolbar_item_toggled_cb(GtkToggleToolButton *button, gpointer user_d
 
 void sc_gui_update_tooltip(void)
 {
-#if GTK_CHECK_VERSION(2, 12, 0)
-	if (sc_info->toolbar_button != NULL)
-	{
-		gchar *text = g_strdup_printf(
-			_("Toggle spell check while typing (current language: %s)"),
-			(sc_info->default_language != NULL) ? sc_info->default_language : _("unknown"));
-		gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(sc_info->toolbar_button), text);
-		g_free(text);
-	}
-#endif
 }
 
 
@@ -411,6 +401,30 @@ gboolean sc_gui_key_release_cb(GtkWidget *widget, GdkEventKey *ev, gpointer data
 }
 
 
+static void update_labels(void)
+{
+	gchar *label;
+
+	label = g_strdup_printf(_("Default (%s)"),
+		(sc_info->default_language != NULL) ? sc_info->default_language : _("unknown"));
+
+	gtk_menu_item_set_label(GTK_MENU_ITEM(sc_info->submenu_item_default), label);
+
+	g_free(label);
+
+#if GTK_CHECK_VERSION(2, 12, 0)
+	if (sc_info->toolbar_button != NULL)
+	{
+		gchar *text = g_strdup_printf(
+			_("Toggle spell check while typing (current language: %s)"),
+			(sc_info->default_language != NULL) ? sc_info->default_language : _("unknown"));
+		gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(sc_info->toolbar_button), text);
+		g_free(text);
+	}
+#endif
+}
+
+
 static void menu_item_toggled_cb(GtkCheckMenuItem *menuitem, gpointer gdata)
 {
 	GeanyDocument *doc;
@@ -431,7 +445,7 @@ static void menu_item_toggled_cb(GtkCheckMenuItem *menuitem, gpointer gdata)
 	{
 		setptr(sc_info->default_language, g_strdup(gdata));
 		sc_speller_reinit_enchant_dict();
-		sc_gui_update_tooltip();
+		update_labels();
 	}
 
 	editor_indicator_clear(doc->editor, GEANY_INDICATOR_ERROR);
@@ -493,6 +507,8 @@ void sc_gui_update_menu(void)
 		}
 	}
 	sc_ignore_callback = FALSE;
+
+	update_labels();
 }
 
 
@@ -508,12 +524,12 @@ void sc_gui_create_menu(GtkWidget *sp_item)
 	menu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(sp_item), menu);
 
-	label = g_strdup_printf(_("Default (%s)"),
-		(sc_info->default_language != NULL) ? sc_info->default_language : _("unknown"));
-	sc_info->submenu_item_default = gtk_menu_item_new_with_label(label);
+	sc_info->submenu_item_default = gtk_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(menu), sc_info->submenu_item_default);
-	g_signal_connect(sc_info->submenu_item_default, "activate", G_CALLBACK(menu_item_toggled_cb), NULL);
-	g_free(label);
+	g_signal_connect(sc_info->submenu_item_default, "activate",
+		G_CALLBACK(menu_item_toggled_cb), NULL);
+
+	update_labels();
 
 	menu_item = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);

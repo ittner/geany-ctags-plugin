@@ -47,8 +47,6 @@ void sc_gui_update_toolbar(void);
 
 void sc_gui_update_menu(void);
 
-void sc_gui_update_tooltip(void);
-
 void sc_gui_init(void);
 
 void sc_gui_free(void);
