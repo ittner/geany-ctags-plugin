@@ -502,8 +502,29 @@ gboolean sc_speller_is_text(GeanyDocument *doc, gint pos)
 			}
 			break;
 		}
-		case SCLEX_CPP:
+#ifdef SCE_PAS_DEFAULT
 		case SCLEX_PASCAL:
+		{
+			switch (style)
+			{
+				case SCE_PAS_DEFAULT:
+				case SCE_PAS_COMMENT:
+				case SCE_PAS_COMMENT2:
+				case SCE_PAS_COMMENTLINE:
+				case SCE_PAS_STRING:
+				case SCE_PAS_CHARACTER:
+					return TRUE;
+				default:
+					return FALSE;
+			}
+			break;
+		}
+
+#endif
+		case SCLEX_CPP:
+#ifndef SCE_PAS_DEFAULT
+		case SCLEX_PASCAL:
+#endif
 		{
 			switch (style)
 			{

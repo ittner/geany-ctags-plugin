@@ -3,6 +3,8 @@
  * src/gui.c, src/scplugin.c, src/gui.h:
    Update the label of the "Default" menu item if the default language
    has been changed.
+ * src/speller.c:
+   Update Pascal styles as they changed in Scintilla.
 
 
 2009-05-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
