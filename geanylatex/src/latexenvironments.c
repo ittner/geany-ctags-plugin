@@ -111,6 +111,7 @@ glatex_insert_environment_dialog(G_GNUC_UNUSED GtkMenuItem *menuitem,
 	GtkWidget *label_env = NULL;
 	GtkWidget *textbox_env = NULL;
 	GtkWidget *table = NULL;
+	GtkTreeModel *model = NULL;
 	gint i, max;
 
 	dialog = gtk_dialog_new_with_buttons(_("Insert Environment"),
@@ -136,6 +137,10 @@ glatex_insert_environment_dialog(G_GNUC_UNUSED GtkMenuItem *menuitem,
 		gtk_combo_box_append_text(GTK_COMBO_BOX(textbox_env),
 								  glatex_environment_array[i].label);
 	}
+
+	model = gtk_combo_box_get_model(GTK_COMBO_BOX(textbox_env));
+	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(model),
+		0, GTK_SORT_ASCENDING);
 
 	gtk_misc_set_alignment(GTK_MISC(label_env), 0, 0.5);
 
