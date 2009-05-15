@@ -26,12 +26,14 @@ CategoryName glatex_environment_cat_names[] = {
 	{ ENVIRONMENT_CAT_FORMAT, N_("Formating"), TRUE},
 	{ ENVIRONMENT_CAT_STRUCTURE, N_("Document Structure"), TRUE},
 	{ ENVIRONMENT_CAT_LISTS, N_("Lists"), TRUE},
+	{ ENVIRONMENT_CAT_MATH, N_("Math"), TRUE},
 	{ 0, NULL, FALSE}
 };
 
 
 SubMenuTemplate glatex_environment_array[] = {
 	/* General document structure environments */
+	{ENVIRONMENT_CAT_STRUCTURE, "block", "block"},
 	{ENVIRONMENT_CAT_STRUCTURE, "document", "document"},
 	{ENVIRONMENT_CAT_STRUCTURE, "frame", "frame"},
 	{ENVIRONMENT_CAT_STRUCTURE, "table", "table"},
@@ -41,6 +43,10 @@ SubMenuTemplate glatex_environment_array[] = {
 	{ENVIRONMENT_CAT_LISTS, "itemize", "itemize"},
 	{ENVIRONMENT_CAT_LISTS, "enumerate", "enumerate"},
 	{ENVIRONMENT_CAT_LISTS, "description", "description"},
+	/* Math stuff */
+	{ENVIRONMENT_CAT_MATH, "displaymath", "displaymath"},
+	{ENVIRONMENT_CAT_MATH, "equation", "equation"},
+	{ENVIRONMENT_CAT_MATH, "eqnarray", "eqnarray"},
 
 	{0, NULL, NULL},
 };

@@ -1,3 +1,8 @@
+2009-05-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Adding a toolbar for common LaTeX format topics.
+
+
 2009-04-17  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Set undo points for better redo/undo on inserting formatings.
