@@ -58,7 +58,8 @@
 #endif
 
 #include <string.h>
-typedef void (*SubMenuCallback) (G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata);
+typedef void (*MenuCallback) (G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata);
+
 
 extern GeanyPlugin	*geany_plugin;
 extern GeanyData	*geany_data;

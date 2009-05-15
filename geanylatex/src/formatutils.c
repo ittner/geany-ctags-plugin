@@ -21,6 +21,7 @@
 
 #include "formatutils.h"
 
+
 void glatex_insert_latex_format(G_GNUC_UNUSED GtkMenuItem * menuitem,
                          G_GNUC_UNUSED gpointer gdata)
 {

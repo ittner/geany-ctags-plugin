@@ -56,6 +56,10 @@ static gboolean toggle_active = FALSE;
 
 static GtkWidget *main_menu_item = NULL;
 
+static GtkUIManager *uim;
+static GtkActionGroup *group;
+static GtkWidget *glatex_toolbar = NULL;
+static GtkWidget *box = NULL;
 
 /* Doing some basic keybinding stuff */
 enum
@@ -76,6 +80,25 @@ enum
 
 PLUGIN_KEY_GROUP(geanylatex, COUNT_KB)
 
+const GtkActionEntry format_icons[] =
+{
+	{ "Italic", GTK_STOCK_ITALIC, NULL, NULL, N_("Marks selected text as italic"), G_CALLBACK(glatex_kb_format_bold) },
+	{ "Bold", GTK_STOCK_BOLD, NULL, NULL, N_("Marks selected text as bold"), G_CALLBACK(glatex_kb_format_bold) },
+	{ "Underline", GTK_STOCK_UNDERLINE, NULL, NULL, N_("Underlines selected text"), G_CALLBACK(glatex_kb_format_bold) },
+};
+
+const guint ui_entries_n = G_N_ELEMENTS(format_icons);
+
+
+/* fallback UI definition */
+const gchar *toolbar_markup =
+"<ui>"
+	"<toolbar name='glatex_format_toolbar'>"
+	"<toolitem action='Italic'/>"
+	"<toolitem action='Bold'/>"
+	"<toolitem action='Underline'/>"
+	"</toolbar>"
+"</ui>";
 
 /* Functions to toggle the status of plugin */
 void glatex_set_latextoggle_status(gboolean new_status)
@@ -351,7 +374,7 @@ glatex_insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 
 
 void glatex_character_create_menu_item(GtkWidget *menu, const gchar *label,
-									   gint letter, SubMenuCallback callback)
+									   gint letter, MenuCallback callback)
 {
 	GtkWidget *tmp;
 
@@ -411,7 +434,7 @@ count_menu_cat_entries(CategoryName *tmp)
 
 void glatex_sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template,
 				   CategoryName *category_name,
-				   SubMenuCallback callback_function)
+				   MenuCallback callback_function)
 {
 	gint i;
 	gint j;
@@ -982,7 +1005,6 @@ void plugin_help()
 		"authors."));
 }
 
-
 void
 plugin_init(G_GNUC_UNUSED GeanyData * data)
 {
@@ -1108,6 +1130,17 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 
 	init_keybindings();
 
+	box = ui_lookup_widget(geany->main_widgets->window, "vbox1");
+	uim = gtk_ui_manager_new();
+	group = gtk_action_group_new("glatex_format_toolbar");
+	gtk_action_group_set_translation_domain(group, GETTEXT_PACKAGE);
+	gtk_action_group_add_actions(group, format_icons, ui_entries_n, NULL);
+	gtk_ui_manager_insert_action_group(uim, group, 0);
+	gtk_ui_manager_add_ui_from_string(uim, toolbar_markup, -1, NULL);
+	glatex_toolbar = gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar");
+	gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(glatex_toolbar), FALSE, TRUE, 0);
+	gtk_box_reorder_child(GTK_BOX(box), glatex_toolbar, 2);
+
 	ui_add_document_sensitive(menu_latex_menu_special_char);
 	ui_add_document_sensitive(menu_latex_ref);
 	ui_add_document_sensitive(menu_latex_label);
@@ -1124,4 +1157,5 @@ void
 plugin_cleanup()
 {
 	gtk_widget_destroy(main_menu_item);
+	gtk_widget_destroy(glatex_toolbar);
 }
