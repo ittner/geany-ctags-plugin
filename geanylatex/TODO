@@ -1,26 +1,16 @@
 	TODO
 ************
 
-	ROADMAP/TODO
-*********************
-
-for 0.4
 * Improving support for bibTeX
     * Parsing of *.bib
     * Inserting of \cite
     * Dialog for inserting bibTeX entries
-* Adding support for diff. letter classes
+* Wizard:
+	* Adding support for diff. letter classes
+	* Make plugin use customisable templates
 * Replacing of environments
-
-for 0.5
 * Parsing document for »TOC«
     * Navigation throught document
     * "Graphical" support while using \ref, \pageref ...
-
-
-	UNSCHEDULED
-********************
-
-* Make plugin use customizahle templates
 * Code examples for very common problems
 * Make special characters extensible through files
