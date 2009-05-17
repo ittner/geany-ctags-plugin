@@ -1,3 +1,10 @@
+2009-05-17  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Adding some more items to toolbar for centerin, left and right formatted
+   text. Created LaTeX code based on needs still some improvement. Please
+   use with care.
+
+
 2009-05-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Adding a toolbar for common LaTeX format topics.

@@ -968,10 +968,24 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 }
 
 
-/*void glatex_kb_bibtex_entry_insert(G_GNUC_UNUSED guint key_id)
+static void init_toolbar()
 {
-	insert_bibtex_entry(NULL, NULL);
-}*/
+	static GtkWidget *menubar_toolbar_separator = NULL;
+
+	menubar_toolbar_separator = GTK_WIDGET(gtk_separator_tool_item_new());
+
+	box = ui_lookup_widget(geany->main_widgets->window, "vbox1");
+	uim = gtk_ui_manager_new();
+	group = gtk_action_group_new("glatex_format_toolbar");
+	gtk_action_group_set_translation_domain(group, GETTEXT_PACKAGE);
+	gtk_action_group_add_actions(group, format_icons, ui_entries_n, NULL);
+	gtk_ui_manager_insert_action_group(uim, group, 0);
+	gtk_ui_manager_add_ui_from_string(uim, toolbar_markup, -1, NULL);
+	glatex_toolbar = gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar");
+	gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(glatex_toolbar), FALSE, TRUE, 0);
+	gtk_box_reorder_child(GTK_BOX(box), glatex_toolbar, 2);
+}
+
 
 void init_keybindings()
 {
@@ -1017,7 +1031,6 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 {
 	GtkTooltips *tooltips = NULL;
 	GtkWidget *tmp = NULL;
-	static GtkWidget *menubar_toolbar_separator = NULL;
 
 	int i;
 
@@ -1026,9 +1039,6 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	glatex_init_encodings_latex();
 
 	tooltips = gtk_tooltips_new();
-
-	menubar_toolbar_separator = GTK_WIDGET(gtk_separator_tool_item_new());
-
 
 	menu_latex = gtk_menu_item_new_with_mnemonic(_("_LaTeX"));
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_latex);
@@ -1141,17 +1151,8 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 			 		 G_CALLBACK(glatex_toggle_status), NULL);
 
 	init_keybindings();
+	init_toolbar();
 
-	box = ui_lookup_widget(geany->main_widgets->window, "vbox1");
-	uim = gtk_ui_manager_new();
-	group = gtk_action_group_new("glatex_format_toolbar");
-	gtk_action_group_set_translation_domain(group, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions(group, format_icons, ui_entries_n, NULL);
-	gtk_ui_manager_insert_action_group(uim, group, 0);
-	gtk_ui_manager_add_ui_from_string(uim, toolbar_markup, -1, NULL);
-	glatex_toolbar = gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar");
-	gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(glatex_toolbar), FALSE, TRUE, 0);
-	gtk_box_reorder_child(GTK_BOX(box), glatex_toolbar, 2);
 
 	ui_add_document_sensitive(menu_latex_menu_special_char);
 	ui_add_document_sensitive(menu_latex_ref);
@@ -1169,5 +1170,6 @@ void
 plugin_cleanup()
 {
 	gtk_widget_destroy(main_menu_item);
-	gtk_widget_destroy(glatex_toolbar);
+	if (glatex_toolbar != NULL)
+		gtk_widget_destroy(glatex_toolbar);
 }
