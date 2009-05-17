@@ -75,6 +75,9 @@ enum
 	KB_LATEX_FORMAT_BOLD,
 	KB_LATEX_FORMAT_ITALIC,
 	KB_LATEX_FORMAT_TYPEWRITER,
+	KB_LATEX_FORMAT_CENTER,
+	KB_LATEX_FORMAT_LEFT,
+	KB_LATEX_FORMAT_RIGHT,
 	COUNT_KB
 };
 
@@ -1015,7 +1018,12 @@ void init_keybindings()
 		0, 0, "format_italic", _("Format selection in italic font face"), NULL);
 	keybindings_set_item(plugin_key_group, KB_LATEX_FORMAT_TYPEWRITER, glatex_kb_format_typewriter,
 		0, 0, "format_typewriter", _("Format selection in typewriter font face"), NULL);
-
+	keybindings_set_item(plugin_key_group, KB_LATEX_FORMAT_CENTER, glatex_kb_format_centering,
+		0, 0, "format_center", _("Format selection centered"), NULL);
+	keybindings_set_item(plugin_key_group, KB_LATEX_FORMAT_LEFT, glatex_kb_format_left,
+		0, 0, "format_left", _("Format selection left-aligned"), NULL);
+	keybindings_set_item(plugin_key_group, KB_LATEX_FORMAT_RIGHT, glatex_kb_format_right,
+		0, 0, "format_right", _("Format selection right-aligned "), NULL);
 }
 
 void plugin_help()
