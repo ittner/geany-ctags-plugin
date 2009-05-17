@@ -34,5 +34,8 @@ void glatex_kb_replace_special_chars(G_GNUC_UNUSED guint key_id);
 void glatex_kb_format_bold(G_GNUC_UNUSED guint key_id);
 void glatex_kb_format_italic(G_GNUC_UNUSED guint key_id);
 void glatex_kb_format_typewriter(G_GNUC_UNUSED guint key_id);
+void glatex_kb_format_centering(G_GNUC_UNUSED guint key_id);
+void glatex_kb_format_left(G_GNUC_UNUSED guint key_id);
+void glatex_kb_format_right(G_GNUC_UNUSED guint key_id);
 
 #endif

@@ -85,6 +85,9 @@ const GtkActionEntry format_icons[] =
 	{ "Italic", GTK_STOCK_ITALIC, NULL, NULL, N_("Marks selected text as italic"), G_CALLBACK(glatex_kb_format_bold) },
 	{ "Bold", GTK_STOCK_BOLD, NULL, NULL, N_("Marks selected text as bold"), G_CALLBACK(glatex_kb_format_bold) },
 	{ "Underline", GTK_STOCK_UNDERLINE, NULL, NULL, N_("Underlines selected text"), G_CALLBACK(glatex_kb_format_bold) },
+	{ "Centered", GTK_STOCK_JUSTIFY_CENTER, NULL, NULL, NULL, G_CALLBACK(glatex_kb_format_centering) },
+	{ "Left", GTK_STOCK_JUSTIFY_LEFT, NULL, NULL, NULL, G_CALLBACK(glatex_kb_format_left) },
+	{ "Right", GTK_STOCK_JUSTIFY_RIGHT, NULL, NULL, NULL, G_CALLBACK(glatex_kb_format_right) },
 };
 
 const guint ui_entries_n = G_N_ELEMENTS(format_icons);
@@ -97,6 +100,10 @@ const gchar *toolbar_markup =
 	"<toolitem action='Italic'/>"
 	"<toolitem action='Bold'/>"
 	"<toolitem action='Underline'/>"
+	"<separator/>"
+	"<toolitem action='Centered' />"
+	"<toolitem action='Left' />"
+	"<toolitem action='Right'/>"
 	"</toolbar>"
 "</ui>";
 
@@ -1010,6 +1017,8 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 {
 	GtkTooltips *tooltips = NULL;
 	GtkWidget *tmp = NULL;
+	static GtkWidget *menubar_toolbar_separator = NULL;
+
 	int i;
 
 	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
@@ -1017,6 +1026,9 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	glatex_init_encodings_latex();
 
 	tooltips = gtk_tooltips_new();
+
+	menubar_toolbar_separator = GTK_WIDGET(gtk_separator_tool_item_new());
+
 
 	menu_latex = gtk_menu_item_new_with_mnemonic(_("_LaTeX"));
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_latex);

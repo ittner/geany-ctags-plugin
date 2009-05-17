@@ -28,7 +28,10 @@ gchar* glatex_format_pattern[] = {
 	"\\textsl",
 	"\\texttt",
 	"\\textsc",
-	"\\emph"
+	"\\emph",
+	"\\centering",
+	"\\raggedleft",
+	"\\raggedright",
 };
 
 const gchar *glatex_format_labels[] = {
@@ -39,4 +42,7 @@ const gchar *glatex_format_labels[] = {
 	N_("Typewriter"),
 	N_("Small Caps"),
 	N_("Emphasis"),
+	N_("Centered"),
+	N_("Left side oriented"),
+	N_("Right side oriented")
 };

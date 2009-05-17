@@ -89,3 +89,24 @@ void glatex_kb_format_typewriter(G_GNUC_UNUSED guint key_id)
 		return;
 	glatex_insert_latex_format(NULL, GINT_TO_POINTER(LATEX_TYPEWRITER));
 }
+
+void glatex_kb_format_centering(G_GNUC_UNUSED guint key_id)
+{
+	if (NULL == document_get_current())
+		return;
+	glatex_insert_latex_format(NULL, GINT_TO_POINTER(LATEX_CENTER));
+}
+
+void glatex_kb_format_left(G_GNUC_UNUSED guint key_id)
+{
+	if (NULL == document_get_current())
+		return;
+	glatex_insert_latex_format(NULL, GINT_TO_POINTER(LATEX_LEFT));
+}
+
+void glatex_kb_format_right(G_GNUC_UNUSED guint key_id)
+{
+	if (NULL == document_get_current())
+		return;
+	glatex_insert_latex_format(NULL, GINT_TO_POINTER(LATEX_RIGHT));
+}
