@@ -987,8 +987,8 @@ static void init_toolbar()
 	glatex_toolbar = gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar");
 	gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(glatex_toolbar), FALSE, TRUE, 0);
 	gtk_box_reorder_child(GTK_BOX(box), glatex_toolbar, 2);
+	ui_add_document_sensitive(glatex_toolbar);
 }
-
 
 void init_keybindings()
 {
