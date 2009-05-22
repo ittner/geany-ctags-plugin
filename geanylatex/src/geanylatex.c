@@ -1140,9 +1140,15 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	GtkWidget *tmp = NULL;
 	GKeyFile *config = g_key_file_new();
 	GError *error = NULL;
-	g_key_file_load_from_file(config, config_file,
-		G_KEY_FILE_NONE, NULL);
 
+	/* loading configurations from file ...*/
+	config_file = g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S, 
+	"plugins", G_DIR_SEPARATOR_S,
+	"geanyLaTeX", G_DIR_SEPARATOR_S, "general.conf", NULL);
+	
+	/* ... and Initialising options from config file */
+	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
+	
 	glatex_set_koma_active = g_key_file_get_boolean(config, "general",
 		"glatex_set_koma_active", &error);
 	if (error != NULL)
@@ -1166,14 +1172,6 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	int i;
 
 	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
-
-	/* loading configurations from file ...*/
-	config_file = g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S, 
-	"plugins", G_DIR_SEPARATOR_S,
-	"geanyLaTeX", G_DIR_SEPARATOR_S, "general.conf", NULL);
-	
-	/* ... and Initialising options from config file */
-	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 
 	g_key_file_free(config);
 
