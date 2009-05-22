@@ -196,15 +196,21 @@ on_configure_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
 		
 		/* Apply changes to Geany */
 		/* Add toolbar if requested */
-		if (glatex_set_toolbar_active == TRUE && glatex_toolbar == NULL)
+		if (glatex_set_toolbar_active == TRUE)
 		{
-			init_toolbar();
+			if (glatex_toolbar == NULL)
+			{
+				init_toolbar();
+			}
+			else 
+			{
+				gtk_widget_show(glatex_toolbar);
+			}
 		}
-		/* Destroy toolbar if there is any in case of its not needed anymore */
+		/* Hide toolbar */
 		else if (glatex_set_toolbar_active == FALSE && glatex_toolbar != NULL)
 		{
-			gtk_widget_destroy(glatex_toolbar);
-			glatex_toolbar = NULL;
+			gtk_widget_hide(glatex_toolbar);
 		}
 	}
 }
