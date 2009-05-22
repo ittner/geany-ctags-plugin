@@ -52,6 +52,13 @@ openany,%
 \date{\today}
 
 \begin{document}
+
+\newpage
+\dedication{\normalsize \textbf{Note:} Please note the document has been created on 
+\today. If you are using devel version from SVN, please compile and check 
+\texttt{doc/geanylatex.tex} from sources. Please check page \pageref
+{sec:compiling_of_documentation}, section \ref{sec:compiling_of_documentation}}
+
 \pagenumbering{Roman}
 \maketitle
 \tableofcontents
@@ -104,6 +111,7 @@ There is no special need in RAM or CPU so the plugin should run on
 all systems Geany is able to run.
 
 \section{Installation}
+\subsection{Compiling the plugin itself}
 Compiling and installing the code is done by the following three
 commands:
 
@@ -121,6 +129,14 @@ If there are any errors during compilation, check your build environment
 and try to find the error, otherwise contact one of the
 authors\footnote{Contact data can be found at chapter \ref{contact},
 page \pageref{contact}.}
+
+\subsection{Compiling of documentation}
+\label{sec:compiling_of_documentation}
+Sources of this documentation are available throught 
+\texttt{doc/geanylatex.tex} inside source tree. To compile the sources 
+usage of \texttt{pdflatex} which should be delivered with your favorite 
+\LaTeX{} distribution is recommended. For compiling into HTML format 
+might use \texttt{htlatex}.
 
 
 \section{Usage}
