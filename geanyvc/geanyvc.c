@@ -1858,102 +1858,29 @@ load_config()
 	GKeyFile *config = g_key_file_new();
 
 	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
-	set_changed_flag = g_key_file_get_boolean(config, "VC", "set_changed_flag", &error);
-	if (error != NULL)
-	{
-		// Set default value
-		set_changed_flag = FALSE;
-		g_error_free(error);
-		error = NULL;
-	}
-	set_add_confirmation = g_key_file_get_boolean(config, "VC", "set_add_confirmation", &error);
-	if (error != NULL)
-	{
-		// Set default value
-		set_add_confirmation = TRUE;
-		g_error_free(error);
-		error = NULL;
-	}
-	set_maximize_commit_dialog =
-		g_key_file_get_boolean(config, "VC", "set_maximize_commit_dialog", &error);
-	if (error != NULL)
-	{
-		// Set default value
-		set_maximize_commit_dialog = FALSE;
-		g_error_free(error);
-		error = NULL;
-	}
-	set_external_diff = g_key_file_get_boolean(config, "VC", "set_external_diff", &error);
-	if (error != NULL)
-	{
-		// Set default value
-		set_external_diff = TRUE;
-		g_error_free(error);
-		error = NULL;
-	}
 
-	set_editor_menu_entries = g_key_file_get_boolean(config, "VC", "set_editor_menu_entries", &error);
-	if (error != NULL)
-	{
-		// Set default value
-		set_editor_menu_entries = FALSE;
-		g_error_free(error);
-		error = NULL;
-	}
-
-	enable_cvs = g_key_file_get_boolean(config, "VC", "enable_cvs", &error);
-	if (error != NULL)
-	{
-		// Set default value
-		enable_cvs = TRUE;
-		g_error_free(error);
-		error = NULL;
-	}
-
-	enable_git = g_key_file_get_boolean(config, "VC", "enable_git", &error);
-	if (error != NULL)
-	{
-		// Set default value
-		enable_git = TRUE;
-		g_error_free(error);
-		error = NULL;
-	}
-
-	enable_svn = g_key_file_get_boolean(config, "VC", "enable_svn", &error);
-	if (error != NULL)
-	{
-		// Set default value
-		enable_svn = TRUE;
-		g_error_free(error);
-		error = NULL;
-	}
-
-	enable_svk = g_key_file_get_boolean(config, "VC", "enable_svk", &error);
-	if (error != NULL)
-	{
-		// Set default value
-		enable_svk = TRUE;
-		g_error_free(error);
-		error = NULL;
-	}
-
-	enable_bzr = g_key_file_get_boolean(config, "VC", "enable_bzr", &error);
-	if (error != NULL)
-	{
-		// Set default value
-		enable_bzr = TRUE;
-		g_error_free(error);
-		error = NULL;
-	}
-
-	enable_hg = g_key_file_get_boolean(config, "VC", "enable_hg", &error);
-	if (error != NULL)
-	{
-		// Set default value
-		enable_hg = TRUE;
-		g_error_free(error);
-		error = NULL;
-	}
+	set_changed_flag = utils_get_setting_boolean(config, "VC",
+		"set_changed_flag", FALSE);
+	set_add_confirmation = utils_get_setting_boolean(config, "VC",
+		"set_add_confirmation", TRUE);
+	set_maximize_commit_dialog = utils_get_setting_boolean(config, "VC",
+		"set_maximize_commit_dialog", FALSE);
+	set_external_diff = utils_get_setting_boolean(config, "VC",
+		"set_external_diff", TRUE);
+	set_editor_menu_entries = utils_get_setting_boolean(config, "VC",
+		"set_editor_menu_entries", FALSE);
+	enable_cvs = utils_get_setting_boolean(config, "VC", "enable_cvs",
+		TRUE);
+	enable_git = utils_get_setting_boolean(config, "VC", "enable_git",
+		TRUE);
+	enable_svn = utils_get_setting_boolean(config, "VC", "enable_svn",
+		TRUE);
+	enable_svk = utils_get_setting_boolean(config, "VC", "enable_svk",
+		TRUE);
+	enable_bzr = utils_get_setting_boolean(config, "VC", "enable_bzr",
+		TRUE);
+	enable_hg = utils_get_setting_boolean(config, "VC", "enable_hg",
+		TRUE);
 
 #ifdef USE_GTKSPELL
 	lang = g_key_file_get_string(config, "VC", "spellchecking_language", &error);
