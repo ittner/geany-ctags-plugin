@@ -7,7 +7,7 @@ EXTRA_DIST =				\
 	doc/geanylatex.tex		\
 	doc/geanylatex.pdf		\
 	doc/geanylatex.html		\
-	doc/img/*
+	$(srcdir)/doc/img/*
 
 dist-bzip2: distdir
 	BZIP2=$(BZIP2_ENV) $(AMTAR) --bzip2 -chof $(distdir).tar.bz2 $(distdir)
