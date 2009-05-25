@@ -80,7 +80,7 @@ plugins = [
 	Plugin('geanysendmail',
 		 [ 'geanysendmail/src/geanysendmail.c' ], # source files
 		 [ 'geanysendmail', 'geanysendmail/src' ], # include dirs
-		 '0.5dev'),
+		 '0.4.2'),
 	Plugin('geanydoc',
 		 [ 'geanydoc/src/config.c', 'geanydoc/src/geanydoc.c' ], # source files
 		 [ 'geanydoc', 'geanydoc/src' ], # include dirs
@@ -94,7 +94,7 @@ plugins = [
 		   'geanylatex/src/latexenvironments.c',
 		   'geanylatex/src/latexkeybindings.c'],
 		 [ 'geanylatex' ], # include dirs
-		 '0.4dev'),
+		 '0.4'),
 	Plugin('geanylua',
 		 [ 'geanylua/geanylua.c' ], # the other source files are listed in build_lua()
 		 [ 'geanylua' ], # include dirs
