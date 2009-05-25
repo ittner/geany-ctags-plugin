@@ -54,10 +54,10 @@ openany,%
 \begin{document}
 
 \newpage
-\dedication{\normalsize \textbf{Note:} Please note the document has been created on 
-\today. If you are using devel version from SVN, please compile and check 
+\dedication{\normalsize \textbf{Note:} Please note the document has been created on
+\today. If you are using devel version from SVN, please compile and check
 \texttt{doc/geanylatex.tex} from sources. Please check page \pageref
-{sec:compiling_of_documentation}, section \ref{sec:compiling_of_documentation}}
+{sec:compiling_of_documentation}, section \ref{sec:compiling_of_documentation} how to do so.}
 
 \pagenumbering{Roman}
 \maketitle
@@ -77,7 +77,7 @@ It implements a couple of maybe useful functions:
 		  references \textbackslash ref{} and \textbackslash pageref{}
    		  with getting suggestion from aux file of document
 	\item Inserting special characters through menu
-	\item Help entering the right field for BibTeX entries by
+	\item Help entering the right fields for BibTeX entries by
 		  providing templates
 	\item Easy inserting format patterns like \textbackslash texttt{}
 		  through menu
@@ -85,8 +85,21 @@ It implements a couple of maybe useful functions:
 		  recognising selections
 	\item Shortcuts for inserting \textbackslash item and
 		  \textbackslash newline
+	\item Toolbar with often used format options
 \end{itemize}
 
+\section{News}
+\subsection*{GeanyLaTeX{} 0.4 -- 2009-05-26}
+\begin{itemize}
+	\item Adding a toolbar with often used format commands
+	\item Adding a configuration dialog to configure basic options of plugin
+	\item Moved documentation into a \TeX{}-document
+	\item Replace \textbackslash{}u-UTF-8 letters by octal coded chars to
+		  don't depend on C99 anymore.
+	\item Added a function to bulk replace special characters
+    	  inside marked text by keybinding
+	\item Added a function to replace special characters on typing
+\end{itemize}
 
 \section{Requirements}
 
@@ -132,15 +145,21 @@ page \pageref{contact}.}
 
 \subsection{Compiling of documentation}
 \label{sec:compiling_of_documentation}
-Sources of this documentation are available throught 
-\texttt{doc/geanylatex.tex} inside source tree. To compile the sources 
-usage of \texttt{pdflatex} which should be delivered with your favorite 
-\LaTeX{} distribution is recommended. For compiling into HTML format 
-might use \texttt{htlatex}.
+Sources of this documentation are available throught
+\texttt{doc/geanylatex.tex} inside source tree. To compile the sources,
+usage of \texttt{pdflatex} (should be delivered with your favorite
+\LaTeX{} distribution) is recommended. For compiling into HTML format you
+might like to use \texttt{htlatex}. The HTML version of this documentation
+shipped with source tarball has been compiled with
 
+\begin{figure}[h!]
+\begin{lstlisting}
+htlatex geanylatex.tex xhtml -cvalidate -interaction=batchmode
+\end{lstlisting}
+\end{figure}
 
+\newpage
 \section{Usage}
-
 \begin{figure}[h!]
 	\centering{\includegraphics[height=7cm]{img/plugin_manager.png}}
 	\caption{Plugin manager with Geany\LaTeX{} of Geany 0.16}
@@ -153,10 +172,14 @@ Geany's key binding interface. Inside the sub menu you will find entries
 for functions supported by this version of the plugin. It will be
 called \texttt{LaTeX}.
 
+Also if the option for showing the toolbar is activated on configuration
+dialog, the toolbar with common used format functions appears on at top
+of editor widget. This feature is turned off by default.
+
 
 \section{Features}
 
-Go into more detail on some features.
+Let's go into more detail on some features.
 
 \subsection{\LaTeX-Wizard}
 
@@ -185,7 +208,7 @@ case of the document encoding should be UTF-8. Also it sets the
 encoding Geany is using for the newly created document.
 
 \textbf{Font size} as well as \textbf{Paper size} will set class option
-for font/paper size of the new created document.\textbf{Author},
+for font/paper size of the new created document. \textbf{Author},
 \textbf{Date}, \textbf{Title} will be also passed to the corresponding
 command inside the file header.
 
@@ -195,20 +218,12 @@ document options which allows some help during debugging of document.
 Since KOMA script is quiet popular the option \textbf{Use KOMA script
 if possible} allows to activate the usage of KOMA script. If this
 options is activated instead of \texttt{book}, \texttt{scrbook} will
-be used as document class. Default is activated here.
+be used as document class. Default is activated here. This option is
+deactivated by default and can be set through Geany\LaTeX{}'s
+configuration dialog mentioned earlier in this document.
 
-The dialog can also be called by a shortcut. Please have a look onto
+This wizard can also be called by a shortcut. Please have a look onto
 section \ref{kb_latex_wizard}, page \pageref{kb_latex_wizard}.
-
-
-\subsection{Inserting and replacing of special characters}
-At replacing a selected text will be parsed and all known special
-characters will be replaced by their \TeX{} substitute. This can be very
-useful on importing a large amount of text into your document
-including characters like ö or \frqq. This can be also called using a
-keybinding (see \ref{kb_replacement_of_special_char}, page
-\pageref{kb_replacement_of_special_char}).
-
 
 \subsection{Inserting References and Labels}
 An often used feature on writing of documents is adding and referring
@@ -297,9 +312,13 @@ substitute. This can be done in two different ways:
 
 For both functions there are also shortcuts available.
 
+\subsection{Inserting of special character}
+The plugin is offering a number of special characters with their \TeX{}
+substitutes to be inserted on easy accessing through the plugin menu.
+
 \subsection{Inserting of Environment}
 Geany\LaTeX{} is offering a feature for inserting environments into your
-documents. It can be chosen fro a pulldown menu and will be inserted at
+documents. It can be chosen from a pulldown menu and will be inserted at
 current position of cursor. If there is a selection activ, the selection
 will be included into environment.
 
@@ -350,12 +369,37 @@ Geany\LaTeX{} will add the correct format pattern to the document. If
 there is an selection active, that pattern will be placed around so
 the selected text will be formatted with this chosen style.
 
+Following items are also accessible using the Geany\LaTeX{} toolbar:
+\begin{itemize}
+	\item Italic
+	\item Boldfont
+	\item Underline
+	\item Centered
+	\item left-aligned
+	\item right-aligned
+\end{itemize}
+
 \section{Configuration}
 
-No general configuration is needed to use the plugin. Nevertheless if
-you want improve and make usage of all feature, you can define some
-key bindings using Geany's key binding interface from inside the
-preferences dialog.
+GeanyLaTeX{} can be configured in two major ways:
+\begin{enumerate}
+\item GeanyLaTeX{}'s configuration dialog
+\item Geany's keybindings interface
+\end{enumerate}
+
+\subsection{GeanyLaTeX{}'s configuration dialog}
+With version 0.4 the configuration dialog is offering two options which
+can be changed:
+
+\subsubsection{Use KOMA script by default}
+KOMA script bei Markus Kohm is a very popular set of document classes
+mainly used in Europe. With this option the default setting for e.g.
+\LaTeX{}-Wizard can be configured\footnote{Currently only position where
+this option is being used to be honest}. Option is turned off by default.
+
+\subsubsection{Show extra toolbar}
+Decides whether toolbar with some format icons should appear in the top
+of editor widget. Option is turned off by default. Just give it a try.
 
 \subsection{Key bindings}
 Keybindings which are available:
@@ -393,11 +437,9 @@ Format selection left-aligned & Formats selected text left-aligned on page (uses
 \end{tabular}
 \end{table}
 
-
-
-
+\newpage
 \section{Donating to the plugin}
-If you like the plugin, there are a number of ways, hwo to donate the
+If you like the plugin, there are a number of ways, how to donate the
 development of the plugin.
 
 \subsection{Extending plugin}
@@ -492,6 +534,7 @@ Since this is only a snapshot, you will find more recent information
 for all reported issues bug tracking system of SF at \\
 \url{http://sourceforge.net/tracker/?group\_id=222729}
 
+\newpage
 \section{Recommendations to improve work with \LaTeX{} and Geany}
 Geany is offering a number of nice features, that can be used to make
 daily work more easy without need to write a new plugin or extend
@@ -531,7 +574,7 @@ plugin can be very helpful on testing layout.\\
 \textbf{Homepage:} \url{http://frank.uvena.de/en/Geany/geanylipsum/}
 
 \subsubsection{geanyVC}
-When working on bigger documents an version control system like
+When working on bigger documents a version control system like
 Subversion could be useful to keep versions. GeanyVC is adding a easy
 to use frontend for a number of popular version controll systems such
 as git, Subversion, CVS, Bazaar or Mercural.\\
@@ -543,6 +586,7 @@ inside a document and allows to easy jump to these entries. This
 function is similar to the \texttt{todo} package but doesn't require
 recompiling of the document. Recognised tags will be inserted to
 another tab in Geany's message widget.\\
+\textbf{Homepage:} \url{http://plugins.geany.org/addons/}
 
 \section{License}
 Geany\LaTeX{} and all its parts is distributed under the terms of the
@@ -558,7 +602,7 @@ able to get a copy by contacting the Free Software Foundation, Inc.,
 \label{contact}
 If you found any bugs or want to provide a patch, please contact Frank
 Lanitz (frank(at)geany(dot)org). Please also do so, if you got any
-questions and visiting \url{http://frank.uvena.de/en/Geany/geanylatex/}
+questions and visiting \\ \url{http://frank.uvena.de/en/Geany/geanylatex/}
 didn't help you to figure out the answer. Visiting the website is also
 a good start if you want to check for any update on this plugin.
 

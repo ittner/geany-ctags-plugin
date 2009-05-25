@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-30 23:58+0200\n"
+"POT-Creation-Date: 2009-05-25 23:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,98 +24,122 @@ msgstr ""
 msgid "Plugin to provide better LaTeX support"
 msgstr ""
 
-#: src/geanylatex.c:236
+#: src/geanylatex.c:95
+msgid "Marks selected text as italic"
+msgstr ""
+
+#: src/geanylatex.c:96
+msgid "Marks selected text as bold"
+msgstr ""
+
+#: src/geanylatex.c:97
+msgid "Underlines selected text"
+msgstr ""
+
+#: src/geanylatex.c:181
+msgid "Plugin configuration directory could not be created."
+msgstr ""
+
+#: src/geanylatex.c:223
+msgid "Use KOMA script by default"
+msgstr ""
+
+#: src/geanylatex.c:225
+msgid "Show extra plugin toolbar"
+msgstr ""
+
+#: src/geanylatex.c:394
 msgid "Insert Label"
 msgstr ""
 
-#: src/geanylatex.c:249
+#: src/geanylatex.c:407
 msgid "Label name:"
 msgstr ""
 
-#: src/geanylatex.c:285
+#: src/geanylatex.c:444
 msgid "Insert Reference"
 msgstr ""
 
-#: src/geanylatex.c:298
+#: src/geanylatex.c:457
 msgid "Reference name:"
 msgstr ""
 
-#: src/geanylatex.c:309
-msgid "Standard Reference"
+#: src/geanylatex.c:471
+msgid "_Standard Reference"
 msgstr ""
 
-#: src/geanylatex.c:314
-msgid "Page Reference"
+#: src/geanylatex.c:476
+msgid "_Page Reference"
 msgstr ""
 
-#: src/geanylatex.c:490
+#: src/geanylatex.c:652
 msgid "More"
 msgstr ""
 
 #. Documentclass
-#: src/geanylatex.c:584
+#: src/geanylatex.c:744
 msgid "Documentclass:"
 msgstr ""
 
-#: src/geanylatex.c:587
+#: src/geanylatex.c:747
 msgid "Choose the kind of document you want to write"
 msgstr ""
 
-#: src/geanylatex.c:589 src/bibtexlabels.c:27
+#: src/geanylatex.c:749 src/bibtexlabels.c:27
 msgid "Book"
 msgstr ""
 
-#: src/geanylatex.c:591 src/bibtexlabels.c:26
+#: src/geanylatex.c:751 src/bibtexlabels.c:26
 msgid "Article"
 msgstr ""
 
-#: src/geanylatex.c:593
+#: src/geanylatex.c:753
 msgid "Report"
 msgstr ""
 
-#: src/geanylatex.c:595
+#: src/geanylatex.c:755
 msgid "Letter"
 msgstr ""
 
-#: src/geanylatex.c:597
+#: src/geanylatex.c:757
 msgid "Presentation"
 msgstr ""
 
 #. Encoding
-#: src/geanylatex.c:607
+#: src/geanylatex.c:767
 msgid "Encoding:"
 msgstr ""
 
-#: src/geanylatex.c:611
+#: src/geanylatex.c:771
 msgid "Set the encoding for your new document"
 msgstr ""
 
 #. fontsize
-#: src/geanylatex.c:627
+#: src/geanylatex.c:787
 msgid "Font size:"
 msgstr ""
 
-#: src/geanylatex.c:633
+#: src/geanylatex.c:793
 msgid "Set the default font size of your new document"
 msgstr ""
 
 #. Author
-#: src/geanylatex.c:641
+#: src/geanylatex.c:801
 msgid "Author:"
 msgstr ""
 
-#: src/geanylatex.c:644
+#: src/geanylatex.c:804
 msgid ""
 "Sets the value of the \\author command. In most cases this should be your "
 "name"
 msgstr ""
 
 #. Date
-#: src/geanylatex.c:655
+#: src/geanylatex.c:815
 msgid "Date:"
 msgstr ""
 
-#: src/geanylatex.c:658
+#: src/geanylatex.c:818
 msgid ""
 "Sets the value of the \\date command inside header of your\t\t newly created "
 "LaTeX-document. Keeping it at \\today is a good \t\t decision if you don't "
@@ -123,173 +147,185 @@ msgid ""
 msgstr ""
 
 #. Title of the new document
-#: src/geanylatex.c:667
+#: src/geanylatex.c:827
 msgid "Title:"
 msgstr ""
 
-#: src/geanylatex.c:670
+#: src/geanylatex.c:830
 msgid "Sets the title of your new document."
 msgstr ""
 
 #. Papersize
-#: src/geanylatex.c:676
+#: src/geanylatex.c:836
 msgid "Paper size:"
 msgstr ""
 
-#: src/geanylatex.c:679
+#: src/geanylatex.c:839
 msgid "Choose the paper format for the newly created document"
 msgstr ""
 
 #. Building the wizard-dialog and showing it
-#: src/geanylatex.c:694
+#: src/geanylatex.c:854
 msgid "LaTeX-Wizard"
 msgstr ""
 
-#: src/geanylatex.c:705
+#: src/geanylatex.c:865
 msgid "Use KOMA-script classes if possible"
 msgstr ""
 
-#: src/geanylatex.c:707
+#: src/geanylatex.c:867
 msgid ""
 "Uses the KOMA-script classes by Markus Kohm.\n"
 "Keep in mind: To compile your document these classeshave to be installed "
 "before."
 msgstr ""
 
-#: src/geanylatex.c:714
+#: src/geanylatex.c:874
 msgid "Use draft mode"
 msgstr ""
 
-#: src/geanylatex.c:716
+#: src/geanylatex.c:876
 msgid ""
 "Set the draft flag inside new created documents to get documents with a "
 "number of debugging helpers"
 msgstr ""
 
-#: src/geanylatex.c:926
+#: src/geanylatex.c:1086
 msgid "Dear Sir or Madame"
 msgstr ""
 
-#: src/geanylatex.c:927
+#: src/geanylatex.c:1087
 msgid "With kind regards"
 msgstr ""
 
-#: src/geanylatex.c:1014
+#: src/geanylatex.c:1101
 msgid "Run LaTeX-Wizard"
 msgstr ""
 
-#: src/geanylatex.c:1016
+#: src/geanylatex.c:1103
 msgid "Insert \\label"
 msgstr ""
 
-#: src/geanylatex.c:1018
+#: src/geanylatex.c:1105
 msgid "Insert \\ref"
 msgstr ""
 
-#: src/geanylatex.c:1020
+#: src/geanylatex.c:1107
 msgid "Insert linebreak \\\\ "
 msgstr ""
 
-#: src/geanylatex.c:1022
+#: src/geanylatex.c:1109
 msgid "Turn input replacement on/off"
 msgstr ""
 
-#: src/geanylatex.c:1026
+#: src/geanylatex.c:1113
 msgid "Replace special characters"
 msgstr ""
 
-#: src/geanylatex.c:1029
+#: src/geanylatex.c:1116
 msgid "Run insert environment dialog"
 msgstr ""
 
-#: src/geanylatex.c:1031
+#: src/geanylatex.c:1118
 msgid "Insert \\item"
 msgstr ""
 
-#: src/geanylatex.c:1033
+#: src/geanylatex.c:1120
 msgid "Format selection in bold font face"
 msgstr ""
 
-#: src/geanylatex.c:1035
+#: src/geanylatex.c:1122
 msgid "Format selection in italic font face"
 msgstr ""
 
-#: src/geanylatex.c:1037
+#: src/geanylatex.c:1124
 msgid "Format selection in typewriter font face"
 msgstr ""
 
-#: src/geanylatex.c:1044
+#: src/geanylatex.c:1126
+msgid "Format selection centered"
+msgstr ""
+
+#: src/geanylatex.c:1128
+msgid "Format selection left-aligned"
+msgstr ""
+
+#: src/geanylatex.c:1130
+msgid "Format selection right-aligned "
+msgstr ""
+
+#: src/geanylatex.c:1136
 msgid ""
 "GeanyLaTeX is a plugin to improve support for LaTeX in Geany.\n"
 "\n"
 "Please report all bugs or feature requests to one of the authors."
 msgstr ""
 
-#: src/geanylatex.c:1063
+#: src/geanylatex.c:1169
 msgid "_LaTeX"
 msgstr ""
 
-#: src/geanylatex.c:1070
+#: src/geanylatex.c:1175
 msgid "LaTeX-_Wizard"
 msgstr ""
 
-#: src/geanylatex.c:1073
+#: src/geanylatex.c:1178
 msgid "Starts a Wizard to easily create LaTeX-documents"
 msgstr ""
 
-#: src/geanylatex.c:1078
+#: src/geanylatex.c:1183
 msgid "Insert _Special Character"
 msgstr ""
 
-#: src/geanylatex.c:1080
+#: src/geanylatex.c:1185
 msgid "Helps to use some not very common letters and signs"
 msgstr ""
 
-#: src/geanylatex.c:1090
+#: src/geanylatex.c:1195
 msgid "Insert _Reference"
 msgstr ""
 
-#: src/geanylatex.c:1092
+#: src/geanylatex.c:1197
 msgid "Inserting references to the document"
 msgstr ""
 
-#: src/geanylatex.c:1097
+#: src/geanylatex.c:1202
 msgid "Insert _Label"
 msgstr ""
 
-#: src/geanylatex.c:1099
+#: src/geanylatex.c:1204
 msgid "Helps at inserting labels to a document"
 msgstr ""
 
-#: src/geanylatex.c:1105
+#: src/geanylatex.c:1210
 msgid "Insert _Environment"
 msgstr ""
 
-#: src/geanylatex.c:1107
+#: src/geanylatex.c:1212
 msgid "Helps at inserting an environment a document"
 msgstr ""
 
-#: src/geanylatex.c:1112
+#: src/geanylatex.c:1217
 msgid "_BibTeX"
 msgstr ""
 
-#: src/geanylatex.c:1128
+#: src/geanylatex.c:1233
 msgid "_Format"
 msgstr ""
 
-#: src/geanylatex.c:1146
+#: src/geanylatex.c:1251
 msgid "_Special Character Replacement"
 msgstr ""
 
-#: src/geanylatex.c:1154
+#: src/geanylatex.c:1259
 msgid "Bulk _Replace Special Characters"
 msgstr ""
 
-#: src/geanylatex.c:1156
+#: src/geanylatex.c:1261
 msgid "_Replace selected special cahracters with TeX substitutes"
 msgstr ""
 
-#: src/geanylatex.c:1164
+#: src/geanylatex.c:1269
 msgid "Toggle _Special Character Replacement"
 msgstr ""
 
@@ -615,32 +651,44 @@ msgstr ""
 msgid "Year of publication or creation if unpublished"
 msgstr ""
 
-#: src/formatpatterns.c:35
+#: src/formatpatterns.c:38
 msgid "Italic"
 msgstr ""
 
-#: src/formatpatterns.c:36
+#: src/formatpatterns.c:39
 msgid "Boldfont"
 msgstr ""
 
-#: src/formatpatterns.c:37
+#: src/formatpatterns.c:40
 msgid "Underline"
 msgstr ""
 
-#: src/formatpatterns.c:38
+#: src/formatpatterns.c:41
 msgid "Slanted"
 msgstr ""
 
-#: src/formatpatterns.c:39
+#: src/formatpatterns.c:42
 msgid "Typewriter"
 msgstr ""
 
-#: src/formatpatterns.c:40
+#: src/formatpatterns.c:43
 msgid "Small Caps"
 msgstr ""
 
-#: src/formatpatterns.c:41
+#: src/formatpatterns.c:44
 msgid "Emphasis"
+msgstr ""
+
+#: src/formatpatterns.c:45
+msgid "Centered"
+msgstr ""
+
+#: src/formatpatterns.c:46
+msgid "Left side oriented"
+msgstr ""
+
+#: src/formatpatterns.c:47
+msgid "Right side oriented"
 msgstr ""
 
 #: src/latexenvironments.c:25
@@ -659,10 +707,14 @@ msgstr ""
 msgid "Lists"
 msgstr ""
 
-#: src/latexenvironments.c:110
+#: src/latexenvironments.c:29
+msgid "Math"
+msgstr ""
+
+#: src/latexenvironments.c:117
 msgid "Insert Environment"
 msgstr ""
 
-#: src/latexenvironments.c:124
+#: src/latexenvironments.c:131
 msgid "Environment:"
 msgstr ""

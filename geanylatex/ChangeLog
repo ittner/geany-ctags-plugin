@@ -1,9 +1,10 @@
 2009-05-25  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Some more clean up of code.
+ * Update of documentation for 0.4 release.
 
 
-2009-05-21  Frank Lanitz  <frank@Kafka>
+2009-05-21  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Added configuration dialog.
 
@@ -103,6 +104,11 @@
 2009-02-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Added a menu entry for easy formating of text
+
+
+2009-02-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Release of GeanyLaTeX 0.3
 
 
 2009-02-14  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
