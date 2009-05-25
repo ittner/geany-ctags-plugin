@@ -121,7 +121,4 @@ void glatex_insert_label_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 void glatex_insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	 G_GNUC_UNUSED gpointer gdata);
 void glatex_replace_special_character();
-static void on_configure_response(G_GNUC_UNUSED GtkDialog *dialog, gint response, 
-					  G_GNUC_UNUSED gpointer user_data);
-static void init_toolbar(); 
 #endif

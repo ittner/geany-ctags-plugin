@@ -125,34 +125,28 @@ static struct
 config_widgets;
 
 
-GtkWidget *
-plugin_configure(GtkDialog * dialog)
+static void init_toolbar()
 {
-	GtkWidget	*vbox;
-	GtkTooltips *tooltip = NULL;
+	static GtkWidget *menubar_toolbar_separator = NULL;
 
-	tooltip = gtk_tooltips_new();
+	menubar_toolbar_separator = GTK_WIDGET(gtk_separator_tool_item_new());
 
-	vbox = gtk_vbox_new(FALSE, 6);
-
-	config_widgets.koma_active = gtk_check_button_new_with_label(
-		_("Use KOMA script by default"));
-	config_widgets.toolbar_active = gtk_check_button_new_with_label( 
-		_("Show extra plugin toolbar"));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(config_widgets.koma_active), 
-		glatex_set_koma_active);
-	gtk_box_pack_start(GTK_BOX(vbox), config_widgets.koma_active, FALSE, FALSE, 2);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(config_widgets.toolbar_active), 
-		glatex_set_toolbar_active);
-	gtk_box_pack_start(GTK_BOX(vbox), config_widgets.toolbar_active, FALSE, FALSE, 2);
-	
-	gtk_widget_show_all(vbox);
-	g_signal_connect(dialog, "response", G_CALLBACK(on_configure_response), NULL);
-	return vbox;
+	box = ui_lookup_widget(geany->main_widgets->window, "vbox1");
+	uim = gtk_ui_manager_new();
+	group = gtk_action_group_new("glatex_format_toolbar");
+	gtk_action_group_set_translation_domain(group, GETTEXT_PACKAGE);
+	gtk_action_group_add_actions(group, format_icons, ui_entries_n, NULL);
+	gtk_ui_manager_insert_action_group(uim, group, 0);
+	gtk_ui_manager_add_ui_from_string(uim, toolbar_markup, -1, NULL);
+	glatex_toolbar = gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar");
+	gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(glatex_toolbar), FALSE, TRUE, 0);
+	gtk_box_reorder_child(GTK_BOX(box), glatex_toolbar, 2);
+	ui_add_document_sensitive(glatex_toolbar);
 }
 
+
 static void
-on_configure_response(G_GNUC_UNUSED GtkDialog *dialog, gint response, 
+on_configure_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
 					  G_GNUC_UNUSED gpointer user_data)
 {
 	if (response == GTK_RESPONSE_OK || response == GTK_RESPONSE_APPLY)
@@ -160,21 +154,21 @@ on_configure_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
 		GKeyFile *config = g_key_file_new();
 		gchar *data;
 		gchar *config_dir = g_path_get_dirname(config_file);
-		
-		config_file = g_strconcat(geany->app->configdir, 
+
+		config_file = g_strconcat(geany->app->configdir,
 			G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
 			"geanyLaTeX", G_DIR_SEPARATOR_S, "general.conf", NULL);
 		glatex_set_koma_active =
 			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(config_widgets.koma_active));
 		glatex_set_toolbar_active =
 			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(config_widgets.toolbar_active));
-		
+
 		/* writing stuff to file */
 		g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 
-		g_key_file_set_boolean(config, "general", "glatex_set_koma_active", 
+		g_key_file_set_boolean(config, "general", "glatex_set_koma_active",
 			glatex_set_koma_active);
-		g_key_file_set_boolean(config, "general", "glatex_set_toolbar_active", 
+		g_key_file_set_boolean(config, "general", "glatex_set_toolbar_active",
 			glatex_set_toolbar_active);
 
 		if (!g_file_test(config_dir, G_FILE_TEST_IS_DIR)
@@ -190,10 +184,10 @@ on_configure_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
 			utils_write_file(config_file, data);
 			g_free(data);
 		}
-		
+
 		g_free(config_dir);
 		g_key_file_free(config);
-		
+
 		/* Apply changes to Geany */
 		/* Add toolbar if requested */
 		if (glatex_set_toolbar_active == TRUE)
@@ -202,7 +196,7 @@ on_configure_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
 			{
 				init_toolbar();
 			}
-			else 
+			else
 			{
 				gtk_widget_show(glatex_toolbar);
 			}
@@ -213,6 +207,32 @@ on_configure_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
 			gtk_widget_hide(glatex_toolbar);
 		}
 	}
+}
+
+GtkWidget *
+plugin_configure(GtkDialog * dialog)
+{
+	GtkWidget	*vbox;
+	GtkTooltips *tooltip = NULL;
+
+	tooltip = gtk_tooltips_new();
+
+	vbox = gtk_vbox_new(FALSE, 6);
+
+	config_widgets.koma_active = gtk_check_button_new_with_label(
+		_("Use KOMA script by default"));
+	config_widgets.toolbar_active = gtk_check_button_new_with_label(
+		_("Show extra plugin toolbar"));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(config_widgets.koma_active),
+		glatex_set_koma_active);
+	gtk_box_pack_start(GTK_BOX(vbox), config_widgets.koma_active, FALSE, FALSE, 2);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(config_widgets.toolbar_active),
+		glatex_set_toolbar_active);
+	gtk_box_pack_start(GTK_BOX(vbox), config_widgets.toolbar_active, FALSE, FALSE, 2);
+
+	gtk_widget_show_all(vbox);
+	g_signal_connect(dialog, "response", G_CALLBACK(on_configure_response), NULL);
+	return vbox;
 }
 
 /* Functions to toggle the status of plugin */
@@ -1076,25 +1096,6 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 }
 
 
-static void init_toolbar()
-{
-	static GtkWidget *menubar_toolbar_separator = NULL;
-
-	menubar_toolbar_separator = GTK_WIDGET(gtk_separator_tool_item_new());
-
-	box = ui_lookup_widget(geany->main_widgets->window, "vbox1");
-	uim = gtk_ui_manager_new();
-	group = gtk_action_group_new("glatex_format_toolbar");
-	gtk_action_group_set_translation_domain(group, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions(group, format_icons, ui_entries_n, NULL);
-	gtk_ui_manager_insert_action_group(uim, group, 0);
-	gtk_ui_manager_add_ui_from_string(uim, toolbar_markup, -1, NULL);
-	glatex_toolbar = gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar");
-	gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(glatex_toolbar), FALSE, TRUE, 0);
-	gtk_box_reorder_child(GTK_BOX(box), glatex_toolbar, 2);
-	ui_add_document_sensitive(glatex_toolbar);
-}
-
 void init_keybindings()
 {
 	/* init keybindins */
@@ -1146,15 +1147,16 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	GtkWidget *tmp = NULL;
 	GKeyFile *config = g_key_file_new();
 	GError *error = NULL;
+	int i;
 
 	/* loading configurations from file ...*/
-	config_file = g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S, 
+	config_file = g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S,
 	"plugins", G_DIR_SEPARATOR_S,
 	"geanyLaTeX", G_DIR_SEPARATOR_S, "general.conf", NULL);
-	
+
 	/* ... and Initialising options from config file */
 	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
-	
+
 	glatex_set_koma_active = g_key_file_get_boolean(config, "general",
 		"glatex_set_koma_active", &error);
 	if (error != NULL)
@@ -1164,7 +1166,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 		g_error_free(error);
 		error = NULL;
 	}
-		
+
 	glatex_set_toolbar_active = g_key_file_get_boolean(config, "general",
 		"glatex_set_toolbar_active", &error);
 	if (error != NULL)
@@ -1174,8 +1176,6 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 		g_error_free(error);
 		error = NULL;
 	}
-
-	int i;
 
 	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
 
