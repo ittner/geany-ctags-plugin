@@ -33,11 +33,10 @@ void glatex_insert_latex_format(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	{
         if (sci_has_selection(doc->editor->sci))
         {
-            gint selection_len = sci_get_selected_text_length(doc->editor->sci);
-            gchar *selection = g_malloc(selection_len + 1);
+            gchar *selection;
             const gchar *replacement = NULL;
 
-            sci_get_selected_text(doc->editor->sci, selection);
+            selection = sci_get_selection_contents(doc->editor->sci);
 
             replacement = g_strconcat(glatex_format_pattern[format],"{",
                 selection, "}", NULL);

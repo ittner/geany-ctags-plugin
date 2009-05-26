@@ -63,11 +63,10 @@ void glatex_insert_environment(gchar *environment)
 	{
 		if (sci_has_selection(doc->editor->sci))
         {
-			gint selection_len = sci_get_selected_text_length(doc->editor->sci);
-			gchar *selection = g_malloc(selection_len + 1);
+			gchar *selection  = NULL;
 			const gchar *replacement = NULL;
 
-            sci_get_selected_text(doc->editor->sci, selection);
+            selection = sci_get_selection_contents(doc->editor->sci);
 
             replacement = g_strconcat("\\begin{", environment, "}\n",
                 selection,"\n\\end{", environment, "}\n", NULL);

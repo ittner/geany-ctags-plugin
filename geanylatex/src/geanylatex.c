@@ -24,7 +24,7 @@
 
 #include "geanylatex.h"
 
-PLUGIN_VERSION_CHECK(130)
+PLUGIN_VERSION_CHECK(136)
 
 PLUGIN_SET_INFO(_("LaTeX"), _("Plugin to provide better LaTeX support"),
 	VERSION,"Frank Lanitz <frank@frank.uvena.de>")
@@ -295,18 +295,19 @@ void glatex_replace_special_character()
 
 	if (doc != NULL && sci_has_selection(doc->editor->sci))
 	{
-		gint selection_len = sci_get_selected_text_length(doc->editor->sci);
-		gchar *selection = g_malloc(selection_len + 1);
+		guint selection_len;
+		gchar *selection = NULL;
 		GString *replacement = g_string_new(NULL);
-		gint i;
+		guint i;
 		gchar *new = NULL;
 		const gchar *entity = NULL;
 		gchar buf[7];
 		gint len;
 
-		sci_get_selected_text(doc->editor->sci, selection);
+		selection = sci_get_selection_contents(doc->editor->sci);
 
-		selection_len = sci_get_selected_text_length(doc->editor->sci) - 1;
+		selection_len = strlen(selection);
+
 		for (i = 0; i < selection_len; i++)
 		{
 			len = g_unichar_to_utf8(g_utf8_get_char(selection + i), buf);
