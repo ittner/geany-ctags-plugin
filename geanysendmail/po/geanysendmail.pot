@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-20 22:01+0200\n"
+"POT-Creation-Date: 2009-05-25 00:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,50 +26,54 @@ msgid ""
 "mailer"
 msgstr ""
 
-#: src/geanysendmail.c:136
+#: src/geanysendmail.c:107
 msgid "Recipient's Address"
 msgstr ""
 
-#: src/geanysendmail.c:143
+#: src/geanysendmail.c:118
 msgid "Enter the recipient's e-mail address:"
 msgstr ""
 
-#: src/geanysendmail.c:170 src/geanysendmail.c:314
+#: src/geanysendmail.c:151 src/geanysendmail.c:312
 msgid "Plugin configuration directory could not be created."
 msgstr ""
 
-#: src/geanysendmail.c:184
+#: src/geanysendmail.c:166
 msgid "Filename placeholder not found. The executed command might have failed."
 msgstr ""
 
-#: src/geanysendmail.c:189
+#: src/geanysendmail.c:172
 msgid ""
 "Recipient address placeholder not found. The executed command might have "
 "failed."
 msgstr ""
 
-#: src/geanysendmail.c:201
+#: src/geanysendmail.c:184
 msgid "Could not execute mailer. Please check your configuration."
 msgstr ""
 
-#: src/geanysendmail.c:213
+#: src/geanysendmail.c:196
 msgid "Please define a mail client first."
 msgstr ""
 
-#: src/geanysendmail.c:218
+#: src/geanysendmail.c:201
 msgid "File has to be saved before sending."
 msgstr ""
 
-#: src/geanysendmail.c:251
+#: src/geanysendmail.c:217
 msgid "Mail"
 msgstr ""
 
+#: src/geanysendmail.c:248
+msgid "Send by mail"
+msgstr ""
+
 #. add a label and a text entry to the dialog
-#: src/geanysendmail.c:338
+#: src/geanysendmail.c:336
 msgid "Path and options for the mail client:"
 msgstr ""
 
-#: src/geanysendmail.c:346
+#: src/geanysendmail.c:344
 msgid ""
 "Note: \n"
 "\t\\%f will be replaced by your file.\n"
@@ -80,28 +84,28 @@ msgid ""
 "\tmutt -s \"Sending '\\%b'\" -a \"\\%f\" \"\\%r\""
 msgstr ""
 
-#: src/geanysendmail.c:356
+#: src/geanysendmail.c:354
 msgid "Showing icon in toolbar"
 msgstr ""
 
-#: src/geanysendmail.c:359
+#: src/geanysendmail.c:357
 msgid "Shows a icon in the toolbar to send file more easy."
 msgstr ""
 
-#: src/geanysendmail.c:365
+#: src/geanysendmail.c:364
 msgid "Using dialog for entering email address of recipients"
 msgstr ""
 
-#: src/geanysendmail.c:394
+#: src/geanysendmail.c:389
 msgid "Send file by mail"
 msgstr ""
 
 #. Build up menu entry
-#: src/geanysendmail.c:420
+#: src/geanysendmail.c:416
 msgid "_Mail document"
 msgstr ""
 
-#: src/geanysendmail.c:423
+#: src/geanysendmail.c:419
 msgid ""
 "Sends the opened file as unzipped attachment by any mailer from your $PATH"
 msgstr ""
