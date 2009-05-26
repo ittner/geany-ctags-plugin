@@ -1854,7 +1854,10 @@ plugin_configure(GtkDialog * dialog)
 static void
 load_config()
 {
+#ifdef USE_GTKSPELL
 	GError *error = NULL;
+#endif
+
 	GKeyFile *config = g_key_file_new();
 
 	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
