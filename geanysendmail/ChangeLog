@@ -1,3 +1,8 @@
+2009-05-28  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Make usage of Geany's ui_widget_set_tooltip_text() function.
+
+
 2009-04-24  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Applied a patch by Timothy Boronczyk which allows aborting when inserting
