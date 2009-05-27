@@ -918,8 +918,8 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 			}
 		}
 
-		fontsize = g_strdup(gtk_combo_box_get_active_text(
-			GTK_COMBO_BOX(fontsize_combobox)));
+		fontsize = gtk_combo_box_get_active_text(
+			GTK_COMBO_BOX(fontsize_combobox));
 
 		if (papersize != NULL)
 		{
@@ -935,11 +935,11 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 			draft = g_utf8_casefold("draft", -1);
 			classoptions = g_strconcat(draft, NULL);
 		}
-		if (classoptions != NULL && fontsize != NULL)
+		if (classoptions != NULL && NZV(fontsize))
 		{
 			classoptions = g_strconcat(classoptions, ",", fontsize, NULL);
 		}
-		else if (classoptions == NULL && fontsize != NULL)
+		else if (classoptions == NULL && NZV(fontsize))
 		{
 			classoptions = g_strconcat(fontsize, NULL);
 		}
