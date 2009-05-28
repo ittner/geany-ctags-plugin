@@ -648,10 +648,11 @@ vcdiff_file_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpoint
 
 /* Callback if menu item for the base directory was activated */
 static void
-vcdiff_dir_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, gint flags)
+vcdiff_dir_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, gpointer data)
 {
 	gchar *text = NULL;
 	gchar *dir;
+	gint flags = GPOINTER_TO_INT(data);
 	const VC_RECORD *vc;
 	GeanyDocument *doc;
 
@@ -1596,13 +1597,13 @@ kbdiff_file(G_GNUC_UNUSED guint key_id)
 static void
 kbdiff_dir(G_GNUC_UNUSED guint key_id)
 {
-	vcdiff_dir_activated(NULL, FLAG_DIR);
+	vcdiff_dir_activated(NULL, GINT_TO_POINTER(FLAG_DIR));
 }
 
 static void
 kbdiff_basedir(G_GNUC_UNUSED guint key_id)
 {
-	vcdiff_dir_activated(NULL, FLAG_BASEDIR);
+	vcdiff_dir_activated(NULL, GINT_TO_POINTER(FLAG_BASEDIR));
 }
 
 static void
@@ -1753,53 +1754,48 @@ plugin_configure(GtkDialog * dialog)
 	GtkWidget *label_spellcheck_lang;
 #endif
 
-	GtkTooltips *tooltip = NULL;
-
-	tooltip = gtk_tooltips_new();
 	vbox = gtk_vbox_new(FALSE, 6);
 
 	widgets.cb_changed_flag =
 		gtk_check_button_new_with_label(_
 						("Set Changed-flag for document tabs created by the plugin"));
-	gtk_tooltips_set_tip(tooltip, widgets.cb_changed_flag,
+	ui_widget_set_tooltip_text(widgets.cb_changed_flag,
 			     _
 			     ("If this option is activated, every new by the VC-plugin created document tab "
 			      "will be marked as changed. Even this option is useful in some cases, it could cause "
-			      "a big number of annoying \"Do you want to save\"-dialogs."), NULL);
+			      "a big number of annoying \"Do you want to save\"-dialogs."));
 	gtk_button_set_focus_on_click(GTK_BUTTON(widgets.cb_changed_flag), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widgets.cb_changed_flag), set_changed_flag);
 	gtk_box_pack_start(GTK_BOX(vbox), widgets.cb_changed_flag, FALSE, FALSE, 2);
 
 	widgets.cb_confirm_add =
 		gtk_check_button_new_with_label(_("Confirm adding new files to a VCS"));
-	gtk_tooltips_set_tip(tooltip, widgets.cb_confirm_add,
+	ui_widget_set_tooltip_text(widgets.cb_confirm_add,
 			     _
-			     ("Shows a confirmation dialog on adding a new (created) file to VCS."),
-			     NULL);
+			     ("Shows a confirmation dialog on adding a new (created) file to VCS."));
 	gtk_button_set_focus_on_click(GTK_BUTTON(widgets.cb_confirm_add), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widgets.cb_confirm_add),
 				     set_add_confirmation);
 	gtk_box_pack_start(GTK_BOX(vbox), widgets.cb_confirm_add, TRUE, FALSE, 2);
 
 	widgets.cb_max_commit = gtk_check_button_new_with_label(_("Maximize commit dialog"));
-	gtk_tooltips_set_tip(tooltip, widgets.cb_max_commit, _("Show commit dialog maximize."),
-			     NULL);
+	ui_widget_set_tooltip_text(widgets.cb_max_commit, _("Show commit dialog maximize."));
 	gtk_button_set_focus_on_click(GTK_BUTTON(widgets.cb_max_commit), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widgets.cb_max_commit),
 				     set_maximize_commit_dialog);
 	gtk_box_pack_start(GTK_BOX(vbox), widgets.cb_max_commit, TRUE, FALSE, 2);
 
 	widgets.cb_external_diff = gtk_check_button_new_with_label(_("Use external diff viewer"));
-	gtk_tooltips_set_tip(tooltip, widgets.cb_external_diff,
-			     _("Use external diff viewer for file diff."), NULL);
+	ui_widget_set_tooltip_text(widgets.cb_external_diff,
+			     _("Use external diff viewer for file diff."));
 	gtk_button_set_focus_on_click(GTK_BUTTON(widgets.cb_external_diff), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widgets.cb_external_diff),
 				     set_external_diff);
 	gtk_box_pack_start(GTK_BOX(vbox), widgets.cb_external_diff, TRUE, FALSE, 2);
 
 	widgets.cb_editor_menu_entries = gtk_check_button_new_with_label(_("Show VC entries at editor menu"));
-	gtk_tooltips_set_tip(tooltip, widgets.cb_editor_menu_entries,
-			     _("Show entries for VC functions inside editor menu"), NULL);
+	ui_widget_set_tooltip_text(widgets.cb_editor_menu_entries,
+			     _("Show entries for VC functions inside editor menu"));
 	gtk_button_set_focus_on_click(GTK_BUTTON(widgets.cb_editor_menu_entries), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widgets.cb_editor_menu_entries), set_editor_menu_entries);
 	gtk_box_pack_start(GTK_BOX(vbox), widgets.cb_editor_menu_entries, TRUE, FALSE, 2);
@@ -1917,7 +1913,7 @@ registrate()
 }
 
 static void
-do_current_file_menu(GtkWidget ** parent_menu, GtkTooltips ** tooltips, gboolean editor_menu)
+do_current_file_menu(GtkWidget ** parent_menu, gboolean editor_menu)
 {
 	GtkWidget *cur_file_menu = NULL;
 	/* Menu which will hold the items in the current file menu */
@@ -1927,25 +1923,23 @@ do_current_file_menu(GtkWidget ** parent_menu, GtkTooltips ** tooltips, gboolean
 		*parent_menu = gtk_image_menu_item_new_with_mnemonic(_("_VC file Actions"));
 	else
 		*parent_menu = gtk_image_menu_item_new_with_mnemonic(_("_File"));
-	g_signal_connect((gpointer) * parent_menu, "activate", G_CALLBACK(update_menu_items), NULL);
+	g_signal_connect(* parent_menu, "activate", G_CALLBACK(update_menu_items), NULL);
 
 	/* Diff of current file */
 	menu_vc_diff_file = gtk_menu_item_new_with_mnemonic(_("_Diff"));
 	gtk_container_add(GTK_CONTAINER(cur_file_menu), menu_vc_diff_file);
-	gtk_tooltips_set_tip(*tooltips, menu_vc_diff_file,
-			     _("Make a diff from the current active file"), NULL);
+	ui_widget_set_tooltip_text(menu_vc_diff_file,
+			     _("Make a diff from the current active file"));
 
-	g_signal_connect((gpointer) menu_vc_diff_file, "activate",
-			 G_CALLBACK(vcdiff_file_activated), NULL);
+	g_signal_connect(menu_vc_diff_file, "activate", G_CALLBACK(vcdiff_file_activated), NULL);
 
 	/* Revert current file */
 	menu_vc_revert_file = gtk_menu_item_new_with_mnemonic(_("_Revert"));
 	gtk_container_add(GTK_CONTAINER(cur_file_menu), menu_vc_revert_file);
-	gtk_tooltips_set_tip(*tooltips, menu_vc_revert_file,
-			     _("Restore pristine working copy file (undo local edits)."), NULL);
+	ui_widget_set_tooltip_text(menu_vc_revert_file,
+			     _("Restore pristine working copy file (undo local edits)."));
 
-	g_signal_connect((gpointer) menu_vc_revert_file, "activate",
-			 G_CALLBACK(vcrevert_activated), NULL);
+	g_signal_connect(menu_vc_revert_file, "activate", G_CALLBACK(vcrevert_activated), NULL);
 
 
 	gtk_container_add(GTK_CONTAINER(cur_file_menu), gtk_separator_menu_item_new());
@@ -1954,31 +1948,28 @@ do_current_file_menu(GtkWidget ** parent_menu, GtkTooltips ** tooltips, gboolean
 	/* Blame for current file */
 	menu_vc_blame = gtk_menu_item_new_with_mnemonic(_("_Blame"));
 	gtk_container_add(GTK_CONTAINER(cur_file_menu), menu_vc_blame);
-	gtk_tooltips_set_tip(*tooltips, menu_vc_blame,
-			     _("Shows the changes made at one file per revision and author."),
-			     NULL);
+	ui_widget_set_tooltip_text(menu_vc_blame,
+			     _("Shows the changes made at one file per revision and author."));
 
-	g_signal_connect((gpointer) menu_vc_blame, "activate", G_CALLBACK(vcblame_activated), NULL);
+	g_signal_connect(menu_vc_blame, "activate", G_CALLBACK(vcblame_activated), NULL);
 
 	gtk_container_add(GTK_CONTAINER(cur_file_menu), gtk_separator_menu_item_new());
 
 	/* History/log of current file */
 	menu_vc_log_file = gtk_menu_item_new_with_mnemonic(_("_History"));
 	gtk_container_add(GTK_CONTAINER(cur_file_menu), menu_vc_log_file);
-	gtk_tooltips_set_tip(*tooltips, menu_vc_log_file,
-			     _("Shows the log of the current file"), NULL);
+	ui_widget_set_tooltip_text(menu_vc_log_file,
+			     _("Shows the log of the current file"));
 
-	g_signal_connect((gpointer) menu_vc_log_file, "activate",
-			 G_CALLBACK(vclog_file_activated), NULL);
+	g_signal_connect(menu_vc_log_file, "activate", G_CALLBACK(vclog_file_activated), NULL);
 
 	/* base version of the current file */
 	menu_vc_show_file = gtk_menu_item_new_with_mnemonic(_("_Original"));
 	gtk_container_add(GTK_CONTAINER(cur_file_menu), menu_vc_show_file);
-	gtk_tooltips_set_tip(*tooltips, menu_vc_log_file,
-			     _("Shows the orignal of the current file"), NULL);
+	ui_widget_set_tooltip_text(menu_vc_log_file,
+			     _("Shows the orignal of the current file"));
 
-	g_signal_connect((gpointer) menu_vc_show_file, "activate",
-			 G_CALLBACK(vcshow_file_activated), NULL);
+	g_signal_connect(menu_vc_show_file, "activate", G_CALLBACK(vcshow_file_activated), NULL);
 
 
 	gtk_container_add(GTK_CONTAINER(cur_file_menu), gtk_separator_menu_item_new());
@@ -1986,58 +1977,55 @@ do_current_file_menu(GtkWidget ** parent_menu, GtkTooltips ** tooltips, gboolean
 	/* add current file */
 	menu_vc_add_file = gtk_menu_item_new_with_mnemonic(_("_Add to Version Control"));
 	gtk_container_add(GTK_CONTAINER(cur_file_menu), menu_vc_add_file);
-	gtk_tooltips_set_tip(*tooltips, menu_vc_add_file, _("Add file to repository."), NULL);
+	ui_widget_set_tooltip_text(menu_vc_add_file, _("Add file to repository."));
 
-	g_signal_connect((gpointer) menu_vc_add_file, "activate",
+	g_signal_connect(menu_vc_add_file, "activate",
 			 G_CALLBACK(vcadd_activated), NULL);
 
 	/* remove current file */
 	menu_vc_remove_file = gtk_menu_item_new_with_mnemonic(_("_Remove from Version Control"));
 	gtk_container_add(GTK_CONTAINER(cur_file_menu), menu_vc_remove_file);
-	gtk_tooltips_set_tip(*tooltips, menu_vc_remove_file,
-			     _("Remove file from repository."), NULL);
+	ui_widget_set_tooltip_text(menu_vc_remove_file, _("Remove file from repository."));
 
-	g_signal_connect((gpointer) menu_vc_remove_file, "activate",
-			 G_CALLBACK(vcremove_activated), NULL);
+	g_signal_connect(menu_vc_remove_file, "activate", G_CALLBACK(vcremove_activated), NULL);
 
 	/* connect to parent menu */
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(*parent_menu), cur_file_menu);
 }
 
 static void
-do_current_dir_menu(GtkWidget ** parent_menu, GtkTooltips ** tooltips)
+do_current_dir_menu(GtkWidget ** parent_menu)
 {
 	GtkWidget *cur_dir_menu = NULL;
 	/* Menu which will hold the items in the current file menu */
 	cur_dir_menu = gtk_menu_new();
 
 	*parent_menu = gtk_image_menu_item_new_with_mnemonic(_("_Directory"));
-	g_signal_connect((gpointer) * parent_menu, "activate", G_CALLBACK(update_menu_items), NULL);
+	g_signal_connect(* parent_menu, "activate", G_CALLBACK(update_menu_items), NULL);
 	/* Diff of the current dir */
 	menu_vc_diff_dir = gtk_menu_item_new_with_mnemonic(_("_Diff"));
 	gtk_container_add(GTK_CONTAINER(cur_dir_menu), menu_vc_diff_dir);
-	gtk_tooltips_set_tip(*tooltips, menu_vc_diff_dir,
-			     _("Make a diff from the directory of the current active file"), NULL);
+	ui_widget_set_tooltip_text(menu_vc_diff_dir,
+			     _("Make a diff from the directory of the current active file"));
 
-	g_signal_connect((gpointer) menu_vc_diff_dir, "activate",
-			 G_CALLBACK(vcdiff_dir_activated), (gpointer) FLAG_DIR);
+	g_signal_connect(menu_vc_diff_dir, "activate",
+			 G_CALLBACK(vcdiff_dir_activated), GINT_TO_POINTER(FLAG_DIR));
 
 	/* Revert current dir */
 	menu_vc_revert_dir = gtk_menu_item_new_with_mnemonic(_("_Revert"));
 	gtk_container_add(GTK_CONTAINER(cur_dir_menu), menu_vc_revert_dir);
-	gtk_tooltips_set_tip(*tooltips, menu_vc_revert_dir,
-			     _("Restore original files in the current folder (undo local edits)."),
-			     NULL);
+	ui_widget_set_tooltip_text(menu_vc_revert_dir,
+			     _("Restore original files in the current folder (undo local edits)."));
 
-	g_signal_connect((gpointer) menu_vc_revert_dir, "activate",
-			 G_CALLBACK(vcrevert_dir_activated), (gpointer) FLAG_DIR);
+	g_signal_connect(menu_vc_revert_dir, "activate",
+			 G_CALLBACK(vcrevert_dir_activated), GINT_TO_POINTER(FLAG_DIR));
 
 	gtk_container_add(GTK_CONTAINER(cur_dir_menu), gtk_separator_menu_item_new());
 	/* History/log of the current dir */
 	menu_vc_log_dir = gtk_menu_item_new_with_mnemonic(_("_History"));
 	gtk_container_add(GTK_CONTAINER(cur_dir_menu), menu_vc_log_dir);
-	gtk_tooltips_set_tip(*tooltips, menu_vc_log_dir,
-			     _("Shows the log of the current directory"), NULL);
+	ui_widget_set_tooltip_text(menu_vc_log_dir,
+			     _("Shows the log of the current directory"));
 
 
 	/* connect to parent menu */
@@ -2045,43 +2033,42 @@ do_current_dir_menu(GtkWidget ** parent_menu, GtkTooltips ** tooltips)
 }
 
 static void
-do_basedir_menu(GtkWidget ** parent_menu, GtkTooltips ** tooltips)
+do_basedir_menu(GtkWidget ** parent_menu)
 {
 	GtkWidget *basedir_menu = NULL;
 	/* Menu which will hold the items in the current file menu */
 	basedir_menu = gtk_menu_new();
 
 	*parent_menu = gtk_image_menu_item_new_with_mnemonic(_("_Base Directory"));
-	g_signal_connect((gpointer) * parent_menu, "activate", G_CALLBACK(update_menu_items), NULL);
+	g_signal_connect(* parent_menu, "activate", G_CALLBACK(update_menu_items), NULL);
 
 	/* Complete diff of base directory */
 	menu_vc_diff_basedir = gtk_menu_item_new_with_mnemonic(_("_Diff"));
 	gtk_container_add(GTK_CONTAINER(basedir_menu), menu_vc_diff_basedir);
-	gtk_tooltips_set_tip(*tooltips, menu_vc_diff_basedir,
-			     _("Make a diff from the top VC directory"), NULL);
+	ui_widget_set_tooltip_text(menu_vc_diff_basedir, _("Make a diff from the top VC directory"));
 
-	g_signal_connect((gpointer) menu_vc_diff_basedir, "activate",
-			 G_CALLBACK(vcdiff_dir_activated), (gpointer) FLAG_BASEDIR);
+	g_signal_connect(menu_vc_diff_basedir, "activate",
+			 G_CALLBACK(vcdiff_dir_activated), GINT_TO_POINTER(FLAG_BASEDIR));
 
 	/* Revert everything */
 	menu_vc_revert_basedir = gtk_menu_item_new_with_mnemonic(_("_Revert"));
 	gtk_container_add(GTK_CONTAINER(basedir_menu), menu_vc_revert_basedir);
-	gtk_tooltips_set_tip(*tooltips, menu_vc_revert_basedir, _("Revert any local edits."), NULL);
+	ui_widget_set_tooltip_text(menu_vc_revert_basedir, _("Revert any local edits."));
 
-	g_signal_connect((gpointer) menu_vc_revert_basedir, "activate",
-			 G_CALLBACK(vcrevert_dir_activated), (gpointer) FLAG_BASEDIR);
+	g_signal_connect(menu_vc_revert_basedir, "activate",
+			 G_CALLBACK(vcrevert_dir_activated), GINT_TO_POINTER(FLAG_BASEDIR));
 
 	gtk_container_add(GTK_CONTAINER(basedir_menu), gtk_separator_menu_item_new());
-	g_signal_connect((gpointer) menu_vc_log_dir, "activate",
+	g_signal_connect(menu_vc_log_dir, "activate",
 			 G_CALLBACK(vclog_dir_activated), NULL);
 
 	/* Complete History/Log of base directory */
 	menu_vc_log_basedir = gtk_menu_item_new_with_mnemonic(_("_History"));
 	gtk_container_add(GTK_CONTAINER(basedir_menu), menu_vc_log_basedir);
-	gtk_tooltips_set_tip(*tooltips, menu_vc_log_basedir,
-			     _("Shows the log of the top VC directory"), NULL);
+	ui_widget_set_tooltip_text(menu_vc_log_basedir,
+			     _("Shows the log of the top VC directory"));
 
-	g_signal_connect((gpointer) menu_vc_log_basedir, "activate",
+	g_signal_connect(menu_vc_log_basedir, "activate",
 			 G_CALLBACK(vclog_basedir_activated), NULL);
 
 	/* connect to parent menu */
@@ -2091,15 +2078,12 @@ do_basedir_menu(GtkWidget ** parent_menu, GtkTooltips ** tooltips)
 static void
 add_menuitems_to_editor_menu()
 {
-	GtkTooltips *tooltips = NULL;
-	tooltips = gtk_tooltips_new();
-
 	/* Add file menu also to editor menu (at mouse cursor) */
 	if (set_editor_menu_entries == TRUE && editor_menu_vc == NULL)
 	{
 		menu_item_sep = gtk_separator_menu_item_new();
 		gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), menu_item_sep);
-		do_current_file_menu(&editor_menu_vc, &tooltips, TRUE);
+		do_current_file_menu(&editor_menu_vc, TRUE);
 		gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), editor_menu_vc);
 		gtk_widget_show_all(editor_menu_vc);
 		gtk_widget_show_all(menu_item_sep);
@@ -2110,12 +2094,10 @@ add_menuitems_to_editor_menu()
 	{
 		editor_menu_commit = gtk_menu_item_new_with_mnemonic(_("VC _Commit"));
 		gtk_container_add(GTK_CONTAINER(geany->main_widgets->editor_menu), editor_menu_commit);
-		g_signal_connect((gpointer) editor_menu_commit, "activate",
+		g_signal_connect(editor_menu_commit, "activate",
 			G_CALLBACK(vccommit_activated), NULL);
 		gtk_widget_show_all(editor_menu_commit);
 	}
-
-
 }
 
 static void
@@ -2172,7 +2154,6 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	GtkWidget *menu_vc_file = NULL;
 	GtkWidget *menu_vc_dir = NULL;
 	GtkWidget *menu_vc_basedir = NULL;
-	GtkTooltips *tooltips = NULL;
 
 	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
 
@@ -2183,60 +2164,51 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	load_config();
 	registrate();
 
-	tooltips = gtk_tooltips_new();
-
 	menu_vc = gtk_image_menu_item_new_with_mnemonic(_("_VC"));
 	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_vc);
 
-	g_signal_connect((gpointer) menu_vc, "activate", G_CALLBACK(update_menu_items), NULL);
+	g_signal_connect(menu_vc, "activate", G_CALLBACK(update_menu_items), NULL);
 
 	menu_vc_menu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_vc), menu_vc_menu);
 
 	/* Create the current file Submenu */
-	do_current_file_menu(&menu_vc_file, &tooltips, FALSE);
+	do_current_file_menu(&menu_vc_file, FALSE);
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_file);
 
 	/* Create the current directory Submenu */
-	do_current_dir_menu(&menu_vc_dir, &tooltips);
+	do_current_dir_menu(&menu_vc_dir);
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_dir);
 	/* Create the current base directory Submenu */
-	do_basedir_menu(&menu_vc_basedir, &tooltips);
+	do_basedir_menu(&menu_vc_basedir);
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_basedir);
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), gtk_separator_menu_item_new());
 
 	/* Status of basedir */
 	menu_vc_status = gtk_menu_item_new_with_mnemonic(_("_Status"));
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_status);
-	gtk_tooltips_set_tip(tooltips, menu_vc_status, _("Show status."), NULL);
+	ui_widget_set_tooltip_text(menu_vc_status, _("Show status."));
 
-	g_signal_connect((gpointer) menu_vc_status, "activate",
-			 G_CALLBACK(vcstatus_activated), NULL);
-
+	g_signal_connect(menu_vc_status, "activate", G_CALLBACK(vcstatus_activated), NULL);
 
 	/* complete update */
 	menu_vc_update = gtk_menu_item_new_with_mnemonic(_("_Update"));
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_update);
-	gtk_tooltips_set_tip(tooltips, menu_vc_update, _("Update from remote repositary."), NULL);
+	ui_widget_set_tooltip_text(menu_vc_update, _("Update from remote repositary."));
 
-	g_signal_connect((gpointer) menu_vc_update, "activate",
-			 G_CALLBACK(vcupdate_activated), NULL);
-
+	g_signal_connect(menu_vc_update, "activate", G_CALLBACK(vcupdate_activated), NULL);
 
 	/* Commit all changes */
 	menu_vc_commit = gtk_menu_item_new_with_mnemonic(_("_Commit"));
 	gtk_container_add(GTK_CONTAINER(menu_vc_menu), menu_vc_commit);
-	gtk_tooltips_set_tip(tooltips, menu_vc_commit, _("Commit changes."), NULL);
+	ui_widget_set_tooltip_text(menu_vc_commit, _("Commit changes."));
 
-	g_signal_connect((gpointer) menu_vc_commit, "activate",
-			 G_CALLBACK(vccommit_activated), NULL);
-
+	g_signal_connect(menu_vc_commit, "activate", G_CALLBACK(vccommit_activated), NULL);
 
 	gtk_widget_show_all(menu_vc);
 	gtk_widget_show_all(menu_vc_file);
 	gtk_widget_show_all(menu_vc_dir);
 	gtk_widget_show_all(menu_vc_basedir);
-
 
 	/* initialize keybindings */
 	init_keybindings();
