@@ -326,9 +326,6 @@ on_configure_response(G_GNUC_UNUSED GtkDialog *dialog, gint response, G_GNUC_UNU
 GtkWidget *plugin_configure(GtkDialog *dialog)
 {
 	GtkWidget	*label1, *label2, *vbox;
-	GtkTooltips *tooltip = NULL;
-
-	tooltip = gtk_tooltips_new();
 
 	vbox = gtk_vbox_new(FALSE, 6);
 
