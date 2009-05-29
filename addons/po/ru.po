@@ -1,0 +1,59 @@
+# Russian translations for geany's addons package.
+# Copyright (C) 2009 THE geany'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the geany package.
+# John Wehin <john.wehin@gmail.com>, 2009
+msgid ""
+msgstr ""
+"Project-Id-Version: addons\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-02-26 00:44+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: John Wehin <john.wehin@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Russian\n"
+"X-Poedit-Country: RUSSIAN FEDERATION\n"
+
+#: src/addons.c:53
+msgid "Addons"
+msgstr "Дополнения"
+
+#: src/addons.c:53
+msgid "Various small addons for Geany."
+msgstr "Различные небольшие дополнения для Geany."
+
+#: src/addons.c:150
+msgid "Plugin configuration directory could not be created."
+msgstr "Каталог настроек плагинов не может быть создан."
+
+#: src/addons.c:172
+msgid "Show toolbar item to show a list of currently open documents"
+msgstr "Показать в панели инструментов как список текущих открытых документов"
+
+#. TODO fix the string
+#: src/addons.c:179
+msgid "Show a 'Open URI' menu item in the editor menu"
+msgstr "Показать 'Открыть URI' в меню редактора"
+
+#: src/ao_openuri.c:169
+msgid "Open URI"
+msgstr "Открыть URI"
+
+#: src/ao_openuri.c:175
+msgid "Copy URI"
+msgstr "Копировать URI"
+
+#: src/ao_doclist.c:209
+msgid "Close Ot_her Documents"
+msgstr "Закрыть _другие документы"
+
+#: src/ao_doclist.c:214
+msgid "C_lose All"
+msgstr "З_акрыть все"
+
+#: src/ao_doclist.c:244
+msgid "Show Document List"
+msgstr "Показать список документов"
+
