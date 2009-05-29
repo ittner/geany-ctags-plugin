@@ -6,3 +6,6 @@ src/bibtexlabels.c
 src/formatutils.c
 src/formatpatterns.c
 src/latexenvironments.c
+src/latexkeybindings.c
+src/latexutils.c
+src/reftex.c
