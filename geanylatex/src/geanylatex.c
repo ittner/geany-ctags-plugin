@@ -923,17 +923,20 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 
 		if (papersize != NULL)
 		{
-			classoptions = g_strconcat(papersize, NULL);
+			classoptions = g_strdup(papersize);
+			g_free(papersize);
 		}
 		if (classoptions != NULL && draft_active == TRUE)
 		{
 			draft = g_utf8_casefold("draft", -1);
 			classoptions = g_strconcat(classoptions,",", draft, NULL);
+			g_free(draft);
 		}
 		else if (classoptions == NULL && draft_active == TRUE)
 		{
 			draft = g_utf8_casefold("draft", -1);
 			classoptions = g_strconcat(draft, NULL);
+			g_free(draft);
 		}
 		if (classoptions != NULL && NZV(fontsize))
 		{
@@ -941,8 +944,9 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 		}
 		else if (classoptions == NULL && NZV(fontsize))
 		{
-			classoptions = g_strconcat(fontsize, NULL);
+			classoptions = g_strdup(fontsize);
 		}
+		g_free(fontsize);
 
 
 		switch (documentclass_int)
