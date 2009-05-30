@@ -1018,7 +1018,7 @@ static gboolean
 get_commit_diff_foreach(GtkTreeModel * model, G_GNUC_UNUSED GtkTreePath * path, GtkTreeIter * iter,
 			gpointer data)
 {
-	gchar **diff = (gchar **) data;
+	GString *diff = data;
 	gboolean commit;
 	gchar *filename;
 	gchar *tmp = NULL;
@@ -1031,7 +1031,7 @@ get_commit_diff_foreach(GtkTreeModel * model, G_GNUC_UNUSED GtkTreePath * path, 
 
 	gtk_tree_model_get(model, iter, COLUMN_STATUS, &status, -1);
 
-	if (strcmp(status, FILE_STATUS_MODIFIED) != 0)
+	if (! utils_str_equal(status, FILE_STATUS_MODIFIED))
 	{
 		g_free(status);
 		return FALSE;
@@ -1045,7 +1045,10 @@ get_commit_diff_foreach(GtkTreeModel * model, G_GNUC_UNUSED GtkTreePath * path, 
 	execute_command(vc, &tmp, NULL, filename, VC_COMMAND_DIFF_FILE, NULL, NULL);
 	if (tmp)
 	{
-		setptr(*diff, g_strdup_printf("%s%s", *diff, tmp));
+		/* We temporarily add the filename to the diff output for parsing the diff output later,
+		 * after we have finished parsing, we apply the tag "invisible" which hides the text. */
+		g_string_append_printf(diff, "VC_DIFF%s\n", filename);
+		g_string_append(diff, tmp);
 		g_free(tmp);
 	}
 	else
@@ -1060,19 +1063,22 @@ static gchar *
 get_commit_diff(GtkTreeView * treeview)
 {
 	GtkTreeModel *model = gtk_tree_view_get_model(treeview);
-	gchar *ret = g_strdup("");
+	GString *ret = g_string_new(NULL);
 
-	gtk_tree_model_foreach(model, get_commit_diff_foreach, &ret);
-	return ret;
+	gtk_tree_model_foreach(model, get_commit_diff_foreach, ret);
+
+	return g_string_free(ret, FALSE);
 }
 
 static void
 set_diff_buff(GtkTextBuffer * buffer, const gchar * txt)
 {
 	GtkTextIter start, end;
+	GtkTextMark *mark;
+	gchar *filename;
 	const gchar *tagname = "";
+	const gchar *c, *p = txt;
 
-	const gchar *p = txt;
 	gtk_text_buffer_set_text(buffer, txt, -1);
 
 	gtk_text_buffer_get_start_iter(buffer, &start);
@@ -1082,6 +1088,7 @@ set_diff_buff(GtkTextBuffer * buffer, const gchar * txt)
 
 	while (p)
 	{
+		c = NULL;
 		if (*p == '-')
 		{
 			tagname = "deleted";
@@ -1094,6 +1101,14 @@ set_diff_buff(GtkTextBuffer * buffer, const gchar * txt)
 		{
 			tagname = "";
 		}
+		else if (strncmp(p, "VC_DIFF", 7) == 0)
+		{	/* Lines starting with VC_DIFF are special and were added by our code to tell about
+			 * filename to which the following diff lines belong. We use this file to create
+			 * text marks which we then later use to scroll to if the corresponding file has been
+			 * selected in the commit dialog's files list. */
+			tagname = "invisible";
+			c = strchr(p + 7, '\n');
+		}
 		else
 		{
 			tagname = "default";
@@ -1101,14 +1116,25 @@ set_diff_buff(GtkTextBuffer * buffer, const gchar * txt)
 		gtk_text_buffer_get_iter_at_offset(buffer, &start,
 						   g_utf8_pointer_to_offset(txt, p));
 
+		if (c)
+		{	/* create the mark *after* the start iter has been updated */
+			filename = g_strndup(p + 7, c - p - 7);
+			/* delete old text marks */
+			mark = gtk_text_buffer_get_mark(buffer, filename);
+			if (mark)
+				gtk_text_buffer_delete_mark(buffer, mark);
+			/* create a new one */
+			gtk_text_buffer_create_mark(buffer, filename, &start, TRUE);
+			g_free(filename);
+		}
+
 		p = strchr(p, '\n');
 		if (p)
 		{
 			if (*tagname)
 			{
 				gtk_text_buffer_get_iter_at_offset(buffer, &end,
-								   g_utf8_pointer_to_offset(txt,
-											    p));
+						g_utf8_pointer_to_offset(txt, p + 1));
 				gtk_text_buffer_apply_tag_by_name(buffer, tagname, &start, &end);
 			}
 			p++;
@@ -1134,10 +1160,13 @@ commit_toggled(G_GNUC_UNUSED GtkCellRendererToggle * cell, gchar * path_str, gpo
 	GtkTreeIter iter;
 	GtkTreePath *path = gtk_tree_path_new_from_string(path_str);
 	gboolean fixed;
+	gchar *filename;
+	GtkTextView *diffView = GTK_TEXT_VIEW(ui_lookup_widget(GTK_WIDGET(treeview), "textDiff"));
+	GtkTextMark *mark;
 
 	/* get toggled iter */
 	gtk_tree_model_get_iter(model, &iter, path);
-	gtk_tree_model_get(model, &iter, COLUMN_COMMIT, &fixed, -1);
+	gtk_tree_model_get(model, &iter, COLUMN_COMMIT, &fixed, COLUMN_PATH, &filename, -1);
 
 	/* do something with the value */
 	fixed ^= 1;
@@ -1145,10 +1174,18 @@ commit_toggled(G_GNUC_UNUSED GtkCellRendererToggle * cell, gchar * path_str, gpo
 	/* set new value */
 	gtk_list_store_set(GTK_LIST_STORE(model), &iter, COLUMN_COMMIT, fixed, -1);
 
+	if (! fixed)
+	{
+		mark = gtk_text_buffer_get_mark(gtk_text_view_get_buffer(diffView), filename);
+		if (mark)
+			gtk_text_buffer_delete_mark(gtk_text_view_get_buffer(diffView), mark);
+	}
+
 	refresh_diff_view(treeview);
 
 	/* clean up */
 	gtk_tree_path_free(path);
+	g_free(filename);
 }
 
 static gboolean
@@ -1225,6 +1262,29 @@ get_diff_color(G_GNUC_UNUSED GeanyDocument * doc, gint style)
 #define GLADE_HOOKUP_OBJECT_NO_REF(component,widget,name) \
   g_object_set_data (G_OBJECT (component), name, widget)
 
+static void commit_tree_selection_changed_cb(GtkTreeSelection *sel, GtkTextView *textview)
+{
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	GtkTextMark *mark;
+	gchar *path;
+	gboolean set;
+
+	if (! gtk_tree_selection_get_selected(sel, &model, &iter))
+		return;
+
+	gtk_tree_model_get(model, &iter, COLUMN_COMMIT, &set, COLUMN_PATH, &path, -1);
+
+	if (set)
+	{
+		mark = gtk_text_buffer_get_mark(gtk_text_view_get_buffer(textview), path);
+		if (mark)
+			gtk_text_view_scroll_to_mark(textview, mark, 0.0, TRUE, 0.0, 0.0);
+	}
+	g_free(path);
+}
+
+
 static GtkWidget *
 create_commitDialog(void)
 {
@@ -1246,6 +1306,7 @@ create_commitDialog(void)
 	GtkWidget *btnCancel;
 	GtkWidget *btnCommit;
 	GtkWidget *select_cbox;
+	GtkTreeSelection *sel;
 
 	gchar *rcstyle = g_strdup_printf("style \"geanyvc-diff-font\"\n"
 					 "{\n"
@@ -1362,6 +1423,10 @@ create_commitDialog(void)
 	gtk_widget_show(btnCommit);
 	gtk_dialog_add_action_widget(GTK_DIALOG(commitDialog), btnCommit, GTK_RESPONSE_APPLY);
 
+	sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeSelect));
+	gtk_tree_selection_set_mode(sel, GTK_SELECTION_SINGLE);
+	g_signal_connect(sel, "changed", G_CALLBACK(commit_tree_selection_changed_cb), textDiff);
+
 	/* Store pointers to all widgets, for use by lookup_widget(). */
 	GLADE_HOOKUP_OBJECT_NO_REF(commitDialog, commitDialog, "commitDialog");
 	GLADE_HOOKUP_OBJECT_NO_REF(commitDialog, dialog_vbox1, "dialog_vbox1");
@@ -1451,24 +1516,20 @@ vccommit_activated(G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer 
 	gtk_text_buffer_create_tag(diffbuf, "default", "foreground-gdk",
 				   get_diff_color(doc, SCE_DIFF_POSITION), NULL);
 
+	gtk_text_buffer_create_tag(diffbuf, "invisible", "invisible",
+				   TRUE, NULL);
+
 	set_diff_buff(diffbuf, diff);
 
 	if (set_maximize_commit_dialog)
-	{
 		gtk_window_maximize(GTK_WINDOW(commit));
-		gtk_widget_show_now(commit);
-		gtk_window_get_size(GTK_WINDOW(commit), NULL, &height);
-		gtk_paned_set_position(GTK_PANED(vpaned1), height * 30 / 100);
-		gtk_paned_set_position(GTK_PANED(vpaned2), height * 15 / 100);
-	}
 	else
-	{
 		gtk_widget_set_size_request(commit, 700, 500);
+
 		gtk_widget_show_now(commit);
 		gtk_window_get_size(GTK_WINDOW(commit), NULL, &height);
 		gtk_paned_set_position(GTK_PANED(vpaned1), height * 30 / 100);
 		gtk_paned_set_position(GTK_PANED(vpaned2), height * 55 / 100);
-	}
 
 #ifdef USE_GTKSPELL
 	speller = gtkspell_new_attach(GTK_TEXT_VIEW(messageView), NULL, &spellcheck_error);
