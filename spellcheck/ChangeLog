@@ -1,3 +1,10 @@
+2009-05-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * configure.in, po/geanyspellcheck.pot:
+   Prefix the gettext package with "geany" to avoid possible
+   naming conflicts.
+
+
 2009-05-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/gui.c, src/scplugin.c, src/gui.h:

@@ -48,7 +48,7 @@ blddir = '_build_'
 
 
 class Plugin:
-	def __init__(self, n, s, i, v=VERSION, l=[]):
+	def __init__(self, n, s, i, v=VERSION, l=[], g=None):
 		self.name = n
 		self.sources = s
 		self.includes = i # do not include '.'
@@ -56,6 +56,7 @@ class Plugin:
 		self.libs = l # a list of lists of libs and their versions, e.g. [ [ 'gtk', '2.6' ],
 		              # [ 'gtkspell-2.0', '2.0', False ] ], the third argument defines whether
 		              # the dependency is mandatory
+		self.gettext_package = g if g else n
 
 
 # add a new element for your plugin
@@ -114,7 +115,7 @@ plugins = [
 	Plugin('spellcheck',
 		 [ 'spellcheck/src/gui.c', 'spellcheck/src/scplugin.c', 'spellcheck/src/speller.c' ], # source files
 		 [ 'spellcheck', 'spellcheck/src' ], # include dirs
-		 '0.4', [ [ 'enchant', '1.3', True ] ]),
+		 '0.4', [ [ 'enchant', '1.3', True ] ], 'geanyspellcheck'),
 	Plugin('geanylipsum',
 		 [ 'geanylipsum/src/geanylipsum.c' ], # source files
 		 [ 'geanylipsum', 'geanylipsum/src' ], # include dirs

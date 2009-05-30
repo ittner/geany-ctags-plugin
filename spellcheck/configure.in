@@ -29,7 +29,7 @@ GTK_VERSION=`$PKG_CONFIG --modversion gtk+-2.0`
 ENCHANT_VERSION=`$PKG_CONFIG --modversion enchant`
 
 # i18n
-GETTEXT_PACKAGE=spellcheck
+GETTEXT_PACKAGE=geanyspellcheck
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package.])
 
