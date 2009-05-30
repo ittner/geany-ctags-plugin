@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-26 00:44+0100\n"
+"POT-Creation-Date: 2009-05-30 20:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,43 +16,55 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/addons.c:53
+#: ../src/addons.c:55
 msgid "Addons"
 msgstr ""
 
-#: src/addons.c:53
+#: ../src/addons.c:55
 msgid "Various small addons for Geany."
 msgstr ""
 
-#: src/addons.c:150
+#: ../src/addons.c:176
 msgid "Plugin configuration directory could not be created."
 msgstr ""
 
-#: src/addons.c:172
+#: ../src/addons.c:198
 msgid "Show toolbar item to show a list of currently open documents"
 msgstr ""
 
 #. TODO fix the string
-#: src/addons.c:179
+#: ../src/addons.c:205
 msgid "Show a 'Open URI' menu item in the editor menu"
 msgstr ""
 
-#: src/ao_openuri.c:169
+#: ../src/addons.c:211
+msgid "Show available tasks in the Message Window"
+msgstr ""
+
+#: ../src/addons.c:217
+msgid "Show status icon in the Notification Area"
+msgstr ""
+
+#: ../src/ao_openuri.c:169
 msgid "Open URI"
 msgstr ""
 
-#: src/ao_openuri.c:175
+#: ../src/ao_openuri.c:175
 msgid "Copy URI"
 msgstr ""
 
-#: src/ao_doclist.c:209
+#: ../src/ao_doclist.c:209
 msgid "Close Ot_her Documents"
 msgstr ""
 
-#: src/ao_doclist.c:214
+#: ../src/ao_doclist.c:214
 msgid "C_lose All"
 msgstr ""
 
-#: src/ao_doclist.c:244
+#: ../src/ao_doclist.c:244
 msgid "Show Document List"
+msgstr ""
+
+#: ../src/tasks.c:311
+msgid "Tasks"
 msgstr ""
