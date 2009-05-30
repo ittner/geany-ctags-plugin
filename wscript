@@ -156,6 +156,9 @@ uninstall:
 clean:
 	@./waf clean
 
+distclean:
+	@./waf distclean
+
 .PHONY: clean uninstall install all
 '''
 
@@ -256,7 +259,7 @@ def configure(conf):
 			conf.define('PREFIX', conf.env['PREFIX'], 1)
 			conf.define('DOCDIR', '%s/doc/geany-plugins/%s' % (conf.env['DATADIR'], p.name), 1)
 			if os.path.exists(os.path.join(p.name, 'po')):
-				conf.define('GETTEXT_PACKAGE', p.name, 1)
+				conf.define('GETTEXT_PACKAGE', p.gettext_package, 1)
 				conf.define('ENABLE_NLS', 1)
 			else:
 				conf.undefine('GETTEXT_PACKAGE')
@@ -380,7 +383,7 @@ def build(bld):
 			bld.new_task_gen(
 				features	= 'intltool_po',
 				podir		= os.path.join(p.name, 'po'),
-				appname		= p.name
+				appname		= p.gettext_package
 			)
 		install_docs(bld, p.name, 'AUTHORS ChangeLog COPYING NEWS README THANKS TODO'.split())
 
