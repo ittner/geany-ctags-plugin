@@ -3,10 +3,11 @@
 # This file is distributed under the same license as the geany package.
 #
 # John Wehin <john.wehin@gmail.com>, 2009msgid ""
+msgid ""
 msgstr ""
 "Project-Id-Version: geanydoc\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-26 01:55+0400\n"
+"POT-Creation-Date: 2009-05-28 22:36+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: John Wehin <john.wehin@gmail.com>\n"
 "Language-Team: \n"
@@ -18,44 +19,42 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 
 #. All plugins must set name, description, version and author.
-#: /home/john_wehin/geany/plugin/geanydoc/src/geanydoc.c:63
-#: /home/john_wehin/geany/plugin/geanydoc/src/geanydoc.c:360
+#: ../src/geanydoc.c:63 ../src/geanydoc.c:360
 msgid "Doc"
 msgstr "Документация"
 
-#: /home/john_wehin/geany/plugin/geanydoc/src/geanydoc.c:63
+#: ../src/geanydoc.c:63
 msgid "Call documentation viewer on current symbol."
 msgstr "Показ документации на слово под курсором."
 
-#: /home/john_wehin/geany/plugin/geanydoc/src/geanydoc.c:64
+#: ../src/geanydoc.c:64
 msgid "Yura Siamshka <yurand2@gmail.com>"
 msgstr "Yura Siamshka <yurand2@gmail.com>"
 
-#: /home/john_wehin/geany/plugin/geanydoc/src/geanydoc.c:183
+#: ../src/geanydoc.c:183
 msgid "Could not parse the output of command"
 msgstr "Невозможно проанализировать вывод команды."
 
-#: /home/john_wehin/geany/plugin/geanydoc/src/geanydoc.c:370
+#: ../src/geanydoc.c:370
 msgid "Put output in buffer"
 msgstr "Вывести в буфер"
 
-#: /home/john_wehin/geany/plugin/geanydoc/src/geanydoc.c:382
+#: ../src/geanydoc.c:382
 msgid "Command 0:"
 msgstr "Команда 0:"
 
-#: /home/john_wehin/geany/plugin/geanydoc/src/geanydoc.c:388
+#: ../src/geanydoc.c:388
 msgid "Command 1:"
 msgstr "Команда 1:"
 
-#: /home/john_wehin/geany/plugin/geanydoc/src/geanydoc.c:406
+#: ../src/geanydoc.c:406
 msgid "%w will be replaced with current word\n"
 msgstr "%w будет заменено на слово под курсором\n"
 
-#: /home/john_wehin/geany/plugin/geanydoc/src/geanydoc.c:453
+#: ../src/geanydoc.c:453
 msgid "Document current word"
 msgstr "Документация на слово под курсором"
 
-#: /home/john_wehin/geany/plugin/geanydoc/src/geanydoc.c:454
+#: ../src/geanydoc.c:454
 msgid "Document interactive"
 msgstr "Интерактивная документация"
-

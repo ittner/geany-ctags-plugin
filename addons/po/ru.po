@@ -56,4 +56,3 @@ msgstr "З_акрыть все"
 #: src/ao_doclist.c:244
 msgid "Show Document List"
 msgstr "Показать список документов"
-
