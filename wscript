@@ -184,7 +184,8 @@ def configure(conf):
 		# try SVN
 		elif os.path.exists('.svn'):
 			try:
-				stdout = Utils.cmd_output(cmd='svn info --non-interactive', env={'LANG' : 'C'})
+				_env = None if is_win32 else {'LANG' : 'C'}
+				stdout = Utils.cmd_output(cmd='svn info --non-interactive', silent=True, env=_env)
 				lines = stdout.splitlines(True)
 				for line in lines:
 					if line.startswith('Last Changed Rev'):
@@ -208,9 +209,17 @@ def configure(conf):
 			else:
 				conf.define('LIBDIR', conf.env['PREFIX'] + '/lib', 1)
 
-	conf.check_tool('compiler_cc intltool')
+	conf.check_tool('compiler_cc')
+	# we don't require intltool on Windows (it would require Perl) though it works well
+	try:
+		conf.check_tool('intltool')
+	except:
+		pass
 
-	set_lib_dir()
+	is_win32 = target_is_win32(conf.env)
+
+	if not is_win32:
+		set_lib_dir()
 
 	conf.check_cfg(package='gtk+-2.0', atleast_version='2.6.0', uselib_store='GTK',
 		mandatory=True, args='--cflags --libs')
@@ -245,8 +254,29 @@ def configure(conf):
 						enabled_plugins.remove(p.name)
 
 
+	# Windows specials
+	if is_win32:
+		# geanygdb doesn't compile/run on Windows
+		if 'geanygdb' in enabled_plugins:
+			enabled_plugins.remove('geanygdb')
+
+		prefix = os.path.splitdrive(conf.srcdir)[1]
+		conf.env['PREFIX'] = os.path.join(prefix, '%s-%s' % (APPNAME, VERSION))
+		# hack: we add the parent directory of the first include directory as this is missing in
+		# list returned from pkg-config
+		conf.env['CPPPATH_GTK'].insert(0, os.path.dirname(conf.env['CPPPATH_GTK'][0]))
+		# we don't need -fPIC when compiling on or for Windows
+		if '-fPIC' in conf.env['shlib_CCFLAGS']:
+			conf.env['shlib_CCFLAGS'].remove('-fPIC')
+		conf.env['shlib_PATTERN'] = '%s.dll'
+		conf.env['program_PATTERN'] = '%s.exe'
+	else:
+		conf.env['shlib_PATTERN'] = '%s.so'
+
 	svn_rev = conf_get_svn_rev()
 	conf.define('REVISION', svn_rev, 1)
+
+	conf.env['G_PREFIX'] = conf.env['PREFIX']
 
 	# write a config.h for each plugin
 	for p in plugins:
@@ -256,8 +286,16 @@ def configure(conf):
 				conf.define('USE_GTKSPELL', 1);
 			conf.define('VERSION', p.version, 1)
 			conf.define('PACKAGE', p.name, 1)
-			conf.define('PREFIX', conf.env['PREFIX'], 1)
-			conf.define('DOCDIR', '%s/doc/geany-plugins/%s' % (conf.env['DATADIR'], p.name), 1)
+			if is_win32:
+				conf.define('PREFIX', '', 1)
+				conf.define('LIBDIR', '', 1)
+				conf.define('DOCDIR', 'doc/%s' % p.name, 1)
+				conf.define('LOCALEDIR', 'share/locale', 1)
+				# DATADIR is defined in objidl.h, so we remove it from config.h
+				conf.undefine('DATADIR')
+			else:
+				conf.define('PREFIX', conf.env['PREFIX'], 1)
+				conf.define('DOCDIR', '%s/doc/geany-plugins/%s' % (conf.env['DATADIR'], p.name), 1)
 			if os.path.exists(os.path.join(p.name, 'po')):
 				conf.define('GETTEXT_PACKAGE', p.gettext_package, 1)
 				conf.define('ENABLE_NLS', 1)
@@ -265,9 +303,11 @@ def configure(conf):
 				conf.undefine('GETTEXT_PACKAGE')
 				conf.undefine('ENABLE_NLS')
 			conf.write_config_header(os.path.join(p.name, 'config.h'))
+	if is_win32:
+		conf.env['LOCALEDIR'] = os.path.join(conf.env['G_PREFIX'], 'share/locale')
 
 	Utils.pprint('BLUE', 'Summary:')
-	print_message(conf, 'Install Geany Plugins ' + VERSION + ' in', conf.env['PREFIX'])
+	print_message(conf, 'Install Geany Plugins ' + VERSION + ' in', conf.env['G_PREFIX'])
 	print_message(conf, 'Using GTK version', gtk_version)
 	print_message(conf, 'Using Geany version', geany_version)
 	if svn_rev != '-1':
@@ -304,16 +344,17 @@ def set_options(opt):
 	opt.add_option('--skip-plugins', action='store', default='',
 		help='plugins which should not be built, ignored when --enable-plugins is set, same format as --enable-plugins' % \
 		{ '1' : plugins[0].name, '2' : plugins[1].name }, dest='skip_plugins')
-	opt.add_option('--target-win32', action='store_true', default=False,
-		help='Cross-compile for Win32', dest='target_win32')
 
 
 def build(bld):
+	is_win32 = target_is_win32(bld.env)
+
 	def build_lua(bld, p, libs):
 		lua_sources = [ 'geanylua/glspi_init.c', 'geanylua/glspi_app.c', 'geanylua/glspi_dlg.c',
 						'geanylua/glspi_doc.c', 'geanylua/glspi_kfile.c', 'geanylua/glspi_run.c',
 						'geanylua/glspi_sci.c', 'geanylua/gsdlg_lua.c' ]
 
+		# FIXME this most probably won't work on Windows, untested
 		bld.new_task_gen(
 			features		= 'cc cshlib',
 			source			= lua_sources,
@@ -344,17 +385,17 @@ def build(bld):
 		)
 
 	def install_docs(bld, pname, files):
+		ext = '.txt' if is_win32 else ''
 		for file in files:
 			if os.path.exists(os.path.join(p.name, file)):
-				bld.install_files('${DATADIR}/doc/geany-plugins/%s' % pname, '%s/%s' % (pname, file))
-
-
-	# Build the plugins
-	if Options.options.target_win32:
-		bld.env['shlib_CCFLAGS']    = '' # disable default -fPIC flag
-		bld.env['shlib_PATTERN']    = '%s.dll'
-	else:
-		bld.env['shlib_PATTERN']    = '%s.so'
+				if is_win32:
+					filename = '%s/%s' % (pname, file)
+					bld.install_as(
+						'${G_PREFIX}/doc/%s%s' % (ucFirst(filename, is_win32), ext),
+						filename)
+				else:
+					bld.install_files(
+						'${DATADIR}/doc/geany-plugins/%s' % pname, '%s/%s' % (pname, file))
 
 	for p in plugins:
 		if not p.name in bld.env['enabled_plugins']:
@@ -376,15 +417,17 @@ def build(bld):
 			includes		= p.includes,
 			target			= p.name,
 			uselib			= libs,
-			install_path	= '${LIBDIR}/geany'
+			install_path	= '${G_PREFIX}/lib' if is_win32 else '${LIBDIR}/geany/'
 		)
 
-		if os.path.exists(os.path.join(p.name, 'po')):
+		if os.path.exists(os.path.join(p.name, 'po')) and bld.env['INTLTOOL']:
 			bld.new_task_gen(
 				features	= 'intltool_po',
 				podir		= os.path.join(p.name, 'po'),
-				appname		= p.gettext_package
+				appname		= p.gettext_package,
+				install_path = '${G_PREFIX}/share/locale' if is_win32 else '${LOCALEDIR}'
 			)
+
 		install_docs(bld, p.name, 'AUTHORS ChangeLog COPYING NEWS README THANKS TODO'.split())
 
 
@@ -451,3 +494,19 @@ def print_message(conf, msg, result, color = 'GREEN'):
 	conf.check_message_1(msg)
 	conf.check_message_2(result, color)
 
+
+def ucFirst(s, is_win32):
+	if is_win32:
+		return s.title()
+	return s
+
+
+def target_is_win32(env):
+	if sys.platform == 'win32':
+		return True
+	if env and 'CC' in env:
+		cc = env['CC']
+		if not isinstance(cc, str):
+			cc = ''.join(cc)
+		return cc.find('mingw') != -1
+	return False
