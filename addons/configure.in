@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-# $Id: configure.in 2 2008-04-02 14:52:33Z eht16 $
+# $Id$
 
 AC_INIT(configure.in)
 AM_INIT_AUTOMAKE(addons, 0.3)
