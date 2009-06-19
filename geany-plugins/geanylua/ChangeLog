@@ -1,3 +1,8 @@
+June 19, 2009 (ntrel)
+  Move to geany-plugins project, add i18n support.
+  Rename from GeanyLua to 'Lua Script'.
+  Temporarily fix plugin_configure().
+
 December 5, 2008 (ntrel)
   Update to Geany API v115.
 

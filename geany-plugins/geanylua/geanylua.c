@@ -34,6 +34,8 @@
 #include "geany.h"
 #include "plugindata.h"
 #include "keybindings.h"
+#include "ui_utils.h"
+
 #include "geanyfunctions.h"
 
 #include <glib/gi18n.h>
@@ -132,6 +134,9 @@ PLUGIN_EXPORT
 void plugin_init(GeanyData *data)
 {
 	gchar *libname=NULL;
+
+	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
+
 	geany_data=data;
 	libname=MKPATH(data->app->configdir);
 	if ( !g_file_test(libname,G_FILE_TEST_IS_REGULAR) ) {
@@ -152,7 +157,7 @@ void plugin_init(GeanyData *data)
 		return;
 	}
 	if ( !(
-		GETSYM("glspi_version", glspi_version) && 
+		GETSYM("glspi_version", glspi_version) &&
 		GETSYM("glspi_init", glspi_init) &&
 		GETSYM("glspi_configure", glspi_configure) &&
 		GETSYM("glspi_cleanup", glspi_cleanup) &&
@@ -176,15 +181,16 @@ void plugin_init(GeanyData *data)
 
 
 PLUGIN_EXPORT
-void configure(GtkWidget *parent)
+GtkWidget *plugin_configure(G_GNUC_UNUSED GtkDialog *dialog)
 {
 	if (glspi_configure) {
-		glspi_configure(parent);
+		glspi_configure(geany->main_widgets->window);
 	} else {
 		dialogs_show_msgbox(GTK_MESSAGE_ERROR,
-			_("The "PLUGIN_NAME" plugin failed to load properly.\n"
-			"Please check your installation.") );
+			_("The %s plugin failed to load properly.\n"
+			"Please check your installation."), PLUGIN_NAME );
 	}
+	return NULL; /* FIXME */
 }
 
 
