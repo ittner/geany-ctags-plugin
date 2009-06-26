@@ -866,7 +866,7 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 		_("Use KOMA-script classes if possible"));
 	ui_widget_set_tooltip_text(checkbox_KOMA,
 		_("Uses the KOMA-script classes by Markus Kohm.\n"
-		"Keep in mind: To compile your document these classes"
+		"Keep in mind: To compile your document these classes "
 		"have to be installed before."));
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_KOMA), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_KOMA), glatex_set_koma_active);
@@ -1263,7 +1263,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	menu_latex_replace_selection = gtk_menu_item_new_with_mnemonic(
 		_("Bulk _Replace Special Characters"));
 	ui_widget_set_tooltip_text(menu_latex_replace_selection,
-		_("_Replace selected special cahracters with TeX substitutes"));
+		_("_Replace selected special characters with TeX substitutes"));
 	gtk_container_add(GTK_CONTAINER(menu_latex_replacement_submenu),
 		menu_latex_replace_selection);
 	g_signal_connect(menu_latex_replace_selection, "activate",
