@@ -128,7 +128,7 @@ const gchar *label_script_cmd[GMS_NB_TYPE_SCRIPT] = {
 
 ///< \brief It's the information message about geany mini script
 const char *geany_info = "<b>GMS : Geany Mini-Script filter Plugin</b>\n"
-"This plugin is a tools to apply a script filter on :\n"
+"This plugin is a tool to apply a script filter on :\n"
 "   o the text selection,\n"
 "   o the current document,\n"
 "   o all documents of the current session.\n"
@@ -419,8 +419,8 @@ gms_handle_t gms_new(
                         _("Mini-Script Filter"),
                         GTK_WINDOW( mw ),
                         GTK_DIALOG_DESTROY_WITH_PARENT|GTK_DIALOG_MODAL,
-                        GTK_STOCK_APPLY,GTK_RESPONSE_APPLY,
                         GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL,
+                        GTK_STOCK_EXECUTE,GTK_RESPONSE_APPLY,
                         NULL
                          ) ;
         vb_dlg   = GTK_BOX (GTK_DIALOG(this->w.dlg)->vbox)  ;

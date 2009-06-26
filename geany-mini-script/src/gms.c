@@ -22,8 +22,8 @@
  */
 
 /**
- * gms is a tools to apply a script filter on a text selection, or on
- * the whole document, or all opened document.
+ * gms is a tool to apply a script filter on a text selection, or on
+ * the whole document, or all opened documents.
  *
  * note: the script filter could be : Unix shell, perl , python , sed ,awk ...
  *
