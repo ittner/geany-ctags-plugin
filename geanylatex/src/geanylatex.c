@@ -92,6 +92,7 @@ PLUGIN_KEY_GROUP(geanylatex, COUNT_KB)
 
 const GtkActionEntry format_icons[] =
 {
+	{ "Wizard", GTK_STOCK_NEW, NULL, NULL, N_("Runs LaTeX wizard"), G_CALLBACK(glatex_kbwizard) },
 	{ "Italic", GTK_STOCK_ITALIC, NULL, NULL, N_("Marks selected text as italic"), G_CALLBACK(glatex_kb_format_bold) },
 	{ "Bold", GTK_STOCK_BOLD, NULL, NULL, N_("Marks selected text as bold"), G_CALLBACK(glatex_kb_format_bold) },
 	{ "Underline", GTK_STOCK_UNDERLINE, NULL, NULL, N_("Underlines selected text"), G_CALLBACK(glatex_kb_format_bold) },
@@ -107,13 +108,15 @@ const guint ui_entries_n = G_N_ELEMENTS(format_icons);
 const gchar *toolbar_markup =
 "<ui>"
 	"<toolbar name='glatex_format_toolbar'>"
-	"<toolitem action='Italic'/>"
-	"<toolitem action='Bold'/>"
-	"<toolitem action='Underline'/>"
-	"<separator/>"
-	"<toolitem action='Centered' />"
-	"<toolitem action='Left' />"
-	"<toolitem action='Right'/>"
+		"<toolitem action='Wizard'/>"
+		"<separator/>"
+		"<toolitem action='Italic'/>"
+		"<toolitem action='Bold'/>"
+		"<toolitem action='Underline'/>"
+		"<separator/>"
+		"<toolitem action='Centered' />"
+		"<toolitem action='Left' />"
+		"<toolitem action='Right'/>"
 	"</toolbar>"
 "</ui>";
 
