@@ -36,7 +36,7 @@ GeanyFunctions	*geany_functions;
 
 static GtkWidget *menu_latex = NULL;
 static GtkWidget *menu_latex_menu = NULL;
-static GtkWidget *menu_latex_wizzard = NULL;
+static GtkWidget *menu_latex_wizard = NULL;
 static GtkWidget *menu_latex_menu_special_char = NULL;
 static GtkWidget *menu_latex_menu_special_char_submenu = NULL;
 static GtkWidget *menu_latex_ref = NULL;
@@ -71,7 +71,7 @@ static gchar *config_file = NULL;
 /* Doing some basic keybinding stuff */
 enum
 {
-	KB_LATEX_WIZZARD,
+	KB_LATEX_WIZARD,
 	KB_LATEX_INSERT_LABEL,
 	KB_LATEX_INSERT_REF,
 	KB_LATEX_INSERT_NEWLINE,
@@ -1105,8 +1105,8 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 void init_keybindings()
 {
 	/* init keybindins */
-	keybindings_set_item(plugin_key_group, KB_LATEX_WIZZARD, glatex_kbwizard,
-		0, 0, "run_latex_wizard", _("Run LaTeX-Wizard"), menu_latex_wizzard);
+	keybindings_set_item(plugin_key_group, KB_LATEX_WIZARD, glatex_kbwizard,
+		0, 0, "run_latex_wizard", _("Run LaTeX-Wizard"), menu_latex_wizard);
 	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_LABEL, glatex_kblabel_insert,
 		0, 0, "insert_latex_label", _("Insert \\label"), menu_latex_label);
 	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_REF, glatex_kbref_insert,
@@ -1180,12 +1180,12 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	menu_latex_menu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_latex), menu_latex_menu);
 
-	menu_latex_wizzard = ui_image_menu_item_new(GTK_STOCK_NEW, _("LaTeX-_Wizard"));
-	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_wizzard);
-	ui_widget_set_tooltip_text(menu_latex_wizzard,
+	menu_latex_wizard = ui_image_menu_item_new(GTK_STOCK_NEW, _("LaTeX-_Wizard"));
+	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_wizard);
+	ui_widget_set_tooltip_text(menu_latex_wizard,
 			     _("Starts a Wizard to easily create LaTeX-documents"));
 
-	g_signal_connect(menu_latex_wizzard, "activate",
+	g_signal_connect(menu_latex_wizard, "activate",
 			 G_CALLBACK(glatex_wizard_activated), NULL);
 
 	menu_latex_menu_special_char = gtk_menu_item_new_with_mnemonic(_("Insert _Special Character"));
