@@ -37,5 +37,8 @@ void glatex_kb_format_typewriter(G_GNUC_UNUSED guint key_id);
 void glatex_kb_format_centering(G_GNUC_UNUSED guint key_id);
 void glatex_kb_format_left(G_GNUC_UNUSED guint key_id);
 void glatex_kb_format_right(G_GNUC_UNUSED guint key_id);
+void glatex_kb_insert_description_list(G_GNUC_UNUSED guint key_id);
+void glatex_kb_insert_itemize_list(G_GNUC_UNUSED guint key_id);
+void glatex_kb_insert_enumerate_list(G_GNUC_UNUSED guint key_id);
 
 #endif

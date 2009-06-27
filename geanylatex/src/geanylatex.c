@@ -85,6 +85,9 @@ enum
 	KB_LATEX_FORMAT_CENTER,
 	KB_LATEX_FORMAT_LEFT,
 	KB_LATEX_FORMAT_RIGHT,
+	KB_LATEX_ENVIRONMENT_INSERT_DESCRIPTION,
+	KB_LATEX_ENVIRONMENT_INSERT_ITEMIZE,
+	KB_LATEX_ENVIRONMENT_INSERT_ENUMERATE,
 	COUNT_KB
 };
 
@@ -1135,7 +1138,16 @@ void init_keybindings()
 	keybindings_set_item(plugin_key_group, KB_LATEX_FORMAT_LEFT, glatex_kb_format_left,
 		0, 0, "format_left", _("Format selection left-aligned"), NULL);
 	keybindings_set_item(plugin_key_group, KB_LATEX_FORMAT_RIGHT, glatex_kb_format_right,
-		0, 0, "format_right", _("Format selection right-aligned "), NULL);
+		0, 0, "format_right", _("Format selection right-aligned"), NULL);
+	keybindings_set_item(plugin_key_group, KB_LATEX_ENVIRONMENT_INSERT_DESCRIPTION,
+		glatex_kb_insert_description_list, 0, 0, "insert_description_list",
+		_("Insert description list"), NULL);
+	keybindings_set_item(plugin_key_group, KB_LATEX_ENVIRONMENT_INSERT_ITEMIZE,
+		glatex_kb_insert_itemize_list, 0, 0, "insert_itemize_list",
+		_("Insert itemize list"), NULL);
+	keybindings_set_item(plugin_key_group, KB_LATEX_ENVIRONMENT_INSERT_ENUMERATE,
+		glatex_kb_insert_enumerate_list, 0, 0, "insert_enumerate_list",
+		_("Insert enumerate list"), NULL);
 }
 
 void plugin_help()

@@ -110,3 +110,24 @@ void glatex_kb_format_right(G_GNUC_UNUSED guint key_id)
 		return;
 	glatex_insert_latex_format(NULL, GINT_TO_POINTER(LATEX_RIGHT));
 }
+
+void glatex_kb_insert_description_list(G_GNUC_UNUSED guint key_id)
+{
+	if (NULL == document_get_current())
+		return;
+	glatex_insert_list_environment(GLATEX_LIST_DESCRIPTION);
+}
+
+void glatex_kb_insert_itemize_list(G_GNUC_UNUSED guint key_id)
+{
+	if (NULL == document_get_current())
+		return;
+	glatex_insert_list_environment(GLATEX_LIST_ITEMIZE);
+}
+
+void glatex_kb_insert_enumerate_list(G_GNUC_UNUSED guint key_id)
+{
+	if (NULL == document_get_current())
+		return;
+	glatex_insert_list_environment(GLATEX_LIST_ENUMERATE);
+}

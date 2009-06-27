@@ -34,11 +34,22 @@ enum {
     ENVIRONMENT_CAT_MAX
 };
 
+enum {
+    GLATEX_LIST_DESCRIPTION = 0,
+    GLATEX_LIST_ENUMERATE,
+    GLATEX_LIST_ITEMIZE
+};
+
+enum {
+    GLATEX_ENVIRONMENT_TYPE_NONE = 0,
+    GLATEX_ENVIRONMENT_TYPE_LIST
+};
+
 extern SubMenuTemplate glatex_environment_array[];
 
 extern CategoryName glatex_environment_cat_names[];
 
-void glatex_insert_environment(gchar *environment);
+void glatex_insert_environment(gchar *environment, gint type);
 
 void
 glatex_insert_environment_dialog(G_GNUC_UNUSED GtkMenuItem *menuitem,
@@ -48,4 +59,5 @@ void
 glatex_environment_insert_activated (G_GNUC_UNUSED GtkMenuItem *menuitem,
                               		 G_GNUC_UNUSED gpointer gdata);
 
+void glatex_insert_list_environment(gint type);
 #endif

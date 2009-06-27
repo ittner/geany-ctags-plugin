@@ -51,8 +51,14 @@ SubMenuTemplate glatex_environment_array[] = {
 	{0, NULL, NULL},
 };
 
+gchar *glatex_list_environments [] =
+{
+	"description",
+	"enumerate",
+	"itemize"
+};
 
-void glatex_insert_environment(gchar *environment)
+void glatex_insert_environment(gchar *environment, gint type)
 {
 	GeanyDocument *doc = NULL;
 
@@ -78,11 +84,19 @@ void glatex_insert_environment(gchar *environment)
 		{
 			gint pos = sci_get_current_position(doc->editor->sci);
 			gint len = strlen(environment);
+			GString *tmpstring = NULL;
 			gchar *tmp = NULL;
 
-			tmp = g_strconcat("\\begin{", environment, "}\n\n\\end{",
-			environment, "}\n", NULL);
+			tmpstring = g_string_new("\\begin{");
+			g_string_append(tmpstring, environment);
+			g_string_append(tmpstring, "}\n");
+			if (type == GLATEX_ENVIRONMENT_TYPE_LIST)
+				g_string_append(tmpstring, "\\item \n");
+			g_string_append(tmpstring, "\\end{");
+			g_string_append(tmpstring, environment);
+			g_string_append(tmpstring,"}\n");
 
+			tmp = g_string_free(tmpstring, FALSE);
 			sci_insert_text(doc->editor->sci, pos, tmp);
 			sci_set_current_position(doc->editor->sci, pos + len + 9, TRUE);
 			g_free(tmp);
@@ -97,7 +111,12 @@ glatex_environment_insert_activated (G_GNUC_UNUSED GtkMenuItem *menuitem,
 {
     gint env = GPOINTER_TO_INT(gdata);
 
-    glatex_insert_environment(glatex_environment_array[env].latex);
+	if (glatex_environment_array[env].cat == ENVIRONMENT_CAT_LISTS)
+	    glatex_insert_environment(glatex_environment_array[env].latex,
+			GLATEX_ENVIRONMENT_TYPE_LIST);
+	else
+		glatex_insert_environment(glatex_environment_array[env].latex,
+			GLATEX_ENVIRONMENT_TYPE_NONE);
 }
 
 
@@ -158,7 +177,8 @@ glatex_insert_environment_dialog(G_GNUC_UNUSED GtkMenuItem *menuitem,
 
 		if (env_string != NULL)
 		{
-			glatex_insert_environment(env_string);
+			/* Introduce a check whether an enrivonent is a list */
+			glatex_insert_environment(env_string, GLATEX_ENVIRONMENT_TYPE_NONE);
 			g_free(env_string);
 		}
 	}
@@ -166,3 +186,7 @@ glatex_insert_environment_dialog(G_GNUC_UNUSED GtkMenuItem *menuitem,
 	gtk_widget_destroy(dialog);
 }
 
+void glatex_insert_list_environment(gint type)
+{
+	glatex_insert_environment(glatex_list_environments[type], GLATEX_ENVIRONMENT_TYPE_LIST);
+}
