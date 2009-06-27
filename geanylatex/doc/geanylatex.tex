@@ -51,6 +51,8 @@ openany,%
 \author{Frank Lanitz \\ \small{\href{mailto:frank@frank.uvena.de}{frank@frank.uvena.de}}}
 \date{\today}
 
+\newcommand{\up}[1]{\ensuremath{^\textrm{\scriptsize#1}}}
+
 \begin{document}
 
 \newpage
@@ -433,7 +435,11 @@ font face. This is done be adding \texttt{\textbackslash texttt\{...\}} around
 selection.\\\hline
 Format selection centered & Formats selected text centered on page (uses \texttt{\textbackslash{}centering} \\\hline
 Format selection left-aligned & Formats selected text left-aligned on page (uses \texttt{\textbackslash{}raggedleft} \\\hline
- Format selection right-alignedm & Formats selected text right-aligned on page (uses \texttt{\textbackslash{}raggedright}\\\hline
+Format selection right-alignedm & Formats selected text right-aligned on page (uses \texttt{\textbackslash{}raggedright}\\\hline
+Insert description list & Inserts an description environment as well as a 1\up{st} \textbackslash{}item element.\\\hline
+Insert itemize list & Inserts an itemize environment as well as a 1\up{st} \textbackslash{}item element.\\\hline
+Insert enumerate list & Inserts an enumerate environment as well as a 1\up{st} \textbackslash{}item element.\\\hline
+
 \end{tabular}
 \end{table}
 
