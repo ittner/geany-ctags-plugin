@@ -1241,7 +1241,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_latex_bibtex),
 		menu_latex_bibtex_submenu);
 
-	for (i = 0; i < N_TYPES; i++)
+	for (i = 0; i < GLATEX_BIBTEX_N_TYPES; i++)
 	{
 		tmp = NULL;
 		tmp = gtk_menu_item_new_with_mnemonic(_(glatex_label_types[i]));

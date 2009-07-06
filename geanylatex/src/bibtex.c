@@ -45,88 +45,88 @@ void glatex_insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem,
 						 G_GNUC_UNUSED gpointer gdata)
 {
 	int doctype = GPOINTER_TO_INT(gdata);
-	gboolean fields[N_ENTRIES];
+	gboolean fields[GLATEX_BIBTEX_N_ENTRIES];
 	gchar *output = g_strdup("@");
 	int i;
 
-	for (i = 0; i < N_ENTRIES; i++)
+	for (i = 0; i < GLATEX_BIBTEX_N_ENTRIES; i++)
 	{
 		glatex_set_status(i, FALSE);
 	}
 
 	switch(doctype) {
-	case ARTICLE:
-		glatex_set_status(AUTHOR, TRUE);
-		glatex_set_status(TITLE, TRUE);
-		glatex_set_status(JOURNAL, TRUE);
-		glatex_set_status(YEAR, TRUE);
+	case GLATEX_BIBTEX_ARTICLE:
+		glatex_set_status(GLATEX_BIBTEX_AUTHOR, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_TITLE, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_JOURNAL, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_YEAR, TRUE);
 		break;
-	case BOOK:
-		glatex_set_status(AUTHOR, TRUE);
-		glatex_set_status(EDITOR, TRUE);
-		glatex_set_status(TITLE, TRUE);
-		glatex_set_status(PUBLISHER, TRUE);
-		glatex_set_status(YEAR, TRUE);
+	case GLATEX_BIBTEX_BOOK:
+		glatex_set_status(GLATEX_BIBTEX_AUTHOR, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_EDITOR, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_TITLE, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_PUBLISHER, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_YEAR, TRUE);
 		break;
-	case BOOKLET:
-		glatex_set_status(TITLE, TRUE);
+	case GLATEX_BIBTEX_BOOKLET:
+		glatex_set_status(GLATEX_BIBTEX_TITLE, TRUE);
 		break;
-	case CONFERENCE:
-	case INCOLLECTION:
-	case INPROCEEDINGS:
-		glatex_set_status(AUTHOR, TRUE);
-		glatex_set_status(TITLE, TRUE);
-		glatex_set_status(BOOKTITLE, TRUE);
-		glatex_set_status(YEAR, TRUE);
+	case GLATEX_BIBTEX_CONFERENCE:
+	case GLATEX_BIBTEX_INCOLLECTION:
+	case GLATEX_BIBTEX_INPROCEEDINGS:
+		glatex_set_status(GLATEX_BIBTEX_AUTHOR, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_TITLE, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_BOOKTITLE, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_YEAR, TRUE);
 		break;
-	case INBOOK:
-		glatex_set_status(AUTHOR, TRUE);
-		glatex_set_status(EDITOR, TRUE);
-		glatex_set_status(TITLE, TRUE);
-		glatex_set_status(CHAPTER, TRUE);
-		glatex_set_status(PAGES, TRUE);
-		glatex_set_status(PUBLISHER, TRUE);
-		glatex_set_status(YEAR, TRUE);
+	case GLATEX_BIBTEX_INBOOK:
+		glatex_set_status(GLATEX_BIBTEX_AUTHOR, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_EDITOR, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_TITLE, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_CHAPTER, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_PAGES, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_PUBLISHER, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_YEAR, TRUE);
 		break;
-	case MANUAL:
-		glatex_set_status(TITLE, TRUE);
+	case GLATEX_BIBTEX_MANUAL:
+		glatex_set_status(GLATEX_BIBTEX_TITLE, TRUE);
 		break;
-	case MASTERSTHESIS:
-	case PHDTHESIS:
-		glatex_set_status(AUTHOR, TRUE);
-		glatex_set_status(TITLE, TRUE);
-		glatex_set_status(SCHOOL, TRUE);
-		glatex_set_status(YEAR, TRUE);
+	case GLATEX_BIBTEX_MASTERSTHESIS:
+	case GLATEX_BIBTEX_PHDTHESIS:
+		glatex_set_status(GLATEX_BIBTEX_AUTHOR, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_TITLE, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_SCHOOL, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_YEAR, TRUE);
 		break;
-	case MISC:
-		for (i = 0; i < N_ENTRIES; i++)
+	case GLATEX_BIBTEX_MISC:
+		for (i = 0; i < GLATEX_BIBTEX_N_ENTRIES; i++)
 		{
 			glatex_set_status(i, TRUE);
 		}
-	case TECHREPORT:
-		glatex_set_status(AUTHOR, TRUE);
-		glatex_set_status(TITLE, TRUE);
-		glatex_set_status(INSTITUTION, TRUE);
-		glatex_set_status(YEAR, TRUE);
+	case GLATEX_BIBTEX_TECHREPORT:
+		glatex_set_status(GLATEX_BIBTEX_AUTHOR, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_TITLE, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_INSTITUTION, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_YEAR, TRUE);
 		break;
-	case UNPUBLISHED:
-		glatex_set_status(AUTHOR, TRUE);
-		glatex_set_status(TITLE, TRUE);
-		glatex_set_status(NOTE, TRUE);
+	case GLATEX_BIBTEX_UNPUBLISHED:
+		glatex_set_status(GLATEX_BIBTEX_AUTHOR, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_TITLE, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_NOTE, TRUE);
 		break;
-	case PROCEEDINGS:
-		glatex_set_status(TITLE, TRUE);
-		glatex_set_status(YEAR, TRUE);
+	case GLATEX_BIBTEX_PROCEEDINGS:
+		glatex_set_status(GLATEX_BIBTEX_TITLE, TRUE);
+		glatex_set_status(GLATEX_BIBTEX_YEAR, TRUE);
 		break;
 	default:
-		for (i = 0; i < N_ENTRIES; i++)
+		for (i = 0; i < GLATEX_BIBTEX_N_ENTRIES; i++)
 		{
 			glatex_set_status(i, TRUE);
 		}
 	}
 
 	output = g_strconcat(output, glatex_label_types[doctype], "{ \n",NULL);
-	for (i = 0; i < N_ENTRIES; i++)
+	for (i = 0; i < GLATEX_BIBTEX_N_ENTRIES; i++)
 	{
 		if (fields[i] == TRUE)
 		{
@@ -139,3 +139,4 @@ void glatex_insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem,
 
 	g_free(output);
 }
+
