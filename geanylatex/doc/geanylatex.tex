@@ -47,7 +47,7 @@ openany,%
 \hypersetup{pdftex=true, colorlinks=true, breaklinks=true, linkcolor=black, urlcolor=darkblue}
 
 \title{Geany\LaTeX{} -- A \LaTeX{} plugin for Geany \\[1.5ex]
-	   \normalsize Version 0.4}
+	   \normalsize Version 0.5dev}
 \author{Frank Lanitz \\ \small{\href{mailto:frank@frank.uvena.de}{frank@frank.uvena.de}}}
 \date{\today}
 
@@ -59,7 +59,7 @@ openany,%
 \dedication{\normalsize \textbf{Note:} Please note the document has been created on
 \today. If you are using devel version from SVN, please compile and check
 \texttt{doc/geanylatex.tex} from sources. Please check page \pageref
-{sec:compiling_of_documentation}, section \ref{sec:compiling_of_documentation} how to do so.}
+{sec:compiling_of_documentation}, section \ref{sec:compiling_of_documentation} how to do so. }
 
 \pagenumbering{Roman}
 \maketitle
@@ -91,6 +91,16 @@ It implements a couple of maybe useful functions:
 \end{itemize}
 
 \section{News}
+\subsection*{Since 0.4}
+\begin{itemize}
+	\item Adding a icon for \LaTeX-Wizard to toolbar
+	\item Adding shortcuts for inserting common list environments 
+		  like \texttt{enumerate}, \texttt{itemize} and 
+		  \texttt{description}
+	\item Some general bugfixes and improvments. As always, see 
+		  ChangeLog or svn log.
+\end{itemize}
+
 \subsection*{GeanyLaTeX{} 0.4 -- 2009-05-26}
 \begin{itemize}
 	\item Adding a toolbar with often used format commands
@@ -105,12 +115,14 @@ It implements a couple of maybe useful functions:
 
 \section{Requirements}
 
-For compiling the plugin yourself, you will need the GTK ($>= 2.6.0$)
+\small{\textbf{Please note:} This section of documentation is only valid with standalone distribution of Geany\LaTeX{}. If you are planning to use the common geany-plugins project, please check documentation over there as there are some specialties you might like to know.}
+
+For compiling the plugin yourself, you will need the GTK ($>= 2.8.0$)
 libraries and header files. You will also need its dependency
 libraries and header files, such as Pango, Glib and ATK. All these
 files are available at \url{http://www.gtk.org}.
 
-And obviously, you will need have Geany with its header files
+And obviously, you will need to have Geany with its header files
 installed (in case you are compiling the plugin on your own). If you
 have Geany installed from the sources, you should be ready to go. If
 you used a prepared package e.g. from your distribution you probably
@@ -122,10 +134,13 @@ Furthermore you need, of course, a C compiler and the Make tool. The
 GNU versions of these tools are recommended. Also there should be a
 working \LaTeX-environment on your System.
 
-There is no special need in RAM or CPU so the plugin should run on
-all systems Geany is able to run.
+There is no special need in RAM or CPU so the plugin should compile and 
+run on all systems Geany is able to run.
 
 \section{Installation}
+
+\small{\textbf{Please note:} This section of documentation is only valid with standalone distribution of Geany\LaTeX{}. If you are planning to use the common geany-plugins project, please check documentation over there as there are some specialties you might like to know.}
+
 \subsection{Compiling the plugin itself}
 Compiling and installing the code is done by the following three
 commands:
@@ -140,6 +155,12 @@ $ make install %$
 
 For more configuration details run \texttt{./configure --help}
 
+By default the plugin is getting installed into the lib subfolder of 
+your found Geany installation. So if you have installed Geany to 
+\texttt{/usr/local/} the plugin will be installed to 
+\texttt{/usr/local/lib/geany/}. Translation files will be installed to
+\texttt{/usr/local/share/locale/} in this case. 
+ 
 If there are any errors during compilation, check your build environment
 and try to find the error, otherwise contact one of the
 authors\footnote{Contact data can be found at chapter \ref{contact},
@@ -160,19 +181,18 @@ htlatex geanylatex.tex xhtml -cvalidate -interaction=batchmode
 \end{lstlisting}
 \end{figure}
 
-\newpage
 \section{Usage}
 \begin{figure}[h!]
 	\centering{\includegraphics[height=7cm]{img/plugin_manager.png}}
 	\caption{Plugin manager with Geany\LaTeX{} of Geany 0.16}
 \end{figure}
 
-After Geany\LaTeX{} has been installed successfully the plugin can be
+After Geany\LaTeX{} has been installed successful the plugin can be
 loaded through Geany's plugin manager and a new sub menu in the Tools
 menu will appear as well as new key bindings will be available inside
 Geany's key binding interface. Inside the sub menu you will find entries
-for functions supported by this version of the plugin. It will be
-called \texttt{LaTeX}.
+for functions supported by this version of the plugin. The main menu entry
+will be called something like \texttt{LaTeX}, depending on your locale.
 
 Also if the option for showing the toolbar is activated on configuration
 dialog, the toolbar with common used format functions appears on at top
