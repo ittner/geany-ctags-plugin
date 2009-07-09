@@ -131,3 +131,17 @@ void glatex_kb_insert_enumerate_list(G_GNUC_UNUSED guint key_id)
 		return;
 	glatex_insert_list_environment(GLATEX_LIST_ENUMERATE);
 }
+
+void glatex_kb_structure_lvlup(G_GNUC_UNUSED guint key_id)
+{
+	if (NULL == document_get_current())
+		return;
+	glatex_structure_lvlup();
+}
+
+void glatex_kb_structure_lvldown(G_GNUC_UNUSED guint key_id)
+{
+	if (NULL == document_get_current())
+		return;
+	glatex_structure_lvldown();
+}

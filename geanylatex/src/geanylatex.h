@@ -45,6 +45,7 @@
 #include "reftex.h"
 #include "latexenvironments.h"
 #include "formatutils.h"
+#include "latexstructure.h"
 #include "latexkeybindings.h"
 #include "Scintilla.h"
 #include "plugindata.h"

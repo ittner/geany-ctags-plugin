@@ -88,6 +88,8 @@ enum
 	KB_LATEX_ENVIRONMENT_INSERT_DESCRIPTION,
 	KB_LATEX_ENVIRONMENT_INSERT_ITEMIZE,
 	KB_LATEX_ENVIRONMENT_INSERT_ENUMERATE,
+	KB_LATEX_STRUCTURE_LVLUP,
+	KB_LATEX_STRUCTURE_LVLDOWN,
 	COUNT_KB
 };
 
@@ -1148,6 +1150,12 @@ void init_keybindings()
 	keybindings_set_item(plugin_key_group, KB_LATEX_ENVIRONMENT_INSERT_ENUMERATE,
 		glatex_kb_insert_enumerate_list, 0, 0, "insert_enumerate_list",
 		_("Insert enumerate list"), NULL);
+	keybindings_set_item(plugin_key_group, KB_LATEX_STRUCTURE_LVLUP,
+		glatex_kb_structure_lvlup, 0, 0, "structure_lvl_up",
+		_("Set selection one level up"), NULL);
+	keybindings_set_item(plugin_key_group, KB_LATEX_STRUCTURE_LVLDOWN,
+		glatex_kb_structure_lvldown, 0, 0, "structure_lvl_down",
+		_("Set selection one level down"), NULL);
 }
 
 void plugin_help()
