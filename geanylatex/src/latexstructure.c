@@ -68,6 +68,12 @@ void glatex_structure_lvlup()
 	gchar *tmp = NULL;
 	GString *haystack = NULL;
 
+	if (doc == NULL)
+		return;
+
+	if (! sci_has_selection(doc->editor->sci))
+		return;
+
 	sci_start_undo_action(doc->editor->sci);
 	tmp = sci_get_selection_contents(doc->editor->sci);
 	haystack = g_string_new(tmp);
@@ -99,6 +105,12 @@ void glatex_structure_lvldown()
 	doc = document_get_current();
 	gchar *tmp = NULL;
 	GString *haystack = NULL;
+
+	if (doc == NULL)
+		return;
+
+	if (! sci_has_selection(doc->editor->sci))
+		return;
 
 	tmp = sci_get_selection_contents(doc->editor->sci);
 	haystack = g_string_new(tmp);
