@@ -93,7 +93,8 @@ const gchar *glatex_label_entry_keywords[] = {
 	("Type"),
 	("URL"),
 	("Volume"),
-	("Year")};
+	("Year"),
+	( NULL) };
 
 const gchar *glatex_label_tooltips[] = {
 	N_("Address of publisher"),

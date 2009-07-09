@@ -44,7 +44,6 @@ enum {
 	GLATEX_BIBTEX_N_TYPES
 };
 
-
 enum {
 	GLATEX_BIBTEX_ADDRESS = 0,
 	GLATEX_BIBTEX_ANNOTE,
@@ -88,4 +87,7 @@ int glatex_push_bibtex_entry(int style, GeanyDocument *doc);
 void glatex_insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem,
 								G_GNUC_UNUSED gpointer gdata);
 
+void glatex_bibtex_write_entry(GPtrArray *entry, gint doctype);
+
+GPtrArray *glatex_bibtex_init_empty_entry();
 #endif
