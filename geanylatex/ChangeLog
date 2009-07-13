@@ -1,3 +1,8 @@
+2009-07-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Correct a tooltip by removing unneeded \t from it.
+
+
 2009-07-09  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Added a function to level up and level down structure element.

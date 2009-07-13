@@ -824,9 +824,9 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	label_date = gtk_label_new(_("Date:"));
 	date_textbox = gtk_entry_new();
 	ui_widget_set_tooltip_text(date_textbox,
-		_("Sets the value of the \\date command inside header of your\
-		 newly created LaTeX-document. Keeping it at \\today is a good \
-		 decision if you don't need any fixed date."));
+		_("Sets the value of the \\date command inside header of your "
+		 "new created LaTeX-document. Keeping it at \\today is a good "
+		 "decision if you don't need any fixed date."));
 	gtk_entry_set_text(GTK_ENTRY(date_textbox), "\\today");
 	gtk_misc_set_alignment(GTK_MISC(label_date), 0, 0.5);
 	gtk_table_attach_defaults(GTK_TABLE(table), label_date, 0, 1, 4, 5);
