@@ -25,18 +25,8 @@
 #ifndef GEANYLATEX_H
 #define GEANYLATEX_H
 
-
-#include "geany.h"
-#include "support.h"
-#include "document.h"
-#include "editor.h"
-#include "filetypes.h"
-#include "templates.h"
-#include "dialogs.h"
-#include "utils.h"
-#include "ui_utils.h"
-#include "keybindings.h"
-#include "prefs.h"
+#include <geanyplugin.h>
+#include <gtk/gtk.h>
 #include "datatypes.h"
 #include "letters.h"
 #include "latexencodings.h"
@@ -47,12 +37,8 @@
 #include "formatutils.h"
 #include "latexstructure.h"
 #include "latexkeybindings.h"
-#include "Scintilla.h"
-#include "plugindata.h"
-#include "geanyfunctions.h"
 
 
-#include <gtk/gtk.h>
 
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
