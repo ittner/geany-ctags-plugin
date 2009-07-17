@@ -31,7 +31,7 @@ typedef struct
 	gchar *chapter;
 } LaTeXLabel;
 
-void glatex_add_Labels(GtkWidget *combobox, const gchar *file);
+void glatex_add_Labels(GtkWidget *combobox, GDir *dir);
 
 LaTeXLabel glatex_parseLine(const gchar *line);
 

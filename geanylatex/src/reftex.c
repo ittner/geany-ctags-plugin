@@ -23,22 +23,28 @@
 #include "reftex.h"
 #include "latexutils.h"
 
-void glatex_add_Labels(GtkWidget *combobox, const gchar *file)
+void glatex_add_Labels(GtkWidget *combobox, GDir *dir)
 {
 	gchar **aux_entries = NULL;
+	const gchar *file = NULL;
 	int i = 0;
 	LaTeXLabel tmp;
-	if (file != NULL)
+	if (dir != NULL)
 	{
-		aux_entries = geanylatex_read_file_in_array(file);
-		if (aux_entries != NULL)
+		file = g_dir_read_name(dir);
+		ui_set_statusbar(FALSE, file);
+		while (file != NULL)
 		{
-			for (i = 0; aux_entries[i] != NULL ; i++)
+			aux_entries = geanylatex_read_file_in_array(file);
+			if (aux_entries != NULL)
 			{
-				if  (g_str_has_prefix(aux_entries[i], "\\newlabel"))
+				for (i = 0; aux_entries[i] != NULL ; i++)
 				{
-					tmp = glatex_parseLine(aux_entries[i]);
-					gtk_combo_box_append_text(GTK_COMBO_BOX(combobox), tmp.label_name);
+					if  (g_str_has_prefix(aux_entries[i], "\\newlabel"))
+					{
+						tmp = glatex_parseLine(aux_entries[i]);
+						gtk_combo_box_append_text(GTK_COMBO_BOX(combobox), tmp.label_name);
+					}
 				}
 			}
 		}

@@ -23,11 +23,10 @@
 #include "geanylatex.h"
 
 
-GDir *glatex_get_aux_files_from_dir(const gchar *dirname)
+GDir *glatex_get_aux_dir(gchar *dirname)
 {
 	GDir *dir;
-	dir = g_dir_open (dirname, 0, NULL);
-	return dir;
+	return g_dir_open (dirname, 0, NULL);
 }
 
 gchar **geanylatex_read_file_in_array(const gchar *filename)
