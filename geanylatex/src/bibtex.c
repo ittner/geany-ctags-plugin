@@ -133,10 +133,10 @@ GPtrArray *glatex_bibtex_init_empty_entry()
 void glatex_bibtex_write_entry(GPtrArray *entry, gint doctype)
 {
 	gint i;
-	gchar *output = g_strdup("@");
+	gchar *output = NULL;
 
 	/* Adding the doctype to entry */
-	output = g_strconcat(output, glatex_label_types[doctype], "{ \n",NULL);
+	output = g_strconcat("@", glatex_label_types[doctype], "{ \n",NULL);
 
 	/* Adding the keywords and values to entry */
 	for (i = 0; i < GLATEX_BIBTEX_N_ENTRIES; i++)
