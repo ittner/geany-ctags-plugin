@@ -90,12 +90,16 @@ void glatex_structure_lvlup()
 			) > 0)
 		{
 			tmp = g_string_free(haystack, FALSE);
+			haystack = NULL;
 			sci_replace_sel(doc->editor->sci, tmp);
 			g_free(tmp);
 			sci_end_undo_action(doc->editor->sci);
 			break;
 		}
 	}
+
+	if (haystack != NULL)
+		g_string_free(haystack, TRUE);
 }
 
 void glatex_structure_lvldown()
@@ -126,9 +130,13 @@ void glatex_structure_lvldown()
 			> 0)
 		{
 			tmp = g_string_free(haystack, FALSE);
+			haystack = NULL;
 			sci_replace_sel(doc->editor->sci, tmp);
 			g_free(tmp);
 			break;
 		}
 	}
+
+	if (haystack != NULL)
+		g_string_free(haystack, TRUE);
 }

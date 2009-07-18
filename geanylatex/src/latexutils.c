@@ -62,6 +62,7 @@ const gchar *glatex_get_aux_file()
 		{
 			locale_filename = utils_get_locale_from_utf8(doc->file_name);
 			tmp = g_string_new(locale_filename);
+			g_free(locale_filename);
 			utils_string_replace_all(tmp, ".tex", ".aux");
 
 			return g_string_free(tmp, FALSE);

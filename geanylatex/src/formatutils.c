@@ -34,7 +34,7 @@ void glatex_insert_latex_format(G_GNUC_UNUSED GtkMenuItem * menuitem,
         if (sci_has_selection(doc->editor->sci))
         {
             gchar *selection;
-            const gchar *replacement = NULL;
+            gchar *replacement = NULL;
 
             selection = sci_get_selection_contents(doc->editor->sci);
 
@@ -43,6 +43,7 @@ void glatex_insert_latex_format(G_GNUC_UNUSED GtkMenuItem * menuitem,
 
             sci_replace_sel(doc->editor->sci, replacement);
             g_free(selection);
+			g_free(replacement);
         }
         else
         {

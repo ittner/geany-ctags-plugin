@@ -29,7 +29,8 @@ void glatex_add_Labels(GtkWidget *combobox, GDir *dir)
 	const gchar *file = NULL;
 	int i = 0;
 	LaTeXLabel tmp;
-	if (dir != NULL)
+
+	if (file != NULL)
 	{
 		file = g_dir_read_name(dir);
 		ui_set_statusbar(FALSE, file);
@@ -69,6 +70,7 @@ LaTeXLabel glatex_parseLine(const gchar *line)
 			l++;
 			x++;
 		}
+		g_free(t);
 	}
 	label.label_name = g_strndup(line, l);
 

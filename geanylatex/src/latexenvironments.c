@@ -79,6 +79,7 @@ void glatex_insert_environment(gchar *environment, gint type)
 
             sci_replace_sel(doc->editor->sci, replacement);
             g_free(selection);
+            g_free(replacement);
 		}
 		else
 		{
@@ -90,8 +91,10 @@ void glatex_insert_environment(gchar *environment, gint type)
 			tmpstring = g_string_new("\\begin{");
 			g_string_append(tmpstring, environment);
 			g_string_append(tmpstring, "}\n");
+
 			if (type == GLATEX_ENVIRONMENT_TYPE_LIST)
 				g_string_append(tmpstring, "\\item \n");
+
 			g_string_append(tmpstring, "\\end{");
 			g_string_append(tmpstring, environment);
 			g_string_append(tmpstring,"}\n");
