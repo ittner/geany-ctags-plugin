@@ -133,10 +133,13 @@ GPtrArray *glatex_bibtex_init_empty_entry()
 void glatex_bibtex_write_entry(GPtrArray *entry, gint doctype)
 {
 	gint i;
-	gchar *output = NULL;
+	GString *output = NULL;
+	gchar *tmp = NULL;
 
 	/* Adding the doctype to entry */
-	output = g_strconcat("@", glatex_label_types[doctype], "{ \n",NULL);
+	output = g_string_new("@");
+	g_string_append(output, glatex_label_types[doctype]);
+	g_string_append(output, "{ \n");
 
 	/* Adding the keywords and values to entry */
 	for (i = 0; i < GLATEX_BIBTEX_N_ENTRIES; i++)
@@ -147,21 +150,23 @@ void glatex_bibtex_write_entry(GPtrArray *entry, gint doctype)
 			/* Check whether a field was only set for being used ... */
 			if (utils_str_equal(g_ptr_array_index (entry, i), "\0"))
 			{
-				output = g_strconcat(output,
-					glatex_label_entry_keywords[i], " = {},\n", NULL);
+				g_string_append(output, glatex_label_entry_keywords[i]);
+				g_string_append(output," = {},\n");
 			}
 			/* ... or has some real value inside. */
 			else
 			{
-				output = g_strconcat(output,
-					glatex_label_entry_keywords[i], " = {", g_ptr_array_index(entry, i),
-					"},\n", NULL);
+				g_string_append(output, glatex_label_entry_keywords[i]);
+				g_string_append(output, " = {");
+				g_string_append(output, g_ptr_array_index(entry, i));
+				g_string_append(output, "},\n");
 			}
 		}
 	}
 
-	output = g_strconcat(output, "}\n", NULL);
-	glatex_insert_string(output, FALSE);
-
+	g_string_append(output, "}\n");
+	tmp = g_string_free(output, FALSE);
+	glatex_insert_string(tmp, FALSE);
+	g_free(tmp);
 }
 
