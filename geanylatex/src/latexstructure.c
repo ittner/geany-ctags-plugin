@@ -64,9 +64,10 @@ void glatex_structure_lvlup()
 {
 	gint i;
 	GeanyDocument *doc = NULL;
-	doc = document_get_current();
 	gchar *tmp = NULL;
 	GString *haystack = NULL;
+
+	doc = document_get_current();
 
 	if (doc == NULL)
 		return;
@@ -106,9 +107,10 @@ void glatex_structure_lvldown()
 {
 	gint i;
 	GeanyDocument *doc = NULL;
-	doc = document_get_current();
 	gchar *tmp = NULL;
 	GString *haystack = NULL;
+
+	doc = document_get_current();
 
 	if (doc == NULL)
 		return;

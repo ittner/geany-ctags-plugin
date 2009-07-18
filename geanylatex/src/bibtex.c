@@ -123,7 +123,6 @@ void glatex_insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem,
 /* Creating and initialising a array for a bibTeX entry with NULL pointers*/
 GPtrArray *glatex_bibtex_init_empty_entry()
 {
-	gint i;
 	GPtrArray *entry = g_ptr_array_new();
 	g_ptr_array_set_size(entry, GLATEX_BIBTEX_N_ENTRIES);
 	return entry;

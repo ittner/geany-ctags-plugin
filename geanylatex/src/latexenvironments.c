@@ -70,7 +70,7 @@ void glatex_insert_environment(gchar *environment, gint type)
 		if (sci_has_selection(doc->editor->sci))
         {
 			gchar *selection  = NULL;
-			const gchar *replacement = NULL;
+			gchar *replacement = NULL;
 
             selection = sci_get_selection_contents(doc->editor->sci);
 
