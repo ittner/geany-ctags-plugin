@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title></title>
+		<meta name='Generator' content='Zim 0.28'>
+		<style type='text/css'>
+			a          { text-decoration: none      }
+			a:hover    { text-decoration: underline }
+			a:active   { text-decoration: underline }
+			strike     { color: grey                }
+			u          { text-decoration: none;
+			             background-color: yellow   }
+			pre        { margin: 5px 20px 5px 20px  }
+			span.insen { color: grey                }
+			h1,h2,h3,h4{color: #006600              }
+			pre,tt     {background-color: #eeeeff; border: 1px solid #9999aa}
+		</style>
+	</head>
+	<body>
+
+
+<!-- Wiki content -->
+
+<h1>Embrace:ReadMe</h1>
+
+<p>
+The configuration file's name is <b>embrace.conf</b> and is either in <b>${geany_data_path}/plugins/embrace/</b> or in <b>${users_geany_conf_path}/plugins/embrace/</b> - the latter takes precedence.<br />
+The configuration file is handled with glib's <b>GKeyFile</b>.<br />
+
+</p>
+<p>
+Each group in the config file applies to a configurable set of <tt>filetype</tt>s. It can be given as a semicolon separated list of geany filetype names. (e.g. <tt>C++</tt>; possible values are in geany's <b>filetype_extensions.conf</b>) The buttons of this group will appear on the toolbar only at documents of these filetype. If this key is omitted, then the group's buttons are always visible.<br />
+Each group has a <tt>type</tt>: it is either <tt>simple</tt> (default) or <tt>advanced</tt>. It declares which syntax is used in the group: see below.<br />
+The names of the groups are arbitrary.<br />
+
+</p>
+<h2>type=simple</h2>
+<p>
+Each line in the group defines one embrace item, that is:<br />
+
+</p>
+<p>
+<ul>
+<li>Text with which the selected text should be sorrounded.</li>
+<li>A button on the toolbar.</li>
+<li>A menu item in the <b>Tools</b> menu.</li>
+</ul>
+
+</p>
+<p>
+Example: <tt>p=Paragraph;&lt;p&gt;;&lt;/p&gt;;p.png;&lt;Alt&gt;&lt;Control&gt;p</tt><br />
+
+</p>
+<p>
+The meaning of this line:<ul>
+<li><tt>p</tt> is the internal name</li>
+<li><tt>Paragraph</tt> is the visible name (menu item, tooltip)</li>
+<li><tt>&lt;p&gt;</tt> is inserted before the selection</li>
+<li><tt>&lt;/p&gt;</tt> is inserted after the selection</li>
+<li><tt>p.png</tt> is the icon of the toolbar button: this file must be in the same directory as the config file</li>
+<li><tt>&lt;Alt&gt;&lt;Control&gt;p</tt> is the default keybinding (see keybindings)</li>
+</ul>
+
+</p>
+<h2>type=advanced</h2>
+<p>
+An Item on the toolbar can be either a button, or a button with submenu. <br />
+The button with submenu is initialised with the first item in it's submenu, it means it has the same name, icon and clicking the button will activate the first submenu item. When a different submenu item is activated, it takes control over the button.<br />
+
+</p>
+<p>
+Items on toolbar are given with the <tt>items</tt> key: it is a semicolon separated list of item names. <br />
+Example: <tt>items=header;bold</tt> <br />
+
+</p>
+<p>
+Every item has to be defined in the group.<br />
+
+</p>
+<h3>Defining an item with submenu</h3>
+<p>
+Defining an item with submenu is easy: it's first parameter is <tt>menu</tt>, the rest are the name of the items in the submenu. (These items must be of type <tt>button</tt>.)<br />
+Example: <tt>header=menu;h1;h2;h3</tt><br />
+
+</p>
+<h3>Defining a simple button item</h3>
+<p>
+Defining a button item is more complicated, it consists of two or more lines.<br />
+Example:<br />
+
+</p>
+<pre>
+bold=button;Bold;bold.png;&lt;Alt&gt;&lt;Control&gt;b
+bold_label[hu]=Félkövér
+bold_template=&lt;b&gt;%selection%&lt;/b&gt;
+</pre>
+<p>
+The first line's meaning<ul>
+<li><tt>bold</tt> internal name</li>
+<li><tt>button</tt> this means it is a simple button (without submenu)</li>
+<li><tt>Bold</tt> is the visible name (menu item, tooltip)</li>
+<li><tt>bold.png</tt>  is the icon of the toolbar button: this file must be in the same directory as the config file</li>
+<li><tt>&lt;Alt&gt;&lt;Control&gt;b</tt> is the default keybinding (see keybindings)</li>
+</ul>
+
+</p>
+<p>
+The second line is optional: it defines a localised (hungarian in the example) label for this item. Of course multiple lines can be given, one for each locale. At runtime, the label of the current locale is used.<br />
+
+</p>
+<p>
+The third line is the important part: it defines what will replace the selected text when this item is activated. Some text is handled specially:<br />
+
+</p>
+<h4>special symbols in templates</h4>
+<p>
+<ul>
+<li><tt>\n</tt> or <tt>%newline%</tt> - Insert a new line (it will be replaced by the used EOL byte(s): LF, CR/LF, or CR). The new line is indented to mach the indentation of the selected text's first line.</li>
+<li><tt>\t</tt> or <tt>%ws%</tt> - Insert an indentation step, it will be replaced according to the current document's indent mode.</li>
+<li><tt>%cursor%</tt> - The place of the cursor after insertion. </li>
+<li><tt>%selection%</tt> - If there is a selection when the item is activated, it will be copied here. This may be present multiple times, to make multiple copy of the selection. After the template is used, the last <tt>%selection%</tt> will be the selection. If there is a <tt>%cursor%</tt> in the template, nothing will be selected.</li>
+<li><tt>%</tt>...<tt>%</tt> - Name of a variable. If there is at least one variable in the template, a dialog box will appear when the item is activated. See below, how to define variables.</li>
+<li><tt>[</tt> ... <tt>]</tt> - Content between square brackets is inserted only if at least one variable between them is filled by the user in the dialog.</li>
+<li><tt>%%</tt> ; <tt>%[</tt> ; <tt>%]</tt> - the literal characters "%" ; "[" ; "]" respectively</li>
+</ul>
+
+</p>
+<h4>defining variables used in templates</h4>
+<p>
+As mentioned above, you can use variables in the templates. If there is at least one variable in the template, a dialog will appear every time the template is activeted. (<tt>%newline%</tt>, <tt>%ws%</tt>, <tt>%cursor%</tt>, <tt>%selection%</tt> are not variables) Any variable may be used in any template in the group it is defined.<br />
+
+</p>
+<p>
+The possible type of a variable is one of the following:<br />
+
+</p>
+<p>
+<ul>
+<li><tt>entry</tt> - simple text entry.</li>
+<li><tt>file</tt> - text entry with file selection dialog button. (Anything can be written in the entry, not only valid file names.)</li>
+<li><tt>c_static</tt> - combo box: only predefined values can be selected</li>
+<li><tt>c_entry</tt> - combo box entry: new values can be written too, those will be remembered during the session</li>
+<li><tt>count</tt> - a text entry in which a number may be typed. It's value will not appear in the replacement text, but it determines how many times the innermost block (the part of template between <tt>[</tt> and <tt>]</tt>) should bee repeated.</li>
+</ul>
+
+</p>
+<p>
+Variables of type <tt>entry</tt>, <tt>file</tt> and <tt>count</tt> should be defined like this: <br />
+
+</p>
+<pre>
+src=file|dir_sep_slash;Image file
+src_label[hu]=Képfájl
+</pre>
+<p>
+And the meaning:<ul>
+<li><tt>src</tt> - the name of the variable, it may be used as <tt>%src%</tt> in a template</li>
+<li><tt>file</tt> - type</li>
+<li><tt>dir_sep_slash</tt> - additional options (see below). If no option is needed, the | can be omitted</li>
+<li><tt>Image file</tt> - default label, used int the dialog box</li>
+<li><tt>Képfájl</tt> -  localised label (optional) just like the localised label of a button</li>
+</ul>
+
+</p>
+<p>
+Definition of variables of type <tt>c_static</tt> and <tt>c_entry</tt> are quite the same, but after the label you can specify the combobox values. Example:<br />
+
+</p>
+<pre>
+align=c_static;Align;top;middle;bottom;left;right
+align_label[hu]=Igazítás;top;middle;bottom;left;right
+</pre>
+<p>
+Additional options is a space separated list. Possible vallues vary depending of the variable type:<br />
+
+</p>
+<h4>count</h4>
+<p>
+<ul>
+<li><tt>check</tt> - a checkbox is shown, the count value is therefore 0 or 1</li>
+</ul>
+
+</p>
+<h4>file</h4>
+<p>
+<ul>
+<li><tt>dir_sep_slash</tt> - convert dir separator to '/' (handy under Windows)</li>
+<li><tt>relative</tt> - file path is converted relative to document path, if possible</li>
+</ul>
+
+</p>
+<h4>c_static</h4>
+<p>
+<ul>
+<li><tt>label</tt> - parameters after the label are <i>value</i>;<i>label</i> pairs, where <i>label</i> is displayed in the dialog and <i>value</i> is inserted in the document. Example:</li>
+</ul>
+
+</p>
+<pre>
+align=c_static|label;Align;top;Top;middle;Vertically iddle;bottom;Bottom;left;Float left;right;Float right
+align_label[hu]=Igazítás;top;Fent;middle;Függőlegesen középen;bottom;Lent;left;Baloldalt lebegve;right;Jobboldalt lebegve
+</pre>
+<h2>Keybindings</h2>
+<p>
+Keybindings are default keybindings parsable by <b>gtk_accelerator_parse()</b>. It can be overwritten by the user as any other keybinding, in geany's settings dialog. They will appear in the list as <i>groupName</i>_<i>internalName</i>, e.g. <tt>html_bold</tt>. It means name clash may arise if there are underscores in both group names and button names.<br />
+
+</p>
+
+
+<!-- End wiki content -->
+
+	</body>
+
+</html>

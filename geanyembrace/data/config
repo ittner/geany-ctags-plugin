@@ -1,0 +1,24 @@
+[html]
+filetype=HTML
+bold=bold;<b>;</b>;bold.png
+italic=italic;<i>;</i>;italic.png
+small=small;<small>;</small>;small.png
+table=table;<table>\n;\n</table>;table.png
+tr=table row;<tr>;</tr>;tr.png
+th=table header cell;<th>;</th>;th.png
+td=table cell;<td>;</td>;td.png
+ul=unordered list;<ul>\n;\n</ul>;ul.png
+ol=ordered list;<ol>\n;\n</ol>;ol.png
+li=list item;<li>;</li>;li.png
+p=paragraph;<p>;</p>;p.png
+h1=header 1;<h1>;</h1>;h1.png
+h2=header 2;<h2>;</h2>;h2.png
+h3=header 3;<h3>;</h3>;h3.png
+h4=header 4;<h4>;</h4>;h4.png
+br=line break;<br />\n;;br.png
+img=image;<img src=';' alt='' />;img.png
+div=div;<div>;</div>;div.png
+
+[c]
+filetype=C
+if=if;if(;){};if.png
