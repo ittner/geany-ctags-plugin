@@ -99,6 +99,7 @@ It implements a couple of maybe useful functions:
 		  \texttt{description}
 	\item Some general bugfixes and improvments. As always, see
 		  ChangeLog or svn log.
+	\item Switch to waf for building the plugin
 \end{itemize}
 
 \subsection*{GeanyLaTeX{} 0.4 -- 2009-05-26}
@@ -130,8 +131,8 @@ need to install an additional package, this might be called geany-dev
 or geany-devel. Please note that in order to compile and use this
 plugin, you need Geany 0.17 or later (Geany Plugin API v147 or higher).
 
-Furthermore you need, of course, a C compiler and the Make tool. The
-GNU versions of these tools are recommended. Also there should be a
+Furthermore you need, of course, a C compiler and python installed. The
+GNU version of the C compiler is recommended. Also there should be a
 working \LaTeX-environment on your System.
 
 There is no special need in RAM or CPU so the plugin should compile and
@@ -147,13 +148,13 @@ commands:
 
 \begin{figure}[h!]
 \begin{lstlisting}
-$ ./configure
-$ make
-$ make install %$
+$ ./waf configure
+$ ./waf build
+$ ./waf install %$
 \end{lstlisting}
 \end{figure}
 
-For more configuration details run \texttt{./configure --help}
+For more configuration details run \texttt{./waf --help}
 
 By default the plugin is getting installed into the lib subfolder of
 your found Geany installation. So if you have installed Geany to
