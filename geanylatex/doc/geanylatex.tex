@@ -266,12 +266,11 @@ inserting normal references and page references to an label.
 	\caption{Insert reference dialog on Geany\LaTeX{} 0.4}
 \end{figure}
 
-The suggestions inside the pull down are based on the aux file creating
-by processing of *.tex file. The plugin is searching for a aux file
-for the current open *.tex file inside current directory. When first step
-was successful the file is parsed for \texttt{\textbackslash
-newlabel\{\}\{\}\{\}} and tries to interpret them properly. The found
-entries will be inserted into pull down sorted by alphabet.
+The suggestions inside the pull down are based on the aux files creating
+by processing of *.tex file located inside directory of current \TeX-file.
+When first step was successful the files are parsed for \texttt{\textbackslash
+newlabel\{\}\{\}\{\}} and outcome is tried to interpret them properly.
+The found entries will be inserted into pull down sorted by alphabet.
 
 Both, the inserting labels as well as the inserting reference dialog
 can be accessed by key binding also. See chapter \ref{kb_insert_label}

@@ -22,13 +22,6 @@
 #include "latexutils.h"
 #include "geanylatex.h"
 
-
-GDir *glatex_get_aux_dir(gchar *dirname)
-{
-	GDir *dir;
-	return g_dir_open (dirname, 0, NULL);
-}
-
 gchar **geanylatex_read_file_in_array(const gchar *filename)
 {
 	gchar **result = NULL;
@@ -48,7 +41,7 @@ gchar **geanylatex_read_file_in_array(const gchar *filename)
 	return result;
 }
 
-const gchar *glatex_get_aux_file()
+gchar *glatex_get_aux_file()
 {
 	GeanyDocument *doc = NULL;
 	gchar *locale_filename = NULL;
