@@ -29,32 +29,21 @@
 #include <glib/gstdio.h>
 #include <unistd.h>
 
-#include "geany.h"
-#include "support.h"
-#include "plugindata.h"
-#include "document.h"
-#include "editor.h"
-#include "filetypes.h"
-#include "utils.h"
-#include "ui_utils.h"
-#include "prefs.h"
-#include "keybindings.h"
-#include "highlighting.h"
-#include "geanyfunctions.h"
-
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
 #endif
 
-#include "SciLexer.h"
-
 #include "geanyvc.h"
+#include "geanyplugin.h"
+#include "SciLexer.h"
 
 #include <config.h>
 
 #ifdef USE_GTKSPELL
 #include <gtkspell/gtkspell.h>
 #endif
+
+
 
 PluginFields *plugin_fields;
 GeanyData *geany_data;

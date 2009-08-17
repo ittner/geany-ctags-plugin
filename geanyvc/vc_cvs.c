@@ -20,15 +20,7 @@
  */
 
 #include <string.h>
-
-#include "geany.h"
-#include "support.h"
-#include "plugindata.h"
-#include "document.h"
-#include "filetypes.h"
-#include "utils.h"
-#include "geanyfunctions.h"
-
+#include "geanyplugin.h"
 #include "geanyvc.h"
 
 static const gchar *CVS_CMD_DIFF_FILE[] = { "cvs", "diff", "-u", BASE_FILENAME, NULL };
