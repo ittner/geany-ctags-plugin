@@ -1206,7 +1206,6 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 
 	g_key_file_free(config);
 
-
 	glatex_init_encodings_latex();
 
 	menu_latex = gtk_menu_item_new_with_mnemonic(_("_LaTeX"));
