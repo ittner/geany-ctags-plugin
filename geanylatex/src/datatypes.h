@@ -1,7 +1,7 @@
 /*
  *      datatypes.h
  *
- *      Copyright 2008 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
+ *      Copyright 2008-2009 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -36,5 +36,12 @@ typedef struct
 	gchar *label;
 	gboolean sorted;
 } CategoryName;
+
+typedef struct
+{
+	gchar *filepath;
+	gchar *label;
+	GString *template;
+} TemplateEntry;
 
 #endif

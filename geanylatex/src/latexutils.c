@@ -40,4 +40,3 @@ gchar **geanylatex_read_file_in_array(const gchar *filename)
 
 	return result;
 }
-

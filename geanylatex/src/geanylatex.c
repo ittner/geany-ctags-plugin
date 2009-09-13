@@ -66,7 +66,7 @@ static GtkWidget *glatex_toolbar = NULL;
 static GtkWidget *box = NULL;
 
 /* Configuration file */
-static gchar *config_file = NULL;
+static gchar *config_file = NULL; 
 
 /* Doing some basic keybinding stuff */
 enum
@@ -734,6 +734,7 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	gchar *papersize = NULL;
 	gchar *draft = NULL;
 	gchar *fontsize = NULL;
+	gint template_int;
 	gint documentclass_int;
 	gint encoding_int;
 	gint papersize_int;
@@ -756,14 +757,43 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	GtkWidget *papersize_combobox = NULL;
 	GtkWidget *label_papersize = NULL;
 	GtkWidget *checkbox_draft = NULL;
+	GtkWidget *label_template = NULL;
+	GtkWidget *template_combobox = NULL;
 	gboolean KOMA_active;
 	gboolean draft_active = FALSE;
+	GPtrArray *template_list = NULL;
 
 	/*  Creating and formatting table */
 	table = gtk_table_new(2, 6, FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table), 6);
 	gtk_table_set_row_spacings(GTK_TABLE(table), 6);
 
+	/*  Templates
+	 *  Adds custom templates if there are any. If there are none just
+	 *  adds default one */
+	label_template = gtk_label_new(_("Template:"));
+
+	template_combobox = gtk_combo_box_new_text();
+	ui_widget_set_tooltip_text(template_combobox,
+		_("Set the template which should be used for creating the new document"));
+	gtk_misc_set_alignment(GTK_MISC(label_template), 0, 0.5);
+
+	gtk_table_attach_defaults(GTK_TABLE(table), label_template, 0, 1, 0, 1);
+	gtk_table_attach_defaults(GTK_TABLE(table), template_combobox, 1, 2, 0, 1);	
+	
+	/*  Adding default/build in templates to pull down and set the generic 
+	 * 	one as default */
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(template_combobox), 
+		LATEX_WIZARD_TEMPLATE_DEFAULT, _("Default"));	
+	gtk_combo_box_set_active(GTK_COMBO_BOX(template_combobox), 
+		LATEX_WIZARD_TEMPLATE_DEFAULT);
+	
+	/*  Checking whether some custom template are available and adding 
+	 *  if so. 
+	 *  Also init array with templates available. */
+	template_list = glatex_init_custom_templates();
+	glatex_add_templates_to_combobox(template_list, template_combobox);
+	
 	/*  Documentclass */
 	label_documentclass = gtk_label_new(_("Documentclass:"));
 	documentclass_combobox = gtk_combo_box_new_text();
@@ -779,13 +809,13 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 		_("Letter"));
 	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 4,
 		_("Presentation"));
-
+	
 	gtk_combo_box_set_active(GTK_COMBO_BOX(documentclass_combobox), 0);
 
 	gtk_misc_set_alignment(GTK_MISC(label_documentclass), 0, 0.5);
 
-	gtk_table_attach_defaults(GTK_TABLE(table), label_documentclass, 0, 1, 0, 1);
-	gtk_table_attach_defaults(GTK_TABLE(table), documentclass_combobox, 1, 2, 0, 1);
+	gtk_table_attach_defaults(GTK_TABLE(table), label_documentclass, 0, 1, 1, 2);
+	gtk_table_attach_defaults(GTK_TABLE(table), documentclass_combobox, 1, 2, 1, 2);
 
 	/*  Encoding */
 	label_encoding = gtk_label_new(_("Encoding:"));
@@ -799,15 +829,15 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 					  latex_encodings[i].name);
 	}
 
-	gtk_combo_box_set_active(GTK_COMBO_BOX(encoding_combobox), find_latex_enc(geany_data->file_prefs->default_new_encoding));
+	gtk_combo_box_set_active(GTK_COMBO_BOX(encoding_combobox), 
+		find_latex_enc(geany_data->file_prefs->default_new_encoding));
 
 	gtk_misc_set_alignment(GTK_MISC(label_encoding), 0, 0.5);
 
-	gtk_table_attach_defaults(GTK_TABLE(table), label_encoding, 0, 1, 1, 2);
-	gtk_table_attach_defaults(GTK_TABLE(table), encoding_combobox, 1, 2, 1, 2);
+	gtk_table_attach_defaults(GTK_TABLE(table), label_encoding, 0, 1, 2, 3);
+	gtk_table_attach_defaults(GTK_TABLE(table), encoding_combobox, 1, 2, 2, 3);
 
 	/*  fontsize */
-
 	label_fontsize = gtk_label_new(_("Font size:"));
 	fontsize_combobox = gtk_combo_box_entry_new_text();
 	gtk_combo_box_append_text(GTK_COMBO_BOX(fontsize_combobox),"10pt");
@@ -818,8 +848,8 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 
 	gtk_misc_set_alignment(GTK_MISC(label_fontsize), 0, 0.5);
 
-	gtk_table_attach_defaults(GTK_TABLE(table), label_fontsize, 0, 1, 2, 3);
-	gtk_table_attach_defaults(GTK_TABLE(table), fontsize_combobox, 1, 2, 2, 3);
+	gtk_table_attach_defaults(GTK_TABLE(table), label_fontsize, 0, 1, 3, 4);
+	gtk_table_attach_defaults(GTK_TABLE(table), fontsize_combobox, 1, 2, 3, 4);
 
 	/*  Author */
 	label_author = gtk_label_new(_("Author:"));
@@ -832,8 +862,8 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 		gtk_entry_set_text(GTK_ENTRY(author_textbox), author);
 	}
 	gtk_misc_set_alignment(GTK_MISC(label_author), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(table), label_author, 0, 1, 3, 4);
-	gtk_table_attach_defaults(GTK_TABLE(table), author_textbox, 1, 2, 3, 4);
+	gtk_table_attach_defaults(GTK_TABLE(table), label_author, 0, 1, 4, 5);
+	gtk_table_attach_defaults(GTK_TABLE(table), author_textbox, 1, 2, 4, 5);
 
 	/*  Date */
 	label_date = gtk_label_new(_("Date:"));
@@ -844,8 +874,8 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 		 "decision if you don't need any fixed date."));
 	gtk_entry_set_text(GTK_ENTRY(date_textbox), "\\today");
 	gtk_misc_set_alignment(GTK_MISC(label_date), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(table), label_date, 0, 1, 4, 5);
-	gtk_table_attach_defaults(GTK_TABLE(table), date_textbox, 1, 2, 4, 5);
+	gtk_table_attach_defaults(GTK_TABLE(table), label_date, 0, 1, 5, 6);
+	gtk_table_attach_defaults(GTK_TABLE(table), date_textbox, 1, 2, 5, 6);
 
 	/*  Title of the new document */
 	label_title = gtk_label_new(_("Title:"));
@@ -853,8 +883,8 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	ui_widget_set_tooltip_text(title_textbox,
 		_("Sets the title of your new document."));
 	gtk_misc_set_alignment(GTK_MISC(label_title), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(table), label_title, 0, 1, 5, 6);
-	gtk_table_attach_defaults(GTK_TABLE(table), title_textbox, 1, 2, 5, 6);
+	gtk_table_attach_defaults(GTK_TABLE(table), label_title, 0, 1, 6, 7);
+	gtk_table_attach_defaults(GTK_TABLE(table), title_textbox, 1, 2, 6, 7);
 
 	/*  Papersize */
 	label_papersize = gtk_label_new(_("Paper size:"));
@@ -869,8 +899,8 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 
 	gtk_misc_set_alignment(GTK_MISC(label_papersize), 0, 0.5);
 
-	gtk_table_attach_defaults(GTK_TABLE(table), label_papersize, 0, 1, 6, 7);
-	gtk_table_attach_defaults(GTK_TABLE(table), papersize_combobox, 1, 2, 6, 7);
+	gtk_table_attach_defaults(GTK_TABLE(table), label_papersize, 0, 1, 7, 8);
+	gtk_table_attach_defaults(GTK_TABLE(table), papersize_combobox, 1, 2, 7, 8);
 
 	gtk_widget_show_all(table);
 
@@ -913,6 +943,8 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 			GTK_TOGGLE_BUTTON(checkbox_draft));
 		documentclass_int = gtk_combo_box_get_active(
 			GTK_COMBO_BOX(documentclass_combobox));
+		template_int = gtk_combo_box_get_active(
+			GTK_COMBO_BOX(template_combobox));
 		encoding_int = gtk_combo_box_get_active(
 			GTK_COMBO_BOX(encoding_combobox));
 		enc_latex_char = g_strconcat("\\usepackage[",
@@ -1022,101 +1054,133 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 			}
 
 		}
-
-		if (documentclass_int == 3)
-			code = g_string_new(TEMPLATE_LATEX_LETTER);
-		else if (documentclass_int == 4)
-			code = g_string_new(TEMPLATE_LATEX_BEAMER);
+		
+		/*  Get the correct template */
+		/*  First check whether its a build in one or a custom one than 
+		 *  assign the wished template */
+		if (template_int < LATEX_WIZARD_TEMPLATE_END || 
+			template_list == NULL)
+		{
+			if (template_int == LATEX_WIZARD_TEMPLATE_DEFAULT && 
+				documentclass_int == 3 && documentclass_int == 4)
+				code = g_string_new(TEMPLATE_LATEX);
+			else if (documentclass_int == 3)
+				code = g_string_new(TEMPLATE_LATEX_LETTER);
+			else if (documentclass_int == 4)
+				code = g_string_new(TEMPLATE_LATEX_BEAMER);
+			else
+				code = g_string_new(TEMPLATE_LATEX);
+		}
 		else
-			code = g_string_new(TEMPLATE_LATEX);
+		{	
+			TemplateEntry *tmp = NULL;
+			
+			/* Return if the value choose is for some uknown reason to high */	
+			if (template_int > (template_list->len + LATEX_WIZARD_TEMPLATE_END))
+				return;
+			
+			tmp = g_ptr_array_index(template_list, template_int - LATEX_WIZARD_TEMPLATE_END);
+			code = glatex_get_template_from_file(tmp->filepath);
+			
+			/* Cleaning up template array as there is no usage for anymore */
+			g_ptr_array_foreach (template_list, (GFunc)glatex_free_TemplateEntry, NULL);
+			g_ptr_array_free(template_list, TRUE);
+		}
 
-		if (classoptions != NULL)
+		if (code != NULL)
 		{
-			utils_string_replace_all(code, "{CLASSOPTION}", classoptions);
-			g_free(classoptions);
-		}
-		if (documentclass_str != NULL)
-		{
-			utils_string_replace_all(code, "{DOCUMENTCLASS}", documentclass_str);
-			g_free(documentclass_str);
-		}
-		if (enc_latex_char != NULL)
-		{
-			utils_string_replace_all(code, "{ENCODING}", enc_latex_char);
-			g_free(enc_latex_char);
-		}
-		if (author != NULL)
-		{
-			if (author[0] != '\0')
+			if (classoptions != NULL)
 			{
-				if (documentclass_int == 3)
-			  	{
-			  		author = g_strconcat("\\signature{", author, "}\n", NULL);
-				}
-			  	else
-				{
-					author = g_strconcat("\\author{", author, "}\n", NULL);
-				}
-
-				utils_string_replace_all(code, "{AUTHOR}", author);
+				utils_string_replace_all(code, "{CLASSOPTION}", classoptions);
+				g_free(classoptions);
 			}
-			else
-				if (documentclass_int == 3)
+			if (documentclass_str != NULL)
+			{
+				utils_string_replace_all(code, "{DOCUMENTCLASS}", documentclass_str);
+				g_free(documentclass_str);
+			}
+			if (enc_latex_char != NULL)
+			{
+				utils_string_replace_all(code, "{ENCODING}", enc_latex_char);
+				g_free(enc_latex_char);
+			}
+			if (author != NULL)
+			{
+				if (author[0] != '\0')
 				{
-					utils_string_replace_all(code, "{AUTHOR}", "\% \\signature{}\n");
+					if (documentclass_int == 3)
+				  	{
+				  		author = g_strconcat("\\signature{", author, "}\n", NULL);
+					}
+				  	else
+					{
+						author = g_strconcat("\\author{", author, "}\n", NULL);
+					}
+	
+					utils_string_replace_all(code, "{AUTHOR}", author);
 				}
 				else
-				{
-					utils_string_replace_all(code, "{AUTHOR}", "\% \\author{}\n");
-				}
-
-			g_free(author);
-		}
-		if (date != NULL)
-		{
-			if (date[0] != '\0')
-			{
-				date = g_strconcat("\\date{", date, "}\n", NULL);
-				utils_string_replace_all(code, "{DATE}", date);
+					if (documentclass_int == 3)
+					{
+						utils_string_replace_all(code, "{AUTHOR}", "\% \\signature{}\n");
+					}
+					else
+					{
+						utils_string_replace_all(code, "{AUTHOR}", "\% \\author{}\n");
+					}
+	
+				g_free(author);
 			}
-			else
-				utils_string_replace_all(code, "{DATE}", "\% \\date{}\n");
-			g_free(date);
-		}
-		if (title != NULL)
-		{
-			if (title[0] != '\0')
+			if (date != NULL)
 			{
-				if (documentclass_int == 3)
+				if (date[0] != '\0')
 				{
-					title = g_strconcat("\\subject{", title, "}\n", NULL);
+					date = g_strconcat("\\date{", date, "}\n", NULL);
+					utils_string_replace_all(code, "{DATE}", date);
 				}
 				else
-				{
-					title = g_strconcat("\\title{", title, "}\n", NULL);
-				}
-
-				utils_string_replace_all(code, "{TITLE}", title);
+					utils_string_replace_all(code, "{DATE}", "\% \\date{}\n");
+				g_free(date);
 			}
-			else
-				if (documentclass_int == 3)
+			if (title != NULL)
+			{
+				if (title[0] != '\0')
 				{
-					utils_string_replace_all(code, "{TITLE}", "\% \\subject{} \n");
+					if (documentclass_int == 3)
+					{
+						title = g_strconcat("\\subject{", title, "}\n", NULL);
+					}
+					else
+					{
+						title = g_strconcat("\\title{", title, "}\n", NULL);
+					}
+	
+					utils_string_replace_all(code, "{TITLE}", title);
 				}
 				else
-				{
-					utils_string_replace_all(code, "{TITLE}", "\% \\title{} \n");
-				}
-
-			g_free(title);
+					if (documentclass_int == 3)
+					{
+						utils_string_replace_all(code, "{TITLE}", "\% \\subject{} \n");
+					}
+					else
+					{
+						utils_string_replace_all(code, "{TITLE}", "\% \\title{} \n");
+					}
+	
+				g_free(title);
+			}
+	
+			utils_string_replace_all(code, "{OPENING}", _("Dear Sir or Madame"));
+			utils_string_replace_all(code, "{CLOSING}", _("With kind regards"));
+	
+			output = g_string_free(code, FALSE);
+			show_output(output, NULL, encoding_int);
+			g_free(output);
 		}
-
-		utils_string_replace_all(code, "{OPENING}", _("Dear Sir or Madame"));
-		utils_string_replace_all(code, "{CLOSING}", _("With kind regards"));
-
-		output = g_string_free(code, FALSE);
-		show_output(output, NULL, encoding_int);
-		g_free(output);
+		else
+		{
+			g_warning(_("No template assigned. Aborting"));
+		}
 	}
 	gtk_widget_destroy(dialog);
 }

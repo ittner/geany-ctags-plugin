@@ -93,6 +93,8 @@ It implements a couple of maybe useful functions:
 \section{News}
 \subsection*{Since 0.4}
 \begin{itemize}
+
+	\item Introducing custom templates for \LaTeX-Wizard
 	\item Adding a icon for \LaTeX-Wizard to toolbar
 	\item Adding shortcuts for inserting common list environments
 		  like \texttt{enumerate}, \texttt{itemize} and
@@ -204,8 +206,10 @@ of editor widget. This feature is turned off by default.
 
 Let's go into more detail on some features.
 
+
 \subsection{\LaTeX-Wizard}
 
+\subsubsection{General usage of wizard}
 The \LaTeX-Wizard is implementing a easy way creating a number of
 default documents.
 \begin{figure}[h!]
@@ -213,14 +217,9 @@ default documents.
 	\caption{\LaTeX-Wizard of version 0.4}
 \end{figure}
 
-Document types that are currently supported by the wizard are:
-\begin{itemize}
-	\item book
-	\item report
-	\item article
-	\item letter (default letter class)
-	\item presentation (\LaTeX{} beamer)
-\end{itemize}
+The wizard is offering a chance to choose from a couple of templates 
+with the possibility of adding customer templates. This can be 
+chosen from \textbf{Templates} pulldown on top of dialog. 
 
 This can be set by choosing the needed entry form
 \textbf{Documentclass} pulldown menu.
@@ -247,6 +246,60 @@ configuration dialog mentioned earlier in this document.
 
 This wizard can also be called by a shortcut. Please have a look onto
 section \ref{kb_latex_wizard}, page \pageref{kb_latex_wizard}.
+
+\subsubsection{Default templates}
+Document types that are currently supported by the wizard are:
+\begin{itemize}
+	\item book
+	\item report
+	\item article
+	\item letter (default letter class)
+	\item presentation (\LaTeX{} beamer)
+\end{itemize}
+
+\subsubsection{Extending by own templates}
+Geany\LaTeX{} is offering a way for extending the wizard by user 
+defined templates. This templates will be stored inside the plugin 
+configuration dir with file extension glt. For creating a 
+customized template you will need to create a normal *.tex file and 
+store it inside the directory. On most Linux systems this should be 
+\texttt{\textasciitilde/.config/geany/geanyLaTeX/}. 
+
+Inside your template you can refer to wizard's field by using some special 
+strings which are:
+
+\begin{table}[H]
+\centering
+\label{tab:symbols_in_custom_templates}
+\caption{List of available symbols on custom templates}
+\begin{tabular}{l|p{10cm}}
+\textbf{Symbol} & \textbf{Usage}\\ \hline
+\texttt{\{CLASSOPTION\}} & Will be replaced by the classoptions set on 
+	the wizard as for example font size or paper size.\\
+\texttt{\{DOCUMENTCLASS\}} & Will be replaced by the choosen document 
+	class based on the pulldown of wizard and whether option for KOMA 
+	script has been set. \\
+\texttt{\{DATE\}} & Will be replaced by the input given on the date 
+	field of wizard.\\
+\texttt{\{TITLE\}} & Will be replaced by the input given on the title 
+	field of wizard.\\
+\texttt{\{AUTHOR\} }& Will be replaced by the input given on the author 
+	field of wizard.\\
+\texttt{\{ENCODING\}} & Will be replace by choosen encoding from pulldown 
+	of wizard\\
+\texttt{\{OPENING\}} & Will be replaced by »Dear Sir or Madame« in local 
+	geany\LaTeX{} is running with. If you like to overwrite it, please 
+	don't use the symbol and hardcode the phrase instead.\\
+\texttt{\{CLOSING\}} & Will be replaced by »With kind regards« in local 
+	geany\LaTeX{} is running with. If you like to overwrite it, please 
+	don't use the symbol and hardcode the phrase instead.\\
+	\end{tabular}
+\end{table}
+
+If you have other than the default templates defined they will be 
+add to templates pulldown. So when creating a template, please keep 
+care to set up a good name for the file, as the filename will be 
+the identifier you can choose from on pulldown. 
 
 \subsection{Inserting References and Labels}
 An often used feature on writing of documents is adding and referring

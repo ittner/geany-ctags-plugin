@@ -88,7 +88,8 @@ geanylatex_sources = [
 	'src/bibtex.c','src/geanylatex.c','src/latexstructure.c',
 	'src/bibtexlabels.c','src/latexencodings.c','src/latexutils.c',
 	'src/formatpatterns.c','src/latexenvironments.c','src/letters.c',
-	'src/formatutils.c','src/latexkeybindings.c','src/reftex.c']
+	'src/formatutils.c','src/latexkeybindings.c','src/reftex.c', 
+	'src/templates.c']
 
 def configure(conf):
 	def conf_get_svn_rev():

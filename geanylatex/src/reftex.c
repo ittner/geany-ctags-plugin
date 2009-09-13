@@ -41,8 +41,10 @@ void glatex_parse_aux_file(gpointer file, gpointer combobox)
 
 	if (file != NULL)
 	{
+		/*  Return if its not an aux file */
 		if (!g_str_has_suffix(file, ".aux"))
 			return;
+			
 		sep = (utils_str_equal(doc->real_path, "/")) ? "" : G_DIR_SEPARATOR_S;
 		tmp_complete_path = g_strconcat(tmp_basedir, sep, file, NULL);
 		aux_entries = geanylatex_read_file_in_array(tmp_complete_path);
@@ -86,6 +88,7 @@ void glatex_add_Labels(GtkWidget *combobox, GSList *dir)
 	}
 	g_slist_foreach(dir, glatex_parse_aux_file, combobox);
 }
+
 
 LaTeXLabel* glatex_parseLine(const gchar *line)
 {

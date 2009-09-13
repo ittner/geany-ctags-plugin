@@ -28,6 +28,7 @@
 #include "geanyplugin.h"
 #include <gtk/gtk.h>
 #include "datatypes.h"
+#include "templates.h"
 #include "letters.h"
 #include "latexencodings.h"
 #include "bibtex.h"
@@ -37,8 +38,6 @@
 #include "formatutils.h"
 #include "latexstructure.h"
 #include "latexkeybindings.h"
-
-
 
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
@@ -52,43 +51,6 @@ extern GeanyPlugin	*geany_plugin;
 extern GeanyData	*geany_data;
 extern GeanyFunctions	*geany_functions;
 
-
-#define TEMPLATE_LATEX "\
-\\documentclass[{CLASSOPTION}]{{DOCUMENTCLASS}}\n\
-{ENCODING}\
-{TITLE}\
-{AUTHOR}\
-{DATE}\
-\\begin{document}\n\
-\n\
-\\end{document}\n"
-
-#define TEMPLATE_LATEX_LETTER "\
-\\documentclass[{CLASSOPTION}]{{DOCUMENTCLASS}}\n\
-{ENCODING}\
-\\address{}\n\
-{DATE}\
-{TITLE}\
-{AUTHOR}\
-\\begin{document}\n\
-\\begin{letter}{}\n\
-\\opening{{OPENING}}\n\n\
-\\closing{{CLOSING}}\n\
-\\end{letter}\n\
-\\end{document}\n"
-
-#define TEMPLATE_LATEX_BEAMER "\
-\\documentclass[]{{DOCUMENTCLASS}}\n\
-\\usetheme{default}\n\
-{ENCODING}\
-{TITLE}\
-{AUTHOR}\
-{DATE}\
-\\begin{document}\n\
-\\frame{\\titlepage}\n\
-\\begin{frame}\n\
-\\end{frame}\n\
-\\end{document}\n"
 
 #define create_sub_menu(base_menu, menu, item, title) \
 		(menu) = gtk_menu_new(); \
