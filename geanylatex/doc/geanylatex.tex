@@ -118,7 +118,11 @@ It implements a couple of maybe useful functions:
 
 \section{Requirements}
 
-\small{\textbf{Please note:} This section of documentation is only valid with standalone distribution of Geany\LaTeX{}. If you are planning to use the common geany-plugins project, please check documentation over there as there are some specialties you might like to know.}
+\small{\textbf{Please note:} This section of documentation is only 
+valid with standalone distribution of Geany\LaTeX{}. If you are 
+planning to use the common geany-plugins project, please check 
+documentation over there as there are some specialties you might 
+like to know.}
 
 For compiling the plugin yourself, you will need the GTK ($>= 2.8.0$)
 libraries and header files. You will also need its dependency
@@ -131,7 +135,7 @@ have Geany installed from the sources, you should be ready to go. If
 you used a prepared package e.g. from your distribution you probably
 need to install an additional package, this might be called geany-dev
 or geany-devel. Please note that in order to compile and use this
-plugin, you need Geany 0.17 or later (Geany Plugin API v147 or higher).
+plugin, you need Geany 0.18 or later (Geany Plugin API v147 or higher).
 
 Furthermore you need, of course, a C compiler and python installed. The
 GNU version of the C compiler is recommended. Also there should be a
@@ -142,7 +146,11 @@ run on all systems Geany is able to run.
 
 \section{Installation}
 
-\small{\textbf{Please note:} This section of documentation is only valid with standalone distribution of Geany\LaTeX{}. If you are planning to use the common geany-plugins project, please check documentation over there as there are some specialties you might like to know.}
+\small{\textbf{Please note:} This section of documentation is only 
+valid with standalone distribution of Geany\LaTeX{}. If you are 
+planning to use the common geany-plugins project, please check 
+documentation over there as there are some specialties you might 
+like to know.}
 
 \subsection{Compiling the plugin itself}
 Compiling and installing the code is done by the following three
@@ -301,6 +309,11 @@ add to templates pulldown. So when creating a template, please keep
 care to set up a good name for the file, as the filename will be 
 the identifier you can choose from on pulldown. 
 
+In future a number of templates should be available also online at 
+\url{http://frank.uvena.de/files/geany/data/geanyLaTeX/}. Please 
+feel also free to publish templates in case of you have some useful 
+one.
+
 \subsection{Inserting References and Labels}
 An often used feature on writing of documents is adding and referring
 to labels. Geany\LaTeX{} is adding some support here for more
@@ -319,15 +332,16 @@ inserting normal references and page references to an label.
 	\caption{Insert reference dialog on Geany\LaTeX{} 0.4}
 \end{figure}
 
-The suggestions inside the pull down are based on the aux files creating
-by processing of *.tex file located inside directory of current \TeX-file.
-When first step was successful the files are parsed for \texttt{\textbackslash
-newlabel\{\}\{\}\{\}} and outcome is tried to interpret them properly.
-The found entries will be inserted into pull down sorted by alphabet.
+The suggestions inside the pull down are based on the aux files 
+creating by processing of *.tex file located inside directory of 
+current \TeX-file. When first step was successful the files are 
+parsed for \texttt{\textbackslash newlabel\{\}\{\}\{\}} and outcome 
+is tried to interpret them properly. The found entries will be 
+inserted into pull down sorted by alphabet.
 
-Both, the inserting labels as well as the inserting reference dialog
-can be accessed by key binding also. See chapter \ref{kb_insert_label}
-and \ref{kb_insert_reference} here.
+Both, the inserting labels as well as the inserting reference dialog 
+can be accessed by key binding also. See chapter \ref
+{kb_insert_label} and \ref{kb_insert_reference} here.
 
 \subsection{BibTeX templates for catalogue entries}
 Geany\LaTeX{} is offering a number of often used templates for BibTeX

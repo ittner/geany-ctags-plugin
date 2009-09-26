@@ -1,15 +1,16 @@
-These installation instructions are written for a Linux system.
+These installation instructions are written for a Linux system, but 
+should work also on other plattforms as Windows is.
 
-At the time of this writing, building the plugin requires a recent SVN
-checkout of the Geany sources (Geany Plugin API v130).
+Building the plugin requires Geany 0.18 or above (Geany Plugin API v147 
+or higher).
 
 You need for compliling the plugin the Geany header files installed.
 For configuring and installing just run
 
- % configure
- % make
- % make install
+ % ./waf configure
+ % ./waf build
+ % ./waf install
 
 If you want to install geanyLaTeX to another directory, you should run
-configure with --prefix=/path/to/dir option. make install will install
-all files to your new target.
+./waf configure with --prefix=/path/to/dir option. ./waf install will 
+install all files to your new target.

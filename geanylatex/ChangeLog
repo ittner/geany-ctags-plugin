@@ -1,3 +1,8 @@
+2009-09-13  Frank Lanitz  <frank@frank(dot)uvena(dot)de>
+
+ * Adding custom templates to wizard.
+
+
 2009-08-14  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Make reference dialog catch suggestions from all *.aux files inside
