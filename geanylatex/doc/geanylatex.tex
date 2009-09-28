@@ -118,10 +118,10 @@ It implements a couple of maybe useful functions:
 
 \section{Requirements}
 
-\small{\textbf{Please note:} This section of documentation is only 
-valid with standalone distribution of Geany\LaTeX{}. If you are 
-planning to use the common geany-plugins project, please check 
-documentation over there as there are some specialties you might 
+\small{\textbf{Please note:} This section of documentation is only
+valid with standalone distribution of Geany\LaTeX{}. If you are
+planning to use the common geany-plugins project, please check
+documentation over there as there are some specialties you might
 like to know.}
 
 For compiling the plugin yourself, you will need the GTK ($>= 2.8.0$)
@@ -146,10 +146,10 @@ run on all systems Geany is able to run.
 
 \section{Installation}
 
-\small{\textbf{Please note:} This section of documentation is only 
-valid with standalone distribution of Geany\LaTeX{}. If you are 
-planning to use the common geany-plugins project, please check 
-documentation over there as there are some specialties you might 
+\small{\textbf{Please note:} This section of documentation is only
+valid with standalone distribution of Geany\LaTeX{}. If you are
+planning to use the common geany-plugins project, please check
+documentation over there as there are some specialties you might
 like to know.}
 
 \subsection{Compiling the plugin itself}
@@ -225,9 +225,9 @@ default documents.
 	\caption{\LaTeX-Wizard of version 0.4}
 \end{figure}
 
-The wizard is offering a chance to choose from a couple of templates 
-with the possibility of adding customer templates. This can be 
-chosen from \textbf{Templates} pulldown on top of dialog. 
+The wizard is offering a chance to choose from a couple of templates
+with the possibility of adding customer templates. This can be
+chosen from \textbf{Templates} pulldown on top of dialog.
 
 This can be set by choosing the needed entry form
 \textbf{Documentclass} pulldown menu.
@@ -266,14 +266,14 @@ Document types that are currently supported by the wizard are:
 \end{itemize}
 
 \subsubsection{Extending by own templates}
-Geany\LaTeX{} is offering a way for extending the wizard by user 
-defined templates. This templates will be stored inside the plugin 
-configuration dir with file extension glt. For creating a 
-customized template you will need to create a normal *.tex file and 
-store it inside the directory. On most Linux systems this should be 
-\texttt{\textasciitilde/.config/geany/geanyLaTeX/}. 
+Geany\LaTeX{} is offering a way for extending the wizard by user
+defined templates. This templates will be stored inside the plugin
+configuration dir with file extension glt. For creating a
+customized template you will need to create a normal *.tex file and
+store it inside the directory. On most Linux systems this should be
+\texttt{\textasciitilde/.config/geany/geanyLaTeX/}.
 
-Inside your template you can refer to wizard's field by using some special 
+Inside your template you can refer to wizard's field by using some special
 strings which are:
 
 \begin{table}[H]
@@ -282,36 +282,36 @@ strings which are:
 \caption{List of available symbols on custom templates}
 \begin{tabular}{l|p{10cm}}
 \textbf{Symbol} & \textbf{Usage}\\ \hline
-\texttt{\{CLASSOPTION\}} & Will be replaced by the classoptions set on 
+\texttt{\{CLASSOPTION\}} & Will be replaced by the classoptions set on
 	the wizard as for example font size or paper size.\\
-\texttt{\{DOCUMENTCLASS\}} & Will be replaced by the choosen document 
-	class based on the pulldown of wizard and whether option for KOMA 
+\texttt{\{DOCUMENTCLASS\}} & Will be replaced by the choosen document
+	class based on the pulldown of wizard and whether option for KOMA
 	script has been set. \\
-\texttt{\{DATE\}} & Will be replaced by the input given on the date 
+\texttt{\{DATE\}} & Will be replaced by the input given on the date
 	field of wizard.\\
-\texttt{\{TITLE\}} & Will be replaced by the input given on the title 
+\texttt{\{TITLE\}} & Will be replaced by the input given on the title
 	field of wizard.\\
-\texttt{\{AUTHOR\} }& Will be replaced by the input given on the author 
+\texttt{\{AUTHOR\} }& Will be replaced by the input given on the author
 	field of wizard.\\
-\texttt{\{ENCODING\}} & Will be replace by choosen encoding from pulldown 
+\texttt{\{ENCODING\}} & Will be replace by choosen encoding from pulldown
 	of wizard\\
-\texttt{\{OPENING\}} & Will be replaced by »Dear Sir or Madame« in local 
-	geany\LaTeX{} is running with. If you like to overwrite it, please 
+\texttt{\{OPENING\}} & Will be replaced by »Dear Sir or Madame« in local
+	geany\LaTeX{} is running with. If you like to overwrite it, please
 	don't use the symbol and hardcode the phrase instead.\\
-\texttt{\{CLOSING\}} & Will be replaced by »With kind regards« in local 
-	geany\LaTeX{} is running with. If you like to overwrite it, please 
+\texttt{\{CLOSING\}} & Will be replaced by »With kind regards« in local
+	geany\LaTeX{} is running with. If you like to overwrite it, please
 	don't use the symbol and hardcode the phrase instead.\\
 	\end{tabular}
 \end{table}
 
-If you have other than the default templates defined they will be 
-add to templates pulldown. So when creating a template, please keep 
-care to set up a good name for the file, as the filename will be 
-the identifier you can choose from on pulldown. 
+If you have other than the default templates defined they will be
+add to templates pulldown. So when creating a template, please keep
+care to set up a good name for the file, as the filename will be
+the identifier you can choose from on pulldown.
 
-In future a number of templates should be available also online at 
-\url{http://frank.uvena.de/files/geany/data/geanyLaTeX/}. Please 
-feel also free to publish templates in case of you have some useful 
+In future a number of templates should be available also online at
+\url{http://frank.uvena.de/files/geany/data/geanyLaTeX/}. Please
+feel also free to publish templates in case of you have some useful
 one.
 
 \subsection{Inserting References and Labels}
@@ -332,14 +332,14 @@ inserting normal references and page references to an label.
 	\caption{Insert reference dialog on Geany\LaTeX{} 0.4}
 \end{figure}
 
-The suggestions inside the pull down are based on the aux files 
-creating by processing of *.tex file located inside directory of 
-current \TeX-file. When first step was successful the files are 
-parsed for \texttt{\textbackslash newlabel\{\}\{\}\{\}} and outcome 
-is tried to interpret them properly. The found entries will be 
+The suggestions inside the pull down are based on the aux files
+creating by processing of *.tex file located inside directory of
+current \TeX-file. When first step was successful the files are
+parsed for \texttt{\textbackslash newlabel\{\}\{\}\{\}} and outcome
+is tried to interpret them properly. The found entries will be
 inserted into pull down sorted by alphabet.
 
-Both, the inserting labels as well as the inserting reference dialog 
+Both, the inserting labels as well as the inserting reference dialog
 can be accessed by key binding also. See chapter \ref
 {kb_insert_label} and \ref{kb_insert_reference} here.
 
@@ -536,9 +536,10 @@ Insert enumerate list & Inserts an enumerate environment as well as a 1\up{st} \
 \end{table}
 
 \newpage
-\section{Donating to the plugin}
-If you like the plugin, there are a number of ways, how to donate the
-development of the plugin.
+
+\section{Contribution to the plugin}
+If you like the plugin, there are a number of ways, how to
+contribute to the development of the plugin.
 
 \subsection{Extending plugin}
 
@@ -552,7 +553,7 @@ topics in translation:
 \item \textbf{Translation of plugin:}
 	   Adding a new translation and improving an existing one is easy to
 	   do. After catching the source tarball and extracting you can find
-	   all needed files inside the po folder. \\
+	   all needed files inside the po/ folder. \\
 	   Please contact the authors if you plan to update/add a translation
 	   to ensure nobody else is currently working on and avoid double
 	   work and to get some further information about translation (see
@@ -601,10 +602,12 @@ The documentation is written in \LaTeX{} so all you need is to get the
 tex file from doc folder and add or update the content.
 After this, just send a diff or complete file to one of the authors.
 
-\subsection{Providing additional data for plugin} 
-You can also donate the plugin's development by providing additional 
-data as for example customized templates for the \LaTeX-Wizard. If 
-you build up one, you might like to send it to one of the authors.
+\subsection{Providing additional data for plugin}
+
+You can also contribute to the plugin's development by providing
+additional data as for example customized templates for the
+\LaTeX-Wizard. If you build up one, you might like to send it to
+one of the authors.
 
 \subsection{Propaganda}
 And of course, tell others of Geany and this plugin. If you like to do
