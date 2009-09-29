@@ -37,26 +37,20 @@ GString *glatex_get_template_from_file(gchar *filepath)
 }
 
 
-static void glatex_init_cutom_template_item(gpointer file, gpointer array)
-{	
-	gchar* filepath;
+static void glatex_init_cutom_template_item(gchar *file, GPtrArray *array)
+{
 	TemplateEntry *template = g_new0(TemplateEntry, 1);
-	
+
 	/* Return if its not a searched file */
 	if (g_str_has_suffix(file,".gtl") == FALSE)
 		return;
-	
-	/* Creating up config dir for checking for templates */
-	filepath = g_strconcat(geany->app->configdir,
-		G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
-		"geanyLaTeX", G_DIR_SEPARATOR_S, file, NULL);
-	template->filepath = filepath;
-	
-	/* FIXME: Cut of .gtl from filename */
-	template->label = file;
-	
+
+	template->filepath = g_strdup(file);
+
+	template->label = g_path_get_basename(file);
+
 	/* Adding struct to array */
-	template->template = glatex_get_template_from_file(filepath);
+	template->template = glatex_get_template_from_file(file);
 	g_ptr_array_add(array, template);
 }
 
@@ -67,21 +61,21 @@ GPtrArray* glatex_init_custom_templates()
 	gchar *tmp_basedir = NULL;
 	GSList *file_list = NULL;
 	GPtrArray *templates = NULL;
-	
+
 	/* Creating up config dir for checking for templates */
 	tmp_basedir = g_strconcat(geany->app->configdir,
 			G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
 			"geanyLaTeX", G_DIR_SEPARATOR_S, NULL);
-	
+
 	/* Putting all files in configdir to a file list */
-	file_list = utils_get_file_list(tmp_basedir, length, NULL);
-	
+	file_list = utils_get_file_list_full(tmp_basedir, TRUE, TRUE, NULL);
+
 	/* Init GPtrArray */
 	templates = g_ptr_array_new();
-	
+
 	/* Iterating on all list items */
 	g_slist_foreach(file_list, (GFunc)glatex_init_cutom_template_item, templates);
-	
+ 	g_slist_foreach(file_list, (GFunc) g_free, NULL);
 	g_slist_free(file_list);
 	return templates;
 }
@@ -104,7 +98,7 @@ void glatex_add_templates_to_combobox(GPtrArray *templates, GtkWidget *combobox)
 	for (i = 0; i < templates->len; i++)
 	{
 		tmp = g_ptr_array_index(templates,i);
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combobox), 
-			tmp->label);	
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combobox),
+			tmp->label);
 	}
 }

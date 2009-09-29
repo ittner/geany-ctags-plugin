@@ -24,7 +24,7 @@
 
 #include "geanylatex.h"
 
-PLUGIN_VERSION_CHECK(147)
+PLUGIN_VERSION_CHECK(159)
 
 PLUGIN_SET_INFO(_("LaTeX"), _("Plugin to provide better LaTeX support"),
 	VERSION,"Frank Lanitz <frank@frank.uvena.de>")
@@ -66,7 +66,7 @@ static GtkWidget *glatex_toolbar = NULL;
 static GtkWidget *box = NULL;
 
 /* Configuration file */
-static gchar *config_file = NULL; 
+static gchar *config_file = NULL;
 
 PLUGIN_KEY_GROUP(geanylatex, COUNT_KB)
 
@@ -448,7 +448,7 @@ glatex_insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	if (doc->real_path != NULL)
 	{
 		dir = g_path_get_dirname(doc->real_path);
-		file_list = utils_get_file_list(dir, NULL, NULL);
+		file_list = utils_get_file_list_full(dir, TRUE, TRUE, NULL);
 		glatex_add_Labels(textbox_ref, file_list);
 		model = gtk_combo_box_get_model(GTK_COMBO_BOX(textbox_ref));
 		gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(model),
@@ -754,21 +754,21 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	gtk_misc_set_alignment(GTK_MISC(label_template), 0, 0.5);
 
 	gtk_table_attach_defaults(GTK_TABLE(table), label_template, 0, 1, 0, 1);
-	gtk_table_attach_defaults(GTK_TABLE(table), template_combobox, 1, 2, 0, 1);	
-	
-	/*  Adding default/build in templates to pull down and set the generic 
+	gtk_table_attach_defaults(GTK_TABLE(table), template_combobox, 1, 2, 0, 1);
+
+	/*  Adding default/build in templates to pull down and set the generic
 	 * 	one as default */
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(template_combobox), 
-		LATEX_WIZARD_TEMPLATE_DEFAULT, _("Default"));	
-	gtk_combo_box_set_active(GTK_COMBO_BOX(template_combobox), 
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(template_combobox),
+		LATEX_WIZARD_TEMPLATE_DEFAULT, _("Default"));
+	gtk_combo_box_set_active(GTK_COMBO_BOX(template_combobox),
 		LATEX_WIZARD_TEMPLATE_DEFAULT);
-	
-	/*  Checking whether some custom template are available and adding 
-	 *  if so. 
+
+	/*  Checking whether some custom template are available and adding
+	 *  if so.
 	 *  Also init array with templates available. */
 	template_list = glatex_init_custom_templates();
 	glatex_add_templates_to_combobox(template_list, template_combobox);
-	
+
 	/*  Documentclass */
 	label_documentclass = gtk_label_new(_("Documentclass:"));
 	documentclass_combobox = gtk_combo_box_new_text();
@@ -784,7 +784,7 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 		_("Letter"));
 	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 4,
 		_("Presentation"));
-	
+
 	gtk_combo_box_set_active(GTK_COMBO_BOX(documentclass_combobox), 0);
 
 	gtk_misc_set_alignment(GTK_MISC(label_documentclass), 0, 0.5);
@@ -804,7 +804,7 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 					  latex_encodings[i].name);
 	}
 
-	gtk_combo_box_set_active(GTK_COMBO_BOX(encoding_combobox), 
+	gtk_combo_box_set_active(GTK_COMBO_BOX(encoding_combobox),
 		find_latex_enc(geany_data->file_prefs->default_new_encoding));
 
 	gtk_misc_set_alignment(GTK_MISC(label_encoding), 0, 0.5);
@@ -1029,14 +1029,14 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 			}
 
 		}
-		
+
 		/*  Get the correct template */
-		/*  First check whether its a build in one or a custom one than 
+		/*  First check whether its a build in one or a custom one than
 		 *  assign the wished template */
-		if (template_int < LATEX_WIZARD_TEMPLATE_END || 
+		if (template_int < LATEX_WIZARD_TEMPLATE_END ||
 			template_list == NULL)
 		{
-			if (template_int == LATEX_WIZARD_TEMPLATE_DEFAULT && 
+			if (template_int == LATEX_WIZARD_TEMPLATE_DEFAULT &&
 				documentclass_int == 3 && documentclass_int == 4)
 				code = g_string_new(TEMPLATE_LATEX);
 			else if (documentclass_int == 3)
@@ -1047,16 +1047,16 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 				code = g_string_new(TEMPLATE_LATEX);
 		}
 		else
-		{	
+		{
 			TemplateEntry *tmp = NULL;
-			
-			/* Return if the value choose is for some uknown reason to high */	
+
+			/* Return if the value choose is for some uknown reason to high */
 			if (template_int > (template_list->len + LATEX_WIZARD_TEMPLATE_END))
 				return;
-			
+
 			tmp = g_ptr_array_index(template_list, template_int - LATEX_WIZARD_TEMPLATE_END);
 			code = glatex_get_template_from_file(tmp->filepath);
-			
+
 			/* Cleaning up template array as there is no usage for anymore */
 			g_ptr_array_foreach (template_list, (GFunc)glatex_free_TemplateEntry, NULL);
 			g_ptr_array_free(template_list, TRUE);
@@ -1091,7 +1091,7 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 					{
 						author = g_strconcat("\\author{", author, "}\n", NULL);
 					}
-	
+
 					utils_string_replace_all(code, "{AUTHOR}", author);
 				}
 				else
@@ -1103,7 +1103,7 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 					{
 						utils_string_replace_all(code, "{AUTHOR}", "\% \\author{}\n");
 					}
-	
+
 				g_free(author);
 			}
 			if (date != NULL)
@@ -1129,7 +1129,7 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 					{
 						title = g_strconcat("\\title{", title, "}\n", NULL);
 					}
-	
+
 					utils_string_replace_all(code, "{TITLE}", title);
 				}
 				else
@@ -1141,13 +1141,13 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 					{
 						utils_string_replace_all(code, "{TITLE}", "\% \\title{} \n");
 					}
-	
+
 				g_free(title);
 			}
-	
+
 			utils_string_replace_all(code, "{OPENING}", _("Dear Sir or Madame"));
 			utils_string_replace_all(code, "{CLOSING}", _("With kind regards"));
-	
+
 			output = g_string_free(code, FALSE);
 			show_output(output, NULL, encoding_int);
 			g_free(output);

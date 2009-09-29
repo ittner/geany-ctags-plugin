@@ -24,13 +24,13 @@
 
 #include "geanylatex.h"
 
-/* Add an enum entry for every new build in templates which are not 
- * the TEMPLATE_LATEX_BEAMER and TEMPLATE_LATEX_LETTER. 
- * Anyway, you sould prefer to add new templates not by patching this 
- * code but by providing a template as described in documentation. 
- * However, whenever adding a new template here, please ensure 
- * LATEX_WIZARD_TEMPLATE_END is the last entry as it will trigger 
- * the custom templates.*/ 
+/* Add an enum entry for every new build in templates which are not
+ * the TEMPLATE_LATEX_BEAMER and TEMPLATE_LATEX_LETTER.
+ * Anyway, you sould prefer to add new templates not by patching this
+ * code but by providing a template as described in documentation.
+ * However, whenever adding a new template here, please ensure
+ * LATEX_WIZARD_TEMPLATE_END is the last entry as it will trigger
+ * the custom templates.*/
 enum {
 	LATEX_WIZARD_TEMPLATE_DEFAULT = 0,
 	LATEX_WIZARD_TEMPLATE_END
