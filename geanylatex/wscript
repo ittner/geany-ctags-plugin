@@ -252,7 +252,10 @@ def build(bld):
 			if os.path.exists(file):
 				bld.install_as(
 					'%s/%s%s' % (docdir, uc_first(file, is_win32), ext), file)
-		bld.install_files('%s' % docdir, 'doc/geanylatex.*')
+		bld.install_files('%s' % docdir, 'doc/geanylatex.tex')
+		bld.install_files('%s' % docdir, 'doc/*.html')
+		bld.install_files('%s' % docdir, 'doc/geanylatex.css')
+		bld.install_files('%s' % docdir, 'doc/geanylatex.pdf')
 		bld.install_files('%s/img' % docdir, 'doc/img/*.png')
 
 	bld.new_task_gen(
