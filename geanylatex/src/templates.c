@@ -40,15 +40,18 @@ GString *glatex_get_template_from_file(gchar *filepath)
 static void glatex_init_cutom_template_item(gchar *file, GPtrArray *array)
 {
 	TemplateEntry *template = g_new0(TemplateEntry, 1);
-
+	gchar *tmp = NULL;
+	
 	/* Return if its not a searched file */
 	if (g_str_has_suffix(file,".gtl") == FALSE)
 		return;
 
 	template->filepath = g_strdup(file);
 
-	template->label = g_path_get_basename(file);
-
+	tmp = g_path_get_basename(file);
+	template->label = utils_remove_ext_from_filename(tmp);
+	g_free(tmp);
+	
 	/* Adding struct to array */
 	template->template = glatex_get_template_from_file(file);
 	g_ptr_array_add(array, template);
