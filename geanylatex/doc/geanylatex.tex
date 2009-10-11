@@ -38,7 +38,7 @@ openany,%
 \lstset{captionpos=b}
 \lstset{frame=single}
 \setcounter{secnumdepth}{4} % Also numbering of \paragraph
-\setcounter{tocdepth}{2} % Don't add \subsubsection to toc
+\setcounter{tocdepth}{3} % Don't add \subsubsection to toc
 
 % including and configuring package for links
 \usepackage{hyperref}
@@ -222,7 +222,7 @@ The \LaTeX-Wizard is implementing a easy way creating a number of
 default documents.
 \begin{figure}[h!]
 	\centering{\includegraphics[height=7cm]{img/latexwizard.png}}
-	\caption{\LaTeX-Wizard of version 0.4}
+	\caption{\LaTeX-Wizard of version 0.5dev}
 \end{figure}
 
 The wizard is offering a chance to choose from a couple of templates
@@ -266,6 +266,7 @@ Document types that are currently supported by the wizard are:
 \end{itemize}
 
 \subsubsection{Extending by own templates}
+\label{sec:extending_wizard_by_own_templates}
 Geany\LaTeX{} is offering a way for extending the wizard by user
 defined templates. This templates will be stored inside the plugin
 configuration dir with file extension glt. For creating a
@@ -273,8 +274,8 @@ customized template you will need to create a normal *.tex file and
 store it inside the directory. On most Linux systems this should be
 \texttt{\textasciitilde/.config/geany/geanyLaTeX/}.
 
-Inside your template you can refer to wizard's field by using some special
-strings which are:
+Inside your template you can refer to wizard's field by using some 
+special strings which are:
 
 \begin{table}[H]
 \centering
@@ -304,15 +305,20 @@ strings which are:
 	\end{tabular}
 \end{table}
 
-If you have other than the default templates defined they will be
-add to templates pulldown. So when creating a template, please keep
-care to set up a good name for the file, as the filename will be
+If you have other than the default templates defined they will be 
+add to templates pulldown. So when creating a template, please keep 
+care to set up a good name for the file, as the filename will be 
 the identifier you can choose from on pulldown.
 
-In future a number of templates should be available also online at
-\url{http://frank.uvena.de/files/geany/data/geanyLaTeX/}. Please
-feel also free to publish templates in case of you have some useful
+In future a number of templates should be available also online at 
+\url{http://frank.uvena.de/files/geany/data/geanyLaTeX/}. Please 
+feel also free to publish templates in case of you have some useful 
 one.
+
+If you need more general templates, you may have a look onto Geany's 
+build in template feature -- briefly introduced on chapter \ref
+{sec:recommended_things_geany_template_system}, page \pageref
+{sec:recommended_things_geany_template_system}.
 
 \subsection{Inserting References and Labels}
 An often used feature on writing of documents is adding and referring
@@ -325,11 +331,11 @@ comfortable adding new labels and reference offering a GUI.
 \end{figure}
 
 After an label was added Geany\LaTeX{} is offering a dialog for
-inserting normal references and page references to an label.
+inserting normal references and page references to a label.
 
 \begin{figure}[h!]
 	\centering{\includegraphics[height=3.5cm]{img/insert_reference.png}}
-	\caption{Insert reference dialog on Geany\LaTeX{} 0.4}
+	\caption{Insert reference dialog on Geany\LaTeX{} 0.5svn}
 \end{figure}
 
 The suggestions inside the pull down are based on the aux files
@@ -341,7 +347,7 @@ inserted into pull down sorted by alphabet.
 
 Both, the inserting labels as well as the inserting reference dialog
 can be accessed by key binding also. See chapter \ref
-{kb_insert_label} and \ref{kb_insert_reference} here.
+{kb_insert_label} here.
 
 \subsection{BibTeX templates for catalogue entries}
 Geany\LaTeX{} is offering a number of often used templates for BibTeX
@@ -575,11 +581,11 @@ something interesting. Of course we are also open for not in the
 sources mentioned before listed items. Just contact one of the authors
 (see chapter \ref{contact}).
 
-\subsection{Testing \& bug reporting}
-Geany\LaTeX{} is tested mainly on x86 and x86\_64 architecture running
-GNU/Linux. Also it was tested on some Windows 32 versions like XP SP3
-very briefly. Since there are also other systems available, testing on other
-platforms and maybe reporting of issues is highly appreciate.
+\subsection{Testing \& bug reporting} Geany\LaTeX{} is tested mainly 
+on x86 and x86\_64 architecture running GNU/Linux. Also it was 
+tested on some Windows 32 versions like XP SP3 very briefly. Since 
+there are also other systems available, testing on other platforms 
+and maybe reporting of issues is highly appreciate.
 
 \subsection{Packaging}
 Geany\LaTeX{} is part of the geany-plugins project even though there
@@ -646,6 +652,18 @@ Geany is offering a number of nice features, that can be used to make
 daily work more easy without need to write a new plugin or extend
 Geany\LaTeX.
 
+\subsection{Geany's template system}
+\label{sec:recommended_things_geany_template_system}
+If you don't need a dynamic template as described in chapter \ref 
+{sec:extending_wizard_by_own_templates}, page \pageref 
+{sec:extending_wizard_by_own_templates} you can also use Geany's 
+buildin template function which allows to also add customised 
+templates, including placeholders for e.g. author's name, but in a 
+more general and non\LaTeX{}-specific way. Nevertheless you should 
+give it a try as it useful in many cases. For information how to 
+create your own template using Geany's build in feature, please 
+check manual.  
+
 \subsection{Geany's code snippet function}
 Geany is allowing you to define code snippets and inserting them easy
 during writing a document. This gives you some more flexibility than to
@@ -685,6 +703,15 @@ Subversion could be useful to keep versions. GeanyVC is adding a easy
 to use frontend for a number of popular version controll systems such
 as git, Subversion, CVS, Bazaar or Mercural.\\
 \textbf{Homepage:} \url{http://plugins.geany.org/geanyvc/}
+
+\subsubsection{Spellcheck}
+Nobody is perfect - in special with typing mistakes on writing a 
+text. Spellcheck is offering a way on Geany to make usage of a 
+common spellchecking sytem as aspell, myspell or hunspell. Wrong 
+spelled words can be marked with an red line and the plugin is 
+offering suggestions for correct the word. Unfortunately right now 
+its not supporting some special things common in \TeX{} and \LaTeX{}.\\ 
+\textbf{Homepage:} \url{http://plugins.geany.org/spellcheck/}
 
 \subsubsection{tasks out of the addons plugins}
 A plugin that is recognising \texttt{TODO} or \texttt{FIXME} tags
