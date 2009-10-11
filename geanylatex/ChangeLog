@@ -1,3 +1,9 @@
+2009-10-10 Frank Lanitz  <frank@frank(dot)uvena(dot)de>
+
+ * Add a function to insert \ref{} and \pageref{} together when 
+   inserting a reference.
+
+
 2009-09-13  Frank Lanitz  <frank@frank(dot)uvena(dot)de>
 
  * Adding custom templates to wizard.

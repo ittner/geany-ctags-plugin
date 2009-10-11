@@ -422,6 +422,7 @@ glatex_insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	GtkWidget *table = NULL;
 	GtkWidget *radio1 = NULL;
 	GtkWidget *radio2 = NULL;
+	GtkWidget *radio3 = NULL;
 	GtkTreeModel *model = NULL;
 	GeanyDocument *doc = NULL;
 	GSList *file_list = NULL;
@@ -477,6 +478,11 @@ glatex_insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio2), FALSE);
 	gtk_container_add(GTK_CONTAINER(vbox), radio2);
 
+	radio3 = gtk_radio_button_new_with_mnemonic_from_widget(GTK_RADIO_BUTTON(radio1), _("_Add both"));
+	gtk_button_set_focus_on_click(GTK_BUTTON(radio3), FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio3), FALSE);
+	gtk_container_add(GTK_CONTAINER(vbox), radio3);
+	
 	gtk_widget_show_all(vbox);
 
 
@@ -487,13 +493,18 @@ glatex_insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 		ref_string = g_strdup(gtk_combo_box_get_active_text(
 			GTK_COMBO_BOX(textbox_ref)));
 
-		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio2)) == FALSE)
+		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio1)) == TRUE)
 		{
 			ref_string = g_strconcat("\\ref{", ref_string, "}", NULL);
 		}
-		else
+		else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio2))== TRUE)
 		{
 			ref_string = g_strconcat("\\pageref{", ref_string, "}", NULL);
+		}
+		else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio3))== TRUE)
+		{
+			ref_string = g_strconcat("\\ref{", ref_string, "}, ", _("page"), 
+				" \\pageref{", ref_string, "}", NULL);
 		}
 
 		if (ref_string != NULL)
