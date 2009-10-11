@@ -26,8 +26,8 @@ install an additional package, this might be called geany-dev or
 geany-devel. Please note that in order to compile and use this plugin,
 you need Geany 0.18 or later (Geany Plugin API v147 or higher).
 
-Furthermore you need, of course, a C compiler and the Make tool. The
-GNU versions of these tools are recommended.
+Furthermore you need, of course, a C compiler and Python
+installed. The GNU versions of C compiler is recommended.
 
 
 Installation
@@ -36,12 +36,12 @@ Installation
 Compiling and installing the code is done by the following three
 commands:
 
-$ ./configure
-$ make
-$ make install
+$ ./waf configure
+$ ./waf build
+$ ./waf install
 
 For more configuration details run
-$ ./configure --help
+$ ./waf --help
 
 If there are any errors during compilation, check your build environment
 and try to find the error, otherwise contact one of the authors. (See below)
