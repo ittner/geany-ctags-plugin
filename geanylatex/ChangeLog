@@ -1,6 +1,11 @@
+2009-10-11  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Replace also capital German umlauts.
+
+
 2009-10-10 Frank Lanitz  <frank@frank(dot)uvena(dot)de>
 
- * Add a function to insert \ref{} and \pageref{} together when 
+ * Add a function to insert \ref{} and \pageref{} together when
    inserting a reference.
 
 
