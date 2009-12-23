@@ -245,30 +245,30 @@ static gboolean ht_editor_notify_cb(G_GNUC_UNUSED GObject *object, GeanyEditor *
 	if (editor->document->file_type->id != GEANY_FILETYPES_LATEX)
 		return FALSE;
 	
-	if (toggle_active != TRUE)
-		return FALSE;
-
-	if (nt->nmhdr.code == SCN_CHARADDED)
+	if (toggle_active == TRUE)
 	{
-		gchar buf[7];
-		gint len;
-
-		len = g_unichar_to_utf8(nt->ch, buf);
-		if (len > 0)
+		if (nt->nmhdr.code == SCN_CHARADDED)
 		{
-			const gchar *entity;
-
-			buf[len] = '\0';
-			entity = glatex_get_entity(buf);
-
-			if (entity != NULL)
+			gchar buf[7];
+			gint len;
+	
+			len = g_unichar_to_utf8(nt->ch, buf);
+			if (len > 0)
 			{
-				gint pos = sci_get_current_position(editor->sci);
-
-				sci_set_selection_start(editor->sci, pos - len);
-				sci_set_selection_end(editor->sci, pos);
-
-				sci_replace_sel(editor->sci, entity);
+				const gchar *entity;
+	
+				buf[len] = '\0';
+				entity = glatex_get_entity(buf);
+	
+				if (entity != NULL)
+				{
+					gint pos = sci_get_current_position(editor->sci);
+	
+					sci_set_selection_start(editor->sci, pos - len);
+					sci_set_selection_end(editor->sci, pos);
+	
+					sci_replace_sel(editor->sci, entity);
+				}
 			}
 		}
 	}
