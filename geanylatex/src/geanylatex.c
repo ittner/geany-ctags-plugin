@@ -239,7 +239,12 @@ static gboolean ht_editor_notify_cb(G_GNUC_UNUSED GObject *object, GeanyEditor *
 									SCNotification *nt, G_GNUC_UNUSED gpointer data)
 {
 	g_return_val_if_fail(editor != NULL, FALSE);
-
+	
+	/* Check whether this is a LaTeX file at all. If not, we mot likely 
+	 * don't want to do anything */
+	if (editor->document->file_type->id != GEANY_FILETYPES_LATEX)
+		return FALSE;
+	
 	if (toggle_active != TRUE)
 		return FALSE;
 
