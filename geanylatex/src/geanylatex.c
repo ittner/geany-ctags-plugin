@@ -53,6 +53,7 @@ static GtkWidget *menu_latex_replace_toggle = NULL;
 
 /* Options for plugin */
 static gboolean glatex_set_koma_active = FALSE;
+static gboolean glatex_deactivate_toolbaritems_with_non_latex = TRUE;
 static gboolean glatex_set_toolbar_active = FALSE;
 
 /* Function will be deactivated, when only loaded */
@@ -235,6 +236,61 @@ void glatex_toggle_status(G_GNUC_UNUSED GtkMenuItem * menuitem)
 }
 
 
+static on_document_activate(GObject *object, GeanyDocument *doc, gpointer data)
+{
+	/* First check, whether we are ask to do anything here */
+	g_return_val_if_fail(doc != NULL, FALSE);
+	if (glatex_deactivate_toolbaritems_with_non_latex == TRUE)
+		if (doc->file_type->id != GEANY_FILETYPES_LATEX)
+		{
+			/* Deactivate toolbar items */
+			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Bold"), FALSE);
+			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Underline"), FALSE);
+			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Centered"), FALSE);
+			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Italic"), FALSE);
+			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Left"), FALSE);
+			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Right"), FALSE);
+		}
+		else
+		{
+			/* Activate toolbar items*/
+			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Bold"), TRUE);
+			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Underline"), TRUE);
+			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Centered"), TRUE);
+			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Italic"), TRUE);
+			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Left"), TRUE);
+			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Right"), TRUE);
+		}
+	return FALSE;
+}
+
+static on_document_open(GObject *object, GeanyDocument *doc, gpointer data)
+{
+	on_document_activate(object, doc, data);
+	return FALSE;
+}
+
+
+static on_document_new(GObject *object, GeanyDocument *doc, gpointer data)
+{
+	on_document_activate(object, doc, data);
+	return FALSE;
+}
+
+
+static on_document_filetype_set(GObject *obj, GeanyDocument *doc, 
+	GeanyFiletype *filetype_old, gpointer user_data)
+{
+	if (doc != NULL)
+	{
+		GeanyFiletype *ft = doc->file_type;
+		if (filetype_old != NULL && filetype_old->id != ft->id)
+			on_document_activate(obj, doc, user_data);
+	}
+	return FALSE;
+}
+
+
 static gboolean ht_editor_notify_cb(G_GNUC_UNUSED GObject *object, GeanyEditor *editor,
 									SCNotification *nt, G_GNUC_UNUSED gpointer data)
 {
@@ -332,6 +388,10 @@ void glatex_kblatex_toggle(G_GNUC_UNUSED guint key_id)
 PluginCallback plugin_callbacks[] =
 {
 	{ "editor-notify", (GCallback) &ht_editor_notify_cb, FALSE, NULL },
+	{ "document-activate", (GCallback) &on_document_activate, FALSE, NULL },
+	{ "document-filetype-set", (GCallback) &on_document_filetype_set, FALSE, NULL },
+	{ "document-open", (GCallback) &on_document_open, FALSE, NULL },
+	{ "document-new", (GCallback) &on_document_new, FALSE, NULL},
 	{ NULL, NULL, FALSE, NULL }
 };
 
@@ -1256,6 +1316,10 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 
 	glatex_set_toolbar_active = utils_get_setting_boolean(config, "general",
 		"glatex_set_toolbar_active", FALSE);
+
+	/* Hidden preferences. Can be set directly via configuration file*/
+	glatex_deactivate_toolbaritems_with_non_latex = utils_get_setting_boolean(config, "toolbar",
+		"glatex_deactivate_toolbritems_with_non_latex", TRUE);
 
 	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
 

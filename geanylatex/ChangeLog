@@ -1,3 +1,9 @@
+2009-12-26  Frank Lanitz  <frank@frank.uvena.de>
+
+ * Deactivate icons of toolbar, if no LaTeX document is open. Behavior 
+   can be deactivated via hidden pref. 
+
+
 2009-12-23  Frank Lanitz  <frank@frank.uvena.de>
 
  * Do only special character replacement in case of we really have 
