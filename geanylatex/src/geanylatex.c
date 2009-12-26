@@ -278,7 +278,7 @@ static on_document_new(GObject *object, GeanyDocument *doc, gpointer data)
 }
 
 
-static on_document_filetype_set(GObject *obj, GeanyDocument *doc, 
+static on_document_filetype_set(GObject *obj, GeanyDocument *doc,
 	GeanyFiletype *filetype_old, gpointer user_data)
 {
 	if (doc != NULL)
@@ -295,34 +295,34 @@ static gboolean ht_editor_notify_cb(G_GNUC_UNUSED GObject *object, GeanyEditor *
 									SCNotification *nt, G_GNUC_UNUSED gpointer data)
 {
 	g_return_val_if_fail(editor != NULL, FALSE);
-	
-	/* Check whether this is a LaTeX file at all. If not, we mot likely 
+
+	/* Check whether this is a LaTeX file at all. If not, we mot likely
 	 * don't want to do anything */
 	if (editor->document->file_type->id != GEANY_FILETYPES_LATEX)
 		return FALSE;
-	
+
 	if (toggle_active == TRUE)
 	{
 		if (nt->nmhdr.code == SCN_CHARADDED)
 		{
 			gchar buf[7];
 			gint len;
-	
+
 			len = g_unichar_to_utf8(nt->ch, buf);
 			if (len > 0)
 			{
 				const gchar *entity;
-	
+
 				buf[len] = '\0';
 				entity = glatex_get_entity(buf);
-	
+
 				if (entity != NULL)
 				{
 					gint pos = sci_get_current_position(editor->sci);
-	
+
 					sci_set_selection_start(editor->sci, pos - len);
 					sci_set_selection_end(editor->sci, pos);
-	
+
 					sci_replace_sel(editor->sci, entity);
 				}
 			}
@@ -547,7 +547,7 @@ glatex_insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	gtk_button_set_focus_on_click(GTK_BUTTON(radio3), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio3), FALSE);
 	gtk_container_add(GTK_CONTAINER(vbox), radio3);
-	
+
 	gtk_widget_show_all(vbox);
 
 
@@ -568,7 +568,7 @@ glatex_insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 		}
 		else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio3))== TRUE)
 		{
-			ref_string = g_strconcat("\\ref{", ref_string, "}, ", _("page"), 
+			ref_string = g_strconcat("\\ref{", ref_string, "}, ", _("page"),
 				" \\pageref{", ref_string, "}", NULL);
 		}
 
@@ -1319,7 +1319,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 
 	/* Hidden preferences. Can be set directly via configuration file*/
 	glatex_deactivate_toolbaritems_with_non_latex = utils_get_setting_boolean(config, "toolbar",
-		"glatex_deactivate_toolbritems_with_non_latex", TRUE);
+		"glatex_deactivate_toolbaritems_with_non_latex", TRUE);
 
 	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
 
