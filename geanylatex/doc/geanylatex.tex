@@ -274,7 +274,7 @@ customized template you will need to create a normal *.tex file and
 store it inside the directory. On most Linux systems this should be
 \texttt{\textasciitilde/.config/geany/geanyLaTeX/}.
 
-Inside your template you can refer to wizard's field by using some 
+Inside your template you can refer to wizard's field by using some
 special strings which are:
 
 \begin{table}[H]
@@ -305,17 +305,17 @@ special strings which are:
 	\end{tabular}
 \end{table}
 
-If you have other than the default templates defined they will be 
-add to templates pulldown. So when creating a template, please keep 
-care to set up a good name for the file, as the filename will be 
+If you have other than the default templates defined they will be
+add to templates pulldown. So when creating a template, please keep
+care to set up a good name for the file, as the filename will be
 the identifier you can choose from on pulldown.
 
-In future a number of templates should be available also online at 
-\url{http://frank.uvena.de/files/geany/data/geanyLaTeX/}. Please 
-feel also free to publish templates in case of you have some useful 
+In future a number of templates should be available also online at
+\url{http://frank.uvena.de/files/geany/data/geanyLaTeX/}. Please
+feel also free to publish templates in case of you have some useful
 one.
 
-If you need more general templates, you may have a look onto Geany's 
+If you need more general templates, you may have a look onto Geany's
 build in template feature -- briefly introduced on chapter \ref
 {sec:recommended_things_geany_template_system}, page \pageref
 {sec:recommended_things_geany_template_system}.
@@ -541,7 +541,35 @@ Insert enumerate list & Inserts an enumerate environment as well as a 1\up{st} \
 \end{tabular}
 \end{table}
 
-\newpage
+\subsection{Hidden preferencess}
+As not all users need to configure everything on there plugin, Geany
+\LaTeX{} has some hidden preferences which can be set through
+command line.
+
+\subsubsection{Deactivate toolbar items if document is a non \TeX-type}
+
+By defaul, Geany\LaTeX{} is deactivating buttons inside toolbar, which
+don't make much sense to be applied on non-\TeX{} file types. As
+this is not always wished, its possible to turn this feature off
+via a hidden preferences.
+
+If you want to do so, just add a new section called \texttt{toolbar}
+into your general.conf file of Geany\LaTeX{} plugin which stats
+\texttt{glatex\_deactivate\_toolbaritems\_with\_non\_latex=false}.
+As a result, your config file could look similar to this:
+
+\begin{lstlisting}
+[general]
+glatex_set_koma_active=false
+glatex_set_toolbar_active=true
+
+[toolbar]
+glatex_deactivate_toolbaritems_with_non_latex=false
+\end{lstlisting}
+
+Setting this option back to true will go back to default behaviour.
+
+Please ensure, you reload the plugin once this option has been changed.
 
 \section{Contribution to the plugin}
 If you like the plugin, there are a number of ways, how to
@@ -581,10 +609,10 @@ something interesting. Of course we are also open for not in the
 sources mentioned before listed items. Just contact one of the authors
 (see chapter \ref{contact}).
 
-\subsection{Testing \& bug reporting} Geany\LaTeX{} is tested mainly 
-on x86 and x86\_64 architecture running GNU/Linux. Also it was 
-tested on some Windows 32 versions like XP SP3 very briefly. Since 
-there are also other systems available, testing on other platforms 
+\subsection{Testing \& bug reporting} Geany\LaTeX{} is tested mainly
+on x86 and x86\_64 architecture running GNU/Linux. Also it was
+tested on some Windows 32 versions like XP SP3 very briefly. Since
+there are also other systems available, testing on other platforms
 and maybe reporting of issues is highly appreciate.
 
 \subsection{Packaging}
@@ -654,15 +682,15 @@ Geany\LaTeX.
 
 \subsection{Geany's template system}
 \label{sec:recommended_things_geany_template_system}
-If you don't need a dynamic template as described in chapter \ref 
-{sec:extending_wizard_by_own_templates}, page \pageref 
-{sec:extending_wizard_by_own_templates} you can also use Geany's 
-buildin template function which allows to also add customised 
-templates, including placeholders for e.g. author's name, but in a 
-more general and non\LaTeX{}-specific way. Nevertheless you should 
-give it a try as it useful in many cases. For information how to 
-create your own template using Geany's build in feature, please 
-check manual.  
+If you don't need a dynamic template as described in chapter \ref
+{sec:extending_wizard_by_own_templates}, page \pageref
+{sec:extending_wizard_by_own_templates} you can also use Geany's
+buildin template function which allows to also add customised
+templates, including placeholders for e.g. author's name, but in a
+more general and non\LaTeX{}-specific way. Nevertheless you should
+give it a try as it useful in many cases. For information how to
+create your own template using Geany's build in feature, please
+check manual.
 
 \subsection{Geany's code snippet function}
 Geany is allowing you to define code snippets and inserting them easy
@@ -705,12 +733,12 @@ as git, Subversion, CVS, Bazaar or Mercural.\\
 \textbf{Homepage:} \url{http://plugins.geany.org/geanyvc/}
 
 \subsubsection{Spellcheck}
-Nobody is perfect - in special with typing mistakes on writing a 
-text. Spellcheck is offering a way on Geany to make usage of a 
-common spellchecking sytem as aspell, myspell or hunspell. Wrong 
-spelled words can be marked with an red line and the plugin is 
-offering suggestions for correct the word. Unfortunately right now 
-its not supporting some special things common in \TeX{} and \LaTeX{}.\\ 
+Nobody is perfect - in special with typing mistakes on writing a
+text. Spellcheck is offering a way on Geany to make usage of a
+common spellchecking sytem as aspell, myspell or hunspell. Wrong
+spelled words can be marked with an red line and the plugin is
+offering suggestions for correct the word. Unfortunately right now
+its not supporting some special things common in \TeX{} and \LaTeX{}.\\
 \textbf{Homepage:} \url{http://plugins.geany.org/spellcheck/}
 
 \subsubsection{tasks out of the addons plugins}
