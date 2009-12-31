@@ -134,11 +134,23 @@ void glatex_bibtex_write_entry(GPtrArray *entry, gint doctype)
 	gint i;
 	GString *output = NULL;
 	gchar *tmp = NULL;
-
+	GeanyDocument *doc = NULL;
+	const gchar *eol;
+	
+	doc = document_get_current();
+	if (doc != NULL)
+	{
+		eol = editor_get_eol_char(doc->editor);
+	}
+	else
+	{
+		eol = "\n";
+	}
 	/* Adding the doctype to entry */
 	output = g_string_new("@");
 	g_string_append(output, glatex_label_types[doctype]);
-	g_string_append(output, "{ \n");
+	g_string_append(output, "{");
+	g_string_append(output, eol);
 
 	/* Adding the keywords and values to entry */
 	for (i = 0; i < GLATEX_BIBTEX_N_ENTRIES; i++)
@@ -150,7 +162,8 @@ void glatex_bibtex_write_entry(GPtrArray *entry, gint doctype)
 			if (utils_str_equal(g_ptr_array_index (entry, i), "\0"))
 			{
 				g_string_append(output, glatex_label_entry_keywords[i]);
-				g_string_append(output," = {},\n");
+				g_string_append(output," = {}");
+				g_string_append(output, eol);
 			}
 			/* ... or has some real value inside. */
 			else
@@ -158,12 +171,14 @@ void glatex_bibtex_write_entry(GPtrArray *entry, gint doctype)
 				g_string_append(output, glatex_label_entry_keywords[i]);
 				g_string_append(output, " = {");
 				g_string_append(output, g_ptr_array_index(entry, i));
-				g_string_append(output, "},\n");
+				g_string_append(output, "}");
+				g_string_append(output, eol);
 			}
 		}
 	}
 
-	g_string_append(output, "}\n");
+	g_string_append(output, "}");
+	g_string_append(output, eol);
 	tmp = g_string_free(output, FALSE);
 	glatex_insert_string(tmp, FALSE);
 	g_free(tmp);
