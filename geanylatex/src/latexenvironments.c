@@ -1,22 +1,22 @@
 /*
- *      latexenvironments.c
+ *	  latexenvironments.c
  *
- *      Copyright 2009 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
+ *	  Copyright 2009 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
  *
- *      This program is free software; you can redistribute it and/or modify
- *      it under the terms of the GNU General Public License as published by
- *      the Free Software Foundation; either version 2 of the License, or
- *      (at your option) any later version.
+ *	  This program is free software; you can redistribute it and/or modify
+ *	  it under the terms of the GNU General Public License as published by
+ *	  the Free Software Foundation; either version 2 of the License, or
+ *	  (at your option) any later version.
  *
- *      This program is distributed in the hope that it will be useful,
- *      but WITHOUT ANY WARRANTY; without even the implied warranty of
- *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *      GNU General Public License for more details.
+ *	  This program is distributed in the hope that it will be useful,
+ *	  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	  GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- *      MA 02110-1301, USA.
+ *	  You should have received a copy of the GNU General Public License
+ *	  along with this program; if not, write to the Free Software
+ *	  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ *	  MA 02110-1301, USA.
  */
 
 #include "latexenvironments.h"
@@ -68,18 +68,19 @@ void glatex_insert_environment(gchar *environment, gint type)
 	if (doc != NULL && environment != NULL)
 	{
 		if (sci_has_selection(doc->editor->sci))
-        {
+		{
 			gchar *selection  = NULL;
 			gchar *replacement = NULL;
+			const gchar *eol = editor_get_eol_char(doc->editor);
+			selection = sci_get_selection_contents(doc->editor->sci);
 
-            selection = sci_get_selection_contents(doc->editor->sci);
+			replacement = g_strconcat("\\begin{", environment, "}", 
+				eol,selection, eol, "\\end{", environment, "}", eol, NULL);
 
-            replacement = g_strconcat("\\begin{", environment, "}\n",
-                selection,"\n\\end{", environment, "}\n", NULL);
+			sci_replace_sel(doc->editor->sci, replacement);
+			g_free(selection);
+			g_free(replacement);
 
-            sci_replace_sel(doc->editor->sci, replacement);
-            g_free(selection);
-            g_free(replacement);
 		}
 		else
 		{
@@ -87,17 +88,23 @@ void glatex_insert_environment(gchar *environment, gint type)
 			gint len = strlen(environment);
 			GString *tmpstring = NULL;
 			gchar *tmp = NULL;
+			const gchar *eol = editor_get_eol_char(doc->editor);
 
 			tmpstring = g_string_new("\\begin{");
 			g_string_append(tmpstring, environment);
-			g_string_append(tmpstring, "}\n");
+			g_string_append(tmpstring, "}");
+			g_string_append(tmpstring, eol);
 
 			if (type == GLATEX_ENVIRONMENT_TYPE_LIST)
-				g_string_append(tmpstring, "\\item \n");
+			{
+				g_string_append(tmpstring, "\\item");
+				g_string_append(tmpstring, eol);
+			}
 
 			g_string_append(tmpstring, "\\end{");
 			g_string_append(tmpstring, environment);
-			g_string_append(tmpstring,"}\n");
+			g_string_append(tmpstring,"}");
+			g_string_append(tmpstring, eol);
 
 			tmp = g_string_free(tmpstring, FALSE);
 			sci_insert_text(doc->editor->sci, pos, tmp);
@@ -110,12 +117,12 @@ void glatex_insert_environment(gchar *environment, gint type)
 
 void
 glatex_environment_insert_activated (G_GNUC_UNUSED GtkMenuItem *menuitem,
-                              G_GNUC_UNUSED gpointer gdata)
+							  G_GNUC_UNUSED gpointer gdata)
 {
-    gint env = GPOINTER_TO_INT(gdata);
+	gint env = GPOINTER_TO_INT(gdata);
 
 	if (glatex_environment_array[env].cat == ENVIRONMENT_CAT_LISTS)
-	    glatex_insert_environment(glatex_environment_array[env].latex,
+		glatex_insert_environment(glatex_environment_array[env].latex,
 			GLATEX_ENVIRONMENT_TYPE_LIST);
 	else
 		glatex_insert_environment(glatex_environment_array[env].latex,
@@ -125,7 +132,7 @@ glatex_environment_insert_activated (G_GNUC_UNUSED GtkMenuItem *menuitem,
 
 void
 glatex_insert_environment_dialog(G_GNUC_UNUSED GtkMenuItem *menuitem,
-                                 G_GNUC_UNUSED gpointer gdata)
+								 G_GNUC_UNUSED gpointer gdata)
 {
 	GtkWidget *dialog = NULL;
 	GtkWidget *vbox = NULL;
@@ -171,7 +178,7 @@ glatex_insert_environment_dialog(G_GNUC_UNUSED GtkMenuItem *menuitem,
 
 	gtk_widget_show_all(vbox);
 
-    if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
 		gchar *env_string = NULL;
 
