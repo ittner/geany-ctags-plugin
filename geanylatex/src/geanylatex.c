@@ -294,7 +294,7 @@ static on_document_filetype_set(GObject *obj, GeanyDocument *doc,
 }
 
 
-static gboolean ht_editor_notify_cb(G_GNUC_UNUSED GObject *object, GeanyEditor *editor,
+static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *editor,
 									SCNotification *nt, G_GNUC_UNUSED gpointer data)
 {
 	g_return_val_if_fail(editor != NULL, FALSE);
@@ -390,7 +390,7 @@ void glatex_kblatex_toggle(G_GNUC_UNUSED guint key_id)
 
 PluginCallback plugin_callbacks[] =
 {
-	{ "editor-notify", (GCallback) &ht_editor_notify_cb, FALSE, NULL },
+	{ "editor-notify", (GCallback) &on_editor_notify, FALSE, NULL },
 	{ "document-activate", (GCallback) &on_document_activate, FALSE, NULL },
 	{ "document-filetype-set", (GCallback) &on_document_filetype_set, FALSE, NULL },
 	{ "document-open", (GCallback) &on_document_open, FALSE, NULL },
