@@ -572,6 +572,35 @@ Setting this option back to true will go back to default behaviour.
 
 Please ensure, you reload the plugin once this option has been changed.
 
+\subsubsection{Customized reference strings}
+
+Geany\LaTeX{} is able to insert references to a label where its 
+using some default value. As this value is not always optimal, it 
+can be changed using a hidden preference by setting 
+\texttt{glatex\_reference\_page}, \texttt{glatex\_reference\_chapter} or 
+\texttt{glatex\_reference\_all} inside configuration file as shown inside 
+the example configuration snippet. 
+
+\begin{lstlisting} 
+[general] 
+glatex_set_koma_active=true 
+glatex_set_toolbar_active=true
+
+[reference]
+glatex_reference_page=\\textbf{\pageref{{{reference}}}}
+glatex_reference_chapter=\\textbf{\\ref{{{reference}}}}
+glatex_reference_all=\\textbf{\\ref{{{reference}}}, page \pageref{{{reference}}}}\end{lstlisting}
+
+Please take care in this case \texttt{\{\{reference\}\}} will be 
+replace by label name. 
+
+Also \texttt{\textbackslash{}t}, \texttt{\textbackslash{}r}, 
+\texttt{\textbackslash{}n} will be handled as known from C so you will 
+need to add a second \textbackslash{} in front of in such cases. Even 
+this seems to be annyoing on the first hand, it allows you to insert some 
+more complicated constructs over  here which might require a new line inside. 
+
+
 \section{Contribution to the plugin}
 If you like the plugin, there are a number of ways, how to
 contribute to the development of the plugin.

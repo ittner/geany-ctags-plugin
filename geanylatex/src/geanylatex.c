@@ -54,6 +54,9 @@ static GtkWidget *menu_latex_replace_toggle = NULL;
 /* Options for plugin */
 static gboolean glatex_set_koma_active = FALSE;
 static gboolean glatex_deactivate_toolbaritems_with_non_latex = TRUE;
+static gchar *glatex_ref_chapter_string = NULL;
+static gchar *glatex_ref_page_string = NULL;
+static gchar *glatex_ref_all_string = NULL;
 static gboolean glatex_set_toolbar_active = FALSE;
 
 /* Function will be deactivated, when only loaded */
@@ -554,28 +557,39 @@ glatex_insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
 		gchar *ref_string = NULL;
-
+		GString *template_string = NULL;
+		
 		ref_string = g_strdup(gtk_combo_box_get_active_text(
 			GTK_COMBO_BOX(textbox_ref)));
 
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio1)) == TRUE)
 		{
-			ref_string = g_strconcat("\\ref{", ref_string, "}", NULL);
+			template_string = g_string_new(glatex_ref_chapter_string);
 		}
 		else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio2))== TRUE)
 		{
-			ref_string = g_strconcat("\\pageref{", ref_string, "}", NULL);
+			template_string = g_string_new(glatex_ref_page_string);
 		}
 		else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio3))== TRUE)
 		{
-			ref_string = g_strconcat("\\ref{", ref_string, "}, ", _("page"),
-				" \\pageref{", ref_string, "}", NULL);
+			template_string = g_string_new(glatex_ref_all_string);
 		}
 
-		if (ref_string != NULL)
+		if (ref_string != NULL && template_string != NULL)
 		{
-			glatex_insert_string(ref_string, TRUE);
+			gchar *tmp;
+			utils_string_replace_all(template_string, "{{reference}}", ref_string);
+			tmp = g_string_free(template_string, FALSE);
+			glatex_insert_string(tmp, TRUE);
 			g_free(ref_string);
+			g_free(tmp);
+		}
+		else 
+		{
+			if (ref_string != NULL)
+				g_free(ref_string);
+			if (template_string != NULL)
+				g_free(template_string);
 		}
 	}
 
@@ -1321,6 +1335,13 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	glatex_deactivate_toolbaritems_with_non_latex = utils_get_setting_boolean(config, "toolbar",
 		"glatex_deactivate_toolbaritems_with_non_latex", TRUE);
 
+	glatex_ref_page_string = utils_get_setting_string(config, "reference", 
+		"glatex_reference_page", _("page \\pageref{{{reference}}}"));
+	glatex_ref_chapter_string = utils_get_setting_string(config, "reference", 
+		"glatex_reference_chapter", "\\ref{{{reference}}}");
+	glatex_ref_all_string = utils_get_setting_string(config, "reference", 
+		"glatex_reference_all", _("\\ref{{{reference}}}, page \\pageref{{{reference}}}"));
+
 	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
 
 	g_key_file_free(config);
@@ -1462,4 +1483,7 @@ plugin_cleanup()
 		gtk_widget_destroy(glatex_toolbar);
 
 	g_free(config_file);
+	g_free(glatex_ref_chapter_string);
+	g_free(glatex_ref_page_string);
+	g_free(glatex_ref_all_string);
 }
