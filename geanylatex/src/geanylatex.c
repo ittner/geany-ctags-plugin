@@ -267,11 +267,6 @@ static on_document_activate(GObject *object, GeanyDocument *doc, gpointer data)
 	return FALSE;
 }
 
-static on_document_open(GObject *object, GeanyDocument *doc, gpointer data)
-{
-	return on_document_activate(object, doc, data);
-}
-
 
 static on_document_new(GObject *object, GeanyDocument *doc, gpointer data)
 {
@@ -391,7 +386,6 @@ PluginCallback plugin_callbacks[] =
 	{ "editor-notify", (GCallback) &on_editor_notify, FALSE, NULL },
 	{ "document-activate", (GCallback) &on_document_activate, FALSE, NULL },
 	{ "document-filetype-set", (GCallback) &on_document_filetype_set, FALSE, NULL },
-	{ "document-open", (GCallback) &on_document_open, FALSE, NULL },
 	{ "document-new", (GCallback) &on_document_new, FALSE, NULL},
 	{ NULL, NULL, FALSE, NULL }
 };
