@@ -127,7 +127,13 @@ static GtkWidget *init_toolbar()
 		toolbar = gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar");
 		gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(toolbar), FALSE, TRUE, 0);
 		gtk_box_reorder_child(GTK_BOX(box), toolbar, 2);
-		ui_add_document_sensitive(toolbar);
+		ui_add_document_sensitive(gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar/Bold"));
+		ui_add_document_sensitive(gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar/Underline"));
+		ui_add_document_sensitive(gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar/Centered"));
+		ui_add_document_sensitive(gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar/Italic"));
+		ui_add_document_sensitive(gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar/Left"));
+		ui_add_document_sensitive(gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar/Right"));
+		/*ui_add_document_sensitive(toolbar);*/
 	}
 	/* TODO maybe more error handling */
 
