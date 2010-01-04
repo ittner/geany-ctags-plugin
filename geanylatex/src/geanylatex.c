@@ -269,15 +269,13 @@ static on_document_activate(GObject *object, GeanyDocument *doc, gpointer data)
 
 static on_document_open(GObject *object, GeanyDocument *doc, gpointer data)
 {
-	on_document_activate(object, doc, data);
-	return FALSE;
+	return on_document_activate(object, doc, data);
 }
 
 
 static on_document_new(GObject *object, GeanyDocument *doc, gpointer data)
 {
-	on_document_activate(object, doc, data);
-	return FALSE;
+	return on_document_activate(object, doc, data);
 }
 
 
@@ -288,7 +286,7 @@ static on_document_filetype_set(GObject *obj, GeanyDocument *doc,
 	{
 		GeanyFiletype *ft = doc->file_type;
 		if (filetype_old != NULL && filetype_old->id != ft->id)
-			on_document_activate(obj, doc, user_data);
+			return on_document_activate(obj, doc, user_data);
 	}
 	return FALSE;
 }
