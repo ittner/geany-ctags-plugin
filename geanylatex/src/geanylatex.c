@@ -133,7 +133,6 @@ static GtkWidget *init_toolbar()
 		ui_add_document_sensitive(gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar/Italic"));
 		ui_add_document_sensitive(gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar/Left"));
 		ui_add_document_sensitive(gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar/Right"));
-		/*ui_add_document_sensitive(toolbar);*/
 	}
 	/* TODO maybe more error handling */
 
@@ -556,7 +555,7 @@ glatex_insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	{
 		gchar *ref_string = NULL;
 		GString *template_string = NULL;
-		
+
 		ref_string = g_strdup(gtk_combo_box_get_active_text(
 			GTK_COMBO_BOX(textbox_ref)));
 
@@ -582,7 +581,7 @@ glatex_insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 			g_free(ref_string);
 			g_free(tmp);
 		}
-		else 
+		else
 		{
 			if (ref_string != NULL)
 				g_free(ref_string);
@@ -1333,11 +1332,11 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	glatex_deactivate_toolbaritems_with_non_latex = utils_get_setting_boolean(config, "toolbar",
 		"glatex_deactivate_toolbaritems_with_non_latex", TRUE);
 
-	glatex_ref_page_string = utils_get_setting_string(config, "reference", 
+	glatex_ref_page_string = utils_get_setting_string(config, "reference",
 		"glatex_reference_page", _("page \\pageref{{{reference}}}"));
-	glatex_ref_chapter_string = utils_get_setting_string(config, "reference", 
+	glatex_ref_chapter_string = utils_get_setting_string(config, "reference",
 		"glatex_reference_chapter", "\\ref{{{reference}}}");
-	glatex_ref_all_string = utils_get_setting_string(config, "reference", 
+	glatex_ref_all_string = utils_get_setting_string(config, "reference",
 		"glatex_reference_all", _("\\ref{{{reference}}}, page \\pageref{{{reference}}}"));
 
 	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
