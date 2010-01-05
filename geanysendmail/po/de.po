@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geanysendmail 0.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-25 00:27+0200\n"
+"POT-Creation-Date: 2010-01-05 23:53+0100\n"
 "PO-Revision-Date: 2009-05-25 00:27+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team:  <frank@frank.uvena.de>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: src/geanysendmail.c:47
+#: ../src/geanysendmail.c:40
 msgid "GeanySendMail"
 msgstr "GeanySendMail"
 
-#: src/geanysendmail.c:47
+#: ../src/geanysendmail.c:40
 msgid ""
 "A little plugin to send the current file as attachment by user's favorite "
 "mailer"
@@ -29,25 +29,25 @@ msgstr ""
 "Ein Plugin zum Senden einer Datei als Anhang unter Verwendung eines "
 "Mailprogrammes."
 
-#: src/geanysendmail.c:107
+#: ../src/geanysendmail.c:100
 msgid "Recipient's Address"
 msgstr "Emailadresse des Empfängers"
 
-#: src/geanysendmail.c:118
+#: ../src/geanysendmail.c:111
 msgid "Enter the recipient's e-mail address:"
 msgstr "Emailadresse des Empfängers:"
 
-#: src/geanysendmail.c:151 src/geanysendmail.c:312
+#: ../src/geanysendmail.c:144 ../src/geanysendmail.c:305
 msgid "Plugin configuration directory could not be created."
 msgstr "Konfigurationsdatei konnte nicht erstellt werden."
 
-#: src/geanysendmail.c:166
+#: ../src/geanysendmail.c:159
 msgid "Filename placeholder not found. The executed command might have failed."
 msgstr ""
 "Konnte den Platzhalter für den Dateinamen (\\%s) nicht finden. Das "
 "angegebene Kommando könnte nicht korrekt ausgeführt worden sein."
 
-#: src/geanysendmail.c:172
+#: ../src/geanysendmail.c:165
 msgid ""
 "Recipient address placeholder not found. The executed command might have "
 "failed."
@@ -55,34 +55,34 @@ msgstr ""
 "Konnte den Platzhalter für den Mailempfänger nicht finden. Das angegebene "
 "Kommando könnte nicht korrekt ausgeführt worden sein."
 
-#: src/geanysendmail.c:184
+#: ../src/geanysendmail.c:177
 msgid "Could not execute mailer. Please check your configuration."
 msgstr ""
 "Konnte das Mailprogramm nicht aufrufen. Bitte überprüfen Sie Ihre "
 "Einstellungen"
 
-#: src/geanysendmail.c:196
+#: ../src/geanysendmail.c:189
 msgid "Please define a mail client first."
 msgstr "Bitte ein Mailprogramm angeben!"
 
-#: src/geanysendmail.c:201
+#: ../src/geanysendmail.c:194
 msgid "File has to be saved before sending."
 msgstr "Die Datei muss vor dem Senden gespeichert werden."
 
-#: src/geanysendmail.c:217
+#: ../src/geanysendmail.c:210
 msgid "Mail"
 msgstr "Mail"
 
-#: src/geanysendmail.c:248
+#: ../src/geanysendmail.c:241
 msgid "Send by mail"
 msgstr "Per Mail senden"
 
 #. add a label and a text entry to the dialog
-#: src/geanysendmail.c:336
+#: ../src/geanysendmail.c:326
 msgid "Path and options for the mail client:"
 msgstr "Pfad und Optionen für das Mailprogramm:"
 
-#: src/geanysendmail.c:344
+#: ../src/geanysendmail.c:334
 msgid ""
 "Note: \n"
 "\t\\%f will be replaced by your file.\n"
@@ -100,32 +100,32 @@ msgstr ""
 "\tsylpheed --attach \"\\%f\" --compose \"\\%r\"\n"
 "\tmutt -s \"Sending '\\%b'\" -a \"\\%f\" \"\\%r\""
 
-#: src/geanysendmail.c:354
+#: ../src/geanysendmail.c:344
 msgid "Showing icon in toolbar"
 msgstr "Symbol in der Werkzeugleiste anzeigen"
 
-#: src/geanysendmail.c:357
+#: ../src/geanysendmail.c:346
 msgid "Shows a icon in the toolbar to send file more easy."
 msgstr ""
 "Zeigt ein Symbol in der Werkzeugleiste an, sodass eine Datei einfacher "
 "versendet werden kann."
 
-#: src/geanysendmail.c:364
+#: ../src/geanysendmail.c:352
 msgid "Using dialog for entering email address of recipients"
 msgstr ""
 "Zeigt einen Dialog zum Eingeben der Emailadresse des Empfängers der zu "
 "sendenden Datei"
 
-#: src/geanysendmail.c:389
+#: ../src/geanysendmail.c:377
 msgid "Send file by mail"
 msgstr "Per Mail senden"
 
 #. Build up menu entry
-#: src/geanysendmail.c:416
+#: ../src/geanysendmail.c:404
 msgid "_Mail document"
 msgstr "_Dokument versenden"
 
-#: src/geanysendmail.c:419
+#: ../src/geanysendmail.c:407
 msgid ""
 "Sends the opened file as unzipped attachment by any mailer from your $PATH"
 msgstr ""

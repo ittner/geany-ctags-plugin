@@ -38,7 +38,7 @@ GeanyFunctions	*geany_functions;
 PLUGIN_VERSION_CHECK(147)
 
 PLUGIN_SET_INFO(_("GeanySendMail"), _("A little plugin to send the current \
-file as attachment by user's favorite mailer"), VERSION, "Frank Lanitz <frank@frank.uvena.de>")
+file as attachment by user's favorite mailer"), "0.4.3", "Frank Lanitz <frank@frank.uvena.de>")
 
 /* Keybinding(s) */
 enum

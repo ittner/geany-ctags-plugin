@@ -44,7 +44,7 @@ import preproc
 
 
 APPNAME = 'geanysendmail'
-VERSION = '0.4.3dev'
+VERSION = '0.4.3'
 
 srcdir = '.'
 blddir = '_build_'
