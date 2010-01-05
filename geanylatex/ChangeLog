@@ -1,3 +1,15 @@
+2009-01-03  Frank Lanitz  <frank@frank.uvena.de>
+
+ * Dpn't deactivate wizard icon if no document is open 
+
+
+
+2009-01-01  Frank Lanitz  <frank@frank.uvena.de>
+
+ * Make text used for inserting references configurable. 
+   Please check documentation for details on how to do it. 
+
+
 2009-12-26  Frank Lanitz  <frank@frank.uvena.de>
 
  * Deactivate icons of toolbar, if no LaTeX document is open. Behavior 

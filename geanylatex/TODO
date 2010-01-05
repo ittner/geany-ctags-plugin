@@ -9,10 +9,8 @@
 	* Adding support for diff. letter classes
 	* Adding a way setting variables/values for wizard inside custom 
 	  template
-	* Make templates are getting searched inside $PREFIX
 * Replacing of environments
 * Parsing document for »TOC«
     * Navigation throught document
-    * "Graphical" support while using \ref, \pageref ...
 * Code examples for very common problems
 * Make special characters extensible through files
