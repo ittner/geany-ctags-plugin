@@ -111,6 +111,8 @@ static struct
 }
 config_widgets;
 
+/* Some functions*/
+static void toggle_toolbar_items_by_file_type(gint id);
 
 static GtkWidget *init_toolbar()
 {
@@ -243,13 +245,10 @@ void glatex_toggle_status(G_GNUC_UNUSED GtkMenuItem * menuitem)
 		glatex_set_latextoggle_status(TRUE);
 }
 
-
-static on_document_activate(GObject *object, GeanyDocument *doc, gpointer data)
+static void toggle_toolbar_items_by_file_type(gint id)
 {
-	/* First check, whether we are ask to do anything here */
-	g_return_val_if_fail(doc != NULL, FALSE);
 	if (glatex_deactivate_toolbaritems_with_non_latex == TRUE)
-		if (doc->file_type->id != GEANY_FILETYPES_LATEX)
+		if (id != GEANY_FILETYPES_LATEX)
 		{
 			/* Deactivate toolbar items */
 			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Bold"), FALSE);
@@ -269,6 +268,13 @@ static on_document_activate(GObject *object, GeanyDocument *doc, gpointer data)
 			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Left"), TRUE);
 			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Right"), TRUE);
 		}
+}
+
+
+static on_document_activate(GObject *object, GeanyDocument *doc, gpointer data)
+{
+	g_return_val_if_fail(doc != NULL, FALSE);
+	toggle_toolbar_items_by_file_type(doc->file_type->id);
 	return FALSE;
 }
 
