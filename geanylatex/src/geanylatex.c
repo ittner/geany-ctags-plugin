@@ -24,7 +24,7 @@
 
 #include "geanylatex.h"
 
-PLUGIN_VERSION_CHECK(166)
+PLUGIN_VERSION_CHECK(169)
 
 PLUGIN_SET_INFO(_("GeanyLaTeX"), _("Plugin to provide better LaTeX support"),
 	VERSION,"Frank Lanitz <frank@frank.uvena.de>")
@@ -411,12 +411,14 @@ glatex_insert_string(gchar *string, gboolean reset_position)
 	if (doc != NULL && string != NULL)
 	{
 		gint pos = sci_get_current_position(doc->editor->sci);
-		sci_insert_text(doc->editor->sci, pos, string);
+		gint len = 0;
+
 		if (reset_position == TRUE)
 		{
-			gint len = strlen(string);
-			sci_set_current_position(doc->editor->sci, pos + len, TRUE);
+			len = strlen(string);
 		}
+
+		editor_insert_text_block(doc->editor, string, pos, len, -1, TRUE);
 	}
 }
 
