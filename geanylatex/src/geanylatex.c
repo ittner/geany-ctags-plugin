@@ -2,6 +2,9 @@
  *      geanylatex.c - Plugin to let Geany better work together with LaTeX
  *
  *      Copyright 2007-2010 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
+ *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *
  *      For long list of friendly supporters please have a look at THANKS.
  *
  *      This program is free software; you can redistribute it and/or modify
@@ -59,6 +62,14 @@ static gchar *glatex_ref_page_string = NULL;
 static gchar *glatex_ref_all_string = NULL;
 static gboolean glatex_set_toolbar_active = FALSE;
 
+/* We want to keep this deactivated by default as the
+ * user needs to know what he is doing here.... */
+static gboolean glatex_autocompletion_active = FALSE;
+/* Value how many line should be search for autocompletion of \end{}
+ * and \endgroup{}. */
+static gint glatex_autocompletion_context_size;
+static glatex_autocompletion_only_for_latex;
+
 /* Function will be deactivated, when only loaded */
 static gboolean toggle_active = FALSE;
 
@@ -108,6 +119,7 @@ static struct
 {
 	GtkWidget *koma_active;
 	GtkWidget *toolbar_active;
+	GtkWidget *glatex_autocompletion_active;
 }
 config_widgets;
 
@@ -151,6 +163,7 @@ on_configure_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
 		GKeyFile *config = g_key_file_new();
 		gchar *data;
 		gchar *config_dir = g_path_get_dirname(config_file);
+		gint glatex_autocompletion_active_response;
 
 		config_file = g_strconcat(geany->app->configdir,
 			G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
@@ -160,6 +173,16 @@ on_configure_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
 		glatex_set_toolbar_active =
 			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(config_widgets.toolbar_active));
 
+		/* Check the response code for geanyLaTeX's autocompletion functions.
+		 * Due compatibility with oder Geany versions cass 0 will be treated
+		 * as FALSE, which means autocompletion is deactivated. */
+		glatex_autocompletion_active_response = gtk_combo_box_get_active(
+			GTK_COMBO_BOX(config_widgets.glatex_autocompletion_active));
+		if (glatex_autocompletion_active_response == 0)
+			glatex_autocompletion_active = FALSE;
+		else
+			glatex_autocompletion_active = TRUE;
+
 		/* write stuff to file */
 		g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 
@@ -167,6 +190,8 @@ on_configure_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
 			glatex_set_koma_active);
 		g_key_file_set_boolean(config, "general", "glatex_set_toolbar_active",
 			glatex_set_toolbar_active);
+		g_key_file_set_boolean(config, "general", "glatex_set_autocompletion",
+			glatex_autocompletion_active);
 
 		if (!g_file_test(config_dir, G_FILE_TEST_IS_DIR)
 		    && utils_mkdir(config_dir, TRUE) != 0)
@@ -210,6 +235,9 @@ GtkWidget *
 plugin_configure(GtkDialog * dialog)
 {
 	GtkWidget	*vbox;
+	GtkWidget	*table = NULL;
+	GtkWidget	*label_autocompletion = NULL;
+	gint		tmp;
 
 	vbox = gtk_vbox_new(FALSE, 6);
 
@@ -217,12 +245,34 @@ plugin_configure(GtkDialog * dialog)
 		_("Use KOMA script by default"));
 	config_widgets.toolbar_active = gtk_check_button_new_with_label(
 		_("Show extra plugin toolbar"));
+
+	config_widgets.glatex_autocompletion_active = gtk_combo_box_new_text();
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(config_widgets.glatex_autocompletion_active), 0,
+		_("Don't care about this inside plugin"));
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(config_widgets.glatex_autocompletion_active), 1,
+		_("Always perform autocompletion on LaTeX"));
+
+	/* Dirty workarround for transferring boolean into a valid interger value */
+	if (glatex_autocompletion_active == TRUE)
+		tmp = 1;
+	else
+		tmp = 0;
+	gtk_combo_box_set_active(GTK_COMBO_BOX(config_widgets.glatex_autocompletion_active), tmp);
+	/* Adding table for autocompletion configuration */
+	table = gtk_table_new(1, 2, FALSE);
+	label_autocompletion = gtk_label_new(_("Modus of autocompletion"));
+	gtk_misc_set_alignment(GTK_MISC(label_autocompletion), 0, 0);
+
+	gtk_table_attach_defaults(GTK_TABLE(table), label_autocompletion, 0, 1, 0, 1);
+	gtk_table_attach_defaults(GTK_TABLE(table), config_widgets.glatex_autocompletion_active, 1, 2, 0, 1);
+
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(config_widgets.koma_active),
 		glatex_set_koma_active);
 	gtk_box_pack_start(GTK_BOX(vbox), config_widgets.koma_active, FALSE, FALSE, 2);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(config_widgets.toolbar_active),
 		glatex_set_toolbar_active);
 	gtk_box_pack_start(GTK_BOX(vbox), config_widgets.toolbar_active, FALSE, FALSE, 2);
+	gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
 
 	gtk_widget_show_all(vbox);
 	g_signal_connect(dialog, "response", G_CALLBACK(on_configure_response), NULL);
@@ -301,14 +351,141 @@ static on_document_filetype_set(GObject *obj, GeanyDocument *doc,
 static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *editor,
 									SCNotification *nt, G_GNUC_UNUSED gpointer data)
 {
+	ScintillaObject* sci;
+	gint pos;
+	static gchar indent[100];
+
 	g_return_val_if_fail(editor != NULL, FALSE);
 
-	/* Check whether this is a LaTeX file at all. If not, we mot likely
-	 * don't want to do anything */
-	if (editor->document->file_type->id != GEANY_FILETYPES_LATEX)
+	/* Check whether this is a LaTeX file at all. If not, we most
+	likely don't want to do anything. However, there is only one
+	exception: In case of user really wants to do so and is forcing
+	us with hidden preference */
+	if (glatex_autocompletion_only_for_latex == TRUE &&
+		editor->document->file_type->id != GEANY_FILETYPES_LATEX)
+	{
 		return FALSE;
+	}
 
-	if (toggle_active == TRUE)
+	sci = editor->sci;
+	pos = sci_get_current_position(sci);
+
+	/* Autocompletion for LaTeX specific stuff:
+	 * Introducing \end{} or \endgroup{} after a \begin{}
+	 *
+	 * Function has been taken from Geany's core under terms of GPLv2+
+	 * where it was original developed. */
+	if (glatex_autocompletion_active == TRUE)
+	{
+		if (nt->nmhdr.code == SCN_CHARADDED)
+		{
+			switch (nt->ch)
+			{
+				case '\n':
+				case '\r':
+				{
+					if (sci_get_char_at(sci, pos - (editor_get_eol_char_len (editor) + 1)) == '}'||
+						sci_get_char_at(sci, pos - (editor_get_eol_char_len (editor) + 1)) == ']')
+					{
+						gchar *buf, *construct;
+						/* TODO: Make possible to have longer than a 50 chars environment */
+						gchar env[50];
+						gint line = sci_get_line_from_position(sci, pos - (editor_get_eol_char_len (editor) + 1));
+						gint line_len = sci_get_line_length(sci, line);
+						gint i, start;
+
+						/* get the line */
+						buf = sci_get_line(sci, line);
+
+						/* get to the first non-blank char (some kind of ltrim()) */
+						start = 0;
+						while (isspace(buf[start]) && buf[start] != '\0')
+							start++;
+
+						/* check for begin */
+						if (strncmp(buf + start, "\\begin", 6) == 0)
+						{
+							gchar full_cmd[15];
+							guint j = 0;
+
+							/* take also "\begingroup" (or whatever there can be) and
+							 * append "\endgroup" and so on. */
+							i = start + 6;
+							while (i < line_len && buf[i] != '{' && j < (sizeof(full_cmd) - 1))
+							{
+								/* copy all between "\begin" and "{" to full_cmd */
+								full_cmd[j] = buf[i];
+								i++;
+								j++;
+							}
+							full_cmd[j] = '\0';
+
+							/* go through the line and get the environment */
+							for (i = start + j; i < line_len; i++)
+							{
+								if (buf[i] == '{')
+								{
+									j = 0;
+									i++;
+									while (buf[i] != '}' && j < (sizeof(env) - 1))
+									{	/* this could be done in a shorter way, but so it remains readable ;-) */
+										env[j] = buf[i];
+										j++;
+										i++;
+									}
+									env[j] = '\0';
+									break;
+								}
+							}
+							/* Search whether the environment is closed within the next
+							 * lines. We assume, no \end is needed in such cases */
+							/* TODO using sci_find_text() should be way faster than getting
+							 *      the line buffer and performing string comparisons */
+							for (i = 1; i < glatex_autocompletion_context_size; i++)
+							{
+								gchar *tmp;
+								gchar *end_construct;
+								tmp = sci_get_line(sci, line + i);
+
+								/* Again get to the first non-blank char */
+								start = 0;
+								while (isspace(buf[start]) && buf[start] != '\0')
+									start++;
+								end_construct = g_strdup_printf("\\end%s{%s}", full_cmd, env);
+								if (strstr(tmp, end_construct) != NULL)
+								{
+									/* Clean up everything and quit as nothing
+									 * needs to be done */
+									g_free(tmp);
+									g_free(buf);
+									g_free(end_construct);
+									return;
+								}
+								g_free(tmp);
+							}
+
+							/* get the indentation */
+							/*if (editor->auto_indent)
+								read_indent(editor, pos); */
+							/* TODO: Find a way respecting ident */
+
+							construct = g_strdup_printf("\t\n\\end%s{%s}", full_cmd, env);
+
+							editor_insert_text_block(editor, construct, pos,
+								1, -1, TRUE);
+							g_free(construct);
+						}
+					}
+				break;
+				} /* Closing case \r or \n */
+			} /* Closing switch  */
+			/* later there could be some else ifs for other keywords */
+		}
+	} /* End of latex autocpletion */
+
+	/* Toggle special characters on input */
+	if (editor->document->file_type->id != GEANY_FILETYPES_LATEX &&
+		toggle_active == TRUE)
 	{
 		if (nt->nmhdr.code == SCN_CHARADDED)
 		{
@@ -1332,13 +1509,37 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 
 	glatex_set_koma_active = utils_get_setting_boolean(config, "general",
 		"glatex_set_koma_active", FALSE);
-
 	glatex_set_toolbar_active = utils_get_setting_boolean(config, "general",
 		"glatex_set_toolbar_active", FALSE);
+	glatex_autocompletion_active = utils_get_setting_boolean(config, "general",
+		"glatex_set_autocompletion", FALSE);
 
 	/* Hidden preferences. Can be set directly via configuration file*/
+	glatex_autocompletion_context_size = utils_get_setting_integer(config, "autocompletion",
+		"glatex_set_autocompletion_contextsize", 5);
+
+	/* Doing some input validation */
+	if (glatex_autocompletion_active == TRUE &&
+		glatex_autocompletion_context_size <= 0)
+	{
+		glatex_autocompletion_context_size = 5;
+		g_warning(_("glatex_set_autocompletion_contextsize has been "
+					"initialized with an invalid value. Default value taken. "
+					"Please check your configuration file"));
+	}
+	/* Increase value by an offset as we add a new line so 2 really means 2 */
+	glatex_autocompletion_context_size = glatex_autocompletion_context_size + 2;
+	glatex_autocompletion_only_for_latex = utils_get_setting_boolean(config, "autocompletion",
+		"glatex_autocompletion_only_for_latex", TRUE);
+
 	glatex_deactivate_toolbaritems_with_non_latex = utils_get_setting_boolean(config, "toolbar",
 		"glatex_deactivate_toolbaritems_with_non_latex", TRUE);
+	glatex_ref_page_string = utils_get_setting_string(config, "reference",
+		"glatex_reference_page", _("page \\pageref{{{reference}}}"));
+	glatex_ref_chapter_string = utils_get_setting_string(config, "reference",
+		"glatex_reference_chapter", "\\ref{{{reference}}}");
+	glatex_ref_all_string = utils_get_setting_string(config, "reference",
+		"glatex_reference_all", _("\\ref{{{reference}}}, page \\pageref{{{reference}}}"));
 
 	glatex_ref_page_string = utils_get_setting_string(config, "reference",
 		"glatex_reference_page", _("page \\pageref{{{reference}}}"));

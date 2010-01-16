@@ -1,7 +1,7 @@
-These installation instructions are written for a Linux system, but 
+These installation instructions are written for a Linux system, but
 should work also on other plattforms as Windows is.
 
-Building the plugin requires Geany 0.19 or above (Geany Plugin API v166 
+Building the plugin requires Geany 0.19 or above (Geany Plugin API v169
 or higher).
 
 You need for compliling the plugin the Geany header files installed.
@@ -15,4 +15,4 @@ If you want to install geanyLaTeX to another directory, you should run
 ./waf configure with --prefix=/path/to/dir option. ./waf install will
 install all files to your new target. For more detailed information
 please check documentation inside doc-folder which should be shippid
-with this archive. 
+with this archive.

@@ -55,7 +55,6 @@ openany,%
 
 \begin{document}
 
-\newpage
 \dedication{\normalsize \textbf{Note:} Please note the document has been created on
 \today. If you are using devel version from SVN, please compile and check
 \texttt{doc/geanylatex.tex} from sources. Please check page \pageref
@@ -65,6 +64,7 @@ openany,%
 \maketitle
 \tableofcontents
 \listoftables
+\listoffigures
 \newpage
 \pagenumbering{arabic}
 \section{About the plugin}
@@ -88,9 +88,11 @@ It implements a couple of maybe useful functions:
 	\item Shortcuts for inserting \textbackslash item and
 		  \textbackslash newline
 	\item Toolbar with often used format options
+	\item A couple of useful autocompletion functions during typing
 \end{itemize}
 
-\section{News}
+\newpage
+\section{News \& ChangeLog}
 \subsection*{Since 0.4}
 \begin{itemize}
 
@@ -102,21 +104,30 @@ It implements a couple of maybe useful functions:
 	\item Some general bugfixes and improvments. As always, see
 		  ChangeLog or svn log.
 	\item Switch to waf for building the plugin
-	\item Increasing depency for plugin to Geany Plugin API v166
+	\item Move some \LaTeX{}-specific stuff out of Geany's core into the
+		  plugin. This is effecting e.g. this functions
+			\begin{itemize}
+				\item Autocompletion of \texttt{\textbackslash{}end\{\}}
+					and \texttt{\textbackslash{}endgroup\{\}}
+			\end{itemize}
+	\item Increasing dependency for plugin to Geany Plugin API v166
+	\item Make inserting text for references configurable.
 \end{itemize}
 
 \subsection*{GeanyLaTeX{} 0.4 -- 2009-05-26}
 \begin{itemize}
 	\item Adding a toolbar with often used format commands
-	\item Adding a configuration dialog to configure basic options of plugin
+	\item Adding a configuration dialog to configure basic options
+          of plugin
 	\item Moved documentation into a \TeX{}-document
-	\item Replace \textbackslash{}u-UTF-8 letters by octal coded chars to
-		  don't depend on C99 anymore.
+	\item Replace \textbackslash{}u-UTF-8 letters by octal coded
+          chars to don't depend on C99 anymore.
 	\item Added a function to bulk replace special characters
-    	  inside marked text by keybinding
+          inside marked text by keybinding
 	\item Added a function to replace special characters on typing
 \end{itemize}
 
+\newpage
 \section{Requirements}
 
 \small{\textbf{Please note:} This section of documentation is only
@@ -136,7 +147,7 @@ have Geany installed from the sources, you should be ready to go. If
 you used a prepared package e.g. from your distribution you probably
 need to install an additional package, this might be called geany-dev
 or geany-devel. Please note that in order to compile and use this
-plugin, you need Geany 0.19svn or later (Geany Plugin API v166 or higher).
+plugin, you need Geany 0.19svn or later (Geany Plugin API v169 or higher).
 
 Furthermore you need, of course, a C compiler and python installed. The
 GNU version of the C compiler is recommended. Also there should be a
@@ -421,7 +432,7 @@ will be included into environment.
 \begin{figure}[h!]
 \begin{lstlisting}
 \begin{your_environment}
-	% ... selected text ...
+	... selected text ...
 \end{your_environment}
 \end{lstlisting}
 \end{figure}
@@ -475,6 +486,31 @@ Following items are also accessible using the Geany\LaTeX{} toolbar:
 	\item right-aligned
 \end{itemize}
 
+\subsection{Autocompletion of \textbackslash{}begin and \textbackslash{}begingroup}
+
+Since version 0.5 GeanyLaTeX{} is supporting autocompletion for
+closing \textbackslash{}end and \textbackslash{}endgroup for begin
+commands. Before Geany 0.19 this has been part of the Geany core
+but has been moved out as it is something \LaTeX{} specific.
+
+\subsubsection{Usage of feature}
+
+After the feature has been enabled (Please check \ref
+{sec:modus_of_autocompletion}, page \pageref
+{sec:modus_of_autocompletion} here for more detailed information),
+in every case you enter a \texttt{\textbackslash{}begin\{\}} or
+\texttt{\textbackslash {}begingroup\{\}} the plugin will
+automatically add the fitting \texttt{\textbackslash{}end\{\}} or
+\texttt{\textbackslash{}endgroup\{\}} if its not finding a closing
+tag within the definded context length -- by default this means
+inside following 5 lines. If you like to change this size, please
+check chapter \ref {sec:hidden_pref_autocompletion_context}, page
+\pageref {sec:hidden_pref_autocompletion_context}.
+
+This feature is by default file type depending, so it will only work
+on \TeX{}-like file types.
+
+
 \section{Configuration}
 
 GeanyLaTeX{} can be configured in two major ways:
@@ -501,6 +537,16 @@ of editor widget. Option is turned off by default. Just give it a try.
 	\centering{\includegraphics[height=2cm]{img/toolbar.png}}
 	\caption{Plugin toolbar of Geany\LaTeX{} 0.5}
 \end{figure}
+
+\subsubsection{Modus of autocompletion}
+\label{sec:modus_of_autocompletion}
+Here you can choose, whether the Geany\LaTeX{} should do some
+autocompletion or not. Values are either
+\begin{enumerate}
+	\item Don't care about this inside plugin or
+	\item Always perform autocompletion on LaTeX
+\end{enumerate}
+
 
 \subsection{Key bindings}
 Keybindings which are available:
@@ -538,9 +584,9 @@ Format selection right-alignedm & Formats selected text right-aligned on page (u
 Insert description list & Inserts an description environment as well as a 1\up{st} \textbackslash{}item element.\\\hline
 Insert itemize list & Inserts an itemize environment as well as a 1\up{st} \textbackslash{}item element.\\\hline
 Insert enumerate list & Inserts an enumerate environment as well as a 1\up{st} \textbackslash{}item element.\\\hline
-
 \end{tabular}
 \end{table}
+
 
 \subsection{Hidden preferencess}
 As not all users need to configure everything on there plugin, Geany
@@ -572,18 +618,57 @@ Setting this option back to true will go back to default behaviour.
 
 Please ensure, you reload the plugin once this option has been changed.
 
+\subsubsection{Size of context for autocompletion}
+\label{sec:hidden_pref_autocompletion_context}
+Inside configuration file you can add a value to adjust the size of
+context, which is being searched for autocompletion of \texttt{
+\textbackslash{}end} and \texttt{\textbackslash{}endgroup}. The
+default value is 5. If you want to reset it, just add a new line to
+your configuration file with
+\texttt{glatex\_set\_autocompletion\_contextsize} followed by an integer
+value. An example could look like this:
+
+\begin{figure}[h!]
+\begin{lstlisting}
+[general]
+glatex_set_koma_active=true
+glatex_set_toolbar_active=false
+glatex_set_autocompletion=true
+
+[autocompletion]
+glatex_set_autocompletion_contextsize=2
+\end{lstlisting}
+\caption{general.conf example for contextsize}
+\end{figure}
+
+\subsubsection{Apply autocompletion only to \TeX{}-like files}
+With this option, you can force Geany\LaTeX{} to apply all autocompletion functions also to non-\TeX{} file types as for example an C-source code file. As this is only in a very low number of cases a really good idea, the option is by default turned on.
+
+\begin{figure}[h!]
+\begin{lstlisting}
+[general]
+glatex_set_koma_active=true
+glatex_set_toolbar_active=false
+glatex_set_autocompletion=true
+
+[autocompletion]
+glatex_autocompletion_only_for_latex=false
+\end{lstlisting}
+\caption{general.conf example for deactivating file type specific restrictions for autocompletion}
+\end{figure}
+
 \subsubsection{Customized reference strings}
 
-Geany\LaTeX{} is able to insert references to a label where its 
-using some default value. As this value is not always optimal, it 
-can be changed using a hidden preference by setting 
-\texttt{glatex\_reference\_page}, \texttt{glatex\_reference\_chapter} or 
-\texttt{glatex\_reference\_all} inside configuration file as shown inside 
-the example configuration snippet. 
+Geany\LaTeX{} is able to insert references to a label where its
+using some default value. As this value is not always optimal, it
+can be changed using a hidden preference by setting
+\texttt{glatex\_reference\_page}, \texttt{glatex\_reference\_chapter} or
+\texttt{glatex\_reference\_all} inside configuration file as shown inside
+the example configuration snippet.
 
-\begin{lstlisting} 
-[general] 
-glatex_set_koma_active=true 
+\begin{lstlisting}
+[general]
+glatex_set_koma_active=true
 glatex_set_toolbar_active=true
 
 [reference]
@@ -591,15 +676,14 @@ glatex_reference_page=\\textbf{\pageref{{{reference}}}}
 glatex_reference_chapter=\\textbf{\\ref{{{reference}}}}
 glatex_reference_all=\\textbf{\\ref{{{reference}}}, page \pageref{{{reference}}}}\end{lstlisting}
 
-Please take care in this case \texttt{\{\{reference\}\}} will be 
-replace by label name. 
+Please take care in this case \texttt{\{\{reference\}\}} will be
+replace by label name.
 
-Also \texttt{\textbackslash{}t}, \texttt{\textbackslash{}r}, 
-\texttt{\textbackslash{}n} will be handled as known from C so you will 
-need to add a second \textbackslash{} in front of in such cases. Even 
-this seems to be annyoing on the first hand, it allows you to insert some 
-more complicated constructs over  here which might require a new line inside. 
-
+Also \texttt{\textbackslash{}t}, \texttt{\textbackslash{}r},
+\texttt{\textbackslash{}n} will be handled as known from C so you will
+need to add a second \textbackslash{} in front of in such cases. Even
+this seems to be annyoing on the first hand, it allows you to insert some
+more complicated constructs over  here which might require a new line inside.
 
 \section{Contribution to the plugin}
 If you like the plugin, there are a number of ways, how to

@@ -1,24 +1,29 @@
+2010-01-16  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Took over functionality to automatic close \begin{} and \begingroup{}
+   from Geany core
+
+
 2009-01-03  Frank Lanitz  <frank@frank.uvena.de>
 
- * Dpn't deactivate wizard icon if no document is open 
-
+ * Don't deactivate wizard icon if no document is open
 
 
 2009-01-01  Frank Lanitz  <frank@frank.uvena.de>
 
- * Make text used for inserting references configurable. 
-   Please check documentation for details on how to do it. 
+ * Make text used for inserting references configurable.
+   Please check documentation for details on how to do it.
 
 
 2009-12-26  Frank Lanitz  <frank@frank.uvena.de>
 
- * Deactivate icons of toolbar, if no LaTeX document is open. Behavior 
-   can be deactivated via hidden pref. 
+ * Deactivate icons of toolbar, if no LaTeX document is open. Behavior
+   can be deactivated via hidden pref.
 
 
 2009-12-23  Frank Lanitz  <frank@frank.uvena.de>
 
- * Do only special character replacement in case of we really have 
+ * Do only special character replacement in case of we really have
    an LaTeX file here.
 
 
