@@ -324,18 +324,18 @@ static void toggle_toolbar_items_by_file_type(gint id)
 }
 
 
-static gboolean on_document_activate(G_GNUC_UNUSED GObject *object,
+static void on_document_activate(G_GNUC_UNUSED GObject *object,
 									 GeanyDocument *doc, G_GNUC_UNUSED gpointer data)
 {
-	g_return_val_if_fail(doc != NULL, FALSE);
+	g_return_if_fail(doc != NULL);
 	toggle_toolbar_items_by_file_type(doc->file_type->id);
-	return FALSE;
+	return;
 }
 
 
-static gboolean on_document_new(GObject *object, GeanyDocument *doc, gpointer data)
+static void on_document_new(GObject *object, GeanyDocument *doc, gpointer data)
 {
-	return on_document_activate(object, doc, data);
+	on_document_activate(object, doc, data);
 }
 
 
@@ -353,16 +353,16 @@ on_geany_startup_complete(G_GNUC_UNUSED GObject *obj, G_GNUC_UNUSED gpointer use
 }
 
 
-static gboolean on_document_filetype_set(GObject *obj, GeanyDocument *doc,
+static void on_document_filetype_set(GObject *obj, GeanyDocument *doc,
 	GeanyFiletype *filetype_old, gpointer user_data)
 {
 	if (doc != NULL)
 	{
 		GeanyFiletype *ft = doc->file_type;
 		if (filetype_old != NULL && filetype_old->id != ft->id)
-			return on_document_activate(obj, doc, user_data);
+			on_document_activate(obj, doc, user_data);
 	}
-	return FALSE;
+	return;
 }
 
 
