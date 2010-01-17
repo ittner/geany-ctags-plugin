@@ -235,7 +235,7 @@ GtkWidget *
 plugin_configure(GtkDialog * dialog)
 {
 	GtkWidget	*vbox;
-	GtkWidget	*table = NULL;
+	GtkWidget	*hbox_autocompletion;
 	GtkWidget	*label_autocompletion = NULL;
 	gint		tmp;
 
@@ -252,19 +252,20 @@ plugin_configure(GtkDialog * dialog)
 	gtk_combo_box_insert_text(GTK_COMBO_BOX(config_widgets.glatex_autocompletion_active), 1,
 		_("Always perform autocompletion on LaTeX"));
 
+	/* Configuration for auto completion feature */
+	hbox_autocompletion = gtk_hbox_new(FALSE, 3);
+
 	/* Dirty workarround for transferring boolean into a valid interger value */
 	if (glatex_autocompletion_active == TRUE)
 		tmp = 1;
 	else
 		tmp = 0;
 	gtk_combo_box_set_active(GTK_COMBO_BOX(config_widgets.glatex_autocompletion_active), tmp);
-	/* Adding table for autocompletion configuration */
-	table = gtk_table_new(1, 2, FALSE);
-	label_autocompletion = gtk_label_new(_("Modus of autocompletion"));
-	gtk_misc_set_alignment(GTK_MISC(label_autocompletion), 0, 0);
 
-	gtk_table_attach_defaults(GTK_TABLE(table), label_autocompletion, 0, 1, 0, 1);
-	gtk_table_attach_defaults(GTK_TABLE(table), config_widgets.glatex_autocompletion_active, 1, 2, 0, 1);
+	label_autocompletion = gtk_label_new(_("Modus of autocompletion"));
+
+	gtk_box_pack_start(GTK_BOX(hbox_autocompletion), label_autocompletion, FALSE, FALSE, 3);
+	gtk_box_pack_start(GTK_BOX(hbox_autocompletion), config_widgets.glatex_autocompletion_active, TRUE, TRUE, 3);
 
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(config_widgets.koma_active),
 		glatex_set_koma_active);
@@ -272,7 +273,7 @@ plugin_configure(GtkDialog * dialog)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(config_widgets.toolbar_active),
 		glatex_set_toolbar_active);
 	gtk_box_pack_start(GTK_BOX(vbox), config_widgets.toolbar_active, FALSE, FALSE, 2);
-	gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
+	gtk_box_pack_start(GTK_BOX(vbox), hbox_autocompletion, FALSE, FALSE, 2);
 
 	gtk_widget_show_all(vbox);
 	g_signal_connect(dialog, "response", G_CALLBACK(on_configure_response), NULL);
