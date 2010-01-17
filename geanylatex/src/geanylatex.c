@@ -26,6 +26,7 @@
 /* This plugin improves the work with LaTeX and Geany.*/
 
 #include "geanylatex.h"
+#include "ctype.h"
 
 PLUGIN_VERSION_CHECK(169)
 
@@ -68,7 +69,7 @@ static gboolean glatex_autocompletion_active = FALSE;
 /* Value how many line should be search for autocompletion of \end{}
  * and \endgroup{}. */
 static gint glatex_autocompletion_context_size;
-static glatex_autocompletion_only_for_latex;
+static gboolean glatex_autocompletion_only_for_latex;
 
 /* Function will be deactivated, when only loaded */
 static gboolean toggle_active = FALSE;
@@ -299,6 +300,7 @@ void glatex_toggle_status(G_GNUC_UNUSED GtkMenuItem * menuitem)
 static void toggle_toolbar_items_by_file_type(gint id)
 {
 	if (glatex_deactivate_toolbaritems_with_non_latex == TRUE)
+	{
 		if (id != GEANY_FILETYPES_LATEX)
 		{
 			/* Deactivate toolbar items */
@@ -319,10 +321,12 @@ static void toggle_toolbar_items_by_file_type(gint id)
 			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Left"), TRUE);
 			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Right"), TRUE);
 		}
+	}
 }
 
 
-static on_document_activate(GObject *object, GeanyDocument *doc, gpointer data)
+static gboolean on_document_activate(G_GNUC_UNUSED GObject *object,
+									 GeanyDocument *doc, G_GNUC_UNUSED gpointer data)
 {
 	g_return_val_if_fail(doc != NULL, FALSE);
 	toggle_toolbar_items_by_file_type(doc->file_type->id);
@@ -330,13 +334,13 @@ static on_document_activate(GObject *object, GeanyDocument *doc, gpointer data)
 }
 
 
-static on_document_new(GObject *object, GeanyDocument *doc, gpointer data)
+static gboolean on_document_new(GObject *object, GeanyDocument *doc, gpointer data)
 {
 	return on_document_activate(object, doc, data);
 }
 
 
-static on_document_filetype_set(GObject *obj, GeanyDocument *doc,
+static gboolean on_document_filetype_set(GObject *obj, GeanyDocument *doc,
 	GeanyFiletype *filetype_old, gpointer user_data)
 {
 	if (doc != NULL)
@@ -354,7 +358,6 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 {
 	ScintillaObject* sci;
 	gint pos;
-	static gchar indent[100];
 
 	g_return_val_if_fail(editor != NULL, FALSE);
 
@@ -460,7 +463,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 									g_free(tmp);
 									g_free(buf);
 									g_free(end_construct);
-									return;
+									return FALSE;
 								}
 								g_free(tmp);
 							}
@@ -503,7 +506,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 
 				if (entity != NULL)
 				{
-					gint pos = sci_get_current_position(editor->sci);
+					pos = sci_get_current_position(sci);
 
 					sci_set_selection_start(editor->sci, pos - len);
 					sci_set_selection_end(editor->sci, pos);
@@ -982,7 +985,7 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	gchar *papersize = NULL;
 	gchar *draft = NULL;
 	gchar *fontsize = NULL;
-	gint template_int;
+	guint template_int;
 	gint documentclass_int;
 	gint encoding_int;
 	gint papersize_int;
