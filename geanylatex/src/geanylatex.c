@@ -335,6 +335,7 @@ static void on_document_activate(G_GNUC_UNUSED GObject *object,
 
 static void on_document_new(GObject *object, GeanyDocument *doc, gpointer data)
 {
+	g_return_if_fail(doc != NULL);
 	on_document_activate(object, doc, data);
 }
 
