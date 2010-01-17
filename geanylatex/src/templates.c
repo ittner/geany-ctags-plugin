@@ -41,7 +41,7 @@ static void glatex_init_cutom_template_item(gchar *file, GPtrArray *array)
 {
 	TemplateEntry *template = g_new0(TemplateEntry, 1);
 	gchar *tmp = NULL;
-	
+
 	/* Return if its not a searched file */
 	if (g_str_has_suffix(file,".gtl") == FALSE)
 		return;
@@ -51,7 +51,7 @@ static void glatex_init_cutom_template_item(gchar *file, GPtrArray *array)
 	tmp = g_path_get_basename(file);
 	template->label = utils_remove_ext_from_filename(tmp);
 	g_free(tmp);
-	
+
 	/* Adding struct to array */
 	template->template = glatex_get_template_from_file(file);
 	g_ptr_array_add(array, template);
@@ -60,7 +60,6 @@ static void glatex_init_cutom_template_item(gchar *file, GPtrArray *array)
 
 GPtrArray* glatex_init_custom_templates()
 {
-	guint *length = NULL;
 	gchar *tmp_basedir = NULL;
 	GSList *file_list = NULL;
 	GPtrArray *templates = NULL;
@@ -84,7 +83,7 @@ GPtrArray* glatex_init_custom_templates()
 }
 
 /* Frees all elelements of struct */
-void glatex_free_TemplateEntry(TemplateEntry *template, gpointer *data){
+void glatex_free_TemplateEntry(TemplateEntry *template, G_GNUC_UNUSED gpointer *data){
 	if (template->label != NULL)
 		g_free(template->label);
 	if (template->label != NULL)
@@ -96,7 +95,7 @@ void glatex_free_TemplateEntry(TemplateEntry *template, gpointer *data){
 
 void glatex_add_templates_to_combobox(GPtrArray *templates, GtkWidget *combobox)
 {
-	gint i;
+	guint i;
 	TemplateEntry *tmp;
 	for (i = 0; i < templates->len; i++)
 	{
