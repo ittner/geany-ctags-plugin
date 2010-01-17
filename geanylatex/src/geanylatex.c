@@ -28,7 +28,7 @@
 #include "geanylatex.h"
 #include "ctype.h"
 
-PLUGIN_VERSION_CHECK(169)
+PLUGIN_VERSION_CHECK(170)
 
 PLUGIN_SET_INFO(_("GeanyLaTeX"), _("Plugin to provide better LaTeX support"),
 	VERSION,"Frank Lanitz <frank@frank.uvena.de>")
@@ -153,7 +153,6 @@ static GtkWidget *init_toolbar()
 
 	return toolbar;
 }
-
 
 static void
 on_configure_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
@@ -337,6 +336,20 @@ static gboolean on_document_activate(G_GNUC_UNUSED GObject *object,
 static gboolean on_document_new(GObject *object, GeanyDocument *doc, gpointer data)
 {
 	return on_document_activate(object, doc, data);
+}
+
+
+static void
+on_geany_startup_complete(G_GNUC_UNUSED GObject *obj, G_GNUC_UNUSED gpointer user_data)
+{
+	GeanyDocument *doc = NULL;
+
+	doc = document_get_current();
+
+	if (doc != NULL)
+	{
+		toggle_toolbar_items_by_file_type(doc->file_type->id);
+	}
 }
 
 
@@ -579,6 +592,7 @@ PluginCallback plugin_callbacks[] =
 	{ "document-activate", (GCallback) &on_document_activate, FALSE, NULL },
 	{ "document-filetype-set", (GCallback) &on_document_filetype_set, FALSE, NULL },
 	{ "document-new", (GCallback) &on_document_new, FALSE, NULL},
+	{ "geany-startup-complete", (GCallback) &on_geany_startup_complete, FALSE, NULL },
 	{ NULL, NULL, FALSE, NULL }
 };
 
