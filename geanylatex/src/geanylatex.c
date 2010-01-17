@@ -298,7 +298,8 @@ void glatex_toggle_status(G_GNUC_UNUSED GtkMenuItem * menuitem)
 
 static void toggle_toolbar_items_by_file_type(gint id)
 {
-	if (glatex_deactivate_toolbaritems_with_non_latex == TRUE)
+	if (glatex_set_toolbar_active == TRUE &&
+		glatex_deactivate_toolbaritems_with_non_latex == TRUE)
 	{
 		if (id != GEANY_FILETYPES_LATEX)
 		{
