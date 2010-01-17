@@ -330,7 +330,6 @@ static void on_document_activate(G_GNUC_UNUSED GObject *object,
 {
 	g_return_if_fail(doc != NULL);
 	toggle_toolbar_items_by_file_type(doc->file_type->id);
-	return;
 }
 
 
@@ -364,7 +363,6 @@ static void on_document_filetype_set(GObject *obj, GeanyDocument *doc,
 		if (filetype_old != NULL && filetype_old->id != ft->id)
 			on_document_activate(obj, doc, user_data);
 	}
-	return;
 }
 
 
