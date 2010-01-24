@@ -471,10 +471,6 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 								gchar *end_construct;
 								tmp = sci_get_line(sci, line + i);
 
-								/* Again get to the first non-blank char */
-								start = 0;
-								while (isspace(buf[start]) && buf[start] != '\0')
-									start++;
 								end_construct = g_strdup_printf("\\end%s{%s}", full_cmd, env);
 								if (strstr(tmp, end_construct) != NULL)
 								{
