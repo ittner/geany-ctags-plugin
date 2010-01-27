@@ -1,3 +1,9 @@
+2010-01-27  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Add an example spec file for creating rpm files. 
+   Thanks to Krzysztof Goliński and Dominic Hopf for efforts here. 
+
+
 2010-01-16  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Took over functionality to automatic close \begin{} and \begingroup{}
