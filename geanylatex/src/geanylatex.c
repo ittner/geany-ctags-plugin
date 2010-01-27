@@ -504,7 +504,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 	} /* End of latex autocpletion */
 
 	/* Toggle special characters on input */
-	if (editor->document->file_type->id != GEANY_FILETYPES_LATEX &&
+	if (editor->document->file_type->id == GEANY_FILETYPES_LATEX &&
 		toggle_active == TRUE)
 	{
 		if (nt->nmhdr.code == SCN_CHARADDED)
