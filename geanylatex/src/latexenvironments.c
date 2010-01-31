@@ -74,7 +74,7 @@ void glatex_insert_environment(gchar *environment, gint type)
 			const gchar *eol = editor_get_eol_char(doc->editor);
 			selection = sci_get_selection_contents(doc->editor->sci);
 
-			replacement = g_strconcat("\\begin{", environment, "}", 
+			replacement = g_strconcat("\\begin{", environment, "}",
 				eol,selection, eol, "\\end{", environment, "}", eol, NULL);
 
 			sci_replace_sel(doc->editor->sci, replacement);
@@ -97,7 +97,7 @@ void glatex_insert_environment(gchar *environment, gint type)
 
 			if (type == GLATEX_ENVIRONMENT_TYPE_LIST)
 			{
-				g_string_append(tmpstring, "\\item");
+				g_string_append(tmpstring, "\t\\item");
 				g_string_append(tmpstring, eol);
 			}
 
@@ -107,7 +107,7 @@ void glatex_insert_environment(gchar *environment, gint type)
 			g_string_append(tmpstring, eol);
 
 			tmp = g_string_free(tmpstring, FALSE);
-			sci_insert_text(doc->editor->sci, pos, tmp);
+			glatex_insert_string(tmp, FALSE);
 			sci_set_current_position(doc->editor->sci, pos + len + 9, TRUE);
 			g_free(tmp);
 		}
