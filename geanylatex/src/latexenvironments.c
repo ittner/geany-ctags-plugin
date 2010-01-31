@@ -71,12 +71,18 @@ void glatex_insert_environment(gchar *environment, gint type)
 		{
 			gchar *selection  = NULL;
 			gchar *replacement = NULL;
-			const gchar *eol = editor_get_eol_char(doc->editor);
 			selection = sci_get_selection_contents(doc->editor->sci);
 
-			replacement = g_strconcat("\\begin{", environment, "}",
-				eol,selection, eol, "\\end{", environment, "}", eol, NULL);
-
+			if (utils_str_equal(environment, "block") == TRUE)
+			{
+				replacement = g_strconcat("\\begin{", environment, "}{}\n",
+							  selection, "\n\\end{", environment, "}\n", NULL);
+			}
+			else
+			{
+				replacement = g_strconcat("\\begin{", environment, "}\n",
+							  selection, "\n\\end{", environment, "}\n", NULL);
+			}
 			sci_replace_sel(doc->editor->sci, replacement);
 			g_free(selection);
 			g_free(replacement);
@@ -88,23 +94,28 @@ void glatex_insert_environment(gchar *environment, gint type)
 			gint len = strlen(environment);
 			GString *tmpstring = NULL;
 			gchar *tmp = NULL;
-			const gchar *eol = editor_get_eol_char(doc->editor);
 
 			tmpstring = g_string_new("\\begin{");
 			g_string_append(tmpstring, environment);
-			g_string_append(tmpstring, "}");
-			g_string_append(tmpstring, eol);
+
+			if (utils_str_equal(environment, "block") == TRUE)
+			{
+				g_string_append(tmpstring, "}{}");
+			}
+			else
+			{
+				g_string_append(tmpstring, "}");
+			}
+			g_string_append(tmpstring, "\n");
 
 			if (type == GLATEX_ENVIRONMENT_TYPE_LIST)
 			{
-				g_string_append(tmpstring, "\t\\item");
-				g_string_append(tmpstring, eol);
+				g_string_append(tmpstring, "\t\\item\n");
 			}
 
 			g_string_append(tmpstring, "\\end{");
 			g_string_append(tmpstring, environment);
-			g_string_append(tmpstring,"}");
-			g_string_append(tmpstring, eol);
+			g_string_append(tmpstring,"}\n");
 
 			tmp = g_string_free(tmpstring, FALSE);
 			glatex_insert_string(tmp, FALSE);
