@@ -142,12 +142,6 @@ static GtkWidget *init_toolbar()
 		toolbar = gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar");
 		gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(toolbar), FALSE, TRUE, 0);
 		gtk_box_reorder_child(GTK_BOX(box), toolbar, 2);
-		ui_add_document_sensitive(gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar/Bold"));
-		ui_add_document_sensitive(gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar/Underline"));
-		ui_add_document_sensitive(gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar/Centered"));
-		ui_add_document_sensitive(gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar/Italic"));
-		ui_add_document_sensitive(gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar/Left"));
-		ui_add_document_sensitive(gtk_ui_manager_get_widget(uim, "/ui/glatex_format_toolbar/Right"));
 	}
 	/* TODO maybe more error handling */
 
@@ -296,39 +290,43 @@ void glatex_toggle_status(G_GNUC_UNUSED GtkMenuItem * menuitem)
 		glatex_set_latextoggle_status(TRUE);
 }
 
+static void toggle_toolbar_item(const gchar *path, gboolean new_status)
+{
+	if (gtk_action_get_sensitive(gtk_ui_manager_get_action(uim, path)) != new_status)
+	{
+		gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, path), new_status);
+	}
+}
+
 static void activate_toolbar_items()
 {
-	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Bold"), TRUE);
-	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Underline"), TRUE);
-	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Centered"), TRUE);
-	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Italic"), TRUE);
-	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Left"), TRUE);
-	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Right"), TRUE);
+	toggle_toolbar_item("/ui/glatex_format_toolbar/Bold", TRUE);
+	toggle_toolbar_item("/ui/glatex_format_toolbar/Underline", TRUE);
+	toggle_toolbar_item("/ui/glatex_format_toolbar/Centered", TRUE);
+	toggle_toolbar_item("/ui/glatex_format_toolbar/Italic", TRUE);
+	toggle_toolbar_item("/ui/glatex_format_toolbar/Left", TRUE);
+	toggle_toolbar_item("/ui/glatex_format_toolbar/Right", TRUE);
+	gtk_ui_manager_ensure_update(uim);
 }
 
 static void deactivate_toolbar_items()
 {
-	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Bold"), TRUE);
-	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Underline"), TRUE);
-	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Centered"), TRUE);
-	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Italic"), TRUE);
-	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Left"), TRUE);
-	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Right"), TRUE);
-	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Bold"), FALSE);
-	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Underline"), FALSE);
-	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Centered"), FALSE);
-	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Italic"), FALSE);
-	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Left"), FALSE);
-	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Right"), FALSE);
+	toggle_toolbar_item("/ui/glatex_format_toolbar/Bold", FALSE);
+	toggle_toolbar_item("/ui/glatex_format_toolbar/Underline", FALSE);
+	toggle_toolbar_item("/ui/glatex_format_toolbar/Centered", FALSE);
+	toggle_toolbar_item("/ui/glatex_format_toolbar/Italic", FALSE);
+	toggle_toolbar_item("/ui/glatex_format_toolbar/Left", FALSE);
+	toggle_toolbar_item("/ui/glatex_format_toolbar/Right", FALSE);
+	gtk_ui_manager_ensure_update(uim);
 }
 
 
 static void toggle_toolbar_items_by_file_type(gint id)
 {
-	if (glatex_set_toolbar_active == TRUE &&
-		glatex_deactivate_toolbaritems_with_non_latex == TRUE)
+	if (glatex_set_toolbar_active == TRUE)
 	{
-		if (id == GEANY_FILETYPES_LATEX)
+		if (id == GEANY_FILETYPES_LATEX ||
+		    glatex_deactivate_toolbaritems_with_non_latex == FALSE)
 		{
 			activate_toolbar_items();
 		}
@@ -554,6 +552,16 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 }
 
 
+void on_document_close(G_GNUC_UNUSED GObject *obj, GeanyDocument *doc,
+					   G_GNUC_UNUSED gpointer user_data)
+{
+	g_return_if_fail(doc != NULL);
+
+	if (doc->index < 2)
+		deactivate_toolbar_items();
+}
+
+
 void glatex_replace_special_character()
 {
 	GeanyDocument *doc = NULL;
@@ -614,6 +622,7 @@ PluginCallback plugin_callbacks[] =
 	{ "document-filetype-set", (GCallback) &on_document_filetype_set, FALSE, NULL },
 	{ "document-new", (GCallback) &on_document_new, FALSE, NULL},
 	{ "geany-startup-complete", (GCallback) &on_geany_startup_complete, FALSE, NULL },
+	{ "document-close", (GCallback) &on_document_close, FALSE, NULL},
 	{ NULL, NULL, FALSE, NULL }
 };
 
