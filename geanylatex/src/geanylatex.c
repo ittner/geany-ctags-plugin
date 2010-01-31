@@ -296,44 +296,52 @@ void glatex_toggle_status(G_GNUC_UNUSED GtkMenuItem * menuitem)
 		glatex_set_latextoggle_status(TRUE);
 }
 
+static void activate_toolbar_items()
+{
+	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Bold"), TRUE);
+	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Underline"), TRUE);
+	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Centered"), TRUE);
+	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Italic"), TRUE);
+	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Left"), TRUE);
+	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Right"), TRUE);
+}
+
+static void deactivate_toolbar_items()
+{
+	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Bold"), TRUE);
+	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Underline"), TRUE);
+	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Centered"), TRUE);
+	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Italic"), TRUE);
+	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Left"), TRUE);
+	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Right"), TRUE);
+	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Bold"), FALSE);
+	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Underline"), FALSE);
+	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Centered"), FALSE);
+	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Italic"), FALSE);
+	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Left"), FALSE);
+	gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Right"), FALSE);
+}
+
+
 static void toggle_toolbar_items_by_file_type(gint id)
 {
 	if (glatex_set_toolbar_active == TRUE &&
 		glatex_deactivate_toolbaritems_with_non_latex == TRUE)
 	{
-		if (id != GEANY_FILETYPES_LATEX)
+		if (id == GEANY_FILETYPES_LATEX)
 		{
-			/* Deactivate toolbar items */
-			/* Some ugly work arround until there is some better resolution*/
-			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Bold"), TRUE);
-			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Underline"), TRUE);
-			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Centered"), TRUE);
-			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Italic"), TRUE);
-			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Left"), TRUE);
-			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Right"), TRUE);
-			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Bold"), FALSE);
-			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Underline"), FALSE);
-			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Centered"), FALSE);
-			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Italic"), FALSE);
-			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Left"), FALSE);
-			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Right"), FALSE);
+			activate_toolbar_items();
 		}
 		else
 		{
-			/* Activate toolbar items*/
-			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Bold"), TRUE);
-			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Underline"), TRUE);
-			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Centered"), TRUE);
-			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Italic"), TRUE);
-			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Left"), TRUE);
-			gtk_action_set_sensitive(gtk_ui_manager_get_action(uim, "/ui/glatex_format_toolbar/Right"), TRUE);
+			deactivate_toolbar_items();
 		}
 	}
 }
 
 
 static void on_document_activate(G_GNUC_UNUSED GObject *object,
-									 GeanyDocument *doc, G_GNUC_UNUSED gpointer data)
+								 GeanyDocument *doc, G_GNUC_UNUSED gpointer data)
 {
 	g_return_if_fail(doc != NULL);
 
@@ -344,24 +352,25 @@ static void on_document_activate(G_GNUC_UNUSED GObject *object,
 }
 
 
-static void on_document_new(GObject *object, GeanyDocument *doc, gpointer data)
+static void on_document_new(G_GNUC_UNUSED GObject *object, GeanyDocument *doc,
+							G_GNUC_UNUSED gpointer data)
 {
 	g_return_if_fail(doc != NULL);
 
 	if (main_is_realized() == TRUE)
 	{
-		on_document_activate(object, doc, data);
+		toggle_toolbar_items_by_file_type(doc->file_type->id);
 	}
 }
 
 
 static void
-on_geany_startup_complete(G_GNUC_UNUSED GObject *obj, G_GNUC_UNUSED gpointer user_data)
+on_geany_startup_complete(G_GNUC_UNUSED GObject *obj,
+						  G_GNUC_UNUSED gpointer user_data)
 {
 	GeanyDocument *doc = NULL;
 
 	doc = document_get_current();
-
 	if (doc != NULL)
 	{
 		toggle_toolbar_items_by_file_type(doc->file_type->id);
@@ -369,18 +378,15 @@ on_geany_startup_complete(G_GNUC_UNUSED GObject *obj, G_GNUC_UNUSED gpointer use
 }
 
 
-static void on_document_filetype_set(GObject *obj, GeanyDocument *doc,
-	GeanyFiletype *filetype_old, gpointer user_data)
+static void on_document_filetype_set(G_GNUC_UNUSED GObject *obj, GeanyDocument *doc,
+									 G_GNUC_UNUSED GeanyFiletype *filetype_old,
+									 G_GNUC_UNUSED gpointer user_data)
 {
 	g_return_if_fail(doc != NULL);
 
 	if (main_is_realized() == TRUE)
 	{
-		GeanyFiletype *ft = doc->file_type;
-		if (filetype_old != NULL && filetype_old->id != ft->id)
-		{
-			on_document_activate(obj, doc, user_data);
-		}
+		toggle_toolbar_items_by_file_type(doc->file_type->id);
 	}
 }
 
@@ -1698,9 +1704,13 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 
 	init_keybindings();
 	if (glatex_set_toolbar_active == TRUE)
+	{
 		glatex_toolbar = init_toolbar();
+	}
 	else
+	{
 		glatex_toolbar = NULL;
+	}
 
 	ui_add_document_sensitive(menu_latex_menu_special_char);
 	ui_add_document_sensitive(menu_latex_ref);
