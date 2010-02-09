@@ -402,21 +402,13 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 	 *
 	 * Function has been taken from Geany's core under terms of GPLv2+
 	 * where it was original developed. */
-	if (glatex_autocompletion_active == TRUE)
+	if (glatex_autocompletion_active == TRUE &&
+		!(glatex_autocompletion_only_for_latex == TRUE &&
+		editor->document->file_type->id != GEANY_FILETYPES_LATEX))
 	{
 		sci = editor->sci;
 		pos = sci_get_current_position(sci);
 		
-		/* Check whether this is a LaTeX file at all. If not, we most
-		likely don't want to do anything. However, there is only one
-		exception: In case of user really wants to do so and is forcing
-		us with hidden preference */
-		if (glatex_autocompletion_only_for_latex == TRUE &&
-			editor->document->file_type->id != GEANY_FILETYPES_LATEX)
-		{
-			return FALSE;
-		}
-	
 		if (nt->nmhdr.code == SCN_CHARADDED)
 		{
 			switch (nt->ch)
