@@ -396,20 +396,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 	gint pos;
 
 	g_return_val_if_fail(editor != NULL, FALSE);
-
-	/* Check whether this is a LaTeX file at all. If not, we most
-	likely don't want to do anything. However, there is only one
-	exception: In case of user really wants to do so and is forcing
-	us with hidden preference */
-	if (glatex_autocompletion_only_for_latex == TRUE &&
-		editor->document->file_type->id != GEANY_FILETYPES_LATEX)
-	{
-		return FALSE;
-	}
-
-	sci = editor->sci;
-	pos = sci_get_current_position(sci);
-
+	
 	/* Autocompletion for LaTeX specific stuff:
 	 * Introducing \end{} or \endgroup{} after a \begin{}
 	 *
@@ -417,6 +404,19 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 	 * where it was original developed. */
 	if (glatex_autocompletion_active == TRUE)
 	{
+		sci = editor->sci;
+		pos = sci_get_current_position(sci);
+		
+		/* Check whether this is a LaTeX file at all. If not, we most
+		likely don't want to do anything. However, there is only one
+		exception: In case of user really wants to do so and is forcing
+		us with hidden preference */
+		if (glatex_autocompletion_only_for_latex == TRUE &&
+			editor->document->file_type->id != GEANY_FILETYPES_LATEX)
+		{
+			return FALSE;
+		}
+	
 		if (nt->nmhdr.code == SCN_CHARADDED)
 		{
 			switch (nt->ch)
@@ -527,7 +527,8 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 		{
 			gchar buf[7];
 			gint len;
-
+			sci = editor->sci;
+			
 			len = g_unichar_to_utf8(nt->ch, buf);
 			if (len > 0)
 			{
