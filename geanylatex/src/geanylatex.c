@@ -1533,13 +1533,11 @@ void plugin_help()
 		"authors."));
 }
 
-void
-plugin_init(G_GNUC_UNUSED GeanyData * data)
-{
-	GtkWidget *tmp = NULL;
-	GKeyFile *config = g_key_file_new();
-	gint i;
 
+void glatex_init_configuration()
+{
+	GKeyFile *config = g_key_file_new();
+	
 	/* loading configurations from file ...*/
 	config_file = g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S,
 	"plugins", G_DIR_SEPARATOR_S,
@@ -1588,11 +1586,20 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 		"glatex_reference_chapter", "\\ref{{{reference}}}");
 	glatex_ref_all_string = utils_get_setting_string(config, "reference",
 		"glatex_reference_all", _("\\ref{{{reference}}}, page \\pageref{{{reference}}}"));
+	
+	g_key_file_free(config);
+}
+
+
+void
+plugin_init(G_GNUC_UNUSED GeanyData * data)
+{
+	GtkWidget *tmp = NULL;
+	gint i;
 
 	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
-
-	g_key_file_free(config);
-
+	
+	glatex_init_configuration();
 	glatex_init_encodings_latex();
 
 	menu_latex = gtk_menu_item_new_with_mnemonic(_("_LaTeX"));
