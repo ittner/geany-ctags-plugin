@@ -300,6 +300,11 @@ static void toggle_toolbar_item(const gchar *path, gboolean new_status)
 
 static void activate_toolbar_items()
 {
+	if (uim == NULL)
+	{
+		return;
+	}
+
 	toggle_toolbar_item("/ui/glatex_format_toolbar/Bold", TRUE);
 	toggle_toolbar_item("/ui/glatex_format_toolbar/Underline", TRUE);
 	toggle_toolbar_item("/ui/glatex_format_toolbar/Centered", TRUE);
@@ -311,6 +316,11 @@ static void activate_toolbar_items()
 
 static void deactivate_toolbar_items()
 {
+	if (uim == NULL)
+	{
+		return;
+	}
+
 	toggle_toolbar_item("/ui/glatex_format_toolbar/Bold", FALSE);
 	toggle_toolbar_item("/ui/glatex_format_toolbar/Underline", FALSE);
 	toggle_toolbar_item("/ui/glatex_format_toolbar/Centered", FALSE);
