@@ -1,0 +1,70 @@
+# Bulgarian translations for GeanyInsertNum package.
+# Copyright (C) 2010 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Dimitar Zhekov <jimmy@is-vn.bg>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: geanyinsertnum 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-01-05 23:53+0100\n"
+"PO-Revision-Date: 2010-02-17 19:37+0300\n"
+"Last-Translator: Dimitar Zhekov <jimmy@is-vn.bg>\n"
+"Language-Team: Bulgarian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Insert Numbers"
+msgstr "Вмъкване на числа"
+
+msgid "Insert/Fill columns with numbers."
+msgstr "Вмъкване/запълване на колони с числа."
+
+msgid "Counting..."
+msgstr "Преброяване..."
+
+msgid "Preparing..."
+msgstr "Подготовка..."
+
+msgid "Inserting..."
+msgstr "Вмъкване..."
+
+msgid "For base 11 and above"
+msgstr "За бройна система 11 и нагоре"
+
+msgid "_Start:"
+msgstr "_Начално число:"
+
+msgid "S_tep:"
+msgstr "_Стъпка:"
+
+msgid "_Base:"
+msgstr "_Бройна система:"
+
+msgid "Letters:"
+msgstr "Букви:"
+
+msgid "_Upper"
+msgstr "_Главни"
+
+msgid "_Lower"
+msgstr "_Малки"
+
+msgid "Base _prefix"
+msgstr "Системен _префикс"
+
+msgid "0 for octal, 0x for hex, + for positive decimal"
+msgstr "0 за осмични числа, 0x за шестнайсетични, + за положителни десетични"
+
+msgid "Padding:"
+msgstr "Запълване:"
+
+msgid "Sp_ace"
+msgstr "_Интервали"
+
+msgid "_Zero"
+msgstr "Н_ули"
+
+msgid "Insert _Numbers"
+msgstr "Вмъкване на _числа"
