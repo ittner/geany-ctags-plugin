@@ -406,7 +406,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 	gint pos;
 
 	g_return_val_if_fail(editor != NULL, FALSE);
-	
+
 	/* Autocompletion for LaTeX specific stuff:
 	 * Introducing \end{} or \endgroup{} after a \begin{}
 	 *
@@ -418,7 +418,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 	{
 		sci = editor->sci;
 		pos = sci_get_current_position(sci);
-		
+
 		if (nt->nmhdr.code == SCN_CHARADDED)
 		{
 			switch (nt->ch)
@@ -530,7 +530,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			gchar buf[7];
 			gint len;
 			sci = editor->sci;
-			
+
 			len = g_unichar_to_utf8(nt->ch, buf);
 			if (len > 0)
 			{
@@ -1032,10 +1032,12 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	gchar *papersize = NULL;
 	gchar *draft = NULL;
 	gchar *fontsize = NULL;
+	gchar *orientation_string = NULL;
 	guint template_int;
 	gint documentclass_int;
 	gint encoding_int;
 	gint papersize_int;
+	gint paperorientation_int;
 	GtkWidget *dialog = NULL;
 	GtkWidget *vbox = NULL;
 	GtkWidget *label_documentclass = NULL;
@@ -1057,6 +1059,8 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	GtkWidget *checkbox_draft = NULL;
 	GtkWidget *label_template = NULL;
 	GtkWidget *template_combobox = NULL;
+	GtkWidget *label_orientation = NULL;
+	GtkWidget *orientation_combobox = NULL;
 	gboolean KOMA_active;
 	gboolean draft_active = FALSE;
 	GPtrArray *template_list = NULL;
@@ -1200,6 +1204,24 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	gtk_table_attach_defaults(GTK_TABLE(table), label_papersize, 0, 1, 7, 8);
 	gtk_table_attach_defaults(GTK_TABLE(table), papersize_combobox, 1, 2, 7, 8);
 
+	/* Paper direction */
+	label_orientation = gtk_label_new(_("Paper Orientation:"));
+	orientation_combobox = gtk_combo_box_new_text();
+	ui_widget_set_tooltip_text(orientation_combobox,
+		_("Choose the paper orientation for the newly created document"));
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(orientation_combobox), 0, "Default");
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(orientation_combobox), 1, "Portrait");
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(orientation_combobox), 2, "Landscape");
+
+	gtk_combo_box_set_active(GTK_COMBO_BOX(orientation_combobox), 0);
+
+	gtk_misc_set_alignment(GTK_MISC(label_orientation), 0, 0.5);
+
+	gtk_table_attach_defaults(GTK_TABLE(table), label_orientation, 0, 1, 8, 9);
+	gtk_table_attach_defaults(GTK_TABLE(table), orientation_combobox, 1, 2, 8, 9);
+
+
+	/* Doing the rest .... */
 	gtk_widget_show_all(table);
 
 	/*  Building the wizard-dialog and showing it */
@@ -1252,6 +1274,8 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 		title = g_strdup(gtk_entry_get_text(GTK_ENTRY(title_textbox)));
 		papersize_int = gtk_combo_box_get_active(
 			GTK_COMBO_BOX(papersize_combobox));
+		paperorientation_int = gtk_combo_box_get_active(
+			GTK_COMBO_BOX(orientation_combobox));
 		switch (papersize_int)
 		{
 			case 0:
@@ -1279,6 +1303,29 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 			classoptions = g_strdup(papersize);
 			g_free(papersize);
 		}
+
+		switch (paperorientation_int)
+		{
+			case 2:
+			{
+				orientation_string = g_utf8_casefold("landscape", -1);
+				break;
+			}
+			/* 1 and default currently not handled differently, but
+			 * already inside for future use. Dear future me, sorry */
+			case 1:
+			default:
+			{
+				orientation_string = g_utf8_casefold("", -1);
+				break;
+			}
+		}
+		if (classoptions != NULL && NZV(orientation_string))
+		{
+			classoptions = g_strconcat(classoptions, ",", orientation_string, NULL);
+			g_free(orientation_string);
+		}
+
 		if (classoptions != NULL && draft_active == TRUE)
 		{
 			draft = g_utf8_casefold("draft", -1);
@@ -1401,6 +1448,19 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 			{
 				utils_string_replace_all(code, "{ENCODING}", enc_latex_char);
 				g_free(enc_latex_char);
+			}
+
+			switch (paperorientation_int){
+				case 2:
+				{
+					utils_string_replace_all(code, "{GEOMETRY}", "");
+					break;
+				}
+				default:
+				{
+					utils_string_replace_all(code, "{GEOMETRY}", "");
+					break;
+				}
 			}
 			if (author != NULL)
 			{
@@ -1547,7 +1607,7 @@ void plugin_help()
 void glatex_init_configuration()
 {
 	GKeyFile *config = g_key_file_new();
-	
+
 	/* loading configurations from file ...*/
 	config_file = g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S,
 	"plugins", G_DIR_SEPARATOR_S,
@@ -1596,7 +1656,7 @@ void glatex_init_configuration()
 		"glatex_reference_chapter", "\\ref{{{reference}}}");
 	glatex_ref_all_string = utils_get_setting_string(config, "reference",
 		"glatex_reference_all", _("\\ref{{{reference}}}, page \\pageref{{{reference}}}"));
-	
+
 	g_key_file_free(config);
 }
 
@@ -1608,7 +1668,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	gint i;
 
 	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
-	
+
 	glatex_init_configuration();
 	glatex_init_encodings_latex();
 
