@@ -1,7 +1,13 @@
+2010-03-12  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Add a very first attempt to support landscape on wizard. Output is
+   far away from being good.
+
+
 2010-01-27  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
- * Add an example spec file for creating rpm files. 
-   Thanks to Krzysztof Goliński and Dominic Hopf for efforts here. 
+ * Add an example spec file for creating rpm files.
+   Thanks to Krzysztof Goliński and Dominic Hopf for efforts here.
 
 
 2010-01-16  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

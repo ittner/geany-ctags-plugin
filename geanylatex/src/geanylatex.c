@@ -1308,7 +1308,14 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 		{
 			case 2:
 			{
-				orientation_string = g_utf8_casefold("landscape", -1);
+				if (KOMA_active == TRUE)
+				{
+					orientation_string = g_utf8_casefold("paper=landscape", -1);
+				}
+				else
+				{
+					orientation_string = g_utf8_casefold("landscape", -1);
+				}
 				break;
 			}
 			/* 1 and default currently not handled differently, but
