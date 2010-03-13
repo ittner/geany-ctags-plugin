@@ -1460,7 +1460,8 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 			switch (paperorientation_int){
 				case 2:
 				{
-					utils_string_replace_all(code, "{GEOMETRY}", "");
+					utils_string_replace_all(code, "{GEOMETRY}", 
+						"\\usepackage[landscape]{geometry}\n");
 					break;
 				}
 				default:

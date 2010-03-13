@@ -39,6 +39,7 @@ enum {
 
 #define TEMPLATE_LATEX "\
 \\documentclass[{CLASSOPTION}]{{DOCUMENTCLASS}}\n\
+{GEOMETRY}\
 {ENCODING}\
 {TITLE}\
 {AUTHOR}\
