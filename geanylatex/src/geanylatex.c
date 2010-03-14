@@ -1276,25 +1276,50 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 			GTK_COMBO_BOX(papersize_combobox));
 		paperorientation_int = gtk_combo_box_get_active(
 			GTK_COMBO_BOX(orientation_combobox));
-		switch (papersize_int)
+
+		if (KOMA_active == TRUE)
 		{
-			case 0:
+			switch (papersize_int)
 			{
-				papersize = g_utf8_casefold("a4paper", -1);
-				break;
+				case 0:
+				{
+					papersize = g_utf8_casefold("paper=a4", -1);
+					break;
+				}
+				case 1:
+				{
+					papersize = g_utf8_casefold("paper=a5", -1);
+					break;
+				}
+				case 2:
+				{
+					papersize = g_utf8_casefold("paper=a6", -1);
+					break;
+				}
 			}
-			case 1:
+
+		}
+		else
+		{
+			switch (papersize_int)
 			{
-				papersize = g_utf8_casefold("a5paper", -1);
-				break;
-			}
-			case 2:
-			{
-				papersize = g_utf8_casefold("a6paper", -1);
-				break;
+				case 0:
+				{
+					papersize = g_utf8_casefold("a4paper", -1);
+					break;
+				}
+				case 1:
+				{
+					papersize = g_utf8_casefold("a5paper", -1);
+					break;
+				}
+				case 2:
+				{
+					papersize = g_utf8_casefold("a6paper", -1);
+					break;
+				}
 			}
 		}
-
 		fontsize = gtk_combo_box_get_active_text(
 			GTK_COMBO_BOX(fontsize_combobox));
 
@@ -1460,7 +1485,7 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 			switch (paperorientation_int){
 				case 2:
 				{
-					utils_string_replace_all(code, "{GEOMETRY}", 
+					utils_string_replace_all(code, "{GEOMETRY}",
 						"\\usepackage[landscape]{geometry}\n");
 					break;
 				}
