@@ -23,6 +23,6 @@
 
 #include "geanylatex.h"
 
-gchar **geanylatex_read_file_in_array(const gchar *filename);
+gchar **glatex_read_file_in_array(const gchar *filename);
 
 #endif

@@ -36,7 +36,7 @@ void glatex_parse_aux_file(gchar *file, gpointer combobox)
 		if (!g_str_has_suffix(file, ".aux"))
 			return;
 
-		aux_entries = geanylatex_read_file_in_array(file);
+		aux_entries = glatex_read_file_in_array(file);
 
 		if (aux_entries != NULL)
 		{
