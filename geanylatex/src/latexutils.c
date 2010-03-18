@@ -1,5 +1,5 @@
 /*
- *      utils.c
+ *      latexutils.c
  *
  *      Copyright 2009-2010 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
  *
