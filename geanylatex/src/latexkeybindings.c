@@ -145,3 +145,10 @@ void glatex_kb_structure_lvldown(G_GNUC_UNUSED guint key_id)
 		return;
 	glatex_structure_lvldown();
 }
+
+void glatex_kb_usepackage_dialog(G_GNUC_UNUSED guint key_id)
+{
+	if (NULL == document_get_current())
+		return;
+	glatex_insert_usepackage_dialog(NULL, NULL);
+}
