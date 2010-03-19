@@ -40,3 +40,42 @@ gchar **glatex_read_file_in_array(const gchar *filename)
 
 	return result;
 }
+
+void glatex_usepackage(const gchar *pkg)
+{
+	GeanyDocument *doc = NULL;
+	gint i;
+	gint line_number;
+	gint document_number_of_lines;
+	gchar *tmp_line;
+
+	doc = document_get_current();
+
+	/* Checking whether we have a document */
+	g_return_if_fail(doc != NULL);
+
+	/* Iterating through document to find \begin{document}
+	 * Do nothing, if its not available at all */
+	document_number_of_lines = sci_get_line_count(doc->editor->sci);
+	for (i = 0; i < document_number_of_lines; i++)
+	{
+		tmp_line = sci_get_line(doc->editor->sci, i);
+		if (utils_str_equal(tmp_line, "\\begin{document}\n"))
+		{
+			gint pos;
+			gchar *packagestring;
+
+			pos = sci_get_position_from_line(doc->editor->sci, i);
+
+			/* Building up package string and inserting it */
+			packagestring = g_strconcat("\\usepackage{", pkg, "}\n", NULL);
+			sci_insert_text(doc->editor->sci, pos, packagestring);
+
+			g_free(tmp_line);
+			g_free(packagestring);
+
+			break;
+		}
+		g_free(tmp_line);
+	}
+}

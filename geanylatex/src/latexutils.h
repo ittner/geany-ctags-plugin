@@ -25,4 +25,6 @@
 
 gchar **glatex_read_file_in_array(const gchar *filename);
 
+void glatex_usepackage(const gchar *pkg);
+
 #endif
