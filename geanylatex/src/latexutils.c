@@ -41,7 +41,7 @@ gchar **glatex_read_file_in_array(const gchar *filename)
 	return result;
 }
 
-void glatex_usepackage(const gchar *pkg)
+void glatex_usepackage(const gchar *pkg, const gchar *options)
 {
 	GeanyDocument *doc = NULL;
 	gint i;
@@ -65,9 +65,16 @@ void glatex_usepackage(const gchar *pkg)
 			gchar *packagestring;
 
 			pos = sci_get_position_from_line(doc->editor->sci, i);
-
 			/* Building up package string and inserting it */
-			packagestring = g_strconcat("\\usepackage{", pkg, "}\n", NULL);
+			if (NZV(options))
+			{
+				packagestring = g_strconcat("\\usepackage[", options, 
+					"]{", pkg, "}\n", NULL);
+			}
+			else
+			{
+				packagestring = g_strconcat("\\usepackage{", pkg, "}\n", NULL);
+			}
 			sci_insert_text(doc->editor->sci, pos, packagestring);
 
 			g_free(tmp_line);

@@ -1054,7 +1054,7 @@ void glatex_insert_usepackage_dialog(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	{
 		const gchar *pkg;
 		pkg = gtk_entry_get_text(GTK_ENTRY(textbox));
-		glatex_usepackage(pkg);
+		glatex_usepackage(pkg, NULL);
 
 	}
 
