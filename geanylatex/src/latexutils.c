@@ -79,6 +79,10 @@ void glatex_usepackage(const gchar *pkg)
 		g_free(tmp_line);
 	}
 
+	dialogs_show_msgbox(GTK_MESSAGE_ERROR,
+		_("Could not determine where to insert package: %s"
+		  "\nPlease try insert package manually"), pkg);
 	ui_set_statusbar(TRUE, _("Could not determine where to insert package: %s"), pkg );
+
 
 }

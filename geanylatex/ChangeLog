@@ -1,3 +1,9 @@
+2010-03-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Insert a keybinding and a dialog to insert a \usepackage{} line to header.
+   Still experimental.
+
+
 2010-03-12  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Add a very first attempt to support landscape on wizard. Output is
