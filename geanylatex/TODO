@@ -1,16 +1,30 @@
 	TODO
 ************
+Bugs & Problems:
+* Improve handling of indention on
+	* Inserting an list environment
+	* Autoclosing of environment with \end{} and \endgroup{}
+* Closing dialogs via hitting return
 
+Features:
+* Improving inserting \usepackge{}-function
+	* recognize other \usepackage{} entries
+	* Give a couple of examples
+* Extending insert environment section
+	* More common examples
+	* Parsing document for already used ones
 * Improving support for bibTeX
     * Parsing of *.bib
     * Inserting of \cite
     * Dialog for inserting bibTeX entries
 * Wizard:
 	* Adding support for diff. letter classes
-	* Adding a way setting variables/values for wizard inside custom 
+	* Adding a way setting variables/values for wizard inside custom
 	  template
 * Replacing of environments
 * Parsing document for »TOC«
     * Navigation throught document
 * Code examples for very common problems
 * Make special characters extensible through files
+* Improve behaviour of levelup and leveldown of structures
+* Autoinserting {} when typing \command+return
