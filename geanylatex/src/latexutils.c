@@ -45,7 +45,6 @@ void glatex_usepackage(const gchar *pkg)
 {
 	GeanyDocument *doc = NULL;
 	gint i;
-	gint line_number;
 	gint document_number_of_lines;
 	gchar *tmp_line;
 
