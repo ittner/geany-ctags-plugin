@@ -1674,7 +1674,7 @@ void init_keybindings()
 		_("Set selection one level down"), NULL);
 	keybindings_set_item(plugin_key_group, KB_LATEX_USEPACKAGE_DIALOG,
 		glatex_kb_usepackage_dialog, 0, 0, "usepackage_dialog",
-		_("Insert \\usepackage{}"), NULL);
+		_("Insert \\usepackage{}"), menu_latex_insert_usepackage);
 }
 
 void plugin_help()
