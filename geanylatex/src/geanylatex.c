@@ -1805,7 +1805,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	menu_latex_insert_usepackage = gtk_menu_item_new_with_mnemonic(
 		_("Insert Package"));
 	ui_widget_set_tooltip_text(menu_latex_insert_environment,
-	     _("A small dialog to insert \\usepcakge{} into header of current file"));
+	     _("A small dialog to insert \\usepackage{} into header of current file"));
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_insert_usepackage);
 	g_signal_connect(menu_latex_insert_usepackage, "activate",
 		G_CALLBACK(glatex_insert_usepackage_dialog), NULL);
