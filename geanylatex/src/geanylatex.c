@@ -1553,33 +1553,37 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 					break;
 				}
 			}
-			if (author != NULL)
+			if (NZV(author))
 			{
-				if (author[0] != '\0')
+				gchar* author_string = NULL;
+				if (documentclass_int == 3)
+			  	{
+			  		author_string = g_strconcat("\\signature{", author, "}\n", NULL);
+				}
+			  	else
 				{
-					if (documentclass_int == 3)
-				  	{
-				  		author = g_strconcat("\\signature{", author, "}\n", NULL);
-					}
-				  	else
-					{
-						author = g_strconcat("\\author{", author, "}\n", NULL);
-					}
-
-					utils_string_replace_all(code, "{AUTHOR}", author);
+					author_string = g_strconcat("\\author{", author, "}\n", NULL);
+				}
+				utils_string_replace_all(code, "{AUTHOR}", author_string);
+				g_free(author);
+				g_free(author_string);
+			}
+			else
+			{
+				gchar* author_string = NULL;
+				if (documentclass_int == 3)
+				{
+					utils_string_replace_all(code, "{AUTHOR}", "\% \\signature{}\n");
 				}
 				else
-					if (documentclass_int == 3)
-					{
-						utils_string_replace_all(code, "{AUTHOR}", "\% \\signature{}\n");
-					}
-					else
-					{
-						utils_string_replace_all(code, "{AUTHOR}", "\% \\author{}\n");
-					}
-
+				{
+					utils_string_replace_all(code, "{AUTHOR}", "\% \\author{}\n");
+				}
+				utils_string_replace_all(code, "{AUTHOR}", author_string);
 				g_free(author);
+				g_free(author_string);
 			}
+
 			if (date != NULL)
 			{
 				if (date[0] != '\0')
