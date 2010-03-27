@@ -1780,7 +1780,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	g_signal_connect(menu_latex_wizard, "activate",
 			 G_CALLBACK(glatex_wizard_activated), NULL);
 
-	menu_latex_menu_special_char = gtk_menu_item_new_with_mnemonic(_("Insert _Special Character"));
+	menu_latex_menu_special_char = gtk_menu_item_new_with_mnemonic(_("I_nsert Special Character"));
 	ui_widget_set_tooltip_text(menu_latex_menu_special_char,
 			     _("Helps to use some not very common letters and signs"));
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu),
@@ -1815,7 +1815,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 		G_CALLBACK(glatex_insert_environment_dialog), NULL);
 
 	menu_latex_insert_usepackage = gtk_menu_item_new_with_mnemonic(
-		_("Insert Package"));
+		_("Insert P_ackage"));
 	ui_widget_set_tooltip_text(menu_latex_insert_environment,
 	     _("A small dialog to insert \\usepackage{} into header of current file"));
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_insert_usepackage);
@@ -1855,7 +1855,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	}
 
 	/* Add font size menu */
-	menu_latex_fontsize = gtk_menu_item_new_with_mnemonic(_("_Font size"));
+	menu_latex_fontsize = gtk_menu_item_new_with_mnemonic(_("F_ont size"));
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_fontsize);
 
 	menu_latex_fontsize_submenu = gtk_menu_new();
