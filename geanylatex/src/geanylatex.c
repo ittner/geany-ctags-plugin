@@ -1606,32 +1606,35 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 
 			if (title != NULL)
 			{
-				if (title[0] != '\0')
+				gchar *title_string = NULL;
+				if (documentclass_int == 3)
 				{
-					if (documentclass_int == 3)
-					{
-						title = g_strconcat("\\subject{", title, "}\n", NULL);
-					}
-					else
-					{
-						title = g_strconcat("\\title{", title, "}\n", NULL);
-					}
-
-					utils_string_replace_all(code, "{TITLE}", title);
+					title_string = g_strconcat("\\subject{", title, "}\n", NULL);
 				}
 				else
-					if (documentclass_int == 3)
-					{
-						utils_string_replace_all(code, "{TITLE}", "\% \\subject{} \n");
-					}
-					else
-					{
-						utils_string_replace_all(code, "{TITLE}", "\% \\title{} \n");
-					}
+				{
+					title_string = g_strconcat("\\title{", title, "}\n", NULL);
+				}
 
+				utils_string_replace_all(code, "{TITLE}", title_string);
 				g_free(title);
+				g_free(title_string);
 			}
-
+			else
+			{
+				if (documentclass_int == 3)
+				{
+					utils_string_replace_all(code, "{TITLE}", "\% \\subject{} \n");
+				}
+				else
+				{
+					utils_string_replace_all(code, "{TITLE}", "\% \\title{} \n");
+				}
+				if (title != NULL)
+				{
+					g_free(title);
+				}
+			}
 			utils_string_replace_all(code, "{OPENING}", _("Dear Sir or Madame"));
 			utils_string_replace_all(code, "{CLOSING}", _("With kind regards"));
 
