@@ -1584,17 +1584,19 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 				g_free(author_string);
 			}
 
-			if (date != NULL)
+			if (NZV(date))
 			{
-				if (date[0] != '\0')
-				{
-					date = g_strconcat("\\date{", date, "}\n", NULL);
-					utils_string_replace_all(code, "{DATE}", date);
-				}
-				else
-					utils_string_replace_all(code, "{DATE}", "\% \\date{}\n");
+				gchar *date_string = NULL;
+				date_string = g_strconcat("\\date{", date, "}\n", NULL);
+				utils_string_replace_all(code, "{DATE}", date_string);
 				g_free(date);
+				g_free(date_string);
 			}
+			else
+			{
+				utils_string_replace_all(code, "{DATE}", "\% \\date{}\n");
+			}
+
 			if (title != NULL)
 			{
 				if (title[0] != '\0')
