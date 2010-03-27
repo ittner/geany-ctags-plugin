@@ -66,10 +66,27 @@ void glatex_insert_latex_fontsize(G_GNUC_UNUSED GtkMenuItem * menuitem,
 
 	if (doc != NULL)
 	{
-		sci_start_undo_action(doc->editor->sci);
-		glatex_insert_string(glatex_fontsize_pattern[size], TRUE);
-		glatex_insert_string(" ", TRUE);
-		sci_end_undo_action(doc->editor->sci);
+		if (sci_has_selection(doc->editor->sci))
+		{
+			gchar *selection;
+			gchar *replacement = NULL;
+
+			selection = sci_get_selection_contents(doc->editor->sci);
+
+			replacement = g_strconcat("{",glatex_fontsize_pattern[size],
+				" ", selection, "}", NULL);
+
+			sci_replace_sel(doc->editor->sci, replacement);
+			g_free(selection);
+			g_free(replacement);
+		}
+		else
+		{
+			sci_start_undo_action(doc->editor->sci);
+			glatex_insert_string(glatex_fontsize_pattern[size], TRUE);
+			glatex_insert_string(" ", TRUE);
+			sci_end_undo_action(doc->editor->sci);
+		}
 	}
 }
 
