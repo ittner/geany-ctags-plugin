@@ -73,6 +73,7 @@ void glatex_insert_environment(gchar *environment, gint type)
 			gchar *replacement = NULL;
 			selection = sci_get_selection_contents(doc->editor->sci);
 
+			sci_start_undo_action(doc->editor->sci);
 			if (utils_str_equal(environment, "block") == TRUE)
 			{
 				replacement = g_strconcat("\\begin{", environment, "}{}\n",
@@ -84,6 +85,7 @@ void glatex_insert_environment(gchar *environment, gint type)
 							  selection, "\n\\end{", environment, "}\n", NULL);
 			}
 			sci_replace_sel(doc->editor->sci, replacement);
+			sci_end_undo_action(doc->editor->sci);
 			g_free(selection);
 			g_free(replacement);
 
@@ -95,6 +97,7 @@ void glatex_insert_environment(gchar *environment, gint type)
 			GString *tmpstring = NULL;
 			gchar *tmp = NULL;
 
+			sci_start_undo_action(doc->editor->sci);
 			tmpstring = g_string_new("\\begin{");
 			g_string_append(tmpstring, environment);
 
@@ -120,6 +123,7 @@ void glatex_insert_environment(gchar *environment, gint type)
 			tmp = g_string_free(tmpstring, FALSE);
 			glatex_insert_string(tmp, FALSE);
 			sci_set_current_position(doc->editor->sci, pos + len + 9, TRUE);
+			sci_end_undo_action(doc->editor->sci);
 			g_free(tmp);
 		}
 	}
