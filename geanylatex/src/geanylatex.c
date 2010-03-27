@@ -1580,7 +1580,10 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 					utils_string_replace_all(code, "{AUTHOR}", "\% \\author{}\n");
 				}
 				utils_string_replace_all(code, "{AUTHOR}", author_string);
-				g_free(author);
+				if (author != NULL)
+				{
+					g_free(author);
+				}
 				g_free(author_string);
 			}
 
@@ -1595,6 +1598,10 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 			else
 			{
 				utils_string_replace_all(code, "{DATE}", "\% \\date{}\n");
+				if (date != NULL)
+				{
+					g_free(date);
+				}
 			}
 
 			if (title != NULL)
