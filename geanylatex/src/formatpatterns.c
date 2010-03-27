@@ -1,7 +1,7 @@
 /*
  *      formatpatterns.c
  *
- *      Copyright 2009-2010 Frank Lanitz <frank@Jupiter>
+ *      Copyright 2009-2010 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -45,4 +45,30 @@ const gchar *glatex_format_labels[] = {
 	N_("Centered"),
 	N_("Left side oriented"),
 	N_("Right side oriented")
+};
+
+gchar *glatex_fontsize_pattern[] = {
+	"\\tiny",
+	"\\scriptsize",
+	"\\footnotesize",
+	"\\small",
+	"\\normalsize",
+	"\\large",
+	"\\Large",
+	"\\LARGE",
+	"\\huge",
+	"\\Huge"
+};
+
+const gchar *glatex_fontsize_labels[] = {
+	N_("tiny"),
+	N_("scriptsize"),
+	N_("footnotesize"),
+	N_("small"),
+	N_("normalsize"),
+	N_("large"),
+	N_("Large"),
+	N_("LARGE"),
+	N_("huge"),
+	N_("Huge")
 };

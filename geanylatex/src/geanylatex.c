@@ -49,6 +49,8 @@ static GtkWidget *menu_latex_bibtex = NULL;
 static GtkWidget *menu_latex_bibtex_submenu = NULL;
 static GtkWidget *menu_latex_format_insert = NULL;
 static GtkWidget *menu_latex_format_insert_submenu = NULL;
+static GtkWidget *menu_latex_fontsize = NULL;
+static GtkWidget *menu_latex_fontsize_submenu = NULL;
 static GtkWidget *menu_latex_insert_environment = NULL;
 static GtkWidget *menu_latex_insert_usepackage = NULL;
 static GtkWidget *menu_latex_replacement = NULL;
@@ -1850,6 +1852,23 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 		gtk_container_add(GTK_CONTAINER(menu_latex_format_insert_submenu), tmp);
 		g_signal_connect(tmp, "activate",
 			G_CALLBACK(glatex_insert_latex_format), GINT_TO_POINTER(i));
+	}
+
+	/* Add font size menu */
+	menu_latex_fontsize = gtk_menu_item_new_with_mnemonic(_("_Font size"));
+	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_fontsize);
+
+	menu_latex_fontsize_submenu = gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_latex_fontsize),
+		menu_latex_fontsize_submenu);
+
+	for (i = 0; i < LATEX_FONTSIZE_END; i++)
+	{
+		tmp = NULL;
+		tmp = gtk_menu_item_new_with_mnemonic(_(glatex_fontsize_labels[i]));
+		gtk_container_add(GTK_CONTAINER(menu_latex_fontsize_submenu), tmp);
+		g_signal_connect(tmp, "activate",
+			G_CALLBACK(glatex_insert_latex_fontsize), GINT_TO_POINTER(i));
 	}
 
 	/* Add menuitem for LaTeX replacement functions*/
