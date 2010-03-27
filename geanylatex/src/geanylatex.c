@@ -1816,7 +1816,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 
 	menu_latex_insert_usepackage = gtk_menu_item_new_with_mnemonic(
 		_("Insert P_ackage"));
-	ui_widget_set_tooltip_text(menu_latex_insert_environment,
+	ui_widget_set_tooltip_text(menu_latex_insert_usepackage,
 	     _("A small dialog to insert \\usepackage{} into header of current file"));
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_insert_usepackage);
 	g_signal_connect(menu_latex_insert_usepackage, "activate",
@@ -1901,6 +1901,8 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 			 		 G_CALLBACK(glatex_toggle_status), NULL);
 
 	init_keybindings();
+
+	/* Check whether the toolbar should be shown or not and do so*/
 	if (glatex_set_toolbar_active == TRUE)
 	{
 		glatex_toolbar = init_toolbar();
