@@ -1,25 +1,25 @@
 /*
- *      geanylatex.c - Plugin to let Geany better work together with LaTeX
+ *	  geanylatex.c - Plugin to let Geany better work together with LaTeX
  *
- *      Copyright 2007-2010 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
- *      Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *	  Copyright 2007-2010 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
+ *	  Copyright 2005-2009 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *	  Copyright 2006-2009 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  *
- *      For long list of friendly supporters please have a look at THANKS.
+ *	  For long list of friendly supporters please have a look at THANKS.
  *
- *      This program is free software; you can redistribute it and/or modify
- *      it under the terms of the GNU General Public License as published by
- *      the Free Software Foundation; either version 2 of the License, or
- *      (at your option) any later version.
+ *	  This program is free software; you can redistribute it and/or modify
+ *	  it under the terms of the GNU General Public License as published by
+ *	  the Free Software Foundation; either version 2 of the License, or
+ *	  (at your option) any later version.
  *
- *      This program is distributed in the hope that it will be useful,
- *      but WITHOUT ANY WARRANTY; without even the implied warranty of
- *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *      GNU General Public License for more details.
+ *	  This program is distributed in the hope that it will be useful,
+ *	  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	  GNU General Public License for more details.
  *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *	  You should have received a copy of the GNU General Public License
+ *	  along with this program; if not, write to the Free Software
+ *	  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 /* LaTeX plugin */
@@ -33,9 +33,9 @@ PLUGIN_VERSION_CHECK(170)
 PLUGIN_SET_INFO(_("GeanyLaTeX"), _("Plugin to provide better LaTeX support"),
 	VERSION,"Frank Lanitz <frank@frank.uvena.de>")
 
-GeanyPlugin		*geany_plugin;
-GeanyData		*geany_data;
-GeanyFunctions	*geany_functions;
+GeanyPlugin	 *geany_plugin;
+GeanyData	   *geany_data;
+GeanyFunctions  *geany_functions;
 
 
 static GtkWidget *menu_latex = NULL;
@@ -191,7 +191,7 @@ on_configure_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
 			glatex_autocompletion_active);
 
 		if (!g_file_test(config_dir, G_FILE_TEST_IS_DIR)
-		    && utils_mkdir(config_dir, TRUE) != 0)
+			&& utils_mkdir(config_dir, TRUE) != 0)
 		{
 			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 				_("Plugin configuration directory could not be created."));
@@ -231,9 +231,9 @@ on_configure_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
 GtkWidget *
 plugin_configure(GtkDialog * dialog)
 {
-	GtkWidget	*vbox;
-	GtkWidget	*hbox_autocompletion;
-	GtkWidget	*label_autocompletion = NULL;
+	GtkWidget   *vbox;
+	GtkWidget   *hbox_autocompletion;
+	GtkWidget   *label_autocompletion = NULL;
 	gint		tmp;
 
 	vbox = gtk_vbox_new(FALSE, 6);
@@ -339,7 +339,7 @@ static void toggle_toolbar_items_by_file_type(gint id)
 	if (glatex_set_toolbar_active == TRUE)
 	{
 		if (id == GEANY_FILETYPES_LATEX ||
-		    glatex_deactivate_toolbaritems_with_non_latex == FALSE)
+			glatex_deactivate_toolbaritems_with_non_latex == FALSE)
 		{
 			activate_toolbar_items();
 		}
@@ -473,7 +473,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 									j = 0;
 									i++;
 									while (buf[i] != '}' && j < (sizeof(env) - 1))
-									{	/* this could be done in a shorter way, but so it remains readable ;-) */
+									{   /* this could be done in a shorter way, but so it remains readable ;-) */
 										env[j] = buf[i];
 										j++;
 										i++;
@@ -485,7 +485,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 							/* Search whether the environment is closed within the next
 							 * lines. We assume, no \end is needed in such cases */
 							/* TODO using sci_find_text() should be way faster than getting
-							 *      the line buffer and performing string comparisons */
+							 *	  the line buffer and performing string comparisons */
 							for (i = 1; i < glatex_autocompletion_context_size; i++)
 							{
 								gchar *tmp;
@@ -680,10 +680,10 @@ glatex_insert_label_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	GtkWidget *table = NULL;
 
 	dialog = gtk_dialog_new_with_buttons(_("Insert Label"),
-					     GTK_WINDOW(geany->main_widgets->window),
-					     GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
-					     GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
-					     NULL);
+						 GTK_WINDOW(geany->main_widgets->window),
+						 GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
+						 GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+						 NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 10);
@@ -735,10 +735,10 @@ glatex_insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	doc = document_get_current();
 
 	dialog = gtk_dialog_new_with_buttons(_("Insert Reference"),
-					     GTK_WINDOW(geany->main_widgets->window),
-					     GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
-					     GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
-					     NULL);
+						 GTK_WINDOW(geany->main_widgets->window),
+						 GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
+						 GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+						 NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 10);
@@ -1020,7 +1020,7 @@ show_output(const gchar * output, const gchar * name, const gint local_enc)
 }
 
 void glatex_insert_usepackage_dialog(G_GNUC_UNUSED GtkMenuItem * menuitem,
-				 					 G_GNUC_UNUSED gpointer gdata)
+									 G_GNUC_UNUSED gpointer gdata)
 {
 	GtkWidget *dialog = NULL;
 	GtkWidget *vbox = NULL;
@@ -1031,10 +1031,10 @@ void glatex_insert_usepackage_dialog(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	GtkWidget *textbox_options = NULL;
 
 	dialog = gtk_dialog_new_with_buttons(_("Add additional package"),
-					     GTK_WINDOW(geany->main_widgets->window),
-					     GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
-					     GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
-					     NULL);
+						 GTK_WINDOW(geany->main_widgets->window),
+						 GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
+						 GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+						 NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 10);
@@ -1074,11 +1074,10 @@ void glatex_insert_usepackage_dialog(G_GNUC_UNUSED GtkMenuItem * menuitem,
 
 }
 
-void
-glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
-				 G_GNUC_UNUSED gpointer gdata)
+static void
+on_wizard_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
+				   G_GNUC_UNUSED gpointer user_data)
 {
-	gint i;
 	GString *code = NULL;
 	gchar *author = NULL;
 	gchar *date = NULL;
@@ -1091,249 +1090,39 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	gchar *draft = NULL;
 	gchar *fontsize = NULL;
 	gchar *orientation_string = NULL;
+	gboolean KOMA_active = FALSE;
+	gboolean draft_active = FALSE;
 	guint template_int;
 	gint documentclass_int;
 	gint encoding_int;
 	gint papersize_int;
 	gint paperorientation_int;
-	GtkWidget *dialog = NULL;
-	GtkWidget *vbox = NULL;
-	GtkWidget *label_documentclass = NULL;
-	GtkWidget *documentclass_combobox = NULL;
-	GtkWidget *label_encoding = NULL;
-	GtkWidget *encoding_combobox = NULL;
-	GtkWidget *fontsize_combobox = NULL;
-	GtkWidget *label_fontsize = NULL;
-	GtkWidget *table = NULL;
-	GtkWidget *checkbox_KOMA = NULL;
-	GtkWidget *author_textbox = NULL;
-	GtkWidget *label_author = NULL;
-	GtkWidget *date_textbox = NULL;
-	GtkWidget *label_date = NULL;
-	GtkWidget *title_textbox = NULL;
-	GtkWidget *label_title = NULL;
-	GtkWidget *papersize_combobox = NULL;
-	GtkWidget *label_papersize = NULL;
-	GtkWidget *checkbox_draft = NULL;
-	GtkWidget *label_template = NULL;
-	GtkWidget *template_combobox = NULL;
-	GtkWidget *label_orientation = NULL;
-	GtkWidget *orientation_combobox = NULL;
-	gboolean KOMA_active;
-	gboolean draft_active = FALSE;
-	GPtrArray *template_list = NULL;
 
-	/*  Creating and formatting table */
-	table = gtk_table_new(2, 6, FALSE);
-	gtk_table_set_col_spacings(GTK_TABLE(table), 6);
-	gtk_table_set_row_spacings(GTK_TABLE(table), 6);
-
-	/*  Templates
-	 *  Adds custom templates if there are any. If there are none just
-	 *  adds default one */
-	label_template = gtk_label_new(_("Template:"));
-
-	template_combobox = gtk_combo_box_new_text();
-	ui_widget_set_tooltip_text(template_combobox,
-		_("Set the template which should be used for creating the new document"));
-	gtk_misc_set_alignment(GTK_MISC(label_template), 0, 0.5);
-
-	gtk_table_attach_defaults(GTK_TABLE(table), label_template, 0, 1, 0, 1);
-	gtk_table_attach_defaults(GTK_TABLE(table), template_combobox, 1, 2, 0, 1);
-
-	/*  Adding default/build in templates to pull down and set the generic
-	 * 	one as default */
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(template_combobox),
-		LATEX_WIZARD_TEMPLATE_DEFAULT, _("Default"));
-	gtk_combo_box_set_active(GTK_COMBO_BOX(template_combobox),
-		LATEX_WIZARD_TEMPLATE_DEFAULT);
-
-	/*  Checking whether some custom template are available and adding
-	 *  if so.
-	 *  Also init array with templates available. */
-	template_list = glatex_init_custom_templates();
-	glatex_add_templates_to_combobox(template_list, template_combobox);
-
-	/*  Documentclass */
-	label_documentclass = gtk_label_new(_("Documentclass:"));
-	documentclass_combobox = gtk_combo_box_new_text();
-	ui_widget_set_tooltip_text(documentclass_combobox,
-		_("Choose the kind of document you want to write"));
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 0,
-		_("Book"));
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 1,
-		_("Article"));
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 2,
-		_("Report"));
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 3,
-		_("Letter"));
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(documentclass_combobox), 4,
-		_("Presentation"));
-
-	gtk_combo_box_set_active(GTK_COMBO_BOX(documentclass_combobox), 0);
-
-	gtk_misc_set_alignment(GTK_MISC(label_documentclass), 0, 0.5);
-
-	gtk_table_attach_defaults(GTK_TABLE(table), label_documentclass, 0, 1, 1, 2);
-	gtk_table_attach_defaults(GTK_TABLE(table), documentclass_combobox, 1, 2, 1, 2);
-
-	/*  Encoding */
-	label_encoding = gtk_label_new(_("Encoding:"));
-
-	encoding_combobox = gtk_combo_box_new_text();
-	ui_widget_set_tooltip_text(encoding_combobox,
-		_("Set the encoding for your new document"));
-	for (i = 0; i < LATEX_ENCODINGS_MAX; i++)
-	{
-		gtk_combo_box_insert_text(GTK_COMBO_BOX(encoding_combobox), i,
-					  latex_encodings[i].name);
-	}
-
-	gtk_combo_box_set_active(GTK_COMBO_BOX(encoding_combobox),
-		find_latex_enc(geany_data->file_prefs->default_new_encoding));
-
-	gtk_misc_set_alignment(GTK_MISC(label_encoding), 0, 0.5);
-
-	gtk_table_attach_defaults(GTK_TABLE(table), label_encoding, 0, 1, 2, 3);
-	gtk_table_attach_defaults(GTK_TABLE(table), encoding_combobox, 1, 2, 2, 3);
-
-	/*  fontsize */
-	label_fontsize = gtk_label_new(_("Font size:"));
-	fontsize_combobox = gtk_combo_box_entry_new_text();
-	gtk_combo_box_append_text(GTK_COMBO_BOX(fontsize_combobox),"10pt");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(fontsize_combobox),"11pt");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(fontsize_combobox),"12pt");
-	ui_widget_set_tooltip_text(fontsize_combobox,
-		_("Set the default font size of your new document"));
-
-	gtk_misc_set_alignment(GTK_MISC(label_fontsize), 0, 0.5);
-
-	gtk_table_attach_defaults(GTK_TABLE(table), label_fontsize, 0, 1, 3, 4);
-	gtk_table_attach_defaults(GTK_TABLE(table), fontsize_combobox, 1, 2, 3, 4);
-
-	/*  Author */
-	label_author = gtk_label_new(_("Author:"));
-	author_textbox = gtk_entry_new();
-	ui_widget_set_tooltip_text(author_textbox,
-		_("Sets the value of the \\author command. In most cases this should be your name"));
-	if (geany_data->template_prefs->developer != NULL)
-	{
-		author = geany_data->template_prefs->developer;
-		gtk_entry_set_text(GTK_ENTRY(author_textbox), author);
-	}
-	gtk_misc_set_alignment(GTK_MISC(label_author), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(table), label_author, 0, 1, 4, 5);
-	gtk_table_attach_defaults(GTK_TABLE(table), author_textbox, 1, 2, 4, 5);
-
-	/*  Date */
-	label_date = gtk_label_new(_("Date:"));
-	date_textbox = gtk_entry_new();
-	ui_widget_set_tooltip_text(date_textbox,
-		_("Sets the value of the \\date command inside header of your "
-		 "new created LaTeX-document. Keeping it at \\today is a good "
-		 "decision if you don't need any fixed date."));
-	gtk_entry_set_text(GTK_ENTRY(date_textbox), "\\today");
-	gtk_misc_set_alignment(GTK_MISC(label_date), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(table), label_date, 0, 1, 5, 6);
-	gtk_table_attach_defaults(GTK_TABLE(table), date_textbox, 1, 2, 5, 6);
-
-	/*  Title of the new document */
-	label_title = gtk_label_new(_("Title:"));
-	title_textbox = gtk_entry_new();
-	ui_widget_set_tooltip_text(title_textbox,
-		_("Sets the title of your new document."));
-	gtk_misc_set_alignment(GTK_MISC(label_title), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(table), label_title, 0, 1, 6, 7);
-	gtk_table_attach_defaults(GTK_TABLE(table), title_textbox, 1, 2, 6, 7);
-
-	/*  Papersize */
-	label_papersize = gtk_label_new(_("Paper size:"));
-	papersize_combobox = gtk_combo_box_new_text();
-	ui_widget_set_tooltip_text(papersize_combobox,
-		_("Choose the paper format for the newly created document"));
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(papersize_combobox), 0, "A4");
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(papersize_combobox), 1, "A5");
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(papersize_combobox), 2, "A6");
-
-	gtk_combo_box_set_active(GTK_COMBO_BOX(papersize_combobox), 0);
-
-	gtk_misc_set_alignment(GTK_MISC(label_papersize), 0, 0.5);
-
-	gtk_table_attach_defaults(GTK_TABLE(table), label_papersize, 0, 1, 7, 8);
-	gtk_table_attach_defaults(GTK_TABLE(table), papersize_combobox, 1, 2, 7, 8);
-
-	/* Paper direction */
-	label_orientation = gtk_label_new(_("Paper Orientation:"));
-	orientation_combobox = gtk_combo_box_new_text();
-	ui_widget_set_tooltip_text(orientation_combobox,
-		_("Choose the paper orientation for the newly created document"));
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(orientation_combobox), 0, "Default");
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(orientation_combobox), 1, "Portrait");
-	gtk_combo_box_insert_text(GTK_COMBO_BOX(orientation_combobox), 2, "Landscape");
-
-	gtk_combo_box_set_active(GTK_COMBO_BOX(orientation_combobox), 0);
-
-	gtk_misc_set_alignment(GTK_MISC(label_orientation), 0, 0.5);
-
-	gtk_table_attach_defaults(GTK_TABLE(table), label_orientation, 0, 1, 8, 9);
-	gtk_table_attach_defaults(GTK_TABLE(table), orientation_combobox, 1, 2, 8, 9);
-
-
-	/* Doing the rest .... */
-	gtk_widget_show_all(table);
-
-	/*  Building the wizard-dialog and showing it */
-	dialog = gtk_dialog_new_with_buttons(_("LaTeX-Wizard"),
-				GTK_WINDOW(geany->main_widgets->window),
-				GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
-				GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
-				NULL);
-	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
-	gtk_widget_set_name(dialog, "GeanyDialog");
-	gtk_box_set_spacing(GTK_BOX(vbox), 10);
-	gtk_container_add(GTK_CONTAINER(vbox), table);
-
-	checkbox_KOMA = gtk_check_button_new_with_label(
-		_("Use KOMA-script classes if possible"));
-	ui_widget_set_tooltip_text(checkbox_KOMA,
-		_("Uses the KOMA-script classes by Markus Kohm.\n"
-		"Keep in mind: To compile your document these classes "
-		"have to be installed before."));
-	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_KOMA), FALSE);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_KOMA), glatex_set_koma_active);
-	gtk_box_pack_start(GTK_BOX(vbox), checkbox_KOMA, FALSE, FALSE, 5);
-
-	checkbox_draft = gtk_check_button_new_with_label(_("Use draft mode"));
-	ui_widget_set_tooltip_text(checkbox_draft,
-		_("Set the draft flag inside new created documents to get "
-		"documents with a number of debugging helpers"));
-	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_draft), FALSE);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_draft), draft_active);
-	gtk_box_pack_start(GTK_BOX(vbox), checkbox_draft, FALSE, FALSE, 5);
-
-	gtk_widget_show_all(vbox);
-
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	if (response == GTK_RESPONSE_OK ||
+		response == GTK_RESPONSE_APPLY ||
+		response == GTK_RESPONSE_ACCEPT)
 	{
 		KOMA_active = gtk_toggle_button_get_active(
-			GTK_TOGGLE_BUTTON(checkbox_KOMA));
+			GTK_TOGGLE_BUTTON(glatex_wizard.checkbox_KOMA));
 		draft_active = gtk_toggle_button_get_active(
-			GTK_TOGGLE_BUTTON(checkbox_draft));
+			GTK_TOGGLE_BUTTON(glatex_wizard.checkbox_draft));
 		documentclass_int = gtk_combo_box_get_active(
-			GTK_COMBO_BOX(documentclass_combobox));
+			GTK_COMBO_BOX(glatex_wizard.documentclass_combobox));
 		template_int = gtk_combo_box_get_active(
-			GTK_COMBO_BOX(template_combobox));
+			GTK_COMBO_BOX(glatex_wizard.template_combobox));
 		encoding_int = gtk_combo_box_get_active(
-			GTK_COMBO_BOX(encoding_combobox));
+			GTK_COMBO_BOX(glatex_wizard.encoding_combobox));
 		enc_latex_char = g_strconcat("\\usepackage[",
 			latex_encodings[encoding_int].latex,"]{inputenc}\n", NULL);
-		author = g_strdup(gtk_entry_get_text(GTK_ENTRY(author_textbox)));
-		date = g_strdup(gtk_entry_get_text(GTK_ENTRY(date_textbox)));
-		title = g_strdup(gtk_entry_get_text(GTK_ENTRY(title_textbox)));
+		fontsize = gtk_combo_box_get_active_text(
+			GTK_COMBO_BOX(glatex_wizard.fontsize_combobox));
+		author = g_strdup(gtk_entry_get_text(GTK_ENTRY(glatex_wizard.author_textbox)));
+		date = g_strdup(gtk_entry_get_text(GTK_ENTRY(glatex_wizard.date_textbox)));
+		title = g_strdup(gtk_entry_get_text(GTK_ENTRY(glatex_wizard.title_textbox)));
 		papersize_int = gtk_combo_box_get_active(
-			GTK_COMBO_BOX(papersize_combobox));
+			GTK_COMBO_BOX(glatex_wizard.papersize_combobox));
 		paperorientation_int = gtk_combo_box_get_active(
-			GTK_COMBO_BOX(orientation_combobox));
+			GTK_COMBO_BOX(glatex_wizard.orientation_combobox));
 
 		if (KOMA_active == TRUE)
 		{
@@ -1379,7 +1168,7 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 			}
 		}
 		fontsize = gtk_combo_box_get_active_text(
-			GTK_COMBO_BOX(fontsize_combobox));
+			GTK_COMBO_BOX(glatex_wizard.fontsize_combobox));
 
 		if (papersize != NULL)
 		{
@@ -1494,7 +1283,7 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 		/*  First check whether its a build in one or a custom one than
 		 *  assign the wished template */
 		if (template_int < LATEX_WIZARD_TEMPLATE_END ||
-			template_list == NULL)
+			glatex_wizard.template_list == NULL)
 		{
 			if (template_int == LATEX_WIZARD_TEMPLATE_DEFAULT &&
 				documentclass_int == 3 && documentclass_int == 4)
@@ -1511,15 +1300,15 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 			TemplateEntry *tmp = NULL;
 
 			/* Return if the value choose is for some uknown reason to high */
-			if (template_int > (template_list->len + LATEX_WIZARD_TEMPLATE_END))
+			if (template_int > (glatex_wizard.template_list->len + LATEX_WIZARD_TEMPLATE_END))
 				return;
 
-			tmp = g_ptr_array_index(template_list, template_int - LATEX_WIZARD_TEMPLATE_END);
+			tmp = g_ptr_array_index(glatex_wizard.template_list, template_int - LATEX_WIZARD_TEMPLATE_END);
 			code = glatex_get_template_from_file(tmp->filepath);
 
 			/* Cleaning up template array as there is no usage for anymore */
-			g_ptr_array_foreach (template_list, (GFunc)glatex_free_TemplateEntry, NULL);
-			g_ptr_array_free(template_list, TRUE);
+			g_ptr_array_foreach (glatex_wizard.template_list, (GFunc)glatex_free_TemplateEntry, NULL);
+			g_ptr_array_free(glatex_wizard.template_list, TRUE);
 		}
 
 		if (code != NULL)
@@ -1557,10 +1346,10 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 			{
 				gchar* author_string = NULL;
 				if (documentclass_int == 3)
-			  	{
-			  		author_string = g_strconcat("\\signature{", author, "}\n", NULL);
+				{
+					author_string = g_strconcat("\\signature{", author, "}\n", NULL);
 				}
-			  	else
+				else
 				{
 					author_string = g_strconcat("\\author{", author, "}\n", NULL);
 				}
@@ -1647,9 +1436,219 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 			g_warning(_("No template assigned. Aborting"));
 		}
 	}
-	gtk_widget_destroy(dialog);
+	gtk_widget_destroy(GTK_WIDGET(dialog));
 }
 
+void
+glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
+				 G_GNUC_UNUSED gpointer gdata)
+{
+	gint i;
+	gchar *author;
+	GtkWidget *dialog = NULL;
+	GtkWidget *vbox = NULL;
+	GtkWidget *label_documentclass = NULL;
+	GtkWidget *label_encoding = NULL;
+	GtkWidget *label_fontsize = NULL;
+	GtkWidget *table = NULL;
+	GtkWidget *label_author = NULL;
+	GtkWidget *label_date = NULL;
+	GtkWidget *label_title = NULL;
+	GtkWidget *label_papersize = NULL;
+	GtkWidget *label_template = NULL;
+	GtkWidget *label_orientation = NULL;
+
+	/*  Creating and formatting table */
+	table = gtk_table_new(2, 6, FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(table), 6);
+	gtk_table_set_row_spacings(GTK_TABLE(table), 6);
+
+	/*  Templates
+	 *  Adds custom templates if there are any. If there are none just
+	 *  adds default one */
+	label_template = gtk_label_new(_("Template:"));
+
+	glatex_wizard.template_combobox = gtk_combo_box_new_text();
+	ui_widget_set_tooltip_text(glatex_wizard.template_combobox,
+		_("Set the template which should be used for creating the new document"));
+	gtk_misc_set_alignment(GTK_MISC(label_template), 0, 0.5);
+
+	gtk_table_attach_defaults(GTK_TABLE(table), label_template, 0, 1, 0, 1);
+	gtk_table_attach_defaults(GTK_TABLE(table), glatex_wizard.template_combobox, 1, 2, 0, 1);
+
+	/*  Adding default/build in templates to pull down and set the generic
+	 * 	one as default */
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(glatex_wizard.template_combobox),
+		LATEX_WIZARD_TEMPLATE_DEFAULT, _("Default"));
+	gtk_combo_box_set_active(GTK_COMBO_BOX(glatex_wizard.template_combobox),
+		LATEX_WIZARD_TEMPLATE_DEFAULT);
+
+	/*  Checking whether some custom template are available and adding
+	 *  if so.
+	 *  Also init array with templates available. */
+	glatex_wizard.template_list = glatex_init_custom_templates();
+	glatex_add_templates_to_combobox(glatex_wizard.template_list, glatex_wizard.template_combobox);
+
+	/*  Documentclass */
+	label_documentclass = gtk_label_new(_("Documentclass:"));
+	glatex_wizard.documentclass_combobox = gtk_combo_box_new_text();
+	ui_widget_set_tooltip_text(glatex_wizard.documentclass_combobox,
+		_("Choose the kind of document you want to write"));
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(glatex_wizard.documentclass_combobox), 0,
+		_("Book"));
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(glatex_wizard.documentclass_combobox), 1,
+		_("Article"));
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(glatex_wizard.documentclass_combobox), 2,
+		_("Report"));
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(glatex_wizard.documentclass_combobox), 3,
+		_("Letter"));
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(glatex_wizard.documentclass_combobox), 4,
+		_("Presentation"));
+
+	gtk_combo_box_set_active(GTK_COMBO_BOX(glatex_wizard.documentclass_combobox), 0);
+
+	gtk_misc_set_alignment(GTK_MISC(label_documentclass), 0, 0.5);
+
+	gtk_table_attach_defaults(GTK_TABLE(table), label_documentclass, 0, 1, 1, 2);
+	gtk_table_attach_defaults(GTK_TABLE(table), glatex_wizard.documentclass_combobox, 1, 2, 1, 2);
+
+	/*  Encoding */
+	label_encoding = gtk_label_new(_("Encoding:"));
+
+	glatex_wizard.encoding_combobox = gtk_combo_box_new_text();
+	ui_widget_set_tooltip_text(glatex_wizard.encoding_combobox,
+		_("Set the encoding for your new document"));
+	for (i = 0; i < LATEX_ENCODINGS_MAX; i++)
+	{
+		gtk_combo_box_insert_text(GTK_COMBO_BOX(glatex_wizard.encoding_combobox), i,
+					  latex_encodings[i].name);
+	}
+
+	gtk_combo_box_set_active(GTK_COMBO_BOX(glatex_wizard.encoding_combobox),
+		find_latex_enc(geany_data->file_prefs->default_new_encoding));
+
+	gtk_misc_set_alignment(GTK_MISC(label_encoding), 0, 0.5);
+
+	gtk_table_attach_defaults(GTK_TABLE(table), label_encoding, 0, 1, 2, 3);
+	gtk_table_attach_defaults(GTK_TABLE(table), glatex_wizard.encoding_combobox, 1, 2, 2, 3);
+
+	/*  fontsize */
+	label_fontsize = gtk_label_new(_("Font size:"));
+	glatex_wizard.fontsize_combobox = gtk_combo_box_entry_new_text();
+	gtk_combo_box_append_text(GTK_COMBO_BOX(glatex_wizard.fontsize_combobox),"10pt");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(glatex_wizard.fontsize_combobox),"11pt");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(glatex_wizard.fontsize_combobox),"12pt");
+	ui_widget_set_tooltip_text(glatex_wizard.fontsize_combobox,
+		_("Set the default font size of your new document"));
+
+	gtk_misc_set_alignment(GTK_MISC(label_fontsize), 0, 0.5);
+
+	gtk_table_attach_defaults(GTK_TABLE(table), label_fontsize, 0, 1, 3, 4);
+	gtk_table_attach_defaults(GTK_TABLE(table), glatex_wizard.fontsize_combobox, 1, 2, 3, 4);
+
+	/*  Author */
+	label_author = gtk_label_new(_("Author:"));
+	glatex_wizard.author_textbox = gtk_entry_new();
+	ui_widget_set_tooltip_text(glatex_wizard.author_textbox,
+		_("Sets the value of the \\author command. In most cases this should be your name"));
+	if (geany_data->template_prefs->developer != NULL)
+	{
+		author = geany_data->template_prefs->developer;
+		gtk_entry_set_text(GTK_ENTRY(glatex_wizard.author_textbox), author);
+	}
+	gtk_misc_set_alignment(GTK_MISC(label_author), 0, 0.5);
+	gtk_table_attach_defaults(GTK_TABLE(table), label_author, 0, 1, 4, 5);
+	gtk_table_attach_defaults(GTK_TABLE(table), glatex_wizard.author_textbox, 1, 2, 4, 5);
+
+	/*  Date */
+	label_date = gtk_label_new(_("Date:"));
+	glatex_wizard.date_textbox = gtk_entry_new();
+	ui_widget_set_tooltip_text(glatex_wizard.date_textbox,
+		_("Sets the value of the \\date command inside header of your "
+		 "new created LaTeX-document. Keeping it at \\today is a good "
+		 "decision if you don't need any fixed date."));
+	gtk_entry_set_text(GTK_ENTRY(glatex_wizard.date_textbox), "\\today");
+	gtk_misc_set_alignment(GTK_MISC(label_date), 0, 0.5);
+	gtk_table_attach_defaults(GTK_TABLE(table), label_date, 0, 1, 5, 6);
+	gtk_table_attach_defaults(GTK_TABLE(table), glatex_wizard.date_textbox, 1, 2, 5, 6);
+
+	/*  Title of the new document */
+	label_title = gtk_label_new(_("Title:"));
+	glatex_wizard.title_textbox = gtk_entry_new();
+	ui_widget_set_tooltip_text(glatex_wizard.title_textbox,
+		_("Sets the title of your new document."));
+	gtk_misc_set_alignment(GTK_MISC(label_title), 0, 0.5);
+	gtk_table_attach_defaults(GTK_TABLE(table), label_title, 0, 1, 6, 7);
+	gtk_table_attach_defaults(GTK_TABLE(table), glatex_wizard.title_textbox, 1, 2, 6, 7);
+
+	/*  Papersize */
+	label_papersize = gtk_label_new(_("Paper size:"));
+	glatex_wizard.papersize_combobox = gtk_combo_box_new_text();
+	ui_widget_set_tooltip_text(glatex_wizard.papersize_combobox,
+		_("Choose the paper format for the newly created document"));
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(glatex_wizard.papersize_combobox), 0, "A4");
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(glatex_wizard.papersize_combobox), 1, "A5");
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(glatex_wizard.papersize_combobox), 2, "A6");
+
+	gtk_combo_box_set_active(GTK_COMBO_BOX(glatex_wizard.papersize_combobox), 0);
+
+	gtk_misc_set_alignment(GTK_MISC(label_papersize), 0, 0.5);
+
+	gtk_table_attach_defaults(GTK_TABLE(table), label_papersize, 0, 1, 7, 8);
+	gtk_table_attach_defaults(GTK_TABLE(table), glatex_wizard.papersize_combobox, 1, 2, 7, 8);
+
+	/* Paper direction */
+	label_orientation = gtk_label_new(_("Paper Orientation:"));
+	glatex_wizard.orientation_combobox = gtk_combo_box_new_text();
+	ui_widget_set_tooltip_text(glatex_wizard.orientation_combobox,
+		_("Choose the paper orientation for the newly created document"));
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(glatex_wizard.orientation_combobox), 0, "Default");
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(glatex_wizard.orientation_combobox), 1, "Portrait");
+	gtk_combo_box_insert_text(GTK_COMBO_BOX(glatex_wizard.orientation_combobox), 2, "Landscape");
+
+	gtk_combo_box_set_active(GTK_COMBO_BOX(glatex_wizard.orientation_combobox), 0);
+
+	gtk_misc_set_alignment(GTK_MISC(label_orientation), 0, 0.5);
+
+	gtk_table_attach_defaults(GTK_TABLE(table), label_orientation, 0, 1, 8, 9);
+	gtk_table_attach_defaults(GTK_TABLE(table), glatex_wizard.orientation_combobox, 1, 2, 8, 9);
+
+
+	/* Doing the rest .... */
+	gtk_widget_show_all(table);
+
+	/*  Building the wizard-dialog and showing it */
+	dialog = gtk_dialog_new_with_buttons(_("LaTeX-Wizard"),
+				GTK_WINDOW(geany->main_widgets->window),
+				GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
+				GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+				NULL);
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
+	gtk_widget_set_name(dialog, "GeanyDialog");
+	gtk_box_set_spacing(GTK_BOX(vbox), 10);
+	gtk_container_add(GTK_CONTAINER(vbox), table);
+
+	glatex_wizard.checkbox_KOMA = gtk_check_button_new_with_label(
+		_("Use KOMA-script classes if possible"));
+	ui_widget_set_tooltip_text(glatex_wizard.checkbox_KOMA,
+		_("Uses the KOMA-script classes by Markus Kohm.\n"
+		"Keep in mind: To compile your document these classes "
+		"have to be installed before."));
+	gtk_button_set_focus_on_click(GTK_BUTTON(glatex_wizard.checkbox_KOMA), FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glatex_wizard.checkbox_KOMA), glatex_set_koma_active);
+	gtk_box_pack_start(GTK_BOX(vbox), glatex_wizard.checkbox_KOMA, FALSE, FALSE, 5);
+
+	glatex_wizard.checkbox_draft = gtk_check_button_new_with_label(_("Use draft mode"));
+	ui_widget_set_tooltip_text(glatex_wizard.checkbox_draft,
+		_("Set the draft flag inside new created documents to get "
+		"documents with a number of debugging helpers"));
+	gtk_button_set_focus_on_click(GTK_BUTTON(glatex_wizard.checkbox_draft), FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glatex_wizard.checkbox_draft), FALSE);
+	gtk_box_pack_start(GTK_BOX(vbox), glatex_wizard.checkbox_draft, FALSE, FALSE, 5);
+	g_signal_connect(dialog, "response", G_CALLBACK(on_wizard_response), NULL);
+
+	gtk_widget_show_all(dialog);
+}
 
 void init_keybindings()
 {
@@ -1669,7 +1668,7 @@ void init_keybindings()
 		glatex_kb_replace_special_chars, 0, 0, "latex_replace_chars",
 		_("Replace special characters"), NULL);
 	keybindings_set_item(plugin_key_group, KB_LATEX_ENVIRONMENT_INSERT,
-	 	glatex_kbref_insert_environment, 0, 0, "latex_insert_environment",
+		glatex_kbref_insert_environment, 0, 0, "latex_insert_environment",
 		_("Run insert environment dialog"), menu_latex_insert_environment);
 	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_NEWITEM,
 		glatex_kb_insert_newitem, 0, 0, "latex_insert_item", _("Insert \\item"), NULL);
@@ -1791,14 +1790,14 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	menu_latex_wizard = ui_image_menu_item_new(GTK_STOCK_NEW, _("LaTeX-_Wizard"));
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_wizard);
 	ui_widget_set_tooltip_text(menu_latex_wizard,
-			     _("Starts a Wizard to easily create LaTeX-documents"));
+				 _("Starts a Wizard to easily create LaTeX-documents"));
 
 	g_signal_connect(menu_latex_wizard, "activate",
 			 G_CALLBACK(glatex_wizard_activated), NULL);
 
 	menu_latex_menu_special_char = gtk_menu_item_new_with_mnemonic(_("I_nsert Special Character"));
 	ui_widget_set_tooltip_text(menu_latex_menu_special_char,
-			     _("Helps to use some not very common letters and signs"));
+				 _("Helps to use some not very common letters and signs"));
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu),
 		menu_latex_menu_special_char);
 
@@ -1817,7 +1816,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 
 	menu_latex_label = gtk_menu_item_new_with_mnemonic(_("Insert _Label"));
 	ui_widget_set_tooltip_text(menu_latex_label,
-	    _("Helps at inserting labels to a document"));
+		_("Helps at inserting labels to a document"));
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_label);
 	g_signal_connect(menu_latex_label, "activate",
 		G_CALLBACK(glatex_insert_label_activated), NULL);
@@ -1825,7 +1824,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	menu_latex_insert_environment = gtk_menu_item_new_with_mnemonic(
 		_("Insert _Environment"));
 	ui_widget_set_tooltip_text(menu_latex_insert_environment,
-	     _("Helps at inserting an environment a document"));
+		 _("Helps at inserting an environment a document"));
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_insert_environment);
 	g_signal_connect(menu_latex_insert_environment, "activate",
 		G_CALLBACK(glatex_insert_environment_dialog), NULL);
@@ -1833,7 +1832,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	menu_latex_insert_usepackage = gtk_menu_item_new_with_mnemonic(
 		_("Insert P_ackage"));
 	ui_widget_set_tooltip_text(menu_latex_insert_usepackage,
-	     _("A small dialog to insert \\usepackage{} into header of current file"));
+		 _("A small dialog to insert \\usepackage{} into header of current file"));
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_insert_usepackage);
 	g_signal_connect(menu_latex_insert_usepackage, "activate",
 		G_CALLBACK(glatex_insert_usepackage_dialog), NULL);
@@ -1914,7 +1913,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 		menu_latex_replace_toggle);
 
 	g_signal_connect(menu_latex_replace_toggle, "activate",
-			 		 G_CALLBACK(glatex_toggle_status), NULL);
+					 G_CALLBACK(glatex_toggle_status), NULL);
 
 	init_keybindings();
 
