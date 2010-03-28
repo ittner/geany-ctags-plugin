@@ -87,6 +87,8 @@ static GtkWidget *box = NULL;
 /* Configuration file */
 static gchar *config_file = NULL;
 
+LaTeXWizard glatex_wizard;
+
 PLUGIN_KEY_GROUP(geanylatex, COUNT_KB)
 
 const GtkActionEntry format_icons[] =
