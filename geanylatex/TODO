@@ -21,6 +21,7 @@ Features:
 	* Adding support for diff. letter classes
 	* Adding a way setting variables/values for wizard inside custom
 	  template
+	* Cleaning up the mess with KOMA/non KOMA classes
 * Replacing of environments
 * Parsing document for »TOC«
     * Navigation throught document
@@ -28,4 +29,4 @@ Features:
 * Make special characters extensible through files
 * Improve behaviour of levelup and leveldown of structures
 * Autoinserting {} when typing \command+return
-* Adding a font size chooser to toolbar and menue
+* Adding a font size chooser to toolbar
