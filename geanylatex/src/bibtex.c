@@ -180,7 +180,9 @@ void glatex_bibtex_write_entry(GPtrArray *entry, gint doctype)
 	g_string_append(output, "}");
 	g_string_append(output, eol);
 	tmp = g_string_free(output, FALSE);
+	sci_start_undo_action(doc->editor->sci);
 	glatex_insert_string(tmp, FALSE);
+	sci_end_undo_action(doc->editor->sci);
 	g_free(tmp);
 }
 
