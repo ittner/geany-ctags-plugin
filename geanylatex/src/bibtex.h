@@ -84,8 +84,7 @@ extern const gchar *glatex_label_entry[];
 
 int glatex_push_bibtex_entry(int style, GeanyDocument *doc);
 
-void glatex_insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem,
-								G_GNUC_UNUSED gpointer gdata);
+void glatex_insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem, gpointer gdata);
 
 void glatex_bibtex_write_entry(GPtrArray *entry, gint doctype);
 

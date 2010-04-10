@@ -38,7 +38,7 @@ static int get_entry_pos(char *str)
 #endif
 
 void glatex_insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem,
-						 G_GNUC_UNUSED gpointer gdata)
+						 gpointer gdata)
 {
 	gint i;
 	gint doctype = GPOINTER_TO_INT(gdata);
