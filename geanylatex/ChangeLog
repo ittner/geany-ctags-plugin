@@ -1,3 +1,8 @@
+2010-04-11  Frank Lanitz  <frank@frank.uvena.de>
+
+ * Enabling inserting label on pushing return after typing in label name. 
+
+
 2010-03-27  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Add a menu entry for inserting font sizes to document

@@ -132,6 +132,13 @@ config_widgets;
 /* Some functions*/
 static void toggle_toolbar_items_by_file_type(gint id);
 
+
+void glatex_enter_key_pressed_in_entry(GtkWidget *widget, gpointer dialog )
+{
+	gtk_dialog_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
+}
+
+
 static GtkWidget *init_toolbar()
 {
 	GtkWidget *toolbar = NULL;
@@ -702,6 +709,9 @@ glatex_insert_label_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 0, 1);
 	gtk_table_attach_defaults(GTK_TABLE(table), textbox_label, 1, 2, 0, 1);
 	gtk_container_add(GTK_CONTAINER(vbox), table);
+
+	g_signal_connect(G_OBJECT(textbox_label), "activate",
+		G_CALLBACK(glatex_enter_key_pressed_in_entry), dialog);
 
 	gtk_widget_show_all(vbox);
 
