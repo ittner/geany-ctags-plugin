@@ -89,6 +89,11 @@ void glatex_usepackage(const gchar *pkg, const gchar *options)
 		_("Could not determine where to insert package: %s"
 		  "\nPlease try insert package manually"), pkg);
 	ui_set_statusbar(TRUE, _("Could not determine where to insert package: %s"), pkg );
-
-
 }
+
+
+void glatex_enter_key_pressed_in_entry(GtkWidget *widget, gpointer dialog )
+{
+	gtk_dialog_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
+}
+

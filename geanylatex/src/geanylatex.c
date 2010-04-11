@@ -133,12 +133,6 @@ config_widgets;
 static void toggle_toolbar_items_by_file_type(gint id);
 
 
-void glatex_enter_key_pressed_in_entry(GtkWidget *widget, gpointer dialog )
-{
-	gtk_dialog_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
-}
-
-
 static GtkWidget *init_toolbar()
 {
 	GtkWidget *toolbar = NULL;

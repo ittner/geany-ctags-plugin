@@ -190,7 +190,7 @@ glatex_insert_environment_dialog(G_GNUC_UNUSED GtkMenuItem *menuitem,
 	gtk_table_attach_defaults(GTK_TABLE(table), label_env, 0, 1, 0, 1);
 	gtk_table_attach_defaults(GTK_TABLE(table), textbox_env, 1, 2, 0, 1);
 	gtk_container_add(GTK_CONTAINER(vbox), table);
-
+	
 	gtk_widget_show_all(vbox);
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
