@@ -2,6 +2,8 @@
 
  * Enabling inserting label on pushing return after typing in label name.
  * Enabling inserting \usepackage{} on pushing return after typing in dialog.
+ * Enabling inserting environment on pushing return after typing inside
+   the insert environment dialog. 
 
 
 2010-03-27  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

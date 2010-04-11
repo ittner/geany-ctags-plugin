@@ -154,6 +154,7 @@ glatex_insert_environment_dialog(G_GNUC_UNUSED GtkMenuItem *menuitem,
 	GtkWidget *label_env = NULL;
 	GtkWidget *textbox_env = NULL;
 	GtkWidget *table = NULL;
+	GtkWidget *tmp_entry = NULL;
 	GtkTreeModel *model = NULL;
 	gint i, max;
 
@@ -190,7 +191,11 @@ glatex_insert_environment_dialog(G_GNUC_UNUSED GtkMenuItem *menuitem,
 	gtk_table_attach_defaults(GTK_TABLE(table), label_env, 0, 1, 0, 1);
 	gtk_table_attach_defaults(GTK_TABLE(table), textbox_env, 1, 2, 0, 1);
 	gtk_container_add(GTK_CONTAINER(vbox), table);
-	
+
+	tmp_entry =  gtk_bin_get_child(GTK_BIN(textbox_env));
+	g_signal_connect(G_OBJECT(tmp_entry), "activate",
+		G_CALLBACK(glatex_enter_key_pressed_in_entry), dialog);
+
 	gtk_widget_show_all(vbox);
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
