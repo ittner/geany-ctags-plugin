@@ -1,6 +1,7 @@
 2010-04-11  Frank Lanitz  <frank@frank.uvena.de>
 
- * Enabling inserting label on pushing return after typing in label name. 
+ * Enabling inserting label on pushing return after typing in label name.
+ * Enabling inserting \usepackage{} on pushing return after typing in dialog.
 
 
 2010-03-27  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

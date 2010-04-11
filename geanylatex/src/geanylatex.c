@@ -1065,6 +1065,11 @@ void glatex_insert_usepackage_dialog(G_GNUC_UNUSED GtkMenuItem * menuitem,
 
 	gtk_container_add(GTK_CONTAINER(vbox), table);
 
+	g_signal_connect(G_OBJECT(textbox), "activate",
+		G_CALLBACK(glatex_enter_key_pressed_in_entry), dialog);
+	g_signal_connect(G_OBJECT(textbox_options), "activate",
+		G_CALLBACK(glatex_enter_key_pressed_in_entry), dialog);
+
 	gtk_widget_show_all(vbox);
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
