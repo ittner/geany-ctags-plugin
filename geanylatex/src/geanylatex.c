@@ -733,6 +733,7 @@ glatex_insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	GtkWidget *radio1 = NULL;
 	GtkWidget *radio2 = NULL;
 	GtkWidget *radio3 = NULL;
+	GtkWidget *tmp_entry = NULL;
 	GtkTreeModel *model = NULL;
 	GeanyDocument *doc = NULL;
 	GSList *file_list = NULL;
@@ -792,6 +793,11 @@ glatex_insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	gtk_button_set_focus_on_click(GTK_BUTTON(radio3), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio3), FALSE);
 	gtk_container_add(GTK_CONTAINER(vbox), radio3);
+
+	tmp_entry =  gtk_bin_get_child(GTK_BIN(textbox_ref));
+	g_signal_connect(G_OBJECT(tmp_entry), "activate",
+		G_CALLBACK(glatex_enter_key_pressed_in_entry), dialog);
+
 
 	gtk_widget_show_all(vbox);
 
