@@ -68,7 +68,7 @@ void glatex_usepackage(const gchar *pkg, const gchar *options)
 			/* Building up package string and inserting it */
 			if (NZV(options))
 			{
-				packagestring = g_strconcat("\\usepackage[", options, 
+				packagestring = g_strconcat("\\usepackage[", options,
 					"]{", pkg, "}\n", NULL);
 			}
 			else
@@ -92,7 +92,7 @@ void glatex_usepackage(const gchar *pkg, const gchar *options)
 }
 
 
-void glatex_enter_key_pressed_in_entry(GtkWidget *widget, gpointer dialog )
+void glatex_enter_key_pressed_in_entry(G_GNUC_UNUSED GtkWidget *widget, gpointer dialog )
 {
 	gtk_dialog_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
 }
