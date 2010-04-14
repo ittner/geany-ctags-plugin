@@ -435,7 +435,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 					if (sci_get_char_at(sci, pos - (editor_get_eol_char_len (editor) + 1)) == '}'||
 						sci_get_char_at(sci, pos - (editor_get_eol_char_len (editor) + 1)) == ']')
 					{
-						gchar *buf, *construct;
+						gchar *buf, *construct, *indent;
 						/* TODO: Make possible to have longer than a 50 chars environment */
 						gchar env[50];
 						gint line = sci_get_line_from_position(sci, pos - (editor_get_eol_char_len (editor) + 1));
@@ -476,7 +476,8 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 									j = 0;
 									i++;
 									while (buf[i] != '}' && j < (sizeof(env) - 1))
-									{   /* this could be done in a shorter way, but so it remains readable ;-) */
+									{   /* this could be done in a shorter way,
+									 	 * but so it remains readable ;-) */
 										env[j] = buf[i];
 										j++;
 										i++;
@@ -498,6 +499,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 								end_construct = g_strdup_printf("\\end%s{%s}", full_cmd, env);
 								if (strstr(tmp, end_construct) != NULL)
 								{
+									g_warning ("was gefunden");
 									/* Clean up everything and quit as nothing
 									 * needs to be done */
 									g_free(tmp);
@@ -506,18 +508,21 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 									return FALSE;
 								}
 								g_free(tmp);
+								g_free(end_construct);
+
 							}
 
-							/* get the indentation */
-							/*if (editor->auto_indent)
-								read_indent(editor, pos); */
-							/* TODO: Find a way respecting ident */
+							/* After we have this, we need to ensure basic
+							 * indent is getting applied on closing command */
+							indent = g_strndup(buf, start);
 
-							construct = g_strdup_printf("\t\n\\end%s{%s}", full_cmd, env);
-
+							/* Now we build up closing string and insert
+							 * it into document */
+							construct = g_strdup_printf("\t\n%s\\end%s{%s}", indent, full_cmd, env);
 							editor_insert_text_block(editor, construct, pos,
 								1, -1, TRUE);
 							g_free(construct);
+							g_free(indent);
 						}
 					}
 				break;

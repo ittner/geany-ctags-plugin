@@ -1,3 +1,9 @@
+2010-04-14  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Ensure basic indent is getting applied on closing command of
+   autocompletion of \begin{} and \begingroup{} feature.
+
+
 2010-04-11  Frank Lanitz  <frank@frank.uvena.de>
 
  * Enabling inserting label on pushing return after typing in label name.
