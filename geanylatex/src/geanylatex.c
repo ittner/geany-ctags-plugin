@@ -1458,6 +1458,15 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	GtkWidget *label_papersize = NULL;
 	GtkWidget *label_template = NULL;
 	GtkWidget *label_orientation = NULL;
+	GtkWidget *fontsize_entry = NULL;
+
+	/*  Building the wizard-dialog and showing it */
+	dialog = gtk_dialog_new_with_buttons(_("LaTeX-Wizard"),
+				GTK_WINDOW(geany->main_widgets->window),
+				GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
+				GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+				NULL);
+	gtk_widget_set_name(dialog, "GeanyDialog");
 
 	/*  Creating and formatting table */
 	table = gtk_table_new(2, 6, FALSE);
@@ -1547,6 +1556,10 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	gtk_table_attach_defaults(GTK_TABLE(table), label_fontsize, 0, 1, 3, 4);
 	gtk_table_attach_defaults(GTK_TABLE(table), glatex_wizard.fontsize_combobox, 1, 2, 3, 4);
 
+	fontsize_entry =  gtk_bin_get_child(GTK_BIN(glatex_wizard.fontsize_combobox));
+	g_signal_connect(G_OBJECT(fontsize_entry), "activate",
+		G_CALLBACK(glatex_enter_key_pressed_in_entry), dialog);
+
 	/*  Author */
 	label_author = gtk_label_new(_("Author:"));
 	glatex_wizard.author_textbox = gtk_entry_new();
@@ -1561,6 +1574,9 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	gtk_table_attach_defaults(GTK_TABLE(table), label_author, 0, 1, 4, 5);
 	gtk_table_attach_defaults(GTK_TABLE(table), glatex_wizard.author_textbox, 1, 2, 4, 5);
 
+	g_signal_connect(G_OBJECT(glatex_wizard.author_textbox), "activate",
+		G_CALLBACK(glatex_enter_key_pressed_in_entry), dialog);
+
 	/*  Date */
 	label_date = gtk_label_new(_("Date:"));
 	glatex_wizard.date_textbox = gtk_entry_new();
@@ -1573,6 +1589,9 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	gtk_table_attach_defaults(GTK_TABLE(table), label_date, 0, 1, 5, 6);
 	gtk_table_attach_defaults(GTK_TABLE(table), glatex_wizard.date_textbox, 1, 2, 5, 6);
 
+	g_signal_connect(G_OBJECT(glatex_wizard.date_textbox), "activate",
+		G_CALLBACK(glatex_enter_key_pressed_in_entry), dialog);
+
 	/*  Title of the new document */
 	label_title = gtk_label_new(_("Title:"));
 	glatex_wizard.title_textbox = gtk_entry_new();
@@ -1581,6 +1600,9 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	gtk_misc_set_alignment(GTK_MISC(label_title), 0, 0.5);
 	gtk_table_attach_defaults(GTK_TABLE(table), label_title, 0, 1, 6, 7);
 	gtk_table_attach_defaults(GTK_TABLE(table), glatex_wizard.title_textbox, 1, 2, 6, 7);
+
+	g_signal_connect(G_OBJECT(glatex_wizard.title_textbox), "activate",
+		G_CALLBACK(glatex_enter_key_pressed_in_entry), dialog);
 
 	/*  Papersize */
 	label_papersize = gtk_label_new(_("Paper size:"));
@@ -1618,14 +1640,7 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	/* Doing the rest .... */
 	gtk_widget_show_all(table);
 
-	/*  Building the wizard-dialog and showing it */
-	dialog = gtk_dialog_new_with_buttons(_("LaTeX-Wizard"),
-				GTK_WINDOW(geany->main_widgets->window),
-				GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
-				GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
-				NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
-	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 10);
 	gtk_container_add(GTK_CONTAINER(vbox), table);
 

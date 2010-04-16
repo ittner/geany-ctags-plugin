@@ -1,6 +1,7 @@
 2010-04-16  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Fix indention on insert environment features.
+ * Make wizard run on hitting enter when inserting some of the values.
 
 
 2010-04-14  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
