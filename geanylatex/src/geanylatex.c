@@ -640,27 +640,6 @@ PluginCallback plugin_callbacks[] =
 	{ NULL, NULL, FALSE, NULL }
 };
 
-void
-glatex_insert_string(gchar *string, gboolean reset_position)
-{
-	GeanyDocument *doc = NULL;
-
-	doc = document_get_current();
-
-	if (doc != NULL && string != NULL)
-	{
-		gint pos = sci_get_current_position(doc->editor->sci);
-		gint len = 0;
-
-		if (reset_position == TRUE)
-		{
-			len = strlen(string);
-		}
-
-		editor_insert_text_block(doc->editor, string, pos, len, -1, TRUE);
-	}
-}
-
 
 inline gchar*
 get_latex_command(gint tab_index)

@@ -79,7 +79,6 @@ typedef struct
 } LaTeXWizard;
 
 extern LaTeXWizard glatex_wizard;
-extern void glatex_insert_string(gchar *string, gboolean reset_position);
 gint glatex_count_menu_entries(SubMenuTemplate *tmp, gint categorie);
 void glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	 G_GNUC_UNUSED gpointer gdata);
