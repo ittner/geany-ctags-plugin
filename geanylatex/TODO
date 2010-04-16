@@ -3,7 +3,6 @@
 Bugs & Problems:
 * Improve handling of indention on
 	* Inserting an list environment
-	* Autoclosing of environment with \end{} and \endgroup{}
 * Closing dialogs via hitting return
 
 Features:
