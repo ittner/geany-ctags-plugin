@@ -115,6 +115,6 @@ glatex_insert_string(gchar *string, gboolean reset_position)
 			len = strlen(string);
 		}
 
-		editor_insert_text_block(doc->editor, string, pos, len, -1, TRUE);
+		editor_insert_text_block(doc->editor, string, pos, len, 0, TRUE);
 	}
 }

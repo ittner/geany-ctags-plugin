@@ -98,6 +98,7 @@ void glatex_insert_environment(gchar *environment, gint type)
 			gchar *tmp = NULL;
 
 			sci_start_undo_action(doc->editor->sci);
+
 			tmpstring = g_string_new("\\begin{");
 			g_string_append(tmpstring, environment);
 
@@ -109,22 +110,23 @@ void glatex_insert_environment(gchar *environment, gint type)
 			{
 				g_string_append(tmpstring, "}");
 			}
-			g_string_append(tmpstring, "\n");
+			g_string_append(tmpstring, "\n\t");
+
 
 			if (type == GLATEX_ENVIRONMENT_TYPE_LIST)
 			{
-				g_string_append(tmpstring, "\t\\item\n");
+				g_string_append(tmpstring, "\\item ");
 			}
 
-			g_string_append(tmpstring, "\\end{");
-			g_string_append(tmpstring, environment);
-			g_string_append(tmpstring,"}\n");
-
 			tmp = g_string_free(tmpstring, FALSE);
-			glatex_insert_string(tmp, FALSE);
-			sci_set_current_position(doc->editor->sci, pos + len + 9, TRUE);
-			sci_end_undo_action(doc->editor->sci);
+			glatex_insert_string(tmp, TRUE);
 			g_free(tmp);
+
+			tmp = g_strdup_printf("\n\\end{%s}\n", environment);
+			glatex_insert_string(tmp, FALSE);
+			g_free(tmp);
+
+			sci_end_undo_action(doc->editor->sci);
 		}
 	}
 }
