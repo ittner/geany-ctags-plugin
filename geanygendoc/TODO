@@ -1,0 +1,17 @@
+* support setting duplication in filetype configuration
+    function = {
+      template = "my template";
+      # more settings...
+    }
+    prototype = function;
+    macro     = function;
+  This would be really convenient with function, macro and prototypes for
+  example.
+
+* Support doctype-specific user-defined environment chunks.
+  Problem: there is (for now) nothing here for this kind of settings
+  (doctype-global but also specific to it).
+
+* Provide convenient action "document all file" which would document each and
+  every thing in teh current file. Needs a lot of care because of FORWARD
+  policies but should be doable (and pretty cool).
