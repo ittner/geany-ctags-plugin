@@ -26,6 +26,7 @@
 G_BEGIN_DECLS
 
 
+void          ggd_tag_sort_by_line            (GPtrArray  *tags);
 TMTag        *ggd_tag_find_from_line          (GPtrArray  *tags,
                                                gulong      line);
 TMTag        *ggd_tag_find_at_current_pos     (GeanyDocument *doc);

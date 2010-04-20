@@ -70,6 +70,14 @@ tag_cmp_by_line (gconstpointer a,
   return rv;
 }
 
+void
+ggd_tag_sort_by_line (GPtrArray *tags)
+{
+  g_return_if_fail (tags != NULL);
+  
+  g_ptr_array_sort (tags, tag_cmp_by_line);
+}
+
 TMTag *
 ggd_tag_find_from_line (GPtrArray  *tags,
                         gulong      line)
