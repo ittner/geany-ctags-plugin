@@ -80,17 +80,10 @@ ggd_tag_find_from_line (GPtrArray  *tags,
   
   g_return_val_if_fail (tags != NULL, NULL);
   
-  /* FIXME: try to use an algorithm that doesn't need to have a sorted array.
-   *        it would be faster (well, array sorting is probably everything but
-   *        fast) and better as we wouldn't touch the array */
-  /* sort the array to have the lines in the right order */
-  g_ptr_array_sort (tags, tag_cmp_by_line);
-  /* FIXME: use dichotomy rather than a linear search? */
   PTR_ARRAY_FOR (tags, i, el) {
     if (! (el->type & tm_tag_file_t)) {
-      if (el->atts.entry.line > line && tag) {
-        break;
-      } else {
+      if (el->atts.entry.line <= line &&
+          (! tag || el->atts.entry.line > tag->atts.entry.line)) {
         tag = el;
       }
     }
