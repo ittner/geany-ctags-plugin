@@ -79,8 +79,8 @@ ggd_tag_sort_by_line (GPtrArray *tags)
 }
 
 TMTag *
-ggd_tag_find_from_line (GPtrArray  *tags,
-                        gulong      line)
+ggd_tag_find_from_line (const GPtrArray  *tags,
+                        gulong            line)
 {
   TMTag    *tag = NULL;
   TMTag    *el;
@@ -114,8 +114,8 @@ ggd_tag_find_at_current_pos (GeanyDocument *doc)
 }
 
 TMTag *
-ggd_tag_find_parent (GPtrArray   *tags,
-                     const TMTag *child)
+ggd_tag_find_parent (const GPtrArray *tags,
+                     const TMTag     *child)
 {
   TMTag *tag = NULL;
   
@@ -238,8 +238,8 @@ ggd_tag_get_type_name (const TMTag *tag)
  * Returns: the tag's type hierarchy or %NULL if invalid.
  */
 gchar *
-ggd_tag_resolve_type_hierarchy (GPtrArray    *tags,
-                                const TMTag  *tag)
+ggd_tag_resolve_type_hierarchy (const GPtrArray *tags,
+                                const TMTag     *tag)
 {
   gchar *scope = NULL;
   
@@ -283,8 +283,8 @@ ggd_tag_resolve_type_hierarchy (GPtrArray    *tags,
  * Returns: The #TMTag named @name, or %NULL if none matches
  */
 TMTag *
-ggd_tag_find_from_name (GPtrArray   *tags,
-                        const gchar *name)
+ggd_tag_find_from_name (const GPtrArray *tags,
+                        const gchar     *name)
 {
   TMTag  *tag = NULL;
   guint   i;
@@ -365,9 +365,9 @@ scope_child_matches (const gchar *a,
  * Returns: The list of found children
  */
 GList *
-ggd_tag_find_children (GPtrArray   *tags,
-                       const TMTag *parent,
-                       gint         depth)
+ggd_tag_find_children (const GPtrArray *tags,
+                       const TMTag     *parent,
+                       gint             depth)
 {
   GList  *children = NULL;
   guint   i;

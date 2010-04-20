@@ -27,18 +27,18 @@ G_BEGIN_DECLS
 
 
 void          ggd_tag_sort_by_line            (GPtrArray  *tags);
-TMTag        *ggd_tag_find_from_line          (GPtrArray  *tags,
-                                               gulong      line);
+TMTag        *ggd_tag_find_from_line          (const GPtrArray *tags,
+                                               gulong           line);
 TMTag        *ggd_tag_find_at_current_pos     (GeanyDocument *doc);
-TMTag        *ggd_tag_find_parent             (GPtrArray   *tags,
-                                               const TMTag *child);
-GList        *ggd_tag_find_children           (GPtrArray   *tags,
-                                               const TMTag *parent,
-                                               gint         depth);
-gchar        *ggd_tag_resolve_type_hierarchy  (GPtrArray   *tags,
-                                               const TMTag *tag);
-TMTag        *ggd_tag_find_from_name          (GPtrArray   *tags,
-                                               const gchar *name);
+TMTag        *ggd_tag_find_parent             (const GPtrArray *tags,
+                                               const TMTag     *child);
+GList        *ggd_tag_find_children           (const GPtrArray *tags,
+                                               const TMTag     *parent,
+                                               gint             depth);
+gchar        *ggd_tag_resolve_type_hierarchy  (const GPtrArray *tags,
+                                               const TMTag     *tag);
+TMTag        *ggd_tag_find_from_name          (const GPtrArray *tags,
+                                               const gchar     *name);
 const gchar  *ggd_tag_get_type_name           (const TMTag *tag);
 const gchar  *ggd_tag_type_get_name           (TMTagType  type);
 TMTagType     ggd_tag_type_from_name          (const gchar *name);
