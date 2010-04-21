@@ -28,6 +28,7 @@
 
 #include "ggd-file-type.h"
 #include "ggd-file-type-manager.h"
+#include "ggd-utils.h"
 #include "ggd-plugin.h"
 
 
@@ -390,6 +391,68 @@ ggd_insert_comment (GeanyDocument  *doc,
           success = do_insert_comment (sci, tag_array, tag, ft, setting);
         }
       }
+    }
+  }
+  
+  return success;
+}
+
+/**
+ * ggd_insert_all_comments:
+ * @doc: A #GeanyDocument for which insert the comments
+ * @doc_type: Documentation type identifier
+ * 
+ * Tries to insert a comment for each symbol of a document.
+ * 
+ * Returns: %TRUE on full success, %FALSE otherwise.
+ */
+gboolean
+ggd_insert_all_comments (GeanyDocument *doc,
+                         const gchar   *doc_type)
+{
+  gboolean      success = FALSE;
+  GgdFileType  *ft;
+  
+  g_return_val_if_fail (DOC_VALID (doc), FALSE);
+  
+  ft = ggd_file_type_manager_get_file_type (doc->file_type->id);
+  if (ft) {
+    GgdDocType *doctype;
+    
+    doctype = ggd_file_type_get_doc (ft, doc_type);
+    if (! doctype) {
+      msgwin_status_add (_("No documentation type \"%s\" for language \"%s\""),
+                         doc_type, doc->file_type->name);
+    } else {
+      GPtrArray        *tag_array;
+      ScintillaObject  *sci = doc->editor->sci;
+      const TMTag      *tag;
+      guint             i;
+      GHashTable       *tag_done_table; /* keeps the list of documented tags.
+                                         * Useful since documenting a tag might
+                                         * actually document another one */
+      
+      success = TRUE;
+      tag_array = doc->tm_file->tags_array;
+      tag_done_table = g_hash_table_new (NULL, NULL);
+      /* sort the tags to be sure to insert by the end of the document, then we
+       * don't modify the element's position of tags we'll work on */
+      ggd_tag_sort_by_line (tag_array, GGD_SORT_DESC);
+      sci_start_undo_action (sci);
+      GGD_PTR_ARRAY_FOR (tag_array, i, tag) {
+        GgdDocSetting  *setting;
+        
+        setting = get_setting_from_tag (doctype, tag_array, tag, &tag);
+        if (! setting) {
+          success = FALSE;
+          break;
+        } else if (! g_hash_table_lookup (tag_done_table, tag)) {
+          success = do_insert_comment (sci, tag_array, tag, ft, setting);
+          g_hash_table_insert (tag_done_table, (gpointer)tag, (gpointer)tag);
+        }
+      }
+      sci_end_undo_action (sci);
+      g_hash_table_destroy (tag_done_table);
     }
   }
   

@@ -34,9 +34,6 @@
 
 
 /*
- * TODO:
- *  * add option to generate comments for the whole file
- * 
  * Questions:
  *  * how to update tag list? (tm_source_file_buffer_update() is not found in
  *    symbols table)
@@ -121,6 +118,20 @@ insert_comment (void)
   }
 }
 
+/* tries to insert comments for all the document */
+static void
+insert_all_comments (void)
+{
+  GeanyDocument *doc;
+  
+  doc = document_get_current ();
+  if (DOC_VALID (doc)) {
+    /* try to ensure tags corresponds to the actual state of the file */
+    refresh_tag_list (doc->tm_file, doc->editor->sci, doc);
+    ggd_insert_all_comments (doc, OPT_doctype);
+  }
+}
+
 static gboolean
 load_configuration (void)
 {
@@ -189,7 +200,7 @@ edit_menu_acivated_handler (GtkMenuItem *menu_item,
 }
 
 static void
-keybinding_activated_handler (guint key_id)
+insert_comment_keybinding_handler (guint key_id)
 {
   (void)key_id;
   
@@ -219,7 +230,7 @@ add_edit_menu_item (PluginData *pdata)
   /* make item document-presence sensitive */
   ui_add_document_sensitive (pdata->edit_menu_item);
   /* and attach a keybinding */
-  keybindings_set_item (plugin_key_group, KB_INSERT, keybinding_activated_handler,
+  keybindings_set_item (plugin_key_group, KB_INSERT, insert_comment_keybinding_handler,
                         GDK_d, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
                         "instert_doc", _("Insert documentation comment"),
                         pdata->edit_menu_item);
@@ -282,6 +293,14 @@ create_tools_menu_item (void)
   
   /* build submenu */
   menu = gtk_menu_new ();
+  /* build "document all" item */
+  item = gtk_menu_item_new_with_mnemonic (_("_Document all"));
+  g_signal_connect (item, "activate",
+                    G_CALLBACK (insert_all_comments), NULL);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+  /* separator */
+  item = gtk_separator_menu_item_new ();
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   /* build "reload" item */
   item = gtk_image_menu_item_new_with_mnemonic (_("_Reload configuration files"));
   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),

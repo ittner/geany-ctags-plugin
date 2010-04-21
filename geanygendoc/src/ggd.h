@@ -29,6 +29,8 @@ G_BEGIN_DECLS
 gboolean        ggd_insert_comment            (GeanyDocument *doc,
                                                gint           line,
                                                const gchar   *doc_type);
+gboolean        ggd_insert_all_comments       (GeanyDocument *doc,
+                                               const gchar   *doc_type);
 
 
 G_END_DECLS
