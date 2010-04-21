@@ -37,7 +37,6 @@
  * Questions:
  *  * how to update tag list? (tm_source_file_buffer_update() is not found in
  *    symbols table)
- *  * how to know click position for the popup menu to appear?
  */
 
 /* These items are set by Geany before plugin_init() is called. */
@@ -65,6 +64,8 @@ typedef struct _PluginData
 {
   GgdOptGroup *config;
   
+  gint        editor_menu_popup_line;
+  
   GtkWidget  *separator_item;
   GtkWidget  *edit_menu_item;
   GtkWidget  *tools_menu_item;
@@ -73,7 +74,7 @@ typedef struct _PluginData
 
 #define plugin (&plugin_data)
 static PluginData plugin_data = {
-  NULL, NULL, NULL, NULL, 0l
+  NULL, 0, NULL, NULL, NULL, 0l
 };
 
 static gchar     *OPT_doctype         = NULL;
@@ -83,6 +84,7 @@ static gboolean   OPT_save_to_refresh = FALSE;
 
 
 /* FIXME: tm_source_file_buffer_update() is not found in symbols table */
+/* (tries to) refresh the tag list to the file's current state */
 static void
 refresh_tag_list (TMWorkObject    *tm_wo,
                   ScintillaObject *sci,
@@ -103,9 +105,10 @@ refresh_tag_list (TMWorkObject    *tm_wo,
   }
 }
 
-/* tries to insert a comment in the current document */
+/* tries to insert a comment in the current document
+ * @line: The line for which insert comment, or -1 for the current line */
 static void
-insert_comment (void)
+insert_comment (gint line)
 {
   GeanyDocument *doc;
   
@@ -113,8 +116,10 @@ insert_comment (void)
   if (DOC_VALID (doc)) {
     /* try to ensure tags corresponds to the actual state of the file */
     refresh_tag_list (doc->tm_file, doc->editor->sci, doc);
-    ggd_insert_comment (doc, sci_get_current_line (doc->editor->sci),
-                        OPT_doctype);
+    if (line < 0) {
+      line = sci_get_current_line (doc->editor->sci);
+    }
+    ggd_insert_comment (doc, line, OPT_doctype);
   }
 }
 
@@ -187,66 +192,41 @@ reload_configuration (void)
 }
 
 
-/* actual Geany interaction */
+/* --- Actual Geany interaction --- */
 
+/* handler for the editor's popup menu entry the plugin adds */
 static void
-edit_menu_acivated_handler (GtkMenuItem *menu_item,
-                            gpointer     data)
+editor_menu_acivated_handler (GtkMenuItem *menu_item,
+                              PluginData  *pdata)
 {
   (void)menu_item;
-  (void)data;
   
-  insert_comment ();
+  insert_comment (pdata->editor_menu_popup_line);
 }
 
+/* hanlder for the keybinding that inserts a comment */
 static void
 insert_comment_keybinding_handler (guint key_id)
 {
   (void)key_id;
   
-  insert_comment ();
+  insert_comment (-1);
 }
 
-/* FIXME: make menu item appear in the edit menu too */
+/* handler for the GeanyDocument::update-editor-menu signal.
+ * It is used to get the line at which menu popuped */
 static void
-add_edit_menu_item (PluginData *pdata)
+update_editor_menu_handler (GObject        *obj,
+                            const gchar    *word,
+                            gint            pos,
+                            GeanyDocument  *doc,
+                            PluginData     *pdata)
 {
-  GtkWidget *parent_menu;
-  
-  parent_menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (
-    ui_lookup_widget (geany->main_widgets->editor_menu, "comments")));
-  if (! parent_menu) {
-    parent_menu = geany->main_widgets->editor_menu;
-    pdata->separator_item = gtk_separator_menu_item_new ();
-    gtk_menu_shell_append (GTK_MENU_SHELL (parent_menu), pdata->separator_item);
-    gtk_widget_show (pdata->separator_item);
-  }
-  pdata->edit_menu_item = gtk_menu_item_new_with_label (_("Insert documentation comment"));
-  pdata->edit_menu_item_hid = g_signal_connect (pdata->edit_menu_item, "activate",
-                                                G_CALLBACK (edit_menu_acivated_handler),
-                                                NULL);
-  gtk_menu_shell_append (GTK_MENU_SHELL (parent_menu), pdata->edit_menu_item);
-  gtk_widget_show (pdata->edit_menu_item);
-  /* make item document-presence sensitive */
-  ui_add_document_sensitive (pdata->edit_menu_item);
-  /* and attach a keybinding */
-  keybindings_set_item (plugin_key_group, KB_INSERT, insert_comment_keybinding_handler,
-                        GDK_d, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
-                        "instert_doc", _("Insert documentation comment"),
-                        pdata->edit_menu_item);
+  pdata->editor_menu_popup_line = sci_get_line_from_position (doc->editor->sci,
+                                                              pos);
 }
 
-static void
-remove_edit_menu_item (PluginData *pdata)
-{
-  g_signal_handler_disconnect (pdata->edit_menu_item, pdata->edit_menu_item_hid);
-  pdata->edit_menu_item_hid = 0l;
-  if (pdata->separator_item) {
-    gtk_widget_destroy (pdata->separator_item);
-  }
-  gtk_widget_destroy (pdata->edit_menu_item);
-}
-
+/* handler that opens the current filetype's configuration file */
 static void
 open_current_filetype_conf_handler (GtkWidget  *widget,
                                     gpointer    data)
@@ -275,6 +255,7 @@ open_current_filetype_conf_handler (GtkWidget  *widget,
   }
 }
 
+/* handler that reloads the configuration */
 static void
 reload_configuration_hanlder (GtkWidget  *widget,
                               gpointer    data)
@@ -285,6 +266,66 @@ reload_configuration_hanlder (GtkWidget  *widget,
   reload_configuration ();
 }
 
+/* handler that documents current symbol */
+static void
+document_current_symbol_handler (GObject   *obj,
+                                 gpointer   data)
+{
+  insert_comment (-1);
+}
+
+/* handler that documents all symbols */
+static void
+document_all_symbols_handler (GObject  *obj,
+                              gpointer  data)
+{
+  insert_all_comments ();
+}
+
+
+/* FIXME: make menu item appear in the edit menu too */
+/* adds the menu item in the editor's popup menu */
+static void
+add_edit_menu_item (PluginData *pdata)
+{
+  GtkWidget *parent_menu;
+  
+  parent_menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (
+    ui_lookup_widget (geany->main_widgets->editor_menu, "comments")));
+  if (! parent_menu) {
+    parent_menu = geany->main_widgets->editor_menu;
+    pdata->separator_item = gtk_separator_menu_item_new ();
+    gtk_menu_shell_append (GTK_MENU_SHELL (parent_menu), pdata->separator_item);
+    gtk_widget_show (pdata->separator_item);
+  }
+  pdata->edit_menu_item = gtk_menu_item_new_with_label (_("Insert documentation comment"));
+  pdata->edit_menu_item_hid = g_signal_connect (pdata->edit_menu_item, "activate",
+                                                G_CALLBACK (editor_menu_acivated_handler),
+                                                pdata);
+  gtk_menu_shell_append (GTK_MENU_SHELL (parent_menu), pdata->edit_menu_item);
+  gtk_widget_show (pdata->edit_menu_item);
+  /* make item document-presence sensitive */
+  ui_add_document_sensitive (pdata->edit_menu_item);
+  /* and attach a keybinding */
+  keybindings_set_item (plugin_key_group, KB_INSERT, insert_comment_keybinding_handler,
+                        GDK_d, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                        "instert_doc", _("Insert documentation comment"),
+                        pdata->edit_menu_item);
+}
+
+/* removes the menu item in the editor's popup menu */
+static void
+remove_edit_menu_item (PluginData *pdata)
+{
+  g_signal_handler_disconnect (pdata->edit_menu_item, pdata->edit_menu_item_hid);
+  pdata->edit_menu_item_hid = 0l;
+  if (pdata->separator_item) {
+    gtk_widget_destroy (pdata->separator_item);
+  }
+  gtk_widget_destroy (pdata->edit_menu_item);
+}
+
+/* creates plugin's tool's menu */
 static GtkWidget *
 create_tools_menu_item (void)
 {
@@ -295,12 +336,14 @@ create_tools_menu_item (void)
   menu = gtk_menu_new ();
   /* build "document current symbol" item */
   item = gtk_menu_item_new_with_mnemonic (_("_Document current symbol"));
-  g_signal_connect (item, "activate", G_CALLBACK (insert_comment), NULL);
+  g_signal_connect (item, "activate",
+                    G_CALLBACK (document_current_symbol_handler), NULL);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   ui_add_document_sensitive (item);
   /* build "document all" item */
   item = gtk_menu_item_new_with_mnemonic (_("Document _all symbols"));
-  g_signal_connect (item, "activate", G_CALLBACK (insert_all_comments), NULL);
+  g_signal_connect (item, "activate",
+                    G_CALLBACK (document_all_symbols_handler), NULL);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   ui_add_document_sensitive (item);
   /* separator */
@@ -328,6 +371,7 @@ create_tools_menu_item (void)
   return item;
 }
 
+/* build plugin's menus */
 static void
 build_menus (PluginData *pdata)
 {
@@ -337,6 +381,7 @@ build_menus (PluginData *pdata)
                          pdata->tools_menu_item);
 }
 
+/* destroys plugin's menus */
 static void
 destroy_menus (PluginData *pdata)
 {
@@ -351,6 +396,8 @@ plugin_init (GeanyData *data G_GNUC_UNUSED)
   main_locale_init (LOCALEDIR, GETTEXT_PACKAGE);
   load_configuration ();
   build_menus (plugin);
+  plugin_signal_connect (geany_plugin, NULL, "update-editor-menu", FALSE,
+                         G_CALLBACK (update_editor_menu_handler), plugin);
 }
 
 void
@@ -361,6 +408,7 @@ plugin_cleanup (void)
 }
 
 
+/* --- Configuration dialog --- */
 
 static void
 conf_dialog_response_handler (GtkDialog  *dialog,
