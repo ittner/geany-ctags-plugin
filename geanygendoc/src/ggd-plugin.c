@@ -297,10 +297,12 @@ create_tools_menu_item (void)
   item = gtk_menu_item_new_with_mnemonic (_("_Document current symbol"));
   g_signal_connect (item, "activate", G_CALLBACK (insert_comment), NULL);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+  ui_add_document_sensitive (item);
   /* build "document all" item */
   item = gtk_menu_item_new_with_mnemonic (_("Document _all symbols"));
   g_signal_connect (item, "activate", G_CALLBACK (insert_all_comments), NULL);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+  ui_add_document_sensitive (item);
   /* separator */
   item = gtk_separator_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
@@ -314,9 +316,10 @@ create_tools_menu_item (void)
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   /* language filetypes opener */
   item = gtk_menu_item_new_with_mnemonic (_("_Edit current language configuration"));
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   g_signal_connect (item, "activate",
                     G_CALLBACK (open_current_filetype_conf_handler), NULL);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+  ui_add_document_sensitive (item);
   /* build tools menu item */
   item = gtk_menu_item_new_with_mnemonic (_("_Documentation generator"));
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), menu);
