@@ -1,3 +1,8 @@
+2010-04-21  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Automatic insert {} after typing ^ or _
+
+
 2010-04-16  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Fix indention on insert environment features.

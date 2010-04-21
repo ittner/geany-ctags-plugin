@@ -527,6 +527,13 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 					}
 				break;
 				} /* Closing case \r or \n */
+			case '_':
+			case '^':
+				{
+					sci_insert_text(sci, -1, "{}");
+					sci_set_current_position(sci, pos + 1, TRUE);
+					break;
+				}
 			} /* Closing switch  */
 			/* later there could be some else ifs for other keywords */
 		}
