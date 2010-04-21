@@ -1113,8 +1113,12 @@ on_wizard_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
 			GTK_COMBO_BOX(glatex_wizard.template_combobox));
 		encoding_int = gtk_combo_box_get_active(
 			GTK_COMBO_BOX(glatex_wizard.encoding_combobox));
-		enc_latex_char = g_strconcat("\\usepackage[",
-			latex_encodings[encoding_int].latex,"]{inputenc}\n", NULL);
+		/* We don't want to set an encoding, if there is none choosen */
+		if (encoding_int != LATEX_ENCODINGS_MAX)
+		{
+			enc_latex_char = g_strconcat("\\usepackage[",
+				latex_encodings[encoding_int].latex,"]{inputenc}\n", NULL);
+		}
 		fontsize = gtk_combo_box_get_active_text(
 			GTK_COMBO_BOX(glatex_wizard.fontsize_combobox));
 		author = g_strdup(gtk_entry_get_text(GTK_ENTRY(glatex_wizard.author_textbox)));
@@ -1327,7 +1331,12 @@ on_wizard_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
 				utils_string_replace_all(code, "{ENCODING}", enc_latex_char);
 				g_free(enc_latex_char);
 			}
-
+			else
+			/* If there is no encoding proberly set but {ENCODING} is set inside
+			 * the template, replace it with nothing */
+			{
+				utils_string_replace_all(code, "{ENCODING}", "");
+			}
 			switch (paperorientation_int){
 				case 2:
 				{
