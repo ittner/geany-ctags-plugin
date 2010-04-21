@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geanygendoc 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-16 01:06+0200\n"
+"POT-Creation-Date: 2010-04-21 15:38+0200\n"
 "PO-Revision-Date: 2010-04-16 00:38+0200\n"
 "Last-Translator: Colomban Wendling <ban@herbesfolles.org>\n"
 "Language-Team: French\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/ggd.c:63
+#: src/ggd.c:64
 #, c-format
 msgid "Failed to resize memory output stream"
 msgstr "Impossible de redimensionner le flux de sortie mémoire"
 
-#: src/ggd.c:89
+#: src/ggd.c:92
 #, c-format
 msgid ""
 "Argument parsing regular expression did not match (argument list was: \"%s\")"
@@ -30,17 +30,17 @@ msgstr ""
 "L'expression régulière d'analyse des arguments n'a pas correspondu (la liste "
 "d'arguments était : « %s »)"
 
-#: src/ggd.c:220
+#: src/ggd.c:223
 #, c-format
 msgid "Failed to build comment: %s"
 msgstr "Impossible de construire le commentaire : %s"
 
-#: src/ggd.c:370
+#: src/ggd.c:374
 #, c-format
 msgid "No valid tag for line %d"
 msgstr "Pas de tag valide pour la ligne %d"
 
-#: src/ggd.c:380
+#: src/ggd.c:384 src/ggd.c:424
 #, c-format
 msgid "No documentation type \"%s\" for language \"%s\""
 msgstr "Pas de type de documentation « %s » pour le langage « %s »"
@@ -205,57 +205,67 @@ msgid "Error retrieving keyfile entry %s::%s: %s"
 msgstr ""
 "Erreur lors de la récupération de l'entrée de fichier de clé %s::%s : %s"
 
-#: src/ggd-plugin.c:55
+#: src/ggd-plugin.c:52
 msgid "Generates documentation comments basis from source code"
 msgstr ""
 "Génères des bases de commentaires de documentation depuis le code source"
 
-#: src/ggd-plugin.c:139
+#: src/ggd-plugin.c:150
 #, c-format
 msgid "Failed to load configuration: %s"
 msgstr "Impossible de charger la configuration : %s"
 
-#: src/ggd-plugin.c:160
+#: src/ggd-plugin.c:171
 #, c-format
 msgid "Failed to save configuration: %s"
 msgstr "Impossible d'enregistrer la configuration : %s"
 
-#: src/ggd-plugin.c:213 src/ggd-plugin.c:224
+#: src/ggd-plugin.c:224 src/ggd-plugin.c:235
 msgid "Insert documentation comment"
 msgstr "Insérer un commentaire de documentation"
 
-#: src/ggd-plugin.c:256
+#: src/ggd-plugin.c:267
 #, c-format
 msgid "Failed to find configuration file for file type \"%s\": %s"
 msgstr ""
 "Impossible de trouver le fichier de configuration pour le type de fichier « %"
 "s » : %s"
 
+#. build "document current symbol" item
+#: src/ggd-plugin.c:297
+msgid "_Document current symbol"
+msgstr "_Documenter le symbole courant"
+
+#. build "document all" item
+#: src/ggd-plugin.c:301
+msgid "Document _all symbols"
+msgstr "Documenter _tous les symboles"
+
 #. build "reload" item
-#: src/ggd-plugin.c:286
+#: src/ggd-plugin.c:308
 msgid "_Reload configuration files"
 msgstr "_Recharger les fichiers de configuration"
 
 #. language filetypes opener
-#: src/ggd-plugin.c:294
+#: src/ggd-plugin.c:316
 msgid "_Edit current language configuration"
 msgstr "Édit_er la configuration du langage courant"
 
 #. build tools menu item
-#: src/ggd-plugin.c:299
+#: src/ggd-plugin.c:321
 msgid "_Documentation generator"
 msgstr "Générateur de _documentation"
 
-#: src/ggd-plugin.c:371
+#: src/ggd-plugin.c:394
 msgid "Documentation _type:"
 msgstr "_Type de documentation :"
 
 #. auto-save
-#: src/ggd-plugin.c:378
+#: src/ggd-plugin.c:401
 msgid "_Save file before generating comment"
 msgstr "_Enregistrer le fichier avant de générer le commentaire"
 
-#: src/ggd-plugin.c:380
+#: src/ggd-plugin.c:403
 msgid ""
 "Whether to automatically save the file in which insert comment before "
 "generating the comment. This is currently needed to have an up-to-date tag "
