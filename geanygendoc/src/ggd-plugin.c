@@ -293,10 +293,13 @@ create_tools_menu_item (void)
   
   /* build submenu */
   menu = gtk_menu_new ();
+  /* build "document current symbol" item */
+  item = gtk_menu_item_new_with_mnemonic (_("_Document current symbol"));
+  g_signal_connect (item, "activate", G_CALLBACK (insert_comment), NULL);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   /* build "document all" item */
-  item = gtk_menu_item_new_with_mnemonic (_("_Document all"));
-  g_signal_connect (item, "activate",
-                    G_CALLBACK (insert_all_comments), NULL);
+  item = gtk_menu_item_new_with_mnemonic (_("Document _all symbols"));
+  g_signal_connect (item, "activate", G_CALLBACK (insert_all_comments), NULL);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   /* separator */
   item = gtk_separator_menu_item_new ();
