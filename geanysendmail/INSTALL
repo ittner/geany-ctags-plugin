@@ -1,12 +1,12 @@
 These installation instructions are written for a Linux system.
 
 At the time of this writing, building the plugin requires a recent SVN checkout
-of the Geany sources (API version 149, Geany v0.19svn+).
+of the Geany sources (API version 147, Geany v0.18.1+).
 
 To compile and install just follow the typical three steps:
 
- % ./waf configure 
- % ./waf build 
+ % ./waf configure
+ % ./waf build
  % ./waf install
 
 The plugin will be installed into your $prefix/lib/geany of your Geany
