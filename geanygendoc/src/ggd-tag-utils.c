@@ -28,22 +28,25 @@
 
 
 /* Compare function for g_ptr_array_sort() to compare two TMTag by their
- * lines */
+ * lines.
+ * (gint)data is strictly positive for ASC sort, strictly negative DESC sort */
 static gint
 tag_cmp_by_line (gconstpointer a,
-                 gconstpointer b)
+                 gconstpointer b,
+                 gpointer      data)
 {
-  const TMTag *t1 = *((const TMTag**)a);
-  const TMTag *t2 = *((const TMTag**)b);
-  gint rv;
+  const TMTag  *t1 = *((const TMTag**)a);
+  const TMTag  *t2 = *((const TMTag**)b);
+  gint          direction = GPOINTER_TO_INT (data);
+  gint          rv;
   
   if (t1->type & tm_tag_file_t || t2->type & tm_tag_file_t) {
     rv = 0;
   } else {
     if (t1->atts.entry.line > t2->atts.entry.line) {
-      rv = 1;
+      rv = +direction;
     } else if (t1->atts.entry.line < t2->atts.entry.line) {
-      rv = -1;
+      rv = -direction;
     } else {
       rv = 0;
     }
@@ -52,12 +55,24 @@ tag_cmp_by_line (gconstpointer a,
   return rv;
 }
 
+/**
+ * ggd_tag_sort_by_line:
+ * @tags: A #GPtrArray of #TMTag<!-- -->s
+ * @direction: Sort direction: %GGD_SORT_ASC for an ascending sort or
+ *             %GGD_SORT_DESC for a descending sort.
+ * 
+ * Sorts a #GPtrArray of #TMTag<!-- -->s by the tags' line position. The sort
+ * direction depend on @direction.
+ */
 void
-ggd_tag_sort_by_line (GPtrArray *tags)
+ggd_tag_sort_by_line (GPtrArray  *tags,
+                      gint        direction)
 {
   g_return_if_fail (tags != NULL);
+  g_return_if_fail (direction != 0);
   
-  g_ptr_array_sort (tags, tag_cmp_by_line);
+  g_ptr_array_sort_with_data (tags, tag_cmp_by_line,
+                              GINT_TO_POINTER (direction));
 }
 
 TMTag *

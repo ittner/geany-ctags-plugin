@@ -26,7 +26,11 @@
 G_BEGIN_DECLS
 
 
-void          ggd_tag_sort_by_line            (GPtrArray  *tags);
+#define GGD_SORT_ASC  (1)
+#define GGD_SORT_DESC (-1)
+
+void          ggd_tag_sort_by_line            (GPtrArray *tags,
+                                               gint       direction);
 TMTag        *ggd_tag_find_from_line          (const GPtrArray *tags,
                                                gulong           line);
 TMTag        *ggd_tag_find_at_current_pos     (GeanyDocument *doc);
