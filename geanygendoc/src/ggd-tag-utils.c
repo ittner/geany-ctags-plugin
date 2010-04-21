@@ -23,26 +23,8 @@
 #include <geanyplugin.h>
 #include <glib.h>
 
+#include "ggd-utils.h"
 #include "ggd-plugin.h" /* to access Geany data/funcs */
-
-
-/* a `for` header to walk on an GPtrArray
- * @array: the array to traverse
- * @idx: A guint variable to use as iterator (may be modified)
- * @el: a TMTag pointer to fill with the current element in the array
- * 
- * usage:
- * 
- * guint  i;
- * TMTag *tag;
- * 
- * PTR_ARRAY_FOR (ptr_array, i, tag) {
- *   // use @tag here...
- * }
- */
-#define PTR_ARRAY_FOR(array, idx, el) \
-  for ((idx) = 0; ((el) = g_ptr_array_index ((array), (idx)), \
-                   (idx) < (array)->len); (idx)++)
 
 
 /* Compare function for g_ptr_array_sort() to compare two TMTag by their
@@ -88,7 +70,7 @@ ggd_tag_find_from_line (const GPtrArray  *tags,
   
   g_return_val_if_fail (tags != NULL, NULL);
   
-  PTR_ARRAY_FOR (tags, i, el) {
+  GGD_PTR_ARRAY_FOR (tags, i, el) {
     if (! (el->type & tm_tag_file_t)) {
       if (el->atts.entry.line <= line &&
           (! tag || el->atts.entry.line > tag->atts.entry.line)) {
@@ -144,7 +126,7 @@ ggd_tag_find_parent (const GPtrArray *tags,
     }
     /*g_debug ("%s: parent_name = %s", G_STRFUNC, parent_name);
     g_debug ("%s: parent_scope = %s", G_STRFUNC, parent_scope);*/
-    PTR_ARRAY_FOR (tags, i, el) {
+    GGD_PTR_ARRAY_FOR (tags, i, el) {
       if (! (el->type & tm_tag_file_t) &&
           (utils_str_equal (el->name, parent_name) &&
            utils_str_equal (el->atts.entry.scope, parent_scope))) {
@@ -293,7 +275,7 @@ ggd_tag_find_from_name (const GPtrArray *tags,
   g_return_val_if_fail (tags != NULL, NULL);
   g_return_val_if_fail (name != NULL, NULL);
   
-  PTR_ARRAY_FOR (tags, i, el) {
+  GGD_PTR_ARRAY_FOR (tags, i, el) {
     if (! (el->type & tm_tag_file_t) &&
         utils_str_equal (el->name, name)) {
       tag = el;
@@ -383,7 +365,7 @@ ggd_tag_find_children (const GPtrArray *tags,
   } else {
     fake_scope = g_strdup (parent->name);
   }
-  PTR_ARRAY_FOR (tags, i, el) {
+  GGD_PTR_ARRAY_FOR (tags, i, el) {
     if (scope_child_matches (fake_scope, el->atts.entry.scope, depth)) {
       children = g_list_append (children, el);
     }

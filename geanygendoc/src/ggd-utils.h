@@ -21,6 +21,7 @@
 #define H_GGD_UTILS
 
 #include <glib.h>
+#include <geanyplugin.h> /* Geany's utils for some wrappers */
 
 G_BEGIN_DECLS
 
@@ -37,6 +38,18 @@ gchar          *ggd_get_config_file             (const gchar *name,
                                                  const gchar *section,
                                                  GgdPerms     perms_req,
                                                  GError     **error);
+
+/**
+ * GGD_PTR_ARRAY_FOR:
+ * @ptr_array: A #GPtrArray
+ * @idx: A guint variable to use as the index of the current element in the
+ *       array
+ * @item: A pointer to set to the array's current element
+ * 
+ * <code>for</code> header to iterate over a #GPtrArray.
+ */
+#define GGD_PTR_ARRAY_FOR(ptr_array, idx, item) \
+  foreach_ptr_array ((item), (idx), (ptr_array))
 
 
 G_END_DECLS
