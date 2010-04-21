@@ -54,6 +54,6 @@ void glatex_init_encodings_latex(void)
 		GEANY_ENCODING_IBM_850);
 	fill(LATEX_ENCODING_IBM_852, _("IBM 852 code page"), "cp852",
 		GEANY_ENCODING_IBM_852);
-	fill(LATEX_ENCODING_NONE, _("Misc"), NULL,
+	fill(LATEX_ENCODING_NONE, _("Don't set any encoding"), NULL,
 		GEANY_ENCODING_NONE);
 }
