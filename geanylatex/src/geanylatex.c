@@ -1168,8 +1168,6 @@ on_wizard_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
 				}
 			}
 		}
-		fontsize = gtk_combo_box_get_active_text(
-			GTK_COMBO_BOX(glatex_wizard.fontsize_combobox));
 
 		if (papersize != NULL)
 		{
