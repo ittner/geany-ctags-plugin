@@ -73,6 +73,7 @@ static gboolean glatex_autocompletion_active = FALSE;
  * and \endgroup{}. */
 static gint glatex_autocompletion_context_size;
 static gboolean glatex_autocompletion_only_for_latex;
+static gboolean glatex_autobraces_active = TRUE;
 
 /* Function will be deactivated, when only loaded */
 static gboolean toggle_active = FALSE;
@@ -530,8 +531,11 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			case '_':
 			case '^':
 				{
-					sci_insert_text(sci, -1, "{}");
-					sci_set_current_position(sci, pos + 1, TRUE);
+					if (glatex_autobraces_active == TRUE)
+					{
+						sci_insert_text(sci, -1, "{}");
+						sci_set_current_position(sci, pos + 1, TRUE);
+					}
 					break;
 				}
 			} /* Closing switch  */
@@ -1761,6 +1765,8 @@ void glatex_init_configuration()
 		"glatex_set_toolbar_active", FALSE);
 	glatex_autocompletion_active = utils_get_setting_boolean(config, "general",
 		"glatex_set_autocompletion", FALSE);
+	glatex_autobraces_active = utils_get_setting_boolean(config, "autocompletion",
+		"glatex_set_autobraces", TRUE);
 
 	/* Hidden preferences. Can be set directly via configuration file*/
 	glatex_autocompletion_context_size = utils_get_setting_integer(config, "autocompletion",
