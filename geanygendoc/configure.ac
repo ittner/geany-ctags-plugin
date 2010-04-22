@@ -55,7 +55,7 @@ fi
 # TODO find a way to NOT override --libdir command line option if given
 libdir="`$PKG_CONFIG --variable=libdir geany`/geany"
 # same for the data, since we use geany->app->datadir
-plugindatadir="`$PKG_CONFIG --variable=datadir geany`/geany/${PACKAGE_TARNAME}"
+plugindatadir="`$PKG_CONFIG --variable=datadir geany`/geany/plugins/${PACKAGE_TARNAME}"
 AC_SUBST([plugindatadir])
 
 
