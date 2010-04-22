@@ -26,6 +26,11 @@
 G_BEGIN_DECLS
 
 
+/**
+ * GgdOptGroup:
+ * 
+ * Opaque object representing a group of options.
+ */
 typedef struct _GgdOptGroup GgdOptGroup;
 
 

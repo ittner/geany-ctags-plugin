@@ -26,7 +26,17 @@
 G_BEGIN_DECLS
 
 
+/**
+ * GGD_SORT_ASC:
+ * 
+ * Constant representing ascending sort
+ */
 #define GGD_SORT_ASC  (1)
+/**
+ * GGD_SORT_DESC:
+ * 
+ * Constant representing descending sort
+ */
 #define GGD_SORT_DESC (-1)
 
 void          ggd_tag_sort_by_line            (GPtrArray *tags,

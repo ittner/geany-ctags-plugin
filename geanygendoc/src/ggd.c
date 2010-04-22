@@ -266,6 +266,7 @@ adjust_function_start_line (ScintillaObject *sci,
   return line;
 }
 
+/* adjusts the start line of a tag */
 static gint
 adjust_start_line (ScintillaObject *sci,
                    GPtrArray       *tags,
@@ -321,6 +322,9 @@ do_insert_comment (ScintillaObject *sci,
   return success;
 }
 
+/* Gets the #GgdDocSetting that applies for a given tag.
+ * Since a policy may forward documenting to a parent, tag that actually applies
+ * is returned in @real_tag. */
 static GgdDocSetting *
 get_setting_from_tag (GgdDocType   *doctype,
                       GPtrArray    *tag_array,
@@ -344,12 +348,12 @@ get_setting_from_tag (GgdDocType   *doctype,
   return setting;
 }
 
-/* 
+/**
  * ggd_insert_comment:
- * @doc: The document to which insert the comment
- * @line: SCI's line for which generate a comment. Usually, the current line.
+ * @doc: The document in which insert the comment
+ * @line: SCI's line for which generate a comment. Usually the current line.
  * 
- * tries to insert a comment
+ * Tries to insert a comment in a #GeanyDocument.
  * 
  * <warning>
  *   if tag list is not up-to-date, the result can be surprising

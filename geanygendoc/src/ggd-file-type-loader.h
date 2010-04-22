@@ -27,6 +27,14 @@
 G_BEGIN_DECLS
 
 
+/**
+ * GgdConfError:
+ * @GGD_FILE_TYPE_LOAD_ERROR_READ: A read failed
+ * @GGD_FILE_TYPE_LOAD_ERROR_PARSE: Parsing of a part of the input failed
+ * @GGD_FILE_TYPE_LOAD_ERROR_FAILED: Something failed
+ * 
+ * Error codes of the %GGD_FILE_TYPE_LOAD_ERROR domain.
+ */
 typedef enum _GgdConfError
 {
   GGD_FILE_TYPE_LOAD_ERROR_READ,
@@ -34,6 +42,7 @@ typedef enum _GgdConfError
   GGD_FILE_TYPE_LOAD_ERROR_FAILED
 } GgdConfError;
 
+/*< standard >*/
 #define GGD_FILE_TYPE_LOAD_ERROR (ggd_file_type_load_error_quark ())
 
 GQuark          ggd_file_type_load_error_quark    (void) G_GNUC_CONST;

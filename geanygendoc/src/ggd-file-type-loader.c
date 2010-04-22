@@ -84,6 +84,7 @@
  */
 
 
+/*< standard >*/
 GQuark
 ggd_file_type_load_error_quark (void)
 {

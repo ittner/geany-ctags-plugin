@@ -29,6 +29,14 @@
 G_BEGIN_DECLS
 
 
+/**
+ * _GgdPosition:
+ * @GGD_POS_BEFORE: Place the documentation before what it documents
+ * @GGD_POS_AFTER: Place the documentation after what it documents
+ * @GGD_POS_CURSOR: Place the documentation at the cursor's position
+ * 
+ * Possible positions for documentation insertion.
+ */
 typedef enum _GgdPosition
 {
   GGD_POS_BEFORE,
@@ -36,6 +44,13 @@ typedef enum _GgdPosition
   GGD_POS_CURSOR
 } GgdPosition;
 
+/**
+ * _GgdPolicy:
+ * @GGD_POLICY_KEEP: Document the symbol
+ * @GGD_POLICY_FORWARD: Forward the documentation request to the parent symbol
+ * 
+ * Possible policies for documenting symbols.
+ */
 typedef enum _GgdPolicy
 {
   GGD_POLICY_KEEP,

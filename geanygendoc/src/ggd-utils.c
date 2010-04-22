@@ -33,6 +33,14 @@
 #include "ggd-plugin.h" /* to access Geany data/funcs */
 
 
+/*
+ * set_file_error_from_errno:
+ * @error: A #GError
+ * @errnum: An errno value
+ * @filename: The file name for which the error applies
+ * 
+ * Sets a #GError from an errno value, prefixed with a file's name.
+ */
 #define set_file_error_from_errno(error, errnum, filename)                     \
   G_STMT_START {                                                               \
     gint s_e_f_e_errum = errnum; /* need if @errnum is errno */                \
@@ -41,9 +49,21 @@
                  "%s: %s", filename, g_strerror (s_e_f_e_errum));              \
   } G_STMT_END
 
-/* copies a file to another place. if @exclusive is %TRUE, copy is done (and
- * therefore successful) only if the file doesn't already exist; otherwise, its
- * content is overwritten.
+/*
+ * ggd_copy_file:
+ * @input: Path of the file to copy
+ * @output: Path of the destination
+ * @exclusive: %FALSE to override the destination if it already exist, %TRUE
+ *             otherwise
+ * @mode: Mode to use for creating the file
+ * @error: Return location for errors, or %NULL to ignore them
+ * 
+ * Copies a file to a destination. If @exlusive is %TRUE, the destination is not
+ * overwritten if it exists in a safe way. Otherwise, the destination file is
+ * simply truncated before the copy, with all the problems that can happen (such
+ * as partially overwritten file and so).
+ * 
+ * Returns: %TRUE on success, %FALSE otherwise.
  */
 static gboolean
 ggd_copy_file (const gchar *input,
@@ -101,12 +121,19 @@ ggd_copy_file (const gchar *input,
   return success;
 }
 
-/* gets the configuration file path for a given configuration file.
- * @name: the configuration file name
- * @section: the configuration section or %NULL for the default one
- * @prems_req: requested permissions on config file
+/**
+ * ggd_get_config_file:
+ * @name: The name of the configuration file to get
+ * @section: The name of the configuration section of the file, or %NULL for the
+ *           default one
+ * @perms_req: Requested permissions on the configuration file
+ * @error: Return location for errors, or %NULL to ignore them
  * 
- * Returns: the path for the requested configuration file pr %NULL if not found.
+ * Gets the configuration file path from its name.
+ * Configuration files may be either the system-wide or the user-specific ones,
+ * depending on their existence and on the requested permissions.
+ * 
+ * Returns: The path for the requested configuration file or %NULL if not found.
  */
 gchar *
 ggd_get_config_file (const gchar *name,

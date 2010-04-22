@@ -30,10 +30,37 @@
 #include "ggd-utils.h"
 
 
+/**
+ * SECTION: ggd-file-type-manager
+ * @include ggd-file-type-manager.h
+ * 
+ * The file type manager. It manages a set of file type, caching them and
+ * loading them when needed.
+ * 
+ * Use ggd_file_type_manager_init() to initialize the file type manager, and
+ * ggd_file_type_manager_uninit() to de-initialize it, releasing the resources
+ * allocated for it. A re-initialization can be done be de-initializing and the
+ * re-initializing the file type manager. This can be useful to e.g. flush the
+ * caches and the for reloading of file types.
+ * 
+ * To get a file type from the file type manager, simply use
+ * ggd_file_type_manager_get_file_type(). If the requested file type must be
+ * loaded first, it will be done transparently.
+ */
+
+
+/* Hash table holding the loaded #GgdFileType<!-- -->s */
 static GHashTable *GGD_ft_table = NULL;
 
+/* checks whether the file type manager is initialized */
 #define ggd_file_type_manager_is_initialized() (GGD_ft_table != NULL)
 
+/**
+ * ggd_file_type_manager_init:
+ * 
+ * Initializes the file type manager. This must be called before any other file
+ * type manager functions.
+ */
 void
 ggd_file_type_manager_init (void)
 {
@@ -44,6 +71,13 @@ ggd_file_type_manager_init (void)
                                         (GDestroyNotify)ggd_file_type_unref);
 }
 
+/**
+ * ggd_file_type_manager_uninit:
+ * 
+ * De-initializes the file type manager, releasing memory allocated by it.
+ * It may also be used to force reloading of file type descriptions: simply call
+ * it and then re-initialize it with ggd_file_type_manager_init().
+ */
 void
 ggd_file_type_manager_uninit (void)
 {
@@ -53,6 +87,12 @@ ggd_file_type_manager_uninit (void)
   GGD_ft_table = NULL;
 }
 
+/**
+ * ggd_file_type_manager_add_file_type:
+ * @filetype: A #GgdFileType
+ * 
+ * Adds a file type to the file type manager.
+ */
 void
 ggd_file_type_manager_add_file_type (GgdFileType *filetype)
 {
@@ -64,6 +104,8 @@ ggd_file_type_manager_add_file_type (GgdFileType *filetype)
                        ggd_file_type_ref (filetype));
 }
 
+/* Same as ggd_file_type_manager_get_conf_path() but uses a #GeanyFiletype and
+ * doesn't do come safety checks. */
 static gchar *
 ggd_file_type_manager_get_conf_path_intern (GeanyFiletype  *geany_ft,
                                             GgdPerms        prems_req,
@@ -82,6 +124,18 @@ ggd_file_type_manager_get_conf_path_intern (GeanyFiletype  *geany_ft,
   return filename;
 }
 
+/**
+ * ggd_file_type_manager_get_conf_path:
+ * @id: The ID of a #GeanyFiletype
+ * @prems_req: Required permissions on the file
+ * @error: Return location for errors, or %NULL to ignore them
+ * 
+ * Gets the path to the configuration file of a file type from a given
+ * #GeanyFiletype ID.
+ * 
+ * Returns: A newly allocated path to the requested configuration file that
+ *          should be freed with g_free(), or %NULL on error.
+ */
 gchar *
 ggd_file_type_manager_get_conf_path (filetype_id  id,
                                      GgdPerms     perms_req,
@@ -93,6 +147,15 @@ ggd_file_type_manager_get_conf_path (filetype_id  id,
                                                      error);
 }
 
+/**
+ * ggd_file_type_manager_load_file_type:
+ * @id: A #GeanyFiletype ID
+ * 
+ * Loads the #GgdFileType corresponding to a Geany's file type.
+ * 
+ * Returns: The loaded #GgdFileType, that should not be unref'd, or %NULL on
+ *          failure.
+ */
 GgdFileType *
 ggd_file_type_manager_load_file_type (filetype_id id)
 {
@@ -130,6 +193,17 @@ ggd_file_type_manager_load_file_type (filetype_id id)
   return ft;
 }
 
+/**
+ * ggd_file_type_manager_get_file_type:
+ * @id: A #GeanyFiletype ID
+ * 
+ * Gets a #GgdFileType from the file type manager by its Geany's file type ID.
+ * If the file type isn't already known, it will be transparently loaded.
+ * 
+ * Returns: A #GgdFileType that shouldn't be unref'd, or %NULL if the requested
+ *          file type neither can be found on the loaded file type nor can be
+ *          loaded.
+ */
 GgdFileType *
 ggd_file_type_manager_get_file_type (filetype_id id)
 {
@@ -148,6 +222,16 @@ ggd_file_type_manager_get_file_type (filetype_id id)
   return ft;
 }
 
+/**
+ * ggd_file_type_manager_get_doc_type:
+ * @ft: A #GeanyFiletype ID
+ * @docname: The documentation type identifier
+ * 
+ * Gets the #GgdDocType for a file type and a documentation type identifier.
+ * 
+ * Returns: The #GgdDocType corresponding to the file and documentation type,
+ *          or %NULL on failure.
+ */
 GgdDocType *
 ggd_file_type_manager_get_doc_type (filetype_id  ft,
                                     const gchar *docname)

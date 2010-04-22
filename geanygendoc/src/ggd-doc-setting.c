@@ -27,6 +27,15 @@
 #include <geanyplugin.h>
 
 
+/**
+ * ggd_doc_setting_new:
+ * @match: A setting match pattern
+ * 
+ * Creates a new #GgdDocSetting.
+ * 
+ * Returns: The newly created #GgdDocSetting that should be unref'd with
+ *          ggd_doc_setting_unref() when no longer needed.
+ */
 GgdDocSetting *
 ggd_doc_setting_new (const gchar *match)
 {
@@ -46,6 +55,14 @@ ggd_doc_setting_new (const gchar *match)
   return setting;
 }
 
+/**
+ * ggd_doc_setting_ref:
+ * @setting: A #GgdDocSetting
+ * 
+ * Adds a reference to a #GgdDocSetting.
+ * 
+ * Returns: The setting.
+ */
 GgdDocSetting *
 ggd_doc_setting_ref (GgdDocSetting *setting)
 {
@@ -56,6 +73,13 @@ ggd_doc_setting_ref (GgdDocSetting *setting)
   return setting;
 }
 
+/**
+ * ggd_doc_setting_unref:
+ * @setting: A #GgdDocSetting
+ * 
+ * Drops a reference from a #GgdDocSetting. When its reference count drops to 0,
+ * the setting is destroyed.
+ */
 void
 ggd_doc_setting_unref (GgdDocSetting *setting)
 {
@@ -68,6 +92,14 @@ ggd_doc_setting_unref (GgdDocSetting *setting)
   }
 }
 
+/**
+ * ggd_doc_setting_dump:
+ * @setting: A #GgdDocSetting
+ * @stream: A file stream to which write the dump
+ * 
+ * Dumps a #GgdDocSetting in a human-readable form. This is mostly meant for
+ * debugging purposes.
+ */
 void
 ggd_doc_setting_dump (const GgdDocSetting *setting,
                       FILE                *stream)
@@ -114,7 +146,14 @@ ggd_doc_setting_matches (const GgdDocSetting *setting,
 
 
 
-/* Gets a position from a string. returns -1 on error */
+/**
+ * ggd_position_from_string:
+ * @string: A string representing a #GgdPosition
+ * 
+ * Translates a string to a #GgdPosition.
+ * 
+ * Returns: The corresponding #GgdPosition, or -1 on error.
+ */
 GgdPosition
 ggd_position_from_string (const gchar *string)
 {
@@ -141,7 +180,14 @@ ggd_position_from_string (const gchar *string)
   return -1;
 }
 
-/* Gets a policy from a string. returns -1 on error */
+/**
+ * ggd_policy_from_string:
+ * @string: A string representing a #GgdPolicy
+ * 
+ * Translates a string to a #GgdPolicy.
+ * 
+ * Returns: The corresponding #GgdPolicy, or -1 on error.
+ */
 GgdPolicy
 ggd_policy_from_string (const gchar *string)
 {
@@ -168,7 +214,14 @@ ggd_policy_from_string (const gchar *string)
   return -1;
 }
 
-/* Gets a merge policy from a string. returns -1 on error */
+/**
+ * ggd_merge_policy_from_string:
+ * @string: A string representing a merge policy
+ * 
+ * Translates a string to a merge policy.
+ * 
+ * Returns: The merge policy, or -1 on error.
+ */
 gboolean
 ggd_merge_policy_from_string (const gchar *string)
 {
@@ -193,3 +246,13 @@ ggd_merge_policy_from_string (const gchar *string)
   
   return -1;
 }
+
+/**
+ * ggd_match_from_string:
+ * @name: A string representing a match
+ * 
+ * Translates a string to a match.
+ * 
+ * Returns: The match, or 0 on error.
+ */
+/* documents a define found in the header */

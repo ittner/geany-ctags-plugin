@@ -28,6 +28,11 @@
 #include <gtk/gtk.h>
 
 
+/* This module is strongly inspired from Geany's Stash module with some design
+ * changes and a complete reimplementation.
+ * The major difference is the way proxies are managed. */
+
+
 /* stolen from Geany */
 #define foreach_array(array, type, item)                         \
   for ((item) = ((type*)(gpointer)(array)->data);                \
@@ -35,6 +40,20 @@
        (item)++)
 
 
+/*
+ * GgdOptEntry:
+ * @type: The setting's type
+ * @key: The setting's key (both its name and its key in the underlying
+ *       configuration file)
+ * @optvar: Pointer to the actual value
+ * @value_destroy: Function use to destroy the value, or %NULL
+ * @proxy: A #GObject to use as a proxy for the value
+ * @proxy_prop: Name of the proxy's property to read and write the value
+ * @destroy_hid: Signal handler identifier for the proxy's ::destroy signal, if
+ *               @proxy is a #GtkObject.
+ * 
+ * The structure that represents an option.
+ */
 struct _GgdOptEntry
 {
   GType           type;
@@ -48,6 +67,7 @@ struct _GgdOptEntry
 
 typedef struct _GgdOptEntry GgdOptEntry;
 
+/* syncs an entry's proxy to the entry's value */
 static void
 ggd_opt_entry_sync_to_proxy (GgdOptEntry *entry)
 {
@@ -58,6 +78,7 @@ ggd_opt_entry_sync_to_proxy (GgdOptEntry *entry)
   }
 }
 
+/* syncs an entry's value to the entry's proxy value */
 static void
 ggd_opt_entry_sync_from_proxy (GgdOptEntry *entry)
 {
@@ -67,6 +88,14 @@ ggd_opt_entry_sync_from_proxy (GgdOptEntry *entry)
   }
 }
 
+/*
+ * ggd_opt_entry_set_proxy:
+ * @entry: A #GgdOptEntry
+ * @proxy: The proxy object
+ * @prop: The name of the proxy's property to sync with
+ * 
+ * Sets and syncs the proxy of a #GgdOptEntry.
+ */
 static void
 ggd_opt_entry_set_proxy (GgdOptEntry *entry,
                          GObject     *proxy,
@@ -86,6 +115,7 @@ ggd_opt_entry_set_proxy (GgdOptEntry *entry,
   ggd_opt_entry_sync_to_proxy (entry);
 }
 
+/* Frees an entry's allocated data */
 static void
 ggd_opt_entry_free_data (GgdOptEntry *entry,
                          gboolean     free_opt)
@@ -152,7 +182,7 @@ ggd_opt_group_free (GgdOptGroup  *group,
   }
 }
 
-
+/* adds an entry to a group */
 static GgdOptEntry *
 ggd_opt_group_add_entry (GgdOptGroup   *group,
                          GType          type,
@@ -174,6 +204,7 @@ ggd_opt_group_add_entry (GgdOptGroup   *group,
   return &g_array_index (group->prefs, GgdOptEntry, group->prefs->len -1);
 }
 
+/* looks up for an entry in a group */
 static GgdOptEntry *
 ggd_opt_group_lookup_entry (GgdOptGroup  *group,
                             gpointer      optvar)
@@ -189,6 +220,7 @@ ggd_opt_group_lookup_entry (GgdOptGroup  *group,
   return NULL;
 }
 
+/* looks up an entry in a group from is proxy */
 static GgdOptEntry *
 ggd_opt_group_lookup_entry_from_proxy (GgdOptGroup *group,
                                        GObject     *proxy)
@@ -275,6 +307,9 @@ ggd_opt_group_sync_from_proxies (GgdOptGroup *group)
   }
 }
 
+/* set the proxy of a value
+ * see the doc of ggd_opt_group_set_proxy_full() that does the same but returns
+ * a boolean */
 static GgdOptEntry *
 ggd_opt_group_set_proxy_full_internal (GgdOptGroup  *group,
                                        gpointer      optvar,
@@ -363,6 +398,7 @@ ggd_opt_group_remove_proxy (GgdOptGroup *group,
   ggd_opt_group_set_proxy_full_internal (group, optvar, FALSE, 0, NULL, NULL);
 }
 
+/* detaches a proxy */
 static void
 ggd_opt_group_remove_proxy_from_proxy (GgdOptGroup *group,
                                        GObject     *proxy)

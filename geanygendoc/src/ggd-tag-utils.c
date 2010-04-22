@@ -75,6 +75,17 @@ ggd_tag_sort_by_line (GPtrArray  *tags,
                               GINT_TO_POINTER (direction));
 }
 
+/**
+ * ggd_tag_find_from_line:
+ * @tags: A #GPtrArray of TMTag<!-- -->s
+ * @line: Line for which find the tag
+ * 
+ * Finds the tag that applies for a given line.
+ * It actually gets the first tag that precede or is at the exact position of
+ * the line.
+ * 
+ * Returns: A #TMTag, or %NULL if none found.
+ */
 TMTag *
 ggd_tag_find_from_line (const GPtrArray  *tags,
                         gulong            line)
@@ -97,6 +108,15 @@ ggd_tag_find_from_line (const GPtrArray  *tags,
   return tag;
 }
 
+/**
+ * ggd_tag_find_at_current_pos:
+ * @doc: A #GeanyDocument
+ * 
+ * Finds the tag that applies for the current position in a #GeanyDocument.
+ * See ggd_tag_find_from_line().
+ * 
+ * Returns: A #TMTag, or %NULL if none found.
+ */
 TMTag *
 ggd_tag_find_at_current_pos (GeanyDocument *doc)
 {
@@ -110,6 +130,15 @@ ggd_tag_find_at_current_pos (GeanyDocument *doc)
   return tag;
 }
 
+/**
+ * ggd_tag_find_parent:
+ * @tags: A #GPtrArray of #TMTag<!-- -->s containing @tag
+ * @child: A #TMTag, child of the tag to find
+ * 
+ * Finds the parent tag of a #TMTag.
+ * 
+ * Returns: A #TMTag, or %NULL if @child have no parent.
+ */
 TMTag *
 ggd_tag_find_parent (const GPtrArray *tags,
                      const TMTag     *child)
@@ -180,7 +209,15 @@ static const struct {
   { tm_tag_file_t,            "file"      }
 };
 
-/* Tries to convert @type to string. Returns %NULL on failure */
+/**
+ * ggd_tag_type_get_name:
+ * @type: A #TMTagType
+ * 
+ * Tries to convert a #TMTagType to a string.
+ * 
+ * Returns: A string representing @type that should not be modified or freed,
+ *          or %NULL on failure.
+ */
 const gchar *
 ggd_tag_type_get_name (TMTagType type)
 {
@@ -195,7 +232,15 @@ ggd_tag_type_get_name (TMTagType type)
   return NULL;
 }
 
-/* Tries to convert @name to tag type. Returns 0 on failure */
+/**
+ * ggd_tag_type_from_name:
+ * @name: A string representing a #TMTag type
+ * 
+ * Tries to convert string to tag type.
+ * 
+ * Returns: The #TMTagType that @name stands for, or 0 if @name dosen't stand
+ *          for any type.
+ */
 TMTagType
 ggd_tag_type_from_name (const gchar *name)
 {
@@ -212,7 +257,14 @@ ggd_tag_type_from_name (const gchar *name)
   return 0;
 }
 
-/* Gets the name of a tag type */
+/**
+ * ggd_tag_get_type_name:
+ * @tag: A #TMTag
+ * 
+ * Gets the name of a #TMTag's type. See ggd_tag_type_get_name().
+ * 
+ * Returns: The #TMTag's type name or %NULL on failure.
+ */
 const gchar *
 ggd_tag_get_type_name (const TMTag *tag)
 {
@@ -223,16 +275,17 @@ ggd_tag_get_type_name (const TMTag *tag)
 
 /**
  * ggd_tag_resolve_type_hierarchy:
- * @tags: The tag list that contains @tag
+ * @tags: The tag array that contains @tag
  * @tag: A #TMTag to which get the type hierarchy
  * 
  * Gets the type hierarchy of a tag as a string, each element separated by a
  * dot.
  * 
- * FIXME: perhaps we should use array of type's ID rather than a string.
- * FIXME: perhaps drop recursion
- * 
  * Returns: the tag's type hierarchy or %NULL if invalid.
+ */
+/*
+ * FIXME: perhaps we should use array of type's ID rather than a string?
+ * FIXME: perhaps drop recursion
  */
 gchar *
 ggd_tag_resolve_type_hierarchy (const GPtrArray *tags,
@@ -357,9 +410,9 @@ scope_child_matches (const gchar *a,
  * @parent: Tag for which get children
  * @depth: Maximum depth for children to be found (< 0 means infinite)
  * 
+ * Finds children tags of a #TMTag.
  * 
- * 
- * Returns: The list of found children
+ * Returns: The list of children found for @parent
  */
 GList *
 ggd_tag_find_children (const GPtrArray *tags,

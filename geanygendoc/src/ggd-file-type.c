@@ -27,6 +27,25 @@
 #include "ggd-doc-type.h"
 
 
+/**
+ * SECTION: ggd-file-type
+ * @include: ggd-file-type.h
+ * 
+ * A #GgdFileType represents the rules for a language type.
+ * 
+ * It uses GObject-style reference counting through ggd_file_type_ref() and
+ * ggd_file_type_unref().
+ */
+
+
+/**
+ * ggd_file_type_new:
+ * @type: A #GeanyFiletype ID
+ * 
+ * Creates a new #GgdFileType for a Geany's file type.
+ * 
+ * Returns: A newly created #GgdFileType.
+ */
 GgdFileType *
 ggd_file_type_new (filetype_id type)
 {
@@ -43,6 +62,14 @@ ggd_file_type_new (filetype_id type)
   return ft;
 }
 
+/**
+ * ggd_file_type_ref:
+ * @filetype: A #GgdFileType
+ * 
+ * Adds a reference to a #GgdFileType.
+ * 
+ * Returns: The filetype
+ */
 GgdFileType *
 ggd_file_type_ref (GgdFileType *filetype)
 {
@@ -53,6 +80,13 @@ ggd_file_type_ref (GgdFileType *filetype)
   return filetype;
 }
 
+/**
+ * ggd_file_type_unref:
+ * @filetype: A #GgdFileType
+ * 
+ * Drops a reference from a #GgdFileType. When a file type's reference count
+ * drops to zero, the file type is destroyed.
+ */
 void
 ggd_file_type_unref (GgdFileType *filetype)
 {
@@ -68,6 +102,7 @@ ggd_file_type_unref (GgdFileType *filetype)
   }
 }
 
+/* function to call on each element of the doc type table in order to dump it */
 static void
 dump_doctypes_hfunc (gpointer key   G_GNUC_UNUSED,
                      gpointer value,
@@ -76,6 +111,13 @@ dump_doctypes_hfunc (gpointer key   G_GNUC_UNUSED,
   ggd_doc_type_dump (value, data);
 }
 
+/**
+ * ggd_file_type_dump:
+ * @filetype: A #GgdFileType
+ * @stream: A file stream to which write the dump
+ * 
+ * A user-readable dump of a #GgdFileType, mostly for debugging purposes.
+ */
 void
 ggd_file_type_dump (const GgdFileType *filetype,
                     FILE              *stream)
@@ -93,6 +135,13 @@ ggd_file_type_dump (const GgdFileType *filetype,
   g_hash_table_foreach (filetype->doctypes, dump_doctypes_hfunc, stream);
 }
 
+/**
+ * ggd_file_type_add_doc:
+ * @filetype: A #GgdFileType
+ * @doctype: A #GgdDocType
+ * 
+ * Adds a #GgdDocType to a #GgdFileType.
+ */
 void
 ggd_file_type_add_doc (GgdFileType *filetype,
                        GgdDocType  *doctype)
@@ -105,6 +154,17 @@ ggd_file_type_add_doc (GgdFileType *filetype,
   }
 }
 
+/**
+ * ggd_file_type_get_doc:
+ * @filetype: A #GgdFileType
+ * @name: A documentation type identifier
+ * 
+ * Gets the #GgdDocType of a #GgdFileType that corresponds to the given
+ * documentation type identifier.
+ * 
+ * Returns: The #GgdDocType corresponding to @name that shouldn't be unref'd, or
+ *          %NULL if not found in @filetype.
+ */
 GgdDocType *
 ggd_file_type_get_doc (const GgdFileType *filetype,
                        const gchar       *name)

@@ -26,6 +26,14 @@
 G_BEGIN_DECLS
 
 
+/**
+ * GgdPerms:
+ * @GGD_PERM_R: Read permission
+ * @GGD_PERM_W: Write permission
+ * @GGD_PERM_RW: Both read and write permissions
+ * 
+ * Flags representing permissions.
+ */
 enum _GgdPerms {
   GGD_PERM_R    = 1 << 0,
   GGD_PERM_W    = 1 << 1,
