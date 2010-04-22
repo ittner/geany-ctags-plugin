@@ -27,16 +27,27 @@
 #include "ggd-plugin.h" /* to access Geany data/funcs */
 
 
-/* Compare function for g_ptr_array_sort() to compare two TMTag by their
- * lines.
- * (gint)data is strictly positive for ASC sort, strictly negative DESC sort */
+/*
+ * tag_cmp_by_line:
+ * @a: A #TMTag
+ * @b: Another #TMTag
+ * @data: A pointer that, converted with GPOINTER_TO_INT(), becomes an integer
+ *        strictly positive for an ascending sort or strictly negative for a
+ *        descending sort. The constants %GGD_SORT_ASC and %GGD_SORT_DESC can be
+ *        used here.
+ * 
+ * Compares two #TMTag<!-- -->s by their lines.
+ * 
+ * Returns: A positive integer if line(a) > line(b), a negative integer if
+ *          line(a) < line(b) and a nul integer (0) if line(a) == line(b).
+ */
 static gint
 tag_cmp_by_line (gconstpointer a,
                  gconstpointer b,
                  gpointer      data)
 {
-  const TMTag  *t1 = *((const TMTag**)a);
-  const TMTag  *t2 = *((const TMTag**)b);
+  const TMTag  *t1 = a;
+  const TMTag  *t2 = b;
   gint          direction = GPOINTER_TO_INT (data);
   gint          rv;
   
@@ -55,6 +66,15 @@ tag_cmp_by_line (gconstpointer a,
   return rv;
 }
 
+/* A wrapper for tag_cmp_by_line() that works with g_ptr_array_sort() */
+static gint
+tag_cmp_by_line_ptr_array (gconstpointer a,
+                           gconstpointer b,
+                           gpointer      data)
+{
+  return tag_cmp_by_line (*((const TMTag**)a), *((const TMTag**)b), data);
+}
+
 /**
  * ggd_tag_sort_by_line:
  * @tags: A #GPtrArray of #TMTag<!-- -->s
@@ -71,7 +91,7 @@ ggd_tag_sort_by_line (GPtrArray  *tags,
   g_return_if_fail (tags != NULL);
   g_return_if_fail (direction != 0);
   
-  g_ptr_array_sort_with_data (tags, tag_cmp_by_line,
+  g_ptr_array_sort_with_data (tags, tag_cmp_by_line_ptr_array,
                               GINT_TO_POINTER (direction));
 }
 
@@ -411,6 +431,8 @@ scope_child_matches (const gchar *a,
  * @depth: Maximum depth for children to be found (< 0 means infinite)
  * 
  * Finds children tags of a #TMTag.
+ * <note><para>The returned list of children is sorted in the order they appears
+ * in the source file (by their lines positions)</para></note>
  * 
  * Returns: The list of children found for @parent
  */
@@ -427,7 +449,6 @@ ggd_tag_find_children (const GPtrArray *tags,
   g_return_val_if_fail (tags != NULL, NULL);
   g_return_val_if_fail (parent != NULL, NULL);
   
-  /* FIXME: sort by line? */
   if (parent->atts.entry.scope) {
     fake_scope = g_strconcat (parent->atts.entry.scope, parent->name, NULL);
   } else {
@@ -435,7 +456,9 @@ ggd_tag_find_children (const GPtrArray *tags,
   }
   GGD_PTR_ARRAY_FOR (tags, i, el) {
     if (scope_child_matches (fake_scope, el->atts.entry.scope, depth)) {
-      children = g_list_append (children, el);
+      children = g_list_insert_sorted_with_data (children, el,
+                                                 tag_cmp_by_line,
+                                                 GINT_TO_POINTER (GGD_SORT_ASC));
     }
   }
   g_free (fake_scope);

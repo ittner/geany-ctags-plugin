@@ -1,12 +1,3 @@
-* Fix tag children sorting.
-  Currently tag children (for e.g. structures, enumerations, etc.) are
-  sorted as we get them from Geany, which means alphabetically by name.
-  This is no good since it reorders structure, enumeration, etc,
-  children.
-  The easiest fix is probably to sort the tag array by line before
-  doing anything, but it would be interesting to sort only the symbol
-  list that we build for the environment.
-
 * support setting duplication in filetype configuration
     function = {
       template = "my template";
