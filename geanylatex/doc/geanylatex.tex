@@ -694,7 +694,8 @@ glatex_set_toolbar_active=true
 [reference]
 glatex_reference_page=\\textbf{\pageref{{{reference}}}}
 glatex_reference_chapter=\\textbf{\\ref{{{reference}}}}
-glatex_reference_all=\\textbf{\\ref{{{reference}}}, page \pageref{{{reference}}}}\end{lstlisting}
+glatex_reference_all=\\textbf{\\ref{{{reference}}}, page \pageref{{{reference}}}}
+\end{lstlisting}
 
 Please take care in this case \texttt{\{\{reference\}\}} will be
 replace by label name.
@@ -704,6 +705,29 @@ Also \texttt{\textbackslash{}t}, \texttt{\textbackslash{}r},
 need to add a second \textbackslash{} in front of in such cases. Even
 this seems to be annyoing on the first hand, it allows you to insert some
 more complicated constructs over  here which might require a new line inside.
+
+
+\subsubsection{Autocompletion of \{\} after \_ and \symbol{94}}
+
+Geany\LaTeX{} is able to autocomplete \{\} after typing \_ and
+\symbol{94}. This might by useful on typing mathematic text and
+formula. However, as this option is turn on by default and it might
+get annoying you can deactivate it by setting \texttt{glatex\_set\_autobraces}
+inside \texttt{[autocompletion]} section of configuration file. An example
+which is turning off the feature might can look like this:
+
+\begin{lstlisting}
+[general]
+glatex_set_koma_active=true
+glatex_set_toolbar_active=true
+glatex_set_autocompletion=true
+
+[autocompletion]
+glatex_set_autobraces=false
+\end{lstlisting}
+
+\textbf{Note:} The feature in general is only working, if
+\texttt{glatex\_set\_autocompletion=true} is also set to \texttt{true}.
 
 \section{Contribution to the plugin}
 If you like the plugin, there are a number of ways, how to
