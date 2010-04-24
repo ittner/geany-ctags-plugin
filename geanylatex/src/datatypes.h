@@ -44,4 +44,21 @@ typedef struct
 	GString *template;
 } TemplateEntry;
 
+typedef struct
+{
+	GtkWidget *documentclass_combobox;
+	GtkWidget *encoding_combobox;
+	GtkWidget *fontsize_combobox;
+	GtkWidget *checkbox_KOMA;
+	GtkWidget *author_textbox;
+	GtkWidget *date_textbox;
+	GtkWidget *title_textbox;
+	GtkWidget *papersize_combobox;
+	GtkWidget *checkbox_draft;
+	GtkWidget *template_combobox;
+	GtkWidget *orientation_combobox;
+	GPtrArray *template_list;
+	gboolean draft_active;
+} LaTeXWizard;
+
 #endif
