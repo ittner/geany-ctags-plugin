@@ -759,13 +759,16 @@ glatex_insert_command_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	{
 		gchar *cmd_str = NULL;
 		const gchar *cmd = NULL;
+
 		GeanyDocument *doc = document_get_current();
 		cmd = gtk_entry_get_text(GTK_ENTRY(textbox_command));
 
 		sci_start_undo_action(doc->editor->sci);
 
-		cmd_str = g_strdup_printf("\\%s{}", cmd);
+		cmd_str = g_strdup_printf("\\%s{", cmd);
 		glatex_insert_string(cmd_str, TRUE);
+		/* This shall put the cursor inside the braces */ 
+		glatex_insert_string("}", FALSE);
 
 		sci_end_undo_action(doc->editor->sci);
 
@@ -1146,6 +1149,7 @@ void glatex_insert_usepackage_dialog(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	gtk_widget_destroy(dialog);
 
 }
+
 
 static void
 on_wizard_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
