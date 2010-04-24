@@ -447,12 +447,13 @@ ggd_insert_all_comments (GeanyDocument *doc,
         GgdDocSetting  *setting;
         
         setting = get_setting_from_tag (doctype, tag_array, tag, &tag);
-        if (! setting) {
-          success = FALSE;
-          break;
-        } else if (! g_hash_table_lookup (tag_done_table, tag)) {
-          success = do_insert_comment (sci, tag_array, tag, ft, setting);
-          g_hash_table_insert (tag_done_table, (gpointer)tag, (gpointer)tag);
+        if (setting && ! g_hash_table_lookup (tag_done_table, tag)) {
+          if (! do_insert_comment (sci, tag_array, tag, ft, setting)) {
+            success = FALSE;
+            break;
+          } else {
+            g_hash_table_insert (tag_done_table, (gpointer)tag, (gpointer)tag);
+          }
         }
       }
       sci_end_undo_action (sci);
