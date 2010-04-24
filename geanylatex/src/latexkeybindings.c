@@ -151,3 +151,9 @@ void glatex_kb_usepackage_dialog(G_GNUC_UNUSED guint key_id)
 	g_return_if_fail(document_get_current != NULL);
 	glatex_insert_usepackage_dialog(NULL, NULL);
 }
+
+void glatex_kb_insert_command_dialog(G_GNUC_UNUSED guint key_id)
+{
+	g_return_if_fail(document_get_current != NULL);
+	glatex_insert_command_activated(NULL, NULL);
+}

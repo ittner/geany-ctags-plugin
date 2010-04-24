@@ -47,6 +47,7 @@ enum
 	KB_LATEX_STRUCTURE_LVLUP,
 	KB_LATEX_STRUCTURE_LVLDOWN,
 	KB_LATEX_USEPACKAGE_DIALOG,
+	KB_LATEX_INSERT_COMMAND,
 	COUNT_KB
 };
 
@@ -70,5 +71,6 @@ void glatex_kb_insert_enumerate_list(G_GNUC_UNUSED guint key_id);
 void glatex_kb_structure_lvlup(G_GNUC_UNUSED guint key_id);
 void glatex_kb_structure_lvldown(G_GNUC_UNUSED guint key_id);
 void glatex_kb_usepackage_dialog(G_GNUC_UNUSED guint key_id);
+void glatex_kb_insert_command_dialog(G_GNUC_UNUSED guint key_id);
 
 #endif

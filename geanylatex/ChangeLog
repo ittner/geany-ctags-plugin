@@ -1,3 +1,9 @@
+2010-04-24  Frank Lanitz  <frank@frank.uvena.de>
+
+ * Add a simple insert dommand dialog, which shall support inserting
+   commands more in future
+
+
 2010-04-21  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Automatic insert {} after typing ^ or _

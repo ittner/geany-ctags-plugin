@@ -53,6 +53,7 @@ static GtkWidget *menu_latex_fontsize = NULL;
 static GtkWidget *menu_latex_fontsize_submenu = NULL;
 static GtkWidget *menu_latex_insert_environment = NULL;
 static GtkWidget *menu_latex_insert_usepackage = NULL;
+static GtkWidget *menu_latex_insert_command = NULL;
 static GtkWidget *menu_latex_replacement = NULL;
 static GtkWidget *menu_latex_replacement_submenu = NULL;
 static GtkWidget *menu_latex_replace_selection = NULL;
@@ -716,6 +717,60 @@ glatex_insert_label_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 }
 
 
+void
+glatex_insert_command_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
+					 G_GNUC_UNUSED gpointer gdata)
+{
+	GtkWidget *dialog;
+	GtkWidget *vbox = NULL;
+	GtkWidget *label_command = NULL;
+	GtkWidget *textbox_command = NULL;
+	GtkWidget *table = NULL;
+
+	dialog = gtk_dialog_new_with_buttons(_("Insert Command"),
+						 GTK_WINDOW(geany->main_widgets->window),
+						 GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
+						 GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+						 NULL);
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
+	gtk_widget_set_name(dialog, "GeanyDialog");
+	gtk_box_set_spacing(GTK_BOX(vbox), 10);
+
+	table = gtk_table_new(1, 2, FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(table), 6);
+	gtk_table_set_row_spacings(GTK_TABLE(table), 6);
+
+	label_command = gtk_label_new(_("Command name:"));
+
+	textbox_command = gtk_entry_new();
+
+	gtk_misc_set_alignment(GTK_MISC(label_command), 0, 0.5);
+
+	gtk_table_attach_defaults(GTK_TABLE(table), label_command, 0, 1, 0, 1);
+	gtk_table_attach_defaults(GTK_TABLE(table), textbox_command, 1, 2, 0, 1);
+	gtk_container_add(GTK_CONTAINER(vbox), table);
+
+	g_signal_connect(G_OBJECT(textbox_command), "activate",
+		G_CALLBACK(glatex_enter_key_pressed_in_entry), dialog);
+
+	gtk_widget_show_all(vbox);
+
+	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	{
+		gchar *cmd_str = NULL;
+		const gchar *cmd = NULL;
+
+		cmd = gtk_entry_get_text(GTK_ENTRY(textbox_command));
+		cmd_str = g_strdup_printf("\\%s{}", cmd);
+		glatex_insert_string(cmd_str, TRUE);
+		g_free(cmd_str);
+	}
+
+	gtk_widget_destroy(dialog);
+}
+
+
+	
 void
 glatex_insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 					 G_GNUC_UNUSED gpointer gdata)
@@ -1695,6 +1750,9 @@ void init_keybindings()
 		0, 0, "insert_latex_ref", _("Insert \\ref"), menu_latex_ref);
 	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_NEWLINE, glatex_kb_insert_newline,
 		0, 0, "insert_new_line", _("Insert linebreak \\\\ "), NULL);
+	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_COMMAND,
+		glatex_kb_insert_command_dialog, 0, 0, "latex_insert_command",
+		_("Insert command"), menu_latex_insert_command);
 	keybindings_set_item(plugin_key_group, KB_LATEX_TOGGLE_ACTIVE, glatex_kblatex_toggle,
 		0, 0, "latex_toggle_status", _("Turn input replacement on/off"),
 		menu_latex_replace_toggle);
@@ -1737,6 +1795,7 @@ void init_keybindings()
 		glatex_kb_usepackage_dialog, 0, 0, "usepackage_dialog",
 		_("Insert \\usepackage{}"), menu_latex_insert_usepackage);
 }
+
 
 void plugin_help()
 {
@@ -1951,6 +2010,16 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	g_signal_connect(menu_latex_replace_toggle, "activate",
 					 G_CALLBACK(glatex_toggle_status), NULL);
 
+	/* Add menu entry for inserting a command */
+	menu_latex_insert_command = gtk_menu_item_new_with_mnemonic(
+		_("Insert _Command"));
+	ui_widget_set_tooltip_text(menu_latex_ref,
+		_("Inserting costumized command to document"));
+	gtk_container_add(GTK_CONTAINER(menu_latex_menu),
+		menu_latex_insert_command);
+	g_signal_connect(menu_latex_insert_command, "activate",
+		G_CALLBACK(glatex_insert_command_activated), NULL);
+
 	init_keybindings();
 
 	/* Check whether the toolbar should be shown or not and do so*/
@@ -1970,6 +2039,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	ui_add_document_sensitive(menu_latex_format_insert);
 	ui_add_document_sensitive(menu_latex_insert_environment);
 	ui_add_document_sensitive(menu_latex_insert_usepackage);
+	ui_add_document_sensitive(menu_latex_insert_command);
 	ui_add_document_sensitive(menu_latex_replacement);
 
 	gtk_widget_show_all(menu_latex);
