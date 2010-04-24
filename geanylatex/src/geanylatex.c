@@ -759,10 +759,16 @@ glatex_insert_command_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	{
 		gchar *cmd_str = NULL;
 		const gchar *cmd = NULL;
-
+		GeanyDocument *doc = document_get_current();
 		cmd = gtk_entry_get_text(GTK_ENTRY(textbox_command));
+
+		sci_start_undo_action(doc->editor->sci);
+
 		cmd_str = g_strdup_printf("\\%s{}", cmd);
 		glatex_insert_string(cmd_str, TRUE);
+
+		sci_end_undo_action(doc->editor->sci);
+
 		g_free(cmd_str);
 	}
 
