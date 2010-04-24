@@ -32,6 +32,12 @@
 #include "ggd-plugin.h"
 
 
+/* The value that replace the "cursor" variable in templates, used to find it
+ * and therefore the cursor position. This should be a value that the user never
+ * want to output; otherwise it would behave strangely from the user point of
+ * view, since it is removed from the output. */
+#define GGD_CURSOR_IDENTIFIER     "{cursor}"
+#define GGD_CURSOR_IDENTIFIER_LEN 8
 
 /* wrapper for ctpl_parser_parse() that returns a string. Free with g_free() */
 static gchar *
@@ -135,6 +141,7 @@ get_env_for_tag (GgdFileType   *ft,
   GList       *children = NULL;
   
   env = ctpl_environ_new ();
+  ctpl_environ_push_string (env, "cursor", GGD_CURSOR_IDENTIFIER);
   ctpl_environ_push_string (env, "symbol", tag->name);
   /* get arguments & return type if appropriate */
   if (tag->type & (tm_tag_function_t |
@@ -208,7 +215,8 @@ static gchar *
 get_comment (GgdFileType   *ft,
              GgdDocSetting *setting,
              GPtrArray     *tag_array,
-             const TMTag   *tag)
+             const TMTag   *tag,
+             gint          *cursor_offset)
 {
   gchar *comment = NULL;
   
@@ -222,6 +230,19 @@ get_comment (GgdFileType   *ft,
     if (! comment) {
       msgwin_status_add (_("Failed to build comment: %s"), err->message);
       g_error_free (err);
+    } else {
+      gchar *cursor_str;
+      
+      cursor_str = strstr (comment, GGD_CURSOR_IDENTIFIER);
+      if (cursor_str && cursor_offset) {
+        *cursor_offset = cursor_str - comment;
+      }
+      /* remove the cursor identifier(s) from the final comment */
+      while (cursor_str) {
+        memmove (cursor_str, cursor_str + GGD_CURSOR_IDENTIFIER_LEN,
+                 strlen (cursor_str) - GGD_CURSOR_IDENTIFIER_LEN + 1);
+        cursor_str = strstr (cursor_str, GGD_CURSOR_IDENTIFIER);
+      }
     }
   }
   
@@ -291,8 +312,9 @@ do_insert_comment (ScintillaObject *sci,
 {
   gboolean  success = FALSE;
   gchar    *comment;
+  gint      cursor_offset = 0;
   
-  comment = get_comment (ft, setting, tag_array, tag);
+  comment = get_comment (ft, setting, tag_array, tag, &cursor_offset);
   if (comment) {
     gint pos;
     
@@ -315,6 +337,7 @@ do_insert_comment (ScintillaObject *sci,
         break;
     }
     sci_insert_text (sci, pos, comment);
+    sci_set_current_position (sci, pos + cursor_offset, TRUE);
     success = TRUE;
   }
   g_free (comment);
