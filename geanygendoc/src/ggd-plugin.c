@@ -336,12 +336,16 @@ create_tools_menu_item (void)
   menu = gtk_menu_new ();
   /* build "document current symbol" item */
   item = gtk_menu_item_new_with_mnemonic (_("_Document current symbol"));
+  ui_widget_set_tooltip_text (item, _("Generate documentation for the "
+                                      "currently selected symbol"));
   g_signal_connect (item, "activate",
                     G_CALLBACK (document_current_symbol_handler), NULL);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   ui_add_document_sensitive (item);
   /* build "document all" item */
   item = gtk_menu_item_new_with_mnemonic (_("Document _all symbols"));
+  ui_widget_set_tooltip_text (item, _("Generate documentation for all the "
+                                      "symbols in the current document"));
   g_signal_connect (item, "activate",
                     G_CALLBACK (document_all_symbols_handler), NULL);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
@@ -351,6 +355,8 @@ create_tools_menu_item (void)
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   /* build "reload" item */
   item = gtk_image_menu_item_new_with_mnemonic (_("_Reload configuration files"));
+  ui_widget_set_tooltip_text (item, _("Force reloading of the configuration "
+                                      "files"));
   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
                                  gtk_image_new_from_stock (GTK_STOCK_REFRESH,
                                                            GTK_ICON_SIZE_MENU));
@@ -359,6 +365,8 @@ create_tools_menu_item (void)
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   /* language filetypes opener */
   item = gtk_menu_item_new_with_mnemonic (_("_Edit current language configuration"));
+  ui_widget_set_tooltip_text (item, _("Open the current language configuration "
+                                      "file for editing"));
   g_signal_connect (item, "activate",
                     G_CALLBACK (open_current_filetype_conf_handler), NULL);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
@@ -450,15 +458,13 @@ plugin_configure (GtkDialog *dialog)
   gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
   /* auto-save */
   widget = gtk_check_button_new_with_mnemonic (_("_Save file before generating comment"));
-  gtk_widget_set_tooltip_text (widget,
-                               _("Whether to automatically save the file in "
-                                 "which insert comment before generating the "
-                                 "comment. This is currently needed to have an "
-                                 "up-to-date tag list. If you disable this "
-                                 "option and ask for comment generation on a "
-                                 "modified file, the behavior may be "
-                                 "surprising (since the comment will be "
-                                 "generated for the last saved state)."));
+  ui_widget_set_tooltip_text (widget,
+    _("Whether to automatically save the file to work on before inserting a "
+      "comment. This is currently needed to have an up-to-date tag list. "
+      "If you disable this option and ask for comment generation on a "
+      "modified file, the behavior may be surprising since the comment will be "
+      "generated for the last saved state and not the current state of the "
+      "file."));
   ggd_opt_group_set_proxy_gtktogglebutton (plugin->config, &OPT_save_to_refresh,
                                            widget);
   gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
