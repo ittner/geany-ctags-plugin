@@ -371,10 +371,100 @@ get_setting_from_tag (GgdDocType   *doctype,
   return setting;
 }
 
+/*
+ * get_config:
+ * @doc: A #GeanyDocument for which get the configuration
+ * @doc_type: A documentation type identifier
+ * @file_type_: Return location for the corresponding #GgdFileType, or %NULL
+ * @doc_type_: Return location for the corresponding #GgdDocType, or %NULL
+ * 
+ * Gets the configuration for a document and a documentation type.
+ * 
+ * Returns: %TRUE on success, %FALSE otherwise.
+ */
+static gboolean
+get_config (GeanyDocument  *doc,
+            const gchar    *doc_type,
+            GgdFileType   **file_type_,
+            GgdDocType    **doc_type_)
+{
+  gboolean      success = FALSE;
+  GgdFileType  *ft;
+  
+  ft = ggd_file_type_manager_get_file_type (doc->file_type->id);
+  if (ft) {
+    GgdDocType *doctype;
+    
+    doctype = ggd_file_type_get_doc (ft, doc_type);
+    if (! doctype) {
+      msgwin_status_add (_("No documentation type \"%s\" for language \"%s\""),
+                         doc_type, doc->file_type->name);
+    } else {
+      if (file_type_) *file_type_ = ft;
+      if (doc_type_) *doc_type_ = doctype;
+      success = TRUE;
+    }
+  }
+  
+  return success;
+}
+
+/*
+ * insert_multiple_comments:
+ * @doc: A #GeanyDocument in which insert comments
+ * @filetype: The #GgdFileType to use
+ * @doctype: The #GgdDocType to use
+ * @sorted_tag_list: A list of tag to document. This list must be sorted by
+ *                   tag's line.
+ * 
+ * Tries to insert the documentation for all tags listed in @sorted_tag_list,
+ * taking care of settings and duplications.
+ * 
+ * Returns: %TRUE on success, %FALSE otherwise.
+ */
+static gboolean
+insert_multiple_comments (GeanyDocument *doc,
+                          GgdFileType   *filetype,
+                          GgdDocType    *doctype,
+                          GList         *sorted_tag_list)
+{
+  gboolean          success = FALSE;
+  GList            *node;
+  GPtrArray        *tag_array;
+  ScintillaObject  *sci = doc->editor->sci;
+  GHashTable       *tag_done_table; /* keeps the list of documented tags.
+                                     * Useful since documenting a tag might
+                                     * actually document another one */
+  
+  success = TRUE;
+  tag_array = doc->tm_file->tags_array;
+  tag_done_table = g_hash_table_new (NULL, NULL);
+  sci_start_undo_action (sci);
+  for (node = sorted_tag_list; node; node = node->next) {
+    GgdDocSetting  *setting;
+    const TMTag    *tag = node->data;
+    
+    setting = get_setting_from_tag (doctype, tag_array, tag, &tag);
+    if (setting && ! g_hash_table_lookup (tag_done_table, tag)) {
+      if (! do_insert_comment (sci, tag_array, tag, filetype, setting)) {
+        success = FALSE;
+        break;
+      } else {
+        g_hash_table_insert (tag_done_table, (gpointer)tag, (gpointer)tag);
+      }
+    }
+  }
+  sci_end_undo_action (sci);
+  g_hash_table_destroy (tag_done_table);
+  
+  return success;
+}
+
 /**
  * ggd_insert_comment:
  * @doc: The document in which insert the comment
  * @line: SCI's line for which generate a comment. Usually the current line.
+ * @doc_type: Documentation type identifier
  * 
  * Tries to insert a comment in a #GeanyDocument.
  * 
@@ -390,34 +480,32 @@ ggd_insert_comment (GeanyDocument  *doc,
                     const gchar    *doc_type)
 {
   gboolean          success = FALSE;
-  ScintillaObject  *sci;
   const TMTag      *tag;
   GPtrArray        *tag_array;
+  GgdFileType      *filetype;
+  GgdDocType       *doctype;
   
-  sci = doc->editor->sci;
+  g_return_val_if_fail (DOC_VALID (doc), FALSE);
+  
   tag_array = doc->tm_file->tags_array;
   tag = ggd_tag_find_from_line (tag_array, line + 1 /* it is a SCI line */);
   if (! tag || (tag->type & tm_tag_file_t)) {
     msgwin_status_add (_("No valid tag for line %d"), line);
   } else {
-    GgdFileType *ft;
-    
-    ft = ggd_file_type_manager_get_file_type (doc->file_type->id);
-    if (ft) {
-      GgdDocType *doctype;
+    if (get_config (doc, doc_type, &filetype, &doctype)) {
+      GgdDocSetting  *setting;
+      GList          *tag_list = NULL;
       
-      doctype = ggd_file_type_get_doc (ft, doc_type);
-      if (! doctype) {
-        msgwin_status_add (_("No documentation type \"%s\" for language \"%s\""),
-                           doc_type, doc->file_type->name);
-      } else {
-        GgdDocSetting *setting;
-        
-        setting = get_setting_from_tag (doctype, tag_array, tag, &tag);
-        if (setting) {
-          success = do_insert_comment (sci, tag_array, tag, ft, setting);
-        }
+      setting = get_setting_from_tag (doctype, tag_array, tag, &tag);
+      if (setting->autodoc_children) {
+        tag_list = ggd_tag_find_children_filtered (tag_array, tag, 0,
+                                                   setting->matches);
       }
+      /* we assume that a parent always comes before any children, then simply add
+       * it at the end */
+      tag_list = g_list_append (tag_list, (gpointer)tag);
+      success = insert_multiple_comments (doc, filetype, doctype, tag_list);
+      g_list_free (tag_list);
     }
   }
   
@@ -438,50 +526,21 @@ ggd_insert_all_comments (GeanyDocument *doc,
                          const gchar   *doc_type)
 {
   gboolean      success = FALSE;
-  GgdFileType  *ft;
+  GgdFileType  *filetype;
+  GgdDocType   *doctype;
   
   g_return_val_if_fail (DOC_VALID (doc), FALSE);
   
-  ft = ggd_file_type_manager_get_file_type (doc->file_type->id);
-  if (ft) {
-    GgdDocType *doctype;
+  if (get_config (doc, doc_type, &filetype, &doctype)) {
+    GList    *tag_list;
     
-    doctype = ggd_file_type_get_doc (ft, doc_type);
-    if (! doctype) {
-      msgwin_status_add (_("No documentation type \"%s\" for language \"%s\""),
-                         doc_type, doc->file_type->name);
-    } else {
-      GPtrArray        *tag_array;
-      ScintillaObject  *sci = doc->editor->sci;
-      const TMTag      *tag;
-      guint             i;
-      GHashTable       *tag_done_table; /* keeps the list of documented tags.
-                                         * Useful since documenting a tag might
-                                         * actually document another one */
-      
-      success = TRUE;
-      tag_array = doc->tm_file->tags_array;
-      tag_done_table = g_hash_table_new (NULL, NULL);
-      /* sort the tags to be sure to insert by the end of the document, then we
-       * don't modify the element's position of tags we'll work on */
-      ggd_tag_sort_by_line (tag_array, GGD_SORT_DESC);
-      sci_start_undo_action (sci);
-      GGD_PTR_ARRAY_FOR (tag_array, i, tag) {
-        GgdDocSetting  *setting;
-        
-        setting = get_setting_from_tag (doctype, tag_array, tag, &tag);
-        if (setting && ! g_hash_table_lookup (tag_done_table, tag)) {
-          if (! do_insert_comment (sci, tag_array, tag, ft, setting)) {
-            success = FALSE;
-            break;
-          } else {
-            g_hash_table_insert (tag_done_table, (gpointer)tag, (gpointer)tag);
-          }
-        }
-      }
-      sci_end_undo_action (sci);
-      g_hash_table_destroy (tag_done_table);
-    }
+    /* get a sorted list of tags to be sure to insert by the end of the
+     * document, then we don't modify the element's position of tags we'll work
+     * on */
+    tag_list = ggd_tag_sort_by_line_to_list (doc->tm_file->tags_array,
+                                             GGD_SORT_DESC);
+    success = insert_multiple_comments (doc, filetype, doctype, tag_list);
+    g_list_free (tag_list);
   }
   
   return success;

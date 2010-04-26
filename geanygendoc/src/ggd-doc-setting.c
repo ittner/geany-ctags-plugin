@@ -49,6 +49,7 @@ ggd_doc_setting_new (const gchar *match)
   setting->policy = GGD_POLICY_KEEP;
   setting->merge_children = FALSE;
   setting->matches = tm_tag_max_t;
+  setting->autodoc_children = FALSE;
   
   /*g_debug ("New setting matching '%s'", match);*/
   
@@ -107,13 +108,15 @@ ggd_doc_setting_dump (const GgdDocSetting *setting,
   g_return_if_fail (setting != NULL);
   
   fprintf (stream, "  %s [%p]:\n"
-                   "    template: %p\n"
-                   "    position: %u\n"
-                   "      policy: %u\n",
+                   "          template: %p\n"
+                   "          position: %u\n"
+                   "            policy: %u\n"
+                   " auto-doc-children: %s\n",
                    setting->match, (gpointer)setting,
                    (gpointer)setting->template,
                    setting->position,
-                   setting->policy);
+                   setting->policy,
+                   setting->autodoc_children ? "True" : "False");
 }
 
 /**

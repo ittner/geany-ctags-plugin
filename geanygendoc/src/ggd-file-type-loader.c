@@ -51,6 +51,7 @@
  * string               ::= ( """ .* """ | "'" .* "'" )
  * constant             ::= [_A-Z][_A-Z0-9]+
  * integer              ::= [0-9]+
+ * boolean              ::= ( "True" | "False" )
  * setting_value        ::= ( string | constant | integer )
  * setting              ::= "setting-name" "=" setting_value ";"
  * setting_list         ::= ( "{" setting* "}" | setting )
@@ -65,11 +66,12 @@
  *                            "typedef" | "union" | "variable" | "extern" |
  *                            "define" | "macro" | "file" )
  * matches              ::= type ( "|" type )*
- * doctype_subsetting   ::= ( "template" "=" string |
- *                            "position" "=" position |
- *                            "policy"   "=" policy |
- *                            "children" "=" children |
- *                            "matches"  "=" matches ) ";"
+ * doctype_subsetting   ::= ( "template"          "=" string |
+ *                            "position"          "=" position |
+ *                            "policy"            "=" policy |
+ *                            "children"          "=" children |
+ *                            "matches"           "=" matches |
+ *                            "auto_doc_children" "=" boolean ) ";"
  * match                ::= type ( "." type )*
  * doctype_setting      ::= ( match "=" "{" doctype_subsetting* "}" |
  *                            match "." doctype_subsetting )
@@ -95,6 +97,39 @@ ggd_file_type_load_error_quark (void)
   }
   
   return q;
+}
+
+/* reads a boolean (True or False) */
+static gboolean
+ggd_file_type_read_boolean (GScanner *scanner,
+                            gboolean *value_)
+{
+  gboolean success = FALSE;
+  
+  if (g_scanner_get_next_token (scanner) != G_TOKEN_IDENTIFIER) {
+    g_scanner_unexp_token (scanner, G_TOKEN_IDENTIFIER,
+                           _("boolean value"), NULL, NULL, NULL, TRUE);
+  } else {
+    const gchar  *bool_str  = scanner->value.v_identifier;
+    gboolean      value     = FALSE;
+    
+    success = TRUE;
+    if (strcmp (bool_str, "TRUE") == 0 ||
+        strcmp (bool_str, "True") == 0) {
+      value = TRUE;
+    } else if (strcmp (bool_str, "FALSE") == 0 ||
+               strcmp (bool_str, "False") == 0) {
+      value = FALSE;
+    } else {
+      g_scanner_error (scanner, _("invalid boolean value \"%s\""), bool_str);
+      success = FALSE;
+    }
+    if (success && value_) {
+      *value_ = value;
+    }
+  }
+  
+  return success;
 }
 
 /* reads #GgdDocSetting:template */
@@ -239,6 +274,14 @@ ggd_file_type_read_setting_matches (GScanner       *scanner,
   return success;
 }
 
+/* reads #GgdDocSetting:autodoc_children */
+static gboolean
+ggd_file_type_read_setting_auto_doc_children (GScanner       *scanner,
+                                              GgdDocSetting  *setting)
+{
+  return ggd_file_type_read_boolean (scanner, &setting->autodoc_children);
+}
+
 /* dispatches read of value of doctype subsetting @name */
 static gboolean
 ggd_file_type_read_setting_value (GScanner      *scanner,
@@ -251,11 +294,12 @@ ggd_file_type_read_setting_value (GScanner      *scanner,
     gboolean    (*handler)  (GScanner      *scanner,
                              GgdDocSetting *setting);
   } settings_table[] = {
-    { "template", ggd_file_type_read_setting_template },
-    { "position", ggd_file_type_read_setting_position },
-    { "policy",   ggd_file_type_read_setting_policy   },
-    { "children", ggd_file_type_read_setting_children },
-    { "matches",  ggd_file_type_read_setting_matches  }
+    { "template",           ggd_file_type_read_setting_template           },
+    { "position",           ggd_file_type_read_setting_position           },
+    { "policy",             ggd_file_type_read_setting_policy             },
+    { "children",           ggd_file_type_read_setting_children           },
+    { "matches",            ggd_file_type_read_setting_matches            },
+    { "auto_doc_children",  ggd_file_type_read_setting_auto_doc_children  }
   };
   gboolean  success = FALSE;
   gboolean  found   = FALSE;

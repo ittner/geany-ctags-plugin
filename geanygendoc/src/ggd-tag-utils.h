@@ -41,11 +41,17 @@ G_BEGIN_DECLS
 
 void          ggd_tag_sort_by_line            (GPtrArray *tags,
                                                gint       direction);
+GList        *ggd_tag_sort_by_line_to_list    (const GPtrArray  *tags,
+                                               gint              direction);
 TMTag        *ggd_tag_find_from_line          (const GPtrArray *tags,
                                                gulong           line);
 TMTag        *ggd_tag_find_at_current_pos     (GeanyDocument *doc);
 TMTag        *ggd_tag_find_parent             (const GPtrArray *tags,
                                                const TMTag     *child);
+GList        *ggd_tag_find_children_filtered  (const GPtrArray *tags,
+                                               const TMTag     *parent,
+                                               gint             depth,
+                                               TMTagType        filter);
 GList        *ggd_tag_find_children           (const GPtrArray *tags,
                                                const TMTag     *parent,
                                                gint             depth);

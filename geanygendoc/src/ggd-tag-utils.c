@@ -96,6 +96,42 @@ ggd_tag_sort_by_line (GPtrArray  *tags,
 }
 
 /**
+ * ggd_tag_sort_by_line_to_list:
+ * @tags: A #GPtrArray of #TMTag<!-- -->s
+ * @direction: Sort direction: %GGD_SORT_ASC for an ascending sort or
+ *             %GGD_SORT_DESC for a descending sort.
+ * 
+ * Creates a sorted list of tags from a #GPtrArray of #TMTag<!-- -->s. The list
+ * is sorted by the tags' line position. The sort direction depend on
+ * @direction.
+ * 
+ * <note><para>The tags are not copied; you must then not free the array' items
+ * if you still want to use the returned list.</para></note>
+ * 
+ * Returns: A newly created list of tags that should be freed with
+ *          g_list_free().
+ */
+GList *
+ggd_tag_sort_by_line_to_list (const GPtrArray  *tags,
+                              gint              direction)
+{
+  GList  *children = NULL;
+  guint   i;
+  TMTag  *el;
+  
+  g_return_val_if_fail (tags != NULL, NULL);
+  g_return_val_if_fail (direction != 0, NULL);
+  
+  GGD_PTR_ARRAY_FOR (tags, i, el) {
+    children = g_list_insert_sorted_with_data (children, el,
+                                               tag_cmp_by_line,
+                                               GINT_TO_POINTER (direction));
+  }
+  
+  return children;
+}
+
+/**
  * ggd_tag_find_from_line:
  * @tags: A #GPtrArray of TMTag<!-- -->s
  * @line: Line for which find the tag
@@ -429,17 +465,19 @@ scope_child_matches (const gchar *a,
  * @tags: Array of tags that contains @parent
  * @parent: Tag for which get children
  * @depth: Maximum depth for children to be found (< 0 means infinite)
+ * @filter: A logical OR of the TMTagType<!-- -->s to match
  * 
- * Finds children tags of a #TMTag.
+ * Finds children tags of a #TMTag that matches @matches.
  * <note><para>The returned list of children is sorted in the order they appears
  * in the source file (by their lines positions)</para></note>
  * 
  * Returns: The list of children found for @parent
  */
 GList *
-ggd_tag_find_children (const GPtrArray *tags,
-                       const TMTag     *parent,
-                       gint             depth)
+ggd_tag_find_children_filtered (const GPtrArray *tags,
+                                const TMTag     *parent,
+                                gint             depth,
+                                TMTagType        filter)
 {
   GList  *children = NULL;
   guint   i;
@@ -455,7 +493,8 @@ ggd_tag_find_children (const GPtrArray *tags,
     fake_scope = g_strdup (parent->name);
   }
   GGD_PTR_ARRAY_FOR (tags, i, el) {
-    if (scope_child_matches (fake_scope, el->atts.entry.scope, depth)) {
+    if (scope_child_matches (fake_scope, el->atts.entry.scope, depth) &&
+        el->type & filter) {
       children = g_list_insert_sorted_with_data (children, el,
                                                  tag_cmp_by_line,
                                                  GINT_TO_POINTER (GGD_SORT_ASC));
@@ -464,4 +503,24 @@ ggd_tag_find_children (const GPtrArray *tags,
   g_free (fake_scope);
   
   return children;
+}
+
+/**
+ * ggd_tag_find_children:
+ * @tags: Array of tags that contains @parent
+ * @parent: Tag for which get children
+ * @depth: Maximum depth for children to be found (< 0 means infinite)
+ * 
+ * Finds children tags of a #TMTag.
+ * <note><para>The returned list of children is sorted in the order they appears
+ * in the source file (by their lines positions)</para></note>
+ * 
+ * Returns: The list of children found for @parent
+ */
+GList *
+ggd_tag_find_children (const GPtrArray *tags,
+                       const TMTag     *parent,
+                       gint             depth)
+{
+  return ggd_tag_find_children_filtered (tags, parent, depth, tm_tag_max_t);
 }

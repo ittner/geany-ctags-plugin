@@ -70,6 +70,7 @@ struct _GgdDocSetting
   GgdPolicy   policy;
   gboolean    merge_children;
   TMTagType   matches;
+  gboolean    autodoc_children;
 };
 
 
