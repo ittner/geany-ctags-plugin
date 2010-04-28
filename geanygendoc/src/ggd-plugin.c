@@ -80,6 +80,7 @@ static PluginData plugin_data = {
 /* global plugin options */
 gchar      *GGD_OPT_doctype         = NULL;
 gboolean    GGD_OPT_save_to_refresh = FALSE;
+gboolean    GGD_OPT_indent          = TRUE;
 
 
 
@@ -148,6 +149,7 @@ load_configuration (void)
   plugin->config = ggd_opt_group_new ("General");
   ggd_opt_group_add_string (plugin->config, &GGD_OPT_doctype, "doctype");
   ggd_opt_group_add_boolean (plugin->config, &GGD_OPT_save_to_refresh, "save_to_refresh");
+  ggd_opt_group_add_boolean (plugin->config, &GGD_OPT_indent, "indent");
   conffile = ggd_get_config_file ("ggd.conf", NULL, GGD_PERM_R, &err);
   if (conffile) {
     success = ggd_opt_group_load_from_file (plugin->config, conffile, &err);

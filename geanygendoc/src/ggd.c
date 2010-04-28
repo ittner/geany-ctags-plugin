@@ -32,6 +32,14 @@
 #include "ggd-plugin.h"
 
 
+/* sci_get_line_indentation() is not in the plugin API for now (API v183), then
+ * implement it -- borrowed from Geany's sciwrappers.c */
+#ifndef sci_get_line_indentation
+# define sci_get_line_indentation(sci, line) \
+  (scintilla_send_message (sci, SCI_GETLINEINDENTATION, line, 0))
+#endif /* sci_get_line_indentation */
+
+
 /* The value that replace the "cursor" variable in templates, used to find it
  * and therefore the cursor position. This should be a value that the user never
  * want to output; otherwise it would behave strangely from the user point of
@@ -304,15 +312,16 @@ adjust_start_line (ScintillaObject *sci,
 
 /* inserts the comment for @tag in @sci according to @setting */
 static gboolean
-do_insert_comment (ScintillaObject *sci,
+do_insert_comment (GeanyDocument   *doc,
                    GPtrArray       *tag_array,
                    const TMTag     *tag,
                    GgdFileType     *ft,
                    GgdDocSetting   *setting)
 {
-  gboolean  success = FALSE;
-  gchar    *comment;
-  gint      cursor_offset = 0;
+  gboolean          success = FALSE;
+  gchar            *comment;
+  gint              cursor_offset = 0;
+  ScintillaObject  *sci = doc->editor->sci;
   
   comment = get_comment (ft, setting, tag_array, tag, &cursor_offset);
   if (comment) {
@@ -329,6 +338,9 @@ do_insert_comment (ScintillaObject *sci,
         line = tag->atts.entry.line - 1;
         line = adjust_start_line (sci, tag_array, tag, line);
         pos = sci_get_position_from_line (sci, line);
+        if (GGD_OPT_indent) {
+          pos += sci_get_line_indentation (sci, line);
+        }
         break;
       }
       
@@ -336,8 +348,8 @@ do_insert_comment (ScintillaObject *sci,
         pos = sci_get_current_position (sci);
         break;
     }
-    sci_insert_text (sci, pos, comment);
-    sci_set_current_position (sci, pos + cursor_offset, TRUE);
+    editor_insert_text_block (doc->editor, comment, pos, cursor_offset,
+                              -1, TRUE);
     success = TRUE;
   }
   g_free (comment);
@@ -446,7 +458,7 @@ insert_multiple_comments (GeanyDocument *doc,
     
     setting = get_setting_from_tag (doctype, tag_array, tag, &tag);
     if (setting && ! g_hash_table_lookup (tag_done_table, tag)) {
-      if (! do_insert_comment (sci, tag_array, tag, filetype, setting)) {
+      if (! do_insert_comment (doc, tag_array, tag, filetype, setting)) {
         success = FALSE;
         break;
       } else {

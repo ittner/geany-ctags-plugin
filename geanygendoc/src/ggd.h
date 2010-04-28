@@ -21,7 +21,7 @@
 #define H_GGD
 
 #include <glib.h>
-#include "geanyplugin.h"
+#include <geanyplugin.h>
 
 G_BEGIN_DECLS
 

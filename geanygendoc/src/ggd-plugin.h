@@ -45,6 +45,7 @@ extern  GeanyFunctions   *geany_functions;
 /* global plugin options */
 extern gchar     *GGD_OPT_doctype;
 extern gboolean   GGD_OPT_save_to_refresh;
+extern gboolean   GGD_OPT_indent;
 
 
 G_END_DECLS
