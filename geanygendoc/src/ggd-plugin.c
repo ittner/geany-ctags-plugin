@@ -471,6 +471,14 @@ plugin_configure (GtkDialog *dialog)
   ggd_opt_group_set_proxy_gtktogglebutton (plugin->config, &GGD_OPT_save_to_refresh,
                                            widget);
   gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
+  /* indent */
+  widget = gtk_check_button_new_with_mnemonic (_("_Indent comments"));
+  ui_widget_set_tooltip_text (widget, _("Whether to indent the comments to fit "
+                                        "the indentation at the insertion "
+                                        "position."));
+  ggd_opt_group_set_proxy_gtktogglebutton (plugin->config, &GGD_OPT_indent,
+                                           widget);
+  gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
   
   gtk_widget_show_all (box);
   
