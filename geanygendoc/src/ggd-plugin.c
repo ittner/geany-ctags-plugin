@@ -77,8 +77,9 @@ static PluginData plugin_data = {
   NULL, 0, NULL, NULL, NULL, 0l
 };
 
-static gchar     *OPT_doctype         = NULL;
-static gboolean   OPT_save_to_refresh = FALSE;
+/* global plugin options */
+gchar      *GGD_OPT_doctype         = NULL;
+gboolean    GGD_OPT_save_to_refresh = FALSE;
 
 
 
@@ -100,7 +101,7 @@ refresh_tag_list (TMWorkObject    *tm_wo,
   tm_source_file_buffer_update (tm_wo, buf, len, TRUE);
   g_free (buf);
   //*/
-  if (OPT_save_to_refresh) {
+  if (GGD_OPT_save_to_refresh) {
     document_save_file (doc, FALSE);
   }
 }
@@ -119,7 +120,7 @@ insert_comment (gint line)
     if (line < 0) {
       line = sci_get_current_line (doc->editor->sci);
     }
-    ggd_insert_comment (doc, line, OPT_doctype);
+    ggd_insert_comment (doc, line, GGD_OPT_doctype);
   }
 }
 
@@ -133,7 +134,7 @@ insert_all_comments (void)
   if (DOC_VALID (doc)) {
     /* try to ensure tags corresponds to the actual state of the file */
     refresh_tag_list (doc->tm_file, doc->editor->sci, doc);
-    ggd_insert_all_comments (doc, OPT_doctype);
+    ggd_insert_all_comments (doc, GGD_OPT_doctype);
   }
 }
 
@@ -145,8 +146,8 @@ load_configuration (void)
   GError   *err = NULL;
   
   plugin->config = ggd_opt_group_new ("General");
-  ggd_opt_group_add_string (plugin->config, &OPT_doctype, "doctype");
-  ggd_opt_group_add_boolean (plugin->config, &OPT_save_to_refresh, "save_to_refresh");
+  ggd_opt_group_add_string (plugin->config, &GGD_OPT_doctype, "doctype");
+  ggd_opt_group_add_boolean (plugin->config, &GGD_OPT_save_to_refresh, "save_to_refresh");
   conffile = ggd_get_config_file ("ggd.conf", NULL, GGD_PERM_R, &err);
   if (conffile) {
     success = ggd_opt_group_load_from_file (plugin->config, conffile, &err);
@@ -454,7 +455,7 @@ plugin_configure (GtkDialog *dialog)
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
   widget = gtk_entry_new ();
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
-  ggd_opt_group_set_proxy_gtkentry (plugin->config, &OPT_doctype, widget);
+  ggd_opt_group_set_proxy_gtkentry (plugin->config, &GGD_OPT_doctype, widget);
   gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
   /* auto-save */
   widget = gtk_check_button_new_with_mnemonic (_("_Save file before generating comment"));
@@ -465,7 +466,7 @@ plugin_configure (GtkDialog *dialog)
       "modified file, the behavior may be surprising since the comment will be "
       "generated for the last saved state and not the current state of the "
       "file."));
-  ggd_opt_group_set_proxy_gtktogglebutton (plugin->config, &OPT_save_to_refresh,
+  ggd_opt_group_set_proxy_gtktogglebutton (plugin->config, &GGD_OPT_save_to_refresh,
                                            widget);
   gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
   

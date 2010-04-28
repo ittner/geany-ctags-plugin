@@ -42,6 +42,10 @@ extern  GeanyPlugin      *geany_plugin;
 extern  GeanyData        *geany_data;
 extern  GeanyFunctions   *geany_functions;
 
+/* global plugin options */
+extern gchar     *GGD_OPT_doctype;
+extern gboolean   GGD_OPT_save_to_refresh;
+
 
 G_END_DECLS
 
