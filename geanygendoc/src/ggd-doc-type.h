@@ -24,8 +24,10 @@
 #include <glib.h>
 
 #include "ggd-doc-setting.h"
+#include "ggd-macros.h"
 
 G_BEGIN_DECLS
+GGD_BEGIN_PLUGIN_API
 
 
 typedef struct  _GgdDocType GgdDocType;
@@ -50,6 +52,7 @@ GgdDocSetting  *ggd_doc_type_resolve_setting  (const GgdDocType  *doctype,
                                                gint              *nth_child);
 
 
+GGD_END_PLUGIN_API
 G_END_DECLS
 
 #endif /* guard */

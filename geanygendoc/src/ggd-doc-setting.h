@@ -25,8 +25,10 @@
 #include <ctpl/ctpl.h>
 
 #include "ggd-tag-utils.h"
+#include "ggd-macros.h"
 
 G_BEGIN_DECLS
+GGD_BEGIN_PLUGIN_API
 
 
 /**
@@ -89,6 +91,7 @@ gboolean        ggd_doc_setting_matches       (const GgdDocSetting *setting,
                                                gssize               match_len);
 
 
+GGD_END_PLUGIN_API
 G_END_DECLS
 
 #endif /* guard */

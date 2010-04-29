@@ -23,7 +23,10 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
+#include "ggd-macros.h"
+
 G_BEGIN_DECLS
+GGD_BEGIN_PLUGIN_API
 
 
 /**
@@ -81,6 +84,7 @@ gboolean      ggd_opt_group_write_to_file             (GgdOptGroup *group,
                                            GTK_OBJECT (proxy), "active"))
 
 
+GGD_END_PLUGIN_API
 G_END_DECLS
 
 #endif /* guard */

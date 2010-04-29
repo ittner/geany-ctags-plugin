@@ -23,7 +23,10 @@
 #include <glib.h>
 #include <geanyplugin.h>
 
+#include "ggd-macros.h"
+
 G_BEGIN_DECLS
+GGD_BEGIN_PLUGIN_API
 
 
 /**
@@ -64,6 +67,7 @@ const gchar  *ggd_tag_type_get_name           (TMTagType  type);
 TMTagType     ggd_tag_type_from_name          (const gchar *name);
 
 
+GGD_END_PLUGIN_API
 G_END_DECLS
 
 #endif /* guard */

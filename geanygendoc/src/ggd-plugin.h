@@ -27,7 +27,22 @@
 #include <glib.h>
 #include <geanyplugin.h>
 
+#include "ggd-macros.h"
+
 G_BEGIN_DECLS
+
+
+/* pretty funny hack, because Geany doesn't use a shared library for it's API,
+ * then we need that global function table pointer, that Geany gives at plugin
+ * loading time */
+/* Note that this cannot be hidden since it is accessed by the Geany instance */
+extern  GeanyPlugin      *geany_plugin;
+extern  GeanyData        *geany_data;
+extern  GeanyFunctions   *geany_functions;
+
+
+/* Begin of the plugin's self API */
+GGD_BEGIN_PLUGIN_API
 
 
 #define GGD_PLUGIN_ONAME  geanygendoc
@@ -35,19 +50,13 @@ G_BEGIN_DECLS
 #define GGD_PLUGIN_NAME   "GeanyGenDoc"
 
 
-/* pretty funny hack, because Geany doesn't use a shared library for it's API,
- * then we need that global function table pointer, that Geany gives at plugin
- * loading time */
-extern  GeanyPlugin      *geany_plugin;
-extern  GeanyData        *geany_data;
-extern  GeanyFunctions   *geany_functions;
-
 /* global plugin options */
 extern gchar     *GGD_OPT_doctype;
 extern gboolean   GGD_OPT_save_to_refresh;
 extern gboolean   GGD_OPT_indent;
 
 
+GGD_END_PLUGIN_API
 G_END_DECLS
 
 #endif /* guard */

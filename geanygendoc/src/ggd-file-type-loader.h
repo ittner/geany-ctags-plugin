@@ -23,8 +23,10 @@
 #include <glib.h>
 
 #include "ggd-file-type.h"
+#include "ggd-macros.h"
 
 G_BEGIN_DECLS
+GGD_BEGIN_PLUGIN_API
 
 
 /**
@@ -51,6 +53,7 @@ gboolean        ggd_file_type_load                (GgdFileType *filetype,
                                                    GError     **error);
 
 
+GGD_END_PLUGIN_API
 G_END_DECLS
 
 #endif /* guard */

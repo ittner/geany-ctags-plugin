@@ -23,7 +23,10 @@
 #include <glib.h>
 #include <geanyplugin.h> /* Geany's utils for some wrappers */
 
+#include "ggd-macros.h"
+
 G_BEGIN_DECLS
+GGD_BEGIN_PLUGIN_API
 
 
 /**
@@ -60,6 +63,7 @@ gchar          *ggd_get_config_file             (const gchar *name,
   foreach_ptr_array ((item), (idx), (ptr_array))
 
 
+GGD_END_PLUGIN_API
 G_END_DECLS
 
 #endif /* guard */

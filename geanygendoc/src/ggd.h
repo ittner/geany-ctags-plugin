@@ -23,7 +23,10 @@
 #include <glib.h>
 #include <geanyplugin.h>
 
+#include "ggd-macros.h"
+
 G_BEGIN_DECLS
+GGD_BEGIN_PLUGIN_API
 
 
 gboolean        ggd_insert_comment            (GeanyDocument *doc,
@@ -33,6 +36,7 @@ gboolean        ggd_insert_all_comments       (GeanyDocument *doc,
                                                const gchar   *doc_type);
 
 
+GGD_END_PLUGIN_API
 G_END_DECLS
 
 #endif /* guard */

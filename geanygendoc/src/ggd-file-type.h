@@ -26,8 +26,10 @@
 #include <geanyplugin.h>
 
 #include "ggd-doc-type.h"
+#include "ggd-macros.h"
 
 G_BEGIN_DECLS
+GGD_BEGIN_PLUGIN_API
 
 
 typedef struct _GgdFileType GgdFileType;
@@ -58,6 +60,7 @@ GgdDocType         *ggd_file_type_get_doc   (const GgdFileType *filetype,
                                              const gchar       *name);
 
 
+GGD_END_PLUGIN_API
 G_END_DECLS
 
 #endif /* guard */
