@@ -1,6 +1,7 @@
 /*
  *  
- *  Copyright © 2009 Colomban "Ban" Wendling <ban@herbesfolles.org>
+ *  GeanyGenDoc, a Geany plugin to ease generation of source code documentation
+ *  Copyright (C) 2010  Colomban Wendling <ban@herbesfolles.org>
  *  
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
