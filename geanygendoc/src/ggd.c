@@ -146,19 +146,16 @@ get_env_for_tag (GgdFileType   *ft,
                  GeanyDocument *doc,
                  const TMTag   *tag)
 {
-  CtplEnviron *env;
-  GList       *children = NULL;
-  GPtrArray   *tag_array = doc->tm_file->tags_array;
+  CtplEnviron  *env;
+  GList        *children = NULL;
+  GPtrArray    *tag_array = doc->tm_file->tags_array;
+  gboolean      returns;
   
   env = ctpl_environ_new ();
   ctpl_environ_push_string (env, "cursor", GGD_CURSOR_IDENTIFIER);
   ctpl_environ_push_string (env, "symbol", tag->name);
-  /* get arguments & return type if appropriate */
-  if (tag->type & (tm_tag_function_t |
-                   tm_tag_macro_with_arg_t |
-                   tm_tag_prototype_t |
-                   tm_tag_method_t)) {
-    gboolean    returns;
+  /* get argument list it it exists */
+  if (tag->atts.entry.arglist) {
     CtplValue  *v;
     
     v = get_arg_list_from_string (ft, tag->atts.entry.arglist);
@@ -166,11 +163,13 @@ get_env_for_tag (GgdFileType   *ft,
       ctpl_environ_push (env, "argument_list", v);
       ctpl_value_free (v);
     }
-    returns = ! (tag->atts.entry.var_type != NULL &&
-                 /* C-style none return type hack */
-                 strcmp ("void", tag->atts.entry.var_type) == 0);
-    ctpl_environ_push_int (env, "returns", returns);
   }
+  /* get return type -- no matter if the return concept is pointless for that
+   * particular tag, it's up to the rule to use it when it makes sense */
+  returns = ! (tag->atts.entry.var_type != NULL &&
+               /* C-style none return type hack */
+               strcmp ("void", tag->atts.entry.var_type) == 0);
+  ctpl_environ_push_int (env, "returns", returns);
   /* get direct children tags */
   children = ggd_tag_find_children (tag_array, tag,
                                     FILETYPE_ID (doc->file_type), 0);
