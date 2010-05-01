@@ -511,7 +511,7 @@ ggd_insert_comment (GeanyDocument  *doc,
       GList          *tag_list = NULL;
       
       setting = get_setting_from_tag (doctype, tag_array, tag, &tag);
-      if (setting->autodoc_children) {
+      if (setting && setting->autodoc_children) {
         tag_list = ggd_tag_find_children_filtered (tag_array, tag, 0,
                                                    setting->matches);
       }
