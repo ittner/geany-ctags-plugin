@@ -46,7 +46,7 @@ GeanyData       *geany_data;
 GeanyFunctions  *geany_functions;
 
 /* TODO check minimum requierment */
-PLUGIN_VERSION_CHECK (172)
+PLUGIN_VERSION_CHECK (171)
 
 PLUGIN_SET_INFO (GGD_PLUGIN_NAME,
                  _("Generates documentation comments basis from source code"),

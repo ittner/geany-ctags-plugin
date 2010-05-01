@@ -19,7 +19,7 @@ LT_INIT([disable-static])
 AC_PROG_INSTALL
 
 # checking for Geany
-PKG_CHECK_MODULES(GEANY,  [geany      >= 0.19])
+PKG_CHECK_MODULES(GEANY,  [geany      >= 0.18.1])
 PKG_CHECK_MODULES(GTK,    [gtk+-2.0   >= 2.12])
 PKG_CHECK_MODULES(GLIB,   [glib-2.0   >= 2.14])
 # need GIO >= 2.18 for g_memory_output_stream_get_data_size()
