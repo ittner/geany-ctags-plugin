@@ -155,7 +155,8 @@ get_env_for_tag (GgdFileType   *ft,
   /* get arguments & return type if appropriate */
   if (tag->type & (tm_tag_function_t |
                    tm_tag_macro_with_arg_t |
-                   tm_tag_prototype_t)) {
+                   tm_tag_prototype_t |
+                   tm_tag_method_t)) {
     gboolean    returns;
     CtplValue  *v;
     
