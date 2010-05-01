@@ -28,6 +28,29 @@
 #include "ggd-plugin.h" /* to access Geany data/funcs */
 
 
+/* symbols_get_context_separator() borrowed from Geany since it isn't in the
+ * plugin API yet (API v183) */
+/* FIXME: replace calls to this function with Geany's
+ *        symbols_get_context_separator() when it gets into the plugin API */
+static const gchar *
+ggd_tag_utils_get_context_separator (filetype_id geany_ft)
+{
+  switch (geany_ft) {
+    case GEANY_FILETYPES_C:     /* for C++ .h headers or C structs */
+    case GEANY_FILETYPES_CPP:
+    case GEANY_FILETYPES_GLSL:  /* for structs */
+      return "::";
+
+    /* avoid confusion with other possible separators in group/section name */
+    case GEANY_FILETYPES_CONF:
+    case GEANY_FILETYPES_REST:
+      return ":::";
+
+    default:
+      return ".";
+  }
+}
+
 /*
  * tag_cmp_by_line:
  * @a: A #TMTag
@@ -190,6 +213,7 @@ ggd_tag_find_at_current_pos (GeanyDocument *doc)
 /**
  * ggd_tag_find_parent:
  * @tags: A #GPtrArray of #TMTag<!-- -->s containing @tag
+ * @geany_ft: The Geany's file type identifier for which tags were generated
  * @child: A #TMTag, child of the tag to find
  * 
  * Finds the parent tag of a #TMTag.
@@ -198,6 +222,7 @@ ggd_tag_find_at_current_pos (GeanyDocument *doc)
  */
 TMTag *
 ggd_tag_find_parent (const GPtrArray *tags,
+                     filetype_id      geany_ft,
                      const TMTag     *child)
 {
   TMTag *tag = NULL;
@@ -213,17 +238,22 @@ ggd_tag_find_parent (const GPtrArray *tags,
     const gchar  *tmp;
     guint         i;
     TMTag        *el;
+    const gchar  *separator;
+    gsize         separator_len;
     
-    /* scope is of the form a::b::c */
+    /* scope is of the form a<sep>b<sep>c */
     parent_name = child->atts.entry.scope;
-    while ((tmp = strstr (parent_name, "::")) != NULL) {
-      parent_name = &tmp[2];
+    separator = ggd_tag_utils_get_context_separator (geany_ft);
+    separator_len = strlen (separator);
+    while ((tmp = strstr (parent_name, separator)) != NULL) {
+      parent_name = &tmp[separator_len];
     }
     /* if parent have scope */
     if (parent_name != child->atts.entry.scope) {
       /* the parent scope is the "dirname" of the child's scope */
       parent_scope = g_strndup (child->atts.entry.scope,
-                                parent_name - child->atts.entry.scope - 2);
+                                parent_name - child->atts.entry.scope -
+                                  separator_len);
     }
     /*g_debug ("%s: parent_name = %s", G_STRFUNC, parent_name);
     g_debug ("%s: parent_scope = %s", G_STRFUNC, parent_scope);*/
@@ -333,6 +363,7 @@ ggd_tag_get_type_name (const TMTag *tag)
 /**
  * ggd_tag_resolve_type_hierarchy:
  * @tags: The tag array that contains @tag
+ * @geany_ft: The Geany's file type identifier for which tags were generated
  * @tag: A #TMTag to which get the type hierarchy
  * 
  * Gets the type hierarchy of a tag as a string, each element separated by a
@@ -346,6 +377,7 @@ ggd_tag_get_type_name (const TMTag *tag)
  */
 gchar *
 ggd_tag_resolve_type_hierarchy (const GPtrArray *tags,
+                                filetype_id      geany_ft,
                                 const TMTag     *tag)
 {
   gchar *scope = NULL;
@@ -358,12 +390,12 @@ ggd_tag_resolve_type_hierarchy (const GPtrArray *tags,
   } else {
     TMTag *parent_tag;
     
-    parent_tag = ggd_tag_find_parent (tags, tag);
+    parent_tag = ggd_tag_find_parent (tags, geany_ft, tag);
     scope = g_strdup (ggd_tag_get_type_name (tag));
     if (parent_tag) {
       gchar *parent_scope;
       
-      parent_scope = ggd_tag_resolve_type_hierarchy (tags, parent_tag);
+      parent_scope = ggd_tag_resolve_type_hierarchy (tags, geany_ft, parent_tag);
       if (! parent_scope) {
         /*g_debug ("no parent scope");*/
       } else {
@@ -416,6 +448,7 @@ ggd_tag_find_from_name (const GPtrArray *tags,
  * scope_child_matches:
  * @a: parent scope
  * @b: child scope
+ * @geany_ft: The Geany's file type identifier for which tags were generated
  * @maxdepth: maximum sub-child level that matches, or < 0 for all to match
  * 
  * Checks if scope @b is inside scope @a. @maxdepth make possible to only match
@@ -427,22 +460,27 @@ ggd_tag_find_from_name (const GPtrArray *tags,
 static gboolean
 scope_child_matches (const gchar *a,
                      const gchar *b,
+                     filetype_id  geany_ft,
                      gint         maxdepth)
 {
   gboolean matches = FALSE;
   
+  /*g_debug ("trying to match %s against %s", b, a);*/
   if (a && b) {
     for (; *a && *b && *a == *b; a++, b++);
     if (! *a /* we're at the end of the prefix and it matched */) {
+      const gchar  *separator;
+      
+      separator = ggd_tag_utils_get_context_separator (geany_ft);
       if (maxdepth < 0) {
-        if (! *b || (b[0] == ':' && b[1] == ':')) {
+        if (! *b || strncmp (b, separator, strlen (separator)) == 0) {
           matches = TRUE;
         }
       } else {
         while (! matches && maxdepth >= 0) {
           const gchar *tmp;
           
-          tmp = strstr (b, "::");
+          tmp = strstr (b, separator);
           if (tmp) {
             b = &tmp[2];
             maxdepth --;
@@ -465,6 +503,7 @@ scope_child_matches (const gchar *a,
  * ggd_tag_find_children:
  * @tags: Array of tags that contains @parent
  * @parent: Tag for which get children
+ * @geany_ft: The Geany's file type identifier for which tags were generated
  * @depth: Maximum depth for children to be found (< 0 means infinite)
  * @filter: A logical OR of the TMTagType<!-- -->s to match
  * 
@@ -477,6 +516,7 @@ scope_child_matches (const gchar *a,
 GList *
 ggd_tag_find_children_filtered (const GPtrArray *tags,
                                 const TMTag     *parent,
+                                filetype_id      geany_ft,
                                 gint             depth,
                                 TMTagType        filter)
 {
@@ -489,12 +529,15 @@ ggd_tag_find_children_filtered (const GPtrArray *tags,
   g_return_val_if_fail (parent != NULL, NULL);
   
   if (parent->atts.entry.scope) {
-    fake_scope = g_strconcat (parent->atts.entry.scope, parent->name, NULL);
+    fake_scope = g_strconcat (parent->atts.entry.scope,
+                              ggd_tag_utils_get_context_separator (geany_ft),
+                              parent->name, NULL);
   } else {
     fake_scope = g_strdup (parent->name);
   }
   GGD_PTR_ARRAY_FOR (tags, i, el) {
-    if (scope_child_matches (fake_scope, el->atts.entry.scope, depth) &&
+    if (scope_child_matches (fake_scope, el->atts.entry.scope,
+                             geany_ft, depth) &&
         el->type & filter) {
       children = g_list_insert_sorted_with_data (children, el,
                                                  tag_cmp_by_line,
@@ -510,6 +553,7 @@ ggd_tag_find_children_filtered (const GPtrArray *tags,
  * ggd_tag_find_children:
  * @tags: Array of tags that contains @parent
  * @parent: Tag for which get children
+ * @geany_ft: The Geany's file type identifier for which tags were generated
  * @depth: Maximum depth for children to be found (< 0 means infinite)
  * 
  * Finds children tags of a #TMTag.
@@ -521,7 +565,9 @@ ggd_tag_find_children_filtered (const GPtrArray *tags,
 GList *
 ggd_tag_find_children (const GPtrArray *tags,
                        const TMTag     *parent,
+                       filetype_id      geany_ft,
                        gint             depth)
 {
-  return ggd_tag_find_children_filtered (tags, parent, depth, tm_tag_max_t);
+  return ggd_tag_find_children_filtered (tags, parent, geany_ft,
+                                         depth, tm_tag_max_t);
 }

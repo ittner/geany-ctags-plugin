@@ -143,11 +143,12 @@ hash_table_env_push_list_cb (gpointer symbol,
 static CtplEnviron *
 get_env_for_tag (GgdFileType   *ft,
                  GgdDocSetting *setting,
-                 GPtrArray     *tag_array,
+                 GeanyDocument *doc,
                  const TMTag   *tag)
 {
   CtplEnviron *env;
   GList       *children = NULL;
+  GPtrArray   *tag_array = doc->tm_file->tags_array;
   
   env = ctpl_environ_new ();
   ctpl_environ_push_string (env, "cursor", GGD_CURSOR_IDENTIFIER);
@@ -171,7 +172,8 @@ get_env_for_tag (GgdFileType   *ft,
     ctpl_environ_push_int (env, "returns", returns);
   }
   /* get direct children tags */
-  children = ggd_tag_find_children (tag_array, tag, 0);
+  children = ggd_tag_find_children (tag_array, tag,
+                                    FILETYPE_ID (doc->file_type), 0);
   if (setting->merge_children) {
     CtplValue *v;
     
@@ -224,7 +226,7 @@ get_env_for_tag (GgdFileType   *ft,
 static gchar *
 get_comment (GgdFileType   *ft,
              GgdDocSetting *setting,
-             GPtrArray     *tag_array,
+             GeanyDocument *doc,
              const TMTag   *tag,
              gint          *cursor_offset)
 {
@@ -234,7 +236,7 @@ get_comment (GgdFileType   *ft,
     GError      *err = NULL;
     CtplEnviron *env;
     
-    env = get_env_for_tag (ft, setting, tag_array, tag);
+    env = get_env_for_tag (ft, setting, doc, tag);
     ctpl_environ_merge (env, ft->user_env, FALSE);
     if (! ctpl_environ_add_from_string (env, GGD_OPT_environ, &err)) {
       msgwin_status_add (_("Failed to add global environment, skipping: %s"),
@@ -320,7 +322,6 @@ adjust_start_line (ScintillaObject *sci,
 /* inserts the comment for @tag in @sci according to @setting */
 static gboolean
 do_insert_comment (GeanyDocument   *doc,
-                   GPtrArray       *tag_array,
                    const TMTag     *tag,
                    GgdFileType     *ft,
                    GgdDocSetting   *setting)
@@ -329,8 +330,9 @@ do_insert_comment (GeanyDocument   *doc,
   gchar            *comment;
   gint              cursor_offset = 0;
   ScintillaObject  *sci = doc->editor->sci;
+  GPtrArray        *tag_array = doc->tm_file->tags_array;
   
-  comment = get_comment (ft, setting, tag_array, tag, &cursor_offset);
+  comment = get_comment (ft, setting, doc, tag, &cursor_offset);
   if (comment) {
     gint pos;
     
@@ -368,21 +370,24 @@ do_insert_comment (GeanyDocument   *doc,
  * Since a policy may forward documenting to a parent, tag that actually applies
  * is returned in @real_tag. */
 static GgdDocSetting *
-get_setting_from_tag (GgdDocType   *doctype,
-                      GPtrArray    *tag_array,
-                      const TMTag  *tag,
-                      const TMTag **real_tag)
+get_setting_from_tag (GgdDocType     *doctype,
+                      GeanyDocument  *doc,
+                      const TMTag    *tag,
+                      const TMTag   **real_tag)
 {
   GgdDocSetting  *setting;
   gchar          *hierarchy;
   gint            nth_child;
+  GPtrArray      *tag_array = doc->tm_file->tags_array;
+  filetype_id     geany_ft = FILETYPE_ID (doc->file_type);
   
-  hierarchy = ggd_tag_resolve_type_hierarchy (tag_array, tag);
+  hierarchy = ggd_tag_resolve_type_hierarchy (tag_array, geany_ft, tag);
+  /*g_debug ("type hierarchy for tag %s is: %s", tag->name, hierarchy);*/
   setting = ggd_doc_type_resolve_setting (doctype, hierarchy, &nth_child);
   *real_tag = tag;
   if (setting) {
     for (; nth_child > 0; nth_child--) {
-      *real_tag = ggd_tag_find_parent (tag_array, *real_tag);
+      *real_tag = ggd_tag_find_parent (tag_array, geany_ft, *real_tag);
     }
   }
   g_free (hierarchy);
@@ -449,23 +454,21 @@ insert_multiple_comments (GeanyDocument *doc,
 {
   gboolean          success = FALSE;
   GList            *node;
-  GPtrArray        *tag_array;
   ScintillaObject  *sci = doc->editor->sci;
   GHashTable       *tag_done_table; /* keeps the list of documented tags.
                                      * Useful since documenting a tag might
                                      * actually document another one */
   
   success = TRUE;
-  tag_array = doc->tm_file->tags_array;
   tag_done_table = g_hash_table_new (NULL, NULL);
   sci_start_undo_action (sci);
   for (node = sorted_tag_list; node; node = node->next) {
     GgdDocSetting  *setting;
     const TMTag    *tag = node->data;
     
-    setting = get_setting_from_tag (doctype, tag_array, tag, &tag);
+    setting = get_setting_from_tag (doctype, doc, tag, &tag);
     if (setting && ! g_hash_table_lookup (tag_done_table, tag)) {
-      if (! do_insert_comment (doc, tag_array, tag, filetype, setting)) {
+      if (! do_insert_comment (doc, tag, filetype, setting)) {
         success = FALSE;
         break;
       } else {
@@ -520,10 +523,11 @@ ggd_insert_comment (GeanyDocument  *doc,
       GgdDocSetting  *setting;
       GList          *tag_list = NULL;
       
-      setting = get_setting_from_tag (doctype, tag_array, tag, &tag);
+      setting = get_setting_from_tag (doctype, doc, tag, &tag);
       if (setting && setting->autodoc_children) {
-        tag_list = ggd_tag_find_children_filtered (tag_array, tag, 0,
-                                                   setting->matches);
+        tag_list = ggd_tag_find_children_filtered (tag_array, tag,
+                                                   FILETYPE_ID (doc->file_type),
+                                                   0, setting->matches);
       }
       /* we assume that a parent always comes before any children, then simply add
        * it at the end */
