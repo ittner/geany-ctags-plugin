@@ -17,6 +17,7 @@ noinst_HEADERS         = ggd.h \
                          ggd-file-type-loader.h \
                          ggd-file-type-manager.h \
                          ggd-tag-utils.h \
+                         ggd-macros.h \
                          ggd-options.h \
                          ggd-plugin.h \
                          ggd-utils.h
