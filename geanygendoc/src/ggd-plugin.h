@@ -55,6 +55,7 @@ GGD_BEGIN_PLUGIN_API
 extern gchar     *GGD_OPT_doctype;
 extern gboolean   GGD_OPT_save_to_refresh;
 extern gboolean   GGD_OPT_indent;
+extern gchar     *GGD_OPT_environ;
 
 
 GGD_END_PLUGIN_API

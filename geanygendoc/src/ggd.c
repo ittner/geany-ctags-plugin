@@ -236,6 +236,11 @@ get_comment (GgdFileType   *ft,
     
     env = get_env_for_tag (ft, setting, tag_array, tag);
     ctpl_environ_merge (env, ft->user_env, FALSE);
+    if (! ctpl_environ_add_from_string (env, GGD_OPT_environ, &err)) {
+      msgwin_status_add (_("Failed to add global environment, skipping: %s"),
+                         err->message);
+      g_clear_error (&err);
+    }
     comment = parser_parse_to_string (setting->template, env, &err);
     if (! comment) {
       msgwin_status_add (_("Failed to build comment: %s"), err->message);

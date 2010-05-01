@@ -82,6 +82,7 @@ static PluginData plugin_data = {
 gchar      *GGD_OPT_doctype         = NULL;
 gboolean    GGD_OPT_save_to_refresh = FALSE;
 gboolean    GGD_OPT_indent          = TRUE;
+gchar      *GGD_OPT_environ         = NULL;
 
 
 
@@ -151,6 +152,7 @@ load_configuration (void)
   ggd_opt_group_add_string (plugin->config, &GGD_OPT_doctype, "doctype");
   ggd_opt_group_add_boolean (plugin->config, &GGD_OPT_save_to_refresh, "save_to_refresh");
   ggd_opt_group_add_boolean (plugin->config, &GGD_OPT_indent, "indent");
+  ggd_opt_group_add_string (plugin->config, &GGD_OPT_environ, "environ");
   conffile = ggd_get_config_file ("ggd.conf", NULL, GGD_PERM_R, &err);
   if (conffile) {
     success = ggd_opt_group_load_from_file (plugin->config, conffile, &err);
@@ -480,6 +482,30 @@ plugin_configure (GtkDialog *dialog)
   ggd_opt_group_set_proxy_gtktogglebutton (plugin->config, &GGD_OPT_indent,
                                            widget);
   gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
+  /* environ editor */
+  widget = gtk_frame_new (_("Global environment"));
+  ui_widget_set_tooltip_text (widget, _("Global environment overrides and "
+                                        "additions. This environment will be "
+                                        "merged with the filetype-specific "
+                                        "ones."));
+  {
+    GtkWidget *scrolled;
+    GtkWidget *view;
+    GObject   *proxy;
+    
+    scrolled = gtk_scrolled_window_new (NULL, NULL);
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
+                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+    gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled),
+                                         GTK_SHADOW_IN);
+    gtk_container_add (GTK_CONTAINER (widget), scrolled);
+    view = gtk_text_view_new ();
+    proxy = G_OBJECT (gtk_text_view_get_buffer (GTK_TEXT_VIEW (view)));
+    ggd_opt_group_set_proxy (plugin->config, &GGD_OPT_environ, proxy, "text");
+    gtk_container_add (GTK_CONTAINER (scrolled), view);
+  }
+  gtk_box_pack_start (GTK_BOX (box), widget, TRUE, TRUE, 0);
+  
   
   gtk_widget_show_all (box);
   
