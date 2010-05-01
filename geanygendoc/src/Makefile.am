@@ -9,7 +9,8 @@ geanygendoc_la_SOURCES = ggd.c \
                          ggd-tag-utils.c \
                          ggd-options.c \
                          ggd-plugin.c \
-                         ggd-utils.c
+                         ggd-utils.c \
+                         ggd-widget-frame.c
 noinst_HEADERS         = ggd.h \
                          ggd-doc-setting.h \
                          ggd-doc-type.h \
@@ -20,7 +21,8 @@ noinst_HEADERS         = ggd.h \
                          ggd-macros.h \
                          ggd-options.h \
                          ggd-plugin.h \
-                         ggd-utils.h
+                         ggd-utils.h \
+                         ggd-widget-frame.h
 geanygendoc_la_LDFLAGS = -module -avoid-version
 geanygendoc_la_LIBADD  = @GEANY_LIBS@ \
                          @GLIB_LIBS@ \

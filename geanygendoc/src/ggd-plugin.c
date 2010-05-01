@@ -424,6 +424,8 @@ plugin_cleanup (void)
 
 /* --- Configuration dialog --- */
 
+#include "ggd-widget-frame.h"
+
 static void
 conf_dialog_response_handler (GtkDialog  *dialog,
                               gint        response_id,
@@ -483,7 +485,7 @@ plugin_configure (GtkDialog *dialog)
                                            widget);
   gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
   /* environ editor */
-  widget = gtk_frame_new (_("Global environment"));
+  widget = ggd_frame_new (_("Global environment"));
   ui_widget_set_tooltip_text (widget, _("Global environment overrides and "
                                         "additions. This environment will be "
                                         "merged with the filetype-specific "
