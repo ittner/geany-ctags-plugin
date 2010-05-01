@@ -471,6 +471,11 @@ insert_multiple_comments (GeanyDocument *doc,
       } else {
         g_hash_table_insert (tag_done_table, (gpointer)tag, (gpointer)tag);
       }
+    } else if (! setting) {
+      msgwin_status_add (_("No setting applies to symbol \"%s\" of type \"%s\" "
+                           "at line %lu"),
+                         tag->name, ggd_tag_get_type_name (tag),
+                         tag->atts.entry.line);
     }
   }
   sci_end_undo_action (sci);
