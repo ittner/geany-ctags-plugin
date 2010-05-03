@@ -28,7 +28,7 @@
 #include "geanylatex.h"
 #include "ctype.h"
 
-PLUGIN_VERSION_CHECK(170)
+PLUGIN_VERSION_CHECK(184)
 
 PLUGIN_SET_INFO(_("GeanyLaTeX"), _("Plugin to provide better LaTeX support"),
 	VERSION,"Frank Lanitz <frank@frank.uvena.de>")
@@ -437,12 +437,13 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 					if (sci_get_char_at(sci, pos - (editor_get_eol_char_len (editor) + 1)) == '}'||
 						sci_get_char_at(sci, pos - (editor_get_eol_char_len (editor) + 1)) == ']')
 					{
-						gchar *buf, *construct, *indent;
+						gchar *buf, *construct;
 						/* TODO: Make possible to have longer than a 50 chars environment */
 						gchar env[50];
 						gint line = sci_get_line_from_position(sci, pos - (editor_get_eol_char_len (editor) + 1));
 						gint line_len = sci_get_line_length(sci, line);
 						gint i, start;
+						gint indent;
 
 						/* get the line */
 						buf = sci_get_line(sci, line);
@@ -516,15 +517,18 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 
 							/* After we have this, we need to ensure basic
 							 * indent is getting applied on closing command */
-							indent = g_strndup(buf, start);
+							indent = sci_get_line_indentation(sci, line);
 
 							/* Now we build up closing string and insert
 							 * it into document */
-							construct = g_strdup_printf("\t\n%s\\end%s{%s}", indent, full_cmd, env);
+							construct = g_strdup_printf("\t\n\\end%s{%s}", full_cmd, env);
 							editor_insert_text_block(editor, construct, pos,
 								1, -1, TRUE);
+							sci_set_line_indentation(
+								sci,
+								sci_get_current_line(sci) + 1,
+								indent);
 							g_free(construct);
-							g_free(indent);
 						}
 					}
 				break;
