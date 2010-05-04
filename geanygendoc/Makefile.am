@@ -1,11 +1,15 @@
 
-SUBDIRS = src data po
+SUBDIRS = src data po docs
 
 ACLOCAL_AMFLAGS = -I build/m4
 
 EXTRA_DIST = autogen.sh \
              README \
              po/LINGUAS
+
+doc_DATA = AUTHORS \
+           COPYING \
+           README
 
 sign:
 	if test -f $(PACKAGE)-$(VERSION).tar.gz; then \

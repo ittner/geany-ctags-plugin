@@ -18,6 +18,10 @@ LT_PREREQ([2.2.0])
 LT_INIT([disable-static])
 AC_PROG_INSTALL
 
+AC_PATH_PROG([RST2HTML], [rst2html], [no])
+AC_SUBST([RST2HTML])
+AM_CONDITIONAL([BUILD_RST], [test "x$RST2HTML" != "xno"])
+
 # checking for Geany
 PKG_CHECK_MODULES(GEANY,  [geany      >= 0.18.1])
 PKG_CHECK_MODULES(GTK,    [gtk+-2.0   >= 2.12])
@@ -57,6 +61,8 @@ libdir="`$PKG_CONFIG --variable=libdir geany`/geany"
 # same for the data, since we use geany->app->datadir
 plugindatadir="`$PKG_CONFIG --variable=datadir geany`/geany/plugins/${PACKAGE_TARNAME}"
 AC_SUBST([plugindatadir])
+# docdir
+docdir="`$PKG_CONFIG --variable=prefix geany`/share/doc/geany-plugins/${PACKAGE_TARNAME}/"
 
 
 AC_CONFIG_FILES([
@@ -66,6 +72,8 @@ AC_CONFIG_FILES([
   data/Makefile
   data/filetypes/Makefile
   po/Makefile.in
+  docs/Makefile
+  docs/help/Makefile
 ])
 AC_OUTPUT
 

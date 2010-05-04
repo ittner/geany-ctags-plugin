@@ -17,6 +17,10 @@ You will need the following packages to build GeanyGenDoc:
  - A working make implementation (GNU make is recommended,
    http://www.gnu.org/software/make/)
 
+You may also want the following packages that enables extra features:
+ - Docutils (http://docutils.sourceforge.net/) -- or another implementation of
+   rst2html -- is needed to (re)generate the HTML manual.
+
 
 Installation
 ============
