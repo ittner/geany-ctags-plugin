@@ -36,4 +36,5 @@ AM_CFLAGS = @GEANY_CFLAGS@ \
             @GIO_CFLAGS@ \
             @GTK_CFLAGS@ \
             @CTPL_CFLAGS@ \
-            -DLOCALEDIR=\""$(localedir)"\"
+            -DLOCALEDIR=\""$(localedir)"\" \
+            -DDOCDIR=\""$(docdir)/"\"

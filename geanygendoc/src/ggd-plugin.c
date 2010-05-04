@@ -261,6 +261,13 @@ open_current_filetype_conf_handler (GtkWidget  *widget,
   }
 }
 
+static void
+open_manual_handler (GtkWidget  *widget,
+                     gpointer    data)
+{
+  utils_open_browser (DOCDIR "manual.html");
+}
+
 /* handler that reloads the configuration */
 static void
 reload_configuration_hanlder (GtkWidget  *widget,
@@ -377,6 +384,17 @@ create_tools_menu_item (void)
                     G_CALLBACK (open_current_filetype_conf_handler), NULL);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   ui_add_document_sensitive (item);
+  /* separator */
+  item = gtk_separator_menu_item_new ();
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+  /* help/manual opening */
+  item = gtk_image_menu_item_new_with_mnemonic (_("Open _manual"));
+  ui_widget_set_tooltip_text (item, _("Open the manual in a browser"));
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
+                                 gtk_image_new_from_stock (GTK_STOCK_HELP,
+                                                           GTK_ICON_SIZE_MENU));
+  g_signal_connect (item, "activate", G_CALLBACK (open_manual_handler), NULL);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   /* build tools menu item */
   item = gtk_menu_item_new_with_mnemonic (_("_Documentation generator"));
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), menu);
