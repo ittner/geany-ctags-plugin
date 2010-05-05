@@ -502,7 +502,6 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 								end_construct = g_strdup_printf("\\end%s{%s}", full_cmd, env);
 								if (strstr(tmp, end_construct) != NULL)
 								{
-									g_warning ("was gefunden");
 									/* Clean up everything and quit as nothing
 									 * needs to be done */
 									g_free(tmp);
@@ -524,9 +523,8 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 							construct = g_strdup_printf("\t\n\\end%s{%s}", full_cmd, env);
 							editor_insert_text_block(editor, construct, pos,
 								1, -1, TRUE);
-							sci_set_line_indentation(
-								sci,
-								sci_get_current_line(sci) + 1,
+							/* ... and setting the indention */ 
+							sci_set_line_indentation(sci, sci_get_current_line(sci) + 1,
 								indent);
 							g_free(construct);
 						}
