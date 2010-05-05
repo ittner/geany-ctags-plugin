@@ -92,11 +92,13 @@ void glatex_insert_environment(gchar *environment, gint type)
 		}
 		else
 		{
-			gint pos = sci_get_current_position(doc->editor->sci);
-			gint len = strlen(environment);
+			gint indent, pos, len;
 			GString *tmpstring = NULL;
 			gchar *tmp = NULL;
 
+			pos = sci_get_current_position(doc->editor->sci);
+			len = strlen(environment);
+			
 			sci_start_undo_action(doc->editor->sci);
 
 			tmpstring = g_string_new("\\begin{");
@@ -122,8 +124,15 @@ void glatex_insert_environment(gchar *environment, gint type)
 			glatex_insert_string(tmp, TRUE);
 			g_free(tmp);
 
+			indent = sci_get_line_indentation(doc->editor->sci,
+				sci_get_line_from_position(doc->editor->sci, pos));	
+
 			tmp = g_strdup_printf("\n\\end{%s}\n", environment);
 			glatex_insert_string(tmp, FALSE);
+
+			sci_set_line_indentation(doc->editor->sci,
+				sci_get_current_line(doc->editor->sci) + 1, indent);
+
 			g_free(tmp);
 
 			sci_end_undo_action(doc->editor->sci);
