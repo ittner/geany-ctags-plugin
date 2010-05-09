@@ -20,7 +20,8 @@ AC_PROG_INSTALL
 
 AC_PATH_PROG([RST2HTML], [rst2html], [no])
 AC_SUBST([RST2HTML])
-AM_CONDITIONAL([BUILD_RST], [test "x$RST2HTML" != "xno"])
+BUILD_RST=`test "x$RST2HTML" != "xno" && echo Yes || echo No`
+AM_CONDITIONAL([BUILD_RST], [test "x$BUILD_RST" == "xYes"])
 
 # checking for Geany
 PKG_CHECK_MODULES(GEANY,  [geany      >= 0.18.1])
@@ -83,6 +84,7 @@ echo "Using GLib version                   : ${GLIB_VERSION}"
 echo "Using GIO version                    : ${GIO_VERSION}"
 echo "Using GTK version                    : ${GTK_VERSION}"
 echo "Using CTPL version                   : ${CTPL_VERSION}"
+echo "Build documentation                  : $BUILD_RST"
 echo ""
 echo "Configuration is done OK."
 echo ""
