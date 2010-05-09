@@ -49,8 +49,9 @@ Syntax
 Key-Value pairs
 ---------------
 
-The syntax is an extended key-value tree definition based on common concepts
-(trees, string literals, semicolon-ended values, etc.).
+The syntax used by the configuration files is an extended key-value tree 
+definition based on common concepts (trees, string literals, semicolon-ended 
+values, etc.).
 
 The key-value syntax is as follows::
 
