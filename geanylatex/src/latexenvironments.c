@@ -128,7 +128,7 @@ void glatex_insert_environment(gchar *environment, gint type)
 			indent = sci_get_line_indentation(doc->editor->sci,
 				sci_get_line_from_position(doc->editor->sci, pos));
 
-			tmp = g_strdup_printf("\n\\end{%s}\n", environment);
+			tmp = g_strdup_printf("\n\\end{%s}", environment);
 			glatex_insert_string(tmp, FALSE);
 
 			prefs = editor_get_indent_prefs(doc->editor);
