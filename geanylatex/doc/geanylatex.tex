@@ -55,10 +55,10 @@ openany,%
 
 \begin{document}
 
-\dedication{\normalsize \textbf{Note:} Please note the document has been created on
-\today. If you are using devel version from SVN, please compile and check
-\texttt{doc/geanylatex.tex} from sources. Please check page \pageref
-{sec:compiling_of_documentation}, section \ref{sec:compiling_of_documentation} how to do so. }
+\dedication{\normalsize \textbf{Note:} Please note that this document has been created on
+\today. If you are using a devel version from SVN, please compile and check
+\texttt{doc/geanylatex.tex} from sources. Please check Page \pageref
+{sec:compiling_of_documentation}, Section \ref{sec:compiling_of_documentation} to see how to do this. }
 
 \pagenumbering{Roman}
 \maketitle
@@ -69,28 +69,25 @@ openany,%
 \pagenumbering{arabic}
 \section{About the plugin}
 
-Geany\LaTeX{} is a little plugin to improve support of \LaTeX{} on Geany.
-It implements a couple of maybe useful functions:
+Geany\LaTeX{} is a little plugin to improve \LaTeX{} support in Geany.
+It implements a couple of hopefully useful functions:
 
 \begin{itemize}
-	\item Wizard to create new \LaTeX{} documents in a fast and easy way
+	\item A wizard to create new \LaTeX{} documents in a fast and easy way
 	 	  with a bunch of templates available
-	\item A front end for add labels \textbackslash label{} and
+	\item A front end for adding labels \textbackslash label{} and
 		  references \textbackslash ref{} and \textbackslash pageref{}
-   		  with getting suggestion from aux file of document
-	\item A dialog helping inserting \texttt{\textbackslash{}usepackage\{\}}
-		  into head of document.
-	\item Inserting special characters through menu
-	\item Help entering the right fields for BibTeX entries by
-		  providing templates
-	\item Easy inserting format patterns like \textbackslash texttt{}
-		  through menu
-	\item Support on inserting environments by offering an dialog and
+   		  getting suggestions from the document's aux file
+	\item Insertion of special characters through the menu
+	\item Help on BibTeX entries by templates
+	\item Easy insertion of format patterns like \textbackslash texttt{}
+		  through the menu
+	\item Support of environment insertion by offering an dialog and
 		  recognising selections
 	\item Shortcuts for inserting \textbackslash item and
 		  \textbackslash newline
-	\item Toolbar with often used format options
-	\item A couple of useful autocompletion functions during typing
+	\item Toolbar with frequently used format options
+	\item A couple of useful auto-completion functions during typing
 \end{itemize}
 
 \newpage
@@ -98,38 +95,38 @@ It implements a couple of maybe useful functions:
 \subsection*{Since 0.4}
 \begin{itemize}
 
-	\item Introducing custom templates for \LaTeX-Wizard
-	\item Adding a icon for \LaTeX-Wizard to toolbar
-	\item Adding shortcuts for inserting common list environments
+	\item Introduced custom templates for \LaTeX-Wizard
+	\item Added a \LaTeX-Wizard icon to the toolbar
+	\item Added shortcuts for inserting common list environments
 		  like \texttt{enumerate}, \texttt{itemize} and
 		  \texttt{description}
-	\item Some general bugfixes and improvments. As always, see
+	\item Some general bugfixes and improvements. As always, see the
 		  ChangeLog or svn log.
-	\item Switch to waf for building the plugin
-	\item Move some \LaTeX{}-specific stuff out of Geany's core into the
-		  plugin. This is effecting e.g. this functions
+	\item Switched to waf for building the plugin
+	\item Moved some \LaTeX{}-specific stuff out of Geany's core into the
+		  plugin. This affects features like
 			\begin{itemize}
 				\item Autocompletion of \texttt{\textbackslash{}end\{\}}
 					and \texttt{\textbackslash{}endgroup\{\}}
 			\end{itemize}
-	\item Increasing dependency for plugin to Geany Plugin API v166
-	\item Make inserting text for references configurable.
-	\item Add an function to insert \textbackslash{}usepackage\{\} into
+	\item Proceeded to Geany Plugin API v166
+	\item Made reference insertion configurable.
+	\item Added an function to insert \textbackslash{}usepackage\{\} into
 		  header of file
 	\item Automatic adding of \{\} after typing of \_{} and \symbol{94}
 \end{itemize}
 
 \subsection*{GeanyLaTeX{} 0.4 -- 2009-05-26}
 \begin{itemize}
-	\item Adding a toolbar with often used format commands
-	\item Adding a configuration dialog to configure basic options
-          of plugin
+	\item Added a toolbar with frequently used format commands
+	\item Added a configuration dialog to configure basic options
+          of the plugin
 	\item Moved documentation into a \TeX{}-document
 	\item Replace \textbackslash{}u-UTF-8 letters by octal coded
-          chars to don't depend on C99 anymore.
+          chars to avoid dependency on C99.
 	\item Added a function to bulk replace special characters
           inside marked text by keybinding
-	\item Added a function to replace special characters on typing
+	\item Added a function for special characters substitution during typing
 \end{itemize}
 
 \newpage
@@ -148,26 +145,25 @@ files are available at \url{http://www.gtk.org}.
 
 And obviously, you will need to have Geany with its header files
 installed (in case you are compiling the plugin on your own). If you
-have Geany installed from the sources, you should be ready to go. If
-you used a prepared package e.g. from your distribution you probably
-need to install an additional package, this might be called geany-dev
+installed Geany from the sources, you should be ready to go. If
+you used a prepared package, e.g. from your distribution, you probably
+need to install an additional package, probably called geany-dev
 or geany-devel. Please note that in order to compile and use this
 plugin, you need Geany 0.19svn or later (Geany Plugin API v184 or higher).
 
 Furthermore you need, of course, a C compiler and python installed. The
-GNU version of the C compiler is recommended. Also there should be a
+GNU version of the C compiler is recommended. Furthermore, there should be a
 working \LaTeX-environment on your System.
 
-There is no special need in RAM or CPU so the plugin should compile and
+There is no special need in RAM or CPU, so the plugin should compile and
 run on all systems Geany is able to run.
 
 \section{Installation}
 
 \small{\textbf{Please note:} This section of documentation is only
-valid with standalone distribution of Geany\LaTeX{}. If you are
-planning to use the common geany-plugins project, please check
-documentation over there as there are some specialties you might
-like to know.}
+valid for the standalone distribution of Geany\LaTeX{}. If you are
+about to use the common geany-plugins project, please check their
+documentation as there are some specialties you might like to know.}
 
 \subsection{Compiling the plugin itself}
 Compiling and installing the code is done by the following three
@@ -194,7 +190,7 @@ and try to find the error, otherwise contact one of the
 authors\footnote{Contact data can be found at chapter \ref{contact},
 page \pageref{contact}.}
 
-\subsection{Compiling of documentation}
+\subsection{Compiling the documentation}
 \label{sec:compiling_of_documentation}
 Sources of this documentation are available throught
 \texttt{doc/geanylatex.tex} inside source tree. To compile the sources,
