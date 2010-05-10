@@ -138,6 +138,13 @@ void glatex_insert_environment(gchar *environment, gint type)
 			sci_set_line_indentation(doc->editor->sci,
 				sci_get_current_line(doc->editor->sci) + 1, indent);
 
+			if (indent != 0 && type != GLATEX_ENVIRONMENT_TYPE_LIST)
+			{
+				sci_set_current_position(doc->editor->sci,
+					sci_get_current_position(doc->editor->sci) + indent -
+					(editor_get_eol_char_len(doc->editor) + 1), TRUE);
+			}
+
 			g_free(tmp);
 
 			sci_end_undo_action(doc->editor->sci);
