@@ -95,10 +95,11 @@ void glatex_insert_environment(gchar *environment, gint type)
 			gint indent, pos, len;
 			GString *tmpstring = NULL;
 			gchar *tmp = NULL;
+			const GeanyIndentPrefs *prefs = NULL;
 
 			pos = sci_get_current_position(doc->editor->sci);
 			len = strlen(environment);
-			
+
 			sci_start_undo_action(doc->editor->sci);
 
 			tmpstring = g_string_new("\\begin{");
@@ -125,11 +126,15 @@ void glatex_insert_environment(gchar *environment, gint type)
 			g_free(tmp);
 
 			indent = sci_get_line_indentation(doc->editor->sci,
-				sci_get_line_from_position(doc->editor->sci, pos));	
+				sci_get_line_from_position(doc->editor->sci, pos));
 
 			tmp = g_strdup_printf("\n\\end{%s}\n", environment);
 			glatex_insert_string(tmp, FALSE);
 
+			prefs = editor_get_indent_prefs(doc->editor);
+			sci_set_line_indentation(doc->editor->sci,
+				sci_get_current_line(doc->editor->sci),
+				indent + prefs->width);
 			sci_set_line_indentation(doc->editor->sci,
 				sci_get_current_line(doc->editor->sci) + 1, indent);
 
