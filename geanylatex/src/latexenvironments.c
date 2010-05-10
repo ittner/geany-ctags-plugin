@@ -58,6 +58,8 @@ gchar *glatex_list_environments [] =
 	"itemize"
 };
 
+
+/* if type == -1 then we will try to autodetect the type */
 void glatex_insert_environment(gchar *environment, gint type)
 {
 	GeanyDocument *doc = NULL;
@@ -97,6 +99,21 @@ void glatex_insert_environment(gchar *environment, gint type)
 			gchar *tmp = NULL;
 			static const GeanyIndentPrefs *indention_prefs = NULL;
 
+			if (type == -1)
+			{
+				gint i;
+
+				/* First, we check whether we have a known list over here
+				 * an reset type to fit new value*/
+				for (i = 0; i < GLATEX_LIST_END; i++)
+				{
+					if (utils_str_equal(glatex_list_environments[i], environment) == TRUE)
+					{
+						type = GLATEX_ENVIRONMENT_TYPE_LIST;
+						break;
+					}
+				}
+			}
 			pos = sci_get_current_position(doc->editor->sci);
 			len = strlen(environment);
 
@@ -230,8 +247,7 @@ glatex_insert_environment_dialog(G_GNUC_UNUSED GtkMenuItem *menuitem,
 
 		if (env_string != NULL)
 		{
-			/* Introduce a check whether an enrivonent is a list */
-			glatex_insert_environment(env_string, GLATEX_ENVIRONMENT_TYPE_NONE);
+			glatex_insert_environment(env_string, -1);
 			g_free(env_string);
 		}
 	}
