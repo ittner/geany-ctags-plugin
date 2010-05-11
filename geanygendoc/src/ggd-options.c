@@ -602,20 +602,22 @@ ggd_opt_group_write_to_file (GgdOptGroup *group,
 {
   gboolean  success = FALSE;
   GKeyFile *key_file;
+  gchar    *data;
+  gsize     data_length;
   
   key_file = g_key_file_new ();
-  if (g_key_file_load_from_file (key_file, filename,
-                                 G_KEY_FILE_KEEP_COMMENTS |
-                                 G_KEY_FILE_KEEP_TRANSLATIONS, error)) {
-    gchar  *data;
-    gsize   data_length;
-    
-    ggd_opt_group_write_to_key_file (group, key_file);
-    data = g_key_file_to_data (key_file, &data_length, error);
-    if (data) {
-      if (g_file_set_contents (filename, data, data_length, error)) {
-        success = TRUE;
-      }
+  /* try to load the original file but blindly ignore errors because they are
+   * unlikely to be interesting (the file doesn't already exist, a syntax error
+   * because the file exists but is empty (yes, this throws a parse error),
+   * etc.) */
+  g_key_file_load_from_file (key_file, filename,
+                             G_KEY_FILE_KEEP_COMMENTS |
+                             G_KEY_FILE_KEEP_TRANSLATIONS, NULL);
+  ggd_opt_group_write_to_key_file (group, key_file);
+  data = g_key_file_to_data (key_file, &data_length, error);
+  if (data) {
+    if (g_file_set_contents (filename, data, data_length, error)) {
+      success = TRUE;
     }
   }
   g_key_file_free (key_file);
