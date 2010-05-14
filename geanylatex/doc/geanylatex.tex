@@ -847,6 +847,23 @@ Geany is offering a number of nice features, that can be used to make
 daily work more easy without need to write a new plugin or extend
 Geany\LaTeX{}.
 
+\subsection{Geany's build system}
+
+On Geany you can define a couple of commands for the build system to
+improve work with your source file.
+
+\subsubsection{Document backward search}
+When working on a document it happens taht you find a typing error or
+some more generic issue on your document. Once this happend, its hard
+to find the correct position in your tex file. If you are using xdvi
+you can use the backward search function to jump to the right place of
+your document. An example configuration line for Geany's build system
+could look similar to  this snippet:
+
+\begin{lstlisting}
+xdvi -editor "geany --line %l '%%f'" "%f"
+\end{lstlisting}
+
 \subsection{Geany's template system}
 \label{sec:recommended_things_geany_template_system}
 If you don't need a dynamic template as described in chapter \ref
