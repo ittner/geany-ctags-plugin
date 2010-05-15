@@ -92,7 +92,7 @@ void glatex_usepackage(const gchar *pkg, const gchar *options)
 }
 
 
-void glatex_enter_key_pressed_in_entry(G_GNUC_UNUSED GtkWidget *widget, gpointer dialog )
+void glatex_enter_key_pressed_in_entry(G_GNUC_UNUSED GtkWidget *widget, gpointer dialog)
 {
 	gtk_dialog_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
 }
