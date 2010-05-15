@@ -119,8 +119,3 @@ glatex_insert_string(gchar *string, gboolean reset_position)
 	}
 }
 
-
-void glatex_insert_braces()
-{
-	glatex_insert_string("{}", FALSE);
-}
