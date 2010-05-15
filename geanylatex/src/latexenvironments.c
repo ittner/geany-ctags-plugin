@@ -130,12 +130,12 @@ void glatex_insert_environment(gchar *environment, gint type)
 			{
 				g_string_append(tmpstring, "}");
 			}
-			g_string_append(tmpstring, "\n\t");
+			g_string_append(tmpstring, "\n");
 
 
 			if (type == GLATEX_ENVIRONMENT_TYPE_LIST)
 			{
-				g_string_append(tmpstring, "\\item ");
+				g_string_append(tmpstring, "\t\\item ");
 			}
 
 			tmp = g_string_free(tmpstring, FALSE);
@@ -147,23 +147,17 @@ void glatex_insert_environment(gchar *environment, gint type)
 
 			tmp = g_strdup_printf("\n\\end{%s}", environment);
 			glatex_insert_string(tmp, FALSE);
-
-			indention_prefs = editor_get_indent_prefs(doc->editor);
-			sci_set_line_indentation(doc->editor->sci,
-				sci_get_current_line(doc->editor->sci),
-				indent + indention_prefs->width);
-			sci_set_line_indentation(doc->editor->sci,
-				sci_get_current_line(doc->editor->sci) + 1, indent);
-
-			if (indent != 0 && type != GLATEX_ENVIRONMENT_TYPE_LIST)
-			{
-				sci_set_current_position(doc->editor->sci,
-					sci_get_current_position(doc->editor->sci) + indent -
-					(editor_get_eol_char_len(doc->editor) + 1), TRUE);
-			}
-
 			g_free(tmp);
 
+			indention_prefs = editor_get_indent_prefs(doc->editor);
+			if (type == GLATEX_ENVIRONMENT_TYPE_LIST)
+			{
+				sci_set_line_indentation(doc->editor->sci,
+					sci_get_current_line(doc->editor->sci),
+					indent + indention_prefs->width);
+			}
+			sci_set_line_indentation(doc->editor->sci,
+				sci_get_current_line(doc->editor->sci) + 1, indent);
 			sci_end_undo_action(doc->editor->sci);
 		}
 	}
