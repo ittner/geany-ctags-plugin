@@ -453,7 +453,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 						while (isspace(buf[start]) && buf[start] != '\0')
 							start++;
 
-						/* check for begin */
+						/* check for begin for autocompletion of \end{} and \endgr*/
 						if (strncmp(buf + start, "\\begin", 6) == 0)
 						{
 							gchar full_cmd[15];
@@ -523,13 +523,56 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 							construct = g_strdup_printf("\t\n\\end%s{%s}", full_cmd, env);
 							editor_insert_text_block(editor, construct, pos,
 								1, -1, TRUE);
-							/* ... and setting the indention */ 
+							/* ... and setting the indention */
 							sci_set_line_indentation(sci, sci_get_current_line(sci) + 1,
 								indent);
 							g_free(construct);
 						}
 					}
-				break;
+
+					/* Now we are handling the case, a new line has been inserted
+					* but no closing braces */
+					else if (glatex_autobraces_active == TRUE)
+					{
+						gint line = sci_get_line_from_position(sci, pos -
+									(editor_get_eol_char_len (editor) + 1));
+						gint line_len = sci_get_line_length(sci, line) -
+									editor_get_eol_char_len (editor);
+						gint i;
+						gchar *buf;
+
+						/* Catching current line which has been 'finished'*/
+						buf = sci_get_line(sci, line);
+
+						/* Searching for either \ or " ", {, } from end of
+						 * line back to start */
+						for (i = line_len; i >= 0 ; i--)
+						{
+							if (buf[i] == '\\')
+							{
+								if ((i > 0 && buf[i-1] != '\\') ||
+									(i == 0))
+								{
+									sci_insert_text(sci,
+										pos - (editor_get_eol_char_len (editor)), "{}");
+								}
+								/* We will stop here in any case */
+								break;
+							}
+							/* Else we want to stop once we found a space,
+							 * some closing braces somewhere before as we
+							 * are assuming, manipulating something here
+							 * would cause a bigger mass. */
+							else if (buf[i] == ' ' ||
+									 buf[i] == '}' ||
+									 buf[i] == '{')
+							{
+								break;
+							}
+						}
+						g_free(buf);
+					}
+					break;
 				} /* Closing case \r or \n */
 			case '_':
 			case '^':
@@ -769,7 +812,7 @@ glatex_insert_command_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 
 		cmd_str = g_strdup_printf("\\%s{", cmd);
 		glatex_insert_string(cmd_str, TRUE);
-		/* This shall put the cursor inside the braces */ 
+		/* This shall put the cursor inside the braces */
 		glatex_insert_string("}", FALSE);
 
 		sci_end_undo_action(doc->editor->sci);
@@ -781,7 +824,7 @@ glatex_insert_command_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 }
 
 
-	
+
 void
 glatex_insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 					 G_GNUC_UNUSED gpointer gdata)

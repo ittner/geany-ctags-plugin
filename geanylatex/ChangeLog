@@ -1,3 +1,9 @@
+2010-05-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Add a feature which is inserting {} automaticly once a new line is
+   entered and an command seems to don't have some.
+
+
 2010-05-10  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Fix indention on inserting list environments.

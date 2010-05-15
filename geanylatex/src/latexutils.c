@@ -118,3 +118,9 @@ glatex_insert_string(gchar *string, gboolean reset_position)
 		editor_insert_text_block(doc->editor, string, pos, len, 0, TRUE);
 	}
 }
+
+
+void glatex_insert_braces()
+{
+	glatex_insert_string("{}", FALSE);
+}

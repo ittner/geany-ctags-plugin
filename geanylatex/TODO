@@ -25,5 +25,4 @@ Features:
 * Code examples for very common problems
 * Make special characters extensible through files
 * Improve behaviour of levelup and leveldown of structures
-* Autoinserting {} when typing \command+return
 * Adding a font size chooser to toolbar

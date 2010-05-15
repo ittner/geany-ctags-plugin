@@ -109,11 +109,13 @@ It implements a couple of hopefully useful functions:
 				\item Autocompletion of \texttt{\textbackslash{}end\{\}}
 					and \texttt{\textbackslash{}endgroup\{\}}
 			\end{itemize}
-	\item Proceeded to Geany Plugin API v166
+	\item Proceeded to Geany Plugin API v184
 	\item Made reference insertion configurable.
 	\item Added an function to insert \textbackslash{}usepackage\{\} into
 		  header of file
 	\item Automatic adding of \{\} after typing of \_{} and \symbol{94}
+	\item Added automatic inserting of \{\} after typing a command and
+		  hitting return in case of none pair is already present
 \end{itemize}
 
 \subsection*{GeanyLaTeX{} 0.4 -- 2009-05-26}
@@ -707,7 +709,7 @@ more complicated constructs over  here which might require a new line inside.
 
 
 \subsubsection{Autocompletion of \{\} after \_ and \symbol{94}}
-
+\label{sec:autoadding_of_braces}
 Geany\LaTeX{} is able to autocomplete \{\} after typing \_ and
 \symbol{94}. This might by useful on typing mathematic text and
 formula. However, as this option is turn on by default and it might
@@ -727,6 +729,17 @@ glatex_set_autobraces=false
 
 \textbf{Note:} The feature in general is only working, if
 \texttt{glatex\_set\_autocompletion=true} is also set to \texttt{true}.
+
+\subsubsection{Autoadding of \{\} after a command}
+
+The plugin can autoadd a pair of braces \{\} on hitting return after typing a
+command. The function will search for a \textbackslash{} and will
+stop once it founds a space, some \{\} or a second \textbackslash{}
+as on \textbackslash{} \textbackslash{}. This can be configured also
+by using the hidden preference \texttt{glatex\_set\_autobraces}
+described in chapter \ref{sec:autoadding_of_braces}, page \pageref
+{sec:autoadding_of_braces}.
+
 
 \section{Contribution to the plugin}
 If you like the plugin, there are a number of ways, how to
