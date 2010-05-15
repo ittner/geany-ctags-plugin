@@ -8,7 +8,7 @@ Name:		geany-plugin-latex
 
 Version:	0.5
 Release:	1
-License:	GPLv2 # GPLv2 oder GPLv2+?
+License:	GPLv2+
 
 # rpmlint: geanylatex.spec:9: W: non-standard-group Libraries
 Group:		Libraries
@@ -29,7 +29,7 @@ BuildRequires:	pkgconfig
 #BuildRequires:	rpmbuild(macros) >= 1.198
 
 BuildRequires:	waf
-Requires:	geany >= 0.18
+Requires:	geany >= 0.19
 
 # Requires:	tetex
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -49,6 +49,8 @@ It implements a couple of mayby useful functions:
       recognising selections
     - Shortcuts for inserting \item and \newline
     - Toolbar with often used format options
+    - Adding some autocompletion feature as e.g. autoclosing of
+      environments and adding {} in some cases where it might be useful
 
 %description -l pl.UTF-8
 Geany LaTeX jest małą wtyczką, która udostępnia wsparcie LaTeXa w
@@ -66,17 +68,19 @@ Geany. Implementuje wiele być może przydatnych funkcji:
     - pasek narzędzi z często używanymi opcjami formatowania
 
 %description -l de.UTF-8
-GeanyLaTeX ist ein Plugin für Geany, das bei der Arbeit mit LaTeX-Dateien 
-helfen soll. 
+GeanyLaTeX ist ein Plugin für Geany, das bei der Arbeit mit LaTeX-Dateien
+helfen soll.
 Dabei implementiert es eine Reihe von nützlichen Funktionen
 	- Dialog zum einfachen Erstellen von typischen Dokumenten
-    - Unterstützung beim Einfügen von \label und Referenzen wie \ref und 
+    - Unterstützung beim Einfügen von \label und Referenzen wie \ref und
       \pageref
     - Hilfe beim Einfügen und Ersetzen von Sonderzeichen
-    - Einfaches Einfügen von Formtierungen wie \texttt über Menü bzw. 
+    - Einfaches Einfügen von Formtierungen wie \texttt über Menü bzw.
       Tastendruck
     - Einfügen von Umgebung über Das Menü bzw. Tastendruck
-    - Werkzeugleiste mit oft genutzten Formatierungen 
+    - Werkzeugleiste mit oft genutzten Formatierungen
+    - Autvervollständigungen bei z.B. \begin{} das schließende \end{}
+    - Automatisches Hinzufügen von {} an möglicherweiße sinnvollen Stellen
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -114,6 +118,9 @@ install -p $RPM_BUILD_ROOT%{_docdir}/geany-plugins/geanylatex/img/*  $RPM_BUILD_
 
 %define date	%(echo `LC_ALL="C" date +"%a %b %d %Y"`)
 %changelog
+* Sat May 15 2010 Frank Lanitz <frank@đrank.uvena.de>
+- Some minor update of spec
+
 * Wed Jan 27 2010 Dominic Hopf <dmaphy@fedoraproject.org>
 - use %%global svnrev
 - preserve timestamps of installed documentation
