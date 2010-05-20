@@ -18,5 +18,3 @@
   use valadoc for vala, but not with other languages.
   In practice Doxygen seems the only (or close to be) option that would be
   useful for more than one single language.
-
-* DOCUMENTATION!

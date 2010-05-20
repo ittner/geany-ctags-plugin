@@ -338,6 +338,33 @@ remove_edit_menu_item (PluginData *pdata)
   gtk_widget_destroy (pdata->edit_menu_item);
 }
 
+static GtkWidget *
+menu_add_item (GtkMenuShell  *menu,
+               const gchar   *mnemonic,
+               const gchar   *tooltip,
+               const gchar   *stock_image,
+               GCallback      activate_handler,
+               gpointer       activate_data)
+{
+  GtkWidget *item;
+  
+  if (! stock_image) {
+    item = gtk_menu_item_new_with_mnemonic (mnemonic);
+  } else {
+    item = gtk_image_menu_item_new_with_mnemonic (mnemonic);
+    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
+                                   gtk_image_new_from_stock (stock_image,
+                                                             GTK_ICON_SIZE_MENU));
+  }
+  ui_widget_set_tooltip_text (item, tooltip);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+  if (activate_handler) {
+    g_signal_connect (item, "activate", activate_handler, activate_data);
+  }
+  
+  return item;
+}
+
 /* creates plugin's tool's menu */
 static GtkWidget *
 create_tools_menu_item (void)
@@ -348,53 +375,47 @@ create_tools_menu_item (void)
   /* build submenu */
   menu = gtk_menu_new ();
   /* build "document current symbol" item */
-  item = gtk_menu_item_new_with_mnemonic (_("_Document current symbol"));
-  ui_widget_set_tooltip_text (item, _("Generate documentation for the "
-                                      "currently selected symbol"));
-  g_signal_connect (item, "activate",
-                    G_CALLBACK (document_current_symbol_handler), NULL);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+  item = menu_add_item (GTK_MENU_SHELL (menu),
+                        _("_Document current symbol"),
+                        _("Generate documentation for the currently selected "
+                          "symbol"),
+                        NULL,
+                        G_CALLBACK (document_current_symbol_handler), NULL);
   ui_add_document_sensitive (item);
   /* build "document all" item */
-  item = gtk_menu_item_new_with_mnemonic (_("Document _all symbols"));
-  ui_widget_set_tooltip_text (item, _("Generate documentation for all the "
-                                      "symbols in the current document"));
-  g_signal_connect (item, "activate",
-                    G_CALLBACK (document_all_symbols_handler), NULL);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+  item = menu_add_item (GTK_MENU_SHELL (menu),
+                        _("Document _all symbols"),
+                        _("Generate documentation for all the symbols in the "
+                          "current document"),
+                        NULL,
+                        G_CALLBACK (document_all_symbols_handler), NULL);
   ui_add_document_sensitive (item);
   /* separator */
   item = gtk_separator_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   /* build "reload" item */
-  item = gtk_image_menu_item_new_with_mnemonic (_("_Reload configuration files"));
-  ui_widget_set_tooltip_text (item, _("Force reloading of the configuration "
-                                      "files"));
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
-                                 gtk_image_new_from_stock (GTK_STOCK_REFRESH,
-                                                           GTK_ICON_SIZE_MENU));
-  g_signal_connect (item, "activate",
-                    G_CALLBACK (reload_configuration_hanlder), NULL);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+  item = menu_add_item (GTK_MENU_SHELL (menu),
+                        _("_Reload configuration files"),
+                        _("Force reloading of the configuration files"),
+                        GTK_STOCK_REFRESH,
+                        G_CALLBACK (reload_configuration_hanlder), NULL);
   /* language filetypes opener */
-  item = gtk_menu_item_new_with_mnemonic (_("_Edit current language configuration"));
-  ui_widget_set_tooltip_text (item, _("Open the current language configuration "
-                                      "file for editing"));
-  g_signal_connect (item, "activate",
-                    G_CALLBACK (open_current_filetype_conf_handler), NULL);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+  item = menu_add_item (GTK_MENU_SHELL (menu),
+                        _("_Edit current language configuration"),
+                        _("Open the current language configuration file for "
+                          "editing"),
+                        GTK_STOCK_EDIT,
+                        G_CALLBACK (open_current_filetype_conf_handler), NULL);
   ui_add_document_sensitive (item);
   /* separator */
   item = gtk_separator_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   /* help/manual opening */
-  item = gtk_image_menu_item_new_with_mnemonic (_("Open _manual"));
-  ui_widget_set_tooltip_text (item, _("Open the manual in a browser"));
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
-                                 gtk_image_new_from_stock (GTK_STOCK_HELP,
-                                                           GTK_ICON_SIZE_MENU));
-  g_signal_connect (item, "activate", G_CALLBACK (open_manual_handler), NULL);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+  item = menu_add_item (GTK_MENU_SHELL (menu),
+                        _("Open _manual"),
+                        _("Open the manual in a browser"),
+                        GTK_STOCK_HELP,
+                        G_CALLBACK (open_manual_handler), NULL);
   /* build tools menu item */
   item = gtk_menu_item_new_with_mnemonic (_("_Documentation generator"));
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), menu);
