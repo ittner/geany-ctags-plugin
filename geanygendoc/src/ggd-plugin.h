@@ -52,10 +52,13 @@ GGD_BEGIN_PLUGIN_API
 
 
 /* global plugin options */
-extern gchar     *GGD_OPT_doctype;
+extern gchar     *GGD_OPT_doctype[GEANY_MAX_BUILT_IN_FILETYPES];
 extern gboolean   GGD_OPT_save_to_refresh;
 extern gboolean   GGD_OPT_indent;
 extern gchar     *GGD_OPT_environ;
+
+
+const gchar    *ggd_plugin_get_doctype    (filetype_id id);
 
 
 GGD_END_PLUGIN_API

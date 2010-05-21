@@ -12,9 +12,5 @@
   Problem: there is (for now) nothing here for this kind of settings
   (doctype-global but also specific to it).
 
-* Support per-filetype documentation type. In practice it is needed since if we
-  want the documentation type represent its common name (such as doxygen,
-  gtkdoc, javadoc, valadoc or whatever), and for example almost all users would
-  use valadoc for vala, but not with other languages.
-  In practice Doxygen seems the only (or close to be) option that would be
-  useful for more than one single language.
+* Store doctype in a per-document basis? It would be cool, but not sure it is
+  possible without re-implementing a lot of document history.

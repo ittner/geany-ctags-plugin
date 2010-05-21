@@ -79,12 +79,28 @@ static PluginData plugin_data = {
 };
 
 /* global plugin options */
-gchar      *GGD_OPT_doctype         = NULL;
-gboolean    GGD_OPT_save_to_refresh = FALSE;
-gboolean    GGD_OPT_indent          = TRUE;
-gchar      *GGD_OPT_environ         = NULL;
+gchar      *GGD_OPT_doctype[GEANY_MAX_BUILT_IN_FILETYPES] = { NULL };
+gboolean    GGD_OPT_save_to_refresh                       = FALSE;
+gboolean    GGD_OPT_indent                                = TRUE;
+gchar      *GGD_OPT_environ                               = NULL;
 
 
+/* Gets an element of GGD_OPT_doctype, falling back to GGD_OPT_doctype[0]
+ * (default) if the requested element is not set */
+const gchar *
+ggd_plugin_get_doctype (filetype_id id)
+{
+  const gchar *doctype;
+  
+  g_return_val_if_fail (id >= 0 && id < GEANY_MAX_BUILT_IN_FILETYPES, NULL);
+  
+  doctype = GGD_OPT_doctype[id];
+  if (! doctype || ! *doctype) {
+    doctype = GGD_OPT_doctype[0];
+  }
+  
+  return doctype;
+}
 
 
 /* FIXME: tm_source_file_buffer_update() is not found in symbols table */
@@ -123,7 +139,7 @@ insert_comment (gint line)
     if (line < 0) {
       line = sci_get_current_line (doc->editor->sci);
     }
-    ggd_insert_comment (doc, line, GGD_OPT_doctype);
+    ggd_insert_comment (doc, line, ggd_plugin_get_doctype (doc->file_type->id));
   }
 }
 
@@ -137,8 +153,27 @@ insert_all_comments (void)
   if (DOC_VALID (doc)) {
     /* try to ensure tags corresponds to the actual state of the file */
     refresh_tag_list (doc->tm_file, doc->editor->sci, doc);
-    ggd_insert_all_comments (doc, GGD_OPT_doctype);
+    ggd_insert_all_comments (doc, ggd_plugin_get_doctype (doc->file_type->id));
   }
+}
+
+/* Escapes a string to use it safely as a GKeyFile key.
+ * It currently replaces only "=" and "#" since GKeyFile supports UTF-8 keys. */
+static gchar *
+normalize_key (const gchar *key)
+{
+  GString *nkey;
+  
+  nkey = g_string_new (NULL);
+  for (; *key; key++) {
+    switch (*key) {
+      case '=': g_string_append (nkey, "Equal"); break;
+      case '#': g_string_append (nkey, "Sharp"); break;
+      default:  g_string_append_c (nkey, *key); break;
+    }
+  }
+  
+  return g_string_free (nkey, FALSE);
 }
 
 static gboolean
@@ -147,9 +182,20 @@ load_configuration (void)
   gboolean  success = FALSE;
   gchar    *conffile;
   GError   *err = NULL;
+  guint     i;
   
   plugin->config = ggd_opt_group_new ("General");
-  ggd_opt_group_add_string (plugin->config, &GGD_OPT_doctype, "doctype");
+  ggd_opt_group_add_string (plugin->config, &GGD_OPT_doctype[0], "doctype");
+  for (i = 1; i < GEANY_MAX_BUILT_IN_FILETYPES; i++) {
+    gchar *name;
+    gchar *normal_ftname;
+    
+    normal_ftname = normalize_key (filetypes[i]->name);
+    name = g_strconcat ("doctype_", normal_ftname, NULL);
+    ggd_opt_group_add_string (plugin->config, &GGD_OPT_doctype[i], name);
+    g_free (name);
+    g_free (normal_ftname);
+  }
   ggd_opt_group_add_boolean (plugin->config, &GGD_OPT_save_to_refresh, "save_to_refresh");
   ggd_opt_group_add_boolean (plugin->config, &GGD_OPT_indent, "indent");
   ggd_opt_group_add_string (plugin->config, &GGD_OPT_environ, "environ");
@@ -464,6 +510,9 @@ plugin_cleanup (void)
 /* --- Configuration dialog --- */
 
 #include "ggd-widget-frame.h"
+#include "ggd-widget-doctype-selector.h"
+
+static GtkWidget *GGD_W_doctype_selector;
 
 static void
 conf_dialog_response_handler (GtkDialog  *dialog,
@@ -474,9 +523,17 @@ conf_dialog_response_handler (GtkDialog  *dialog,
     case GTK_RESPONSE_ACCEPT:
     case GTK_RESPONSE_APPLY:
     case GTK_RESPONSE_OK:
-    case GTK_RESPONSE_YES:
+    case GTK_RESPONSE_YES: {
+      guint i;
+      
       ggd_opt_group_sync_from_proxies (pdata->config);
+      for (i = 0; i < GEANY_MAX_BUILT_IN_FILETYPES; i++) {
+        g_free (GGD_OPT_doctype[i]);
+        GGD_OPT_doctype[i] = ggd_doctype_selector_get_doctype (GGD_DOCTYPE_SELECTOR (GGD_W_doctype_selector),
+                                                               i);
+      }
       break;
+    }
     
     default: break;
   }
@@ -486,23 +543,21 @@ GtkWidget *
 plugin_configure (GtkDialog *dialog)
 {
   GtkWidget  *box;
-  GtkWidget  *hbox;
+  GtkWidget  *box2;
+  GtkWidget  *frame;
   GtkWidget  *widget;
-  GtkWidget  *label;
+  guint       i;
   
   g_signal_connect (dialog, "response",
                     G_CALLBACK (conf_dialog_response_handler), plugin);
   
-  box = gtk_vbox_new (FALSE, 6);
-  /* documentation type */
-  hbox = gtk_hbox_new (FALSE, 6);
-  gtk_box_pack_start (GTK_BOX (box), hbox, FALSE, FALSE, 0);
-  label = gtk_label_new_with_mnemonic (_("Documentation _type:"));
-  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-  widget = gtk_entry_new ();
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
-  ggd_opt_group_set_proxy_gtkentry (plugin->config, &GGD_OPT_doctype, widget);
-  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
+  box = gtk_vbox_new (FALSE, 12);
+  
+  /* General */
+  frame = ggd_frame_new (_("General"));
+  gtk_box_pack_start (GTK_BOX (box), frame, TRUE, TRUE, 0);
+  box2 = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (frame), box2);
   /* auto-save */
   widget = gtk_check_button_new_with_mnemonic (_("_Save file before generating comment"));
   ui_widget_set_tooltip_text (widget,
@@ -514,7 +569,7 @@ plugin_configure (GtkDialog *dialog)
       "file."));
   ggd_opt_group_set_proxy_gtktogglebutton (plugin->config, &GGD_OPT_save_to_refresh,
                                            widget);
-  gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (box2), widget, FALSE, FALSE, 0);
   /* indent */
   widget = gtk_check_button_new_with_mnemonic (_("_Indent comments"));
   ui_widget_set_tooltip_text (widget, _("Whether to indent the comments to fit "
@@ -522,8 +577,21 @@ plugin_configure (GtkDialog *dialog)
                                         "position."));
   ggd_opt_group_set_proxy_gtktogglebutton (plugin->config, &GGD_OPT_indent,
                                            widget);
-  gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
-  /* environ editor */
+  gtk_box_pack_start (GTK_BOX (box2), widget, FALSE, FALSE, 0);
+  
+  /* Documentation type */
+  frame = ggd_frame_new (_("Documentation type"));
+  gtk_box_pack_start (GTK_BOX (box), frame, TRUE, TRUE, 0);
+  box2 = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (frame), box2);
+  GGD_W_doctype_selector = ggd_doctype_selector_new ();
+  for (i = 0; i < GEANY_MAX_BUILT_IN_FILETYPES; i++) {
+    ggd_doctype_selector_set_doctype (GGD_DOCTYPE_SELECTOR (GGD_W_doctype_selector),
+                                      i, GGD_OPT_doctype[i]);
+  }
+  gtk_box_pack_start (GTK_BOX (box2), GGD_W_doctype_selector, TRUE, TRUE, 0);
+  
+  /* Environ editor */
   widget = ggd_frame_new (_("Global environment"));
   ui_widget_set_tooltip_text (widget, _("Global environment overrides and "
                                         "additions. This environment will be "
