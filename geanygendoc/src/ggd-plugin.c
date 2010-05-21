@@ -48,10 +48,10 @@ GeanyFunctions  *geany_functions;
 /* TODO check minimum requierment */
 PLUGIN_VERSION_CHECK (171)
 
-PLUGIN_SET_INFO (GGD_PLUGIN_NAME,
-                 _("Generates documentation comments basis from source code"),
+PLUGIN_SET_INFO (_("Documentation Generator"),
+                 _("Generates documentation basis from source code"),
                  VERSION,
-                 "Colomban \"Ban\" Wendling <ban@herbesfolles.org>")
+                 "Colomban Wendling <ban@herbesfolles.org>")
 
 enum
 {
@@ -357,7 +357,7 @@ add_edit_menu_item (PluginData *pdata)
     gtk_menu_shell_append (GTK_MENU_SHELL (parent_menu), pdata->separator_item);
     gtk_widget_show (pdata->separator_item);
   }
-  pdata->edit_menu_item = gtk_menu_item_new_with_label (_("Insert documentation comment"));
+  pdata->edit_menu_item = gtk_menu_item_new_with_label (_("Insert Documentation Comment"));
   pdata->edit_menu_item_hid = g_signal_connect (pdata->edit_menu_item, "activate",
                                                 G_CALLBACK (editor_menu_acivated_handler),
                                                 pdata);
@@ -368,7 +368,7 @@ add_edit_menu_item (PluginData *pdata)
   /* and attach a keybinding */
   keybindings_set_item (plugin_key_group, KB_INSERT, insert_comment_keybinding_handler,
                         GDK_d, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
-                        "instert_doc", _("Insert documentation comment"),
+                        "instert_doc", _("Insert Documentation Comment"),
                         pdata->edit_menu_item);
 }
 
@@ -422,16 +422,15 @@ create_tools_menu_item (void)
   menu = gtk_menu_new ();
   /* build "document current symbol" item */
   item = menu_add_item (GTK_MENU_SHELL (menu),
-                        _("_Document current symbol"),
-                        _("Generate documentation for the currently selected "
-                          "symbol"),
+                        _("_Document Current Symbol"),
+                        _("Generate documentation for the current symbol"),
                         NULL,
                         G_CALLBACK (document_current_symbol_handler), NULL);
   ui_add_document_sensitive (item);
   /* build "document all" item */
   item = menu_add_item (GTK_MENU_SHELL (menu),
-                        _("Document _all symbols"),
-                        _("Generate documentation for all the symbols in the "
+                        _("Document _All Symbols"),
+                        _("Generate documentation for all symbols in the "
                           "current document"),
                         NULL,
                         G_CALLBACK (document_all_symbols_handler), NULL);
@@ -441,13 +440,13 @@ create_tools_menu_item (void)
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   /* build "reload" item */
   item = menu_add_item (GTK_MENU_SHELL (menu),
-                        _("_Reload configuration files"),
+                        _("_Reload Configuration Files"),
                         _("Force reloading of the configuration files"),
                         GTK_STOCK_REFRESH,
                         G_CALLBACK (reload_configuration_hanlder), NULL);
   /* language filetypes opener */
   item = menu_add_item (GTK_MENU_SHELL (menu),
-                        _("_Edit current language configuration"),
+                        _("_Edit Current Language Configuration"),
                         _("Open the current language configuration file for "
                           "editing"),
                         GTK_STOCK_EDIT,
@@ -458,12 +457,12 @@ create_tools_menu_item (void)
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   /* help/manual opening */
   item = menu_add_item (GTK_MENU_SHELL (menu),
-                        _("Open _manual"),
+                        _("Open _Manual"),
                         _("Open the manual in a browser"),
                         GTK_STOCK_HELP,
                         G_CALLBACK (open_manual_handler), NULL);
   /* build tools menu item */
-  item = gtk_menu_item_new_with_mnemonic (_("_Documentation generator"));
+  item = gtk_menu_item_new_with_mnemonic (_("_Documentation Generator"));
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), menu);
   gtk_widget_show_all (item);
   
@@ -565,22 +564,23 @@ plugin_configure (GtkDialog *dialog)
   box2 = gtk_vbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (frame), box2);
   /* auto-save */
-  widget = gtk_check_button_new_with_mnemonic (_("_Save file before generating comment"));
+  widget = gtk_check_button_new_with_mnemonic (_("_Save file before generating "
+                                                 "documentation"));
   ui_widget_set_tooltip_text (widget,
-    _("Whether to automatically save the file to work on before inserting a "
-      "comment. This is currently needed to have an up-to-date tag list. "
-      "If you disable this option and ask for comment generation on a "
-      "modified file, the behavior may be surprising since the comment will be "
-      "generated for the last saved state and not the current state of the "
-      "file."));
+    _("Whether the current document should be saved to disc before generating "
+      "the documentation. This is a technical detail, but it is currently "
+      "needed to have an up-to-date tag list. If you disable this option and "
+      "ask for documentation generation on a modified document, the behavior "
+      "may be surprising since the comment will be generated for the last "
+      "saved state of this document and not the current one."));
   ggd_opt_group_set_proxy_gtktogglebutton (plugin->config, &GGD_OPT_save_to_refresh,
                                            widget);
   gtk_box_pack_start (GTK_BOX (box2), widget, FALSE, FALSE, 0);
   /* indent */
-  widget = gtk_check_button_new_with_mnemonic (_("_Indent comments"));
-  ui_widget_set_tooltip_text (widget, _("Whether to indent the comments to fit "
-                                        "the indentation at the insertion "
-                                        "position."));
+  widget = gtk_check_button_new_with_mnemonic (_("_Indent inserted documentation"));
+  ui_widget_set_tooltip_text (widget,
+    _("Whether the inserted documentation should be indented to fit the "
+      "indentation at the insertion position."));
   ggd_opt_group_set_proxy_gtktogglebutton (plugin->config, &GGD_OPT_indent,
                                            widget);
   gtk_box_pack_start (GTK_BOX (box2), widget, FALSE, FALSE, 0);
@@ -595,14 +595,17 @@ plugin_configure (GtkDialog *dialog)
     ggd_doctype_selector_set_doctype (GGD_DOCTYPE_SELECTOR (GGD_W_doctype_selector),
                                       i, GGD_OPT_doctype[i]);
   }
+  ui_widget_set_tooltip_text (GGD_W_doctype_selector,
+    _("Choose the documentation type to use with each file type. The special "
+      "language \"All\" on top of the list is used to choose the default "
+      "documentation type, used for all languages that haven't one set."));
   gtk_box_pack_start (GTK_BOX (box2), GGD_W_doctype_selector, TRUE, TRUE, 0);
   
   /* Environ editor */
   widget = ggd_frame_new (_("Global environment"));
-  ui_widget_set_tooltip_text (widget, _("Global environment overrides and "
-                                        "additions. This environment will be "
-                                        "merged with the filetype-specific "
-                                        "ones."));
+  ui_widget_set_tooltip_text (widget,
+    _("Global environment overrides and additions. This environment will be "
+      "merged with the file-type-specific ones."));
   {
     GtkWidget *scrolled;
     GtkWidget *view;

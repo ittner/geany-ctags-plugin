@@ -172,7 +172,7 @@ ggd_file_type_manager_load_file_type (filetype_id id)
   filename = ggd_file_type_manager_get_conf_path_intern (geany_ft, GGD_PERM_R,
                                                          &err);
   if (! filename) {
-    msgwin_status_add (_("Filetype configuration file for language \"%s\" not "
+    msgwin_status_add (_("File type configuration file for language \"%s\" not "
                          "found: %s"),
                        geany_ft->name, err->message);
     g_error_free (err);

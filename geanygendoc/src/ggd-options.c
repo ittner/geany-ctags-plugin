@@ -323,7 +323,7 @@ ggd_opt_group_set_proxy_full_internal (GgdOptGroup  *group,
   
   entry = ggd_opt_group_lookup_entry (group, optvar);
   if (! entry) {
-    g_warning (_("Unknown setting"));
+    g_warning (_("Unknown option"));
   } else {
     if (check_type) {
       gboolean  success = TRUE;

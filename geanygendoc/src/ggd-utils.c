@@ -161,7 +161,7 @@ ggd_get_config_file (const gchar *name,
     if (g_file_test (user_path, G_FILE_TEST_EXISTS)) {
       if (! g_file_test (user_path, G_FILE_TEST_IS_REGULAR)) {
         g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
-                     _("file \"%s\" exists but is not a regular file"),
+                     _("File \"%s\" exists but is not a regular file"),
                      user_path);
       } else {
         path = user_path;
@@ -172,7 +172,7 @@ ggd_get_config_file (const gchar *name,
         if (! g_file_test (system_path, G_FILE_TEST_IS_REGULAR)) {
           g_clear_error (error);
           g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
-                       _("file \"%s\" exists but is not a regular file"),
+                       _("File \"%s\" exists but is not a regular file"),
                        system_path);
         } else {
           path = system_path;

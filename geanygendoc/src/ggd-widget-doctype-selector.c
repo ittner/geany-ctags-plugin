@@ -141,8 +141,8 @@ ggd_doctype_selector_constructed (GObject *object)
   gtk_list_store_set (self->priv->store, &iter,
                       COLUMN_ID, 0,
                       COLUMN_LANGUAGE, _("All"),
-                      COLUMN_TOOLTIP, _("Default doctype for languages that "
-                                        "doesn't have one set"),
+                      COLUMN_TOOLTIP, _("Default documentation type for "
+                                        "languages that does not have one set"),
                       COLUMN_DOCTYPE, NULL,
                       -1);
   /* i = 1: skip None */

@@ -423,7 +423,7 @@ ggd_file_type_read_match (GScanner  *scanner,
           } else {
             if (! ggd_match_from_string (identifier)) {
               g_scanner_warn (scanner,
-                              _("Unknown type \"%s\". Is this a typo?"),
+                              _("Unknown type \"%s\", is it a typo?"),
                               identifier);
             }
             if (match_str->len > 0) {
@@ -446,7 +446,7 @@ ggd_file_type_read_match (GScanner  *scanner,
     match = g_string_free (match_str, FALSE);
   } else {
     if (success) {
-      g_scanner_error (scanner, _("match is empty"));
+      g_scanner_error (scanner, _("match identifier is empty"));
     }
     g_string_free (match_str, TRUE);
     success = FALSE;
@@ -568,7 +568,8 @@ ggd_file_type_read_doctypes (GScanner    *scanner,
           g_scanner_get_next_token (scanner); /* eat it */
           if (multiple) {
             g_scanner_unexp_token (scanner, G_TOKEN_IDENTIFIER,
-                                   _("doctype"), NULL, NULL, NULL,TRUE);
+                                   _("documentation type"), NULL, NULL, NULL,
+                                   TRUE);
             success = FALSE;
           } else {
             multiple = TRUE;
@@ -579,7 +580,8 @@ ggd_file_type_read_doctypes (GScanner    *scanner,
           g_scanner_get_next_token (scanner); /* eat it */
           if (! multiple) {
             g_scanner_unexp_token (scanner, G_TOKEN_IDENTIFIER,
-                                   _("doctype"), NULL, NULL, NULL,TRUE);
+                                   _("documentation type"), NULL, NULL, NULL,
+                                   TRUE);
             success = FALSE;
           }
           break;
@@ -600,7 +602,8 @@ ggd_file_type_read_doctypes (GScanner    *scanner,
         default:
           g_scanner_get_next_token (scanner); /* eat it */
           g_scanner_unexp_token (scanner, G_TOKEN_IDENTIFIER,
-                                 _("doctype"), NULL, NULL, NULL, TRUE);
+                                 _("documentation type"), NULL, NULL, NULL,
+                                 TRUE);
           success = FALSE;
       }
     } while (success && multiple && ttype != G_TOKEN_RIGHT_CURLY);
@@ -853,10 +856,10 @@ scanner_msg_handler (GScanner  *scanner,
                      gboolean   error)
 {
   if (! error) {
-    g_warning (_("Parsing warning: %s:%u:%u: %s"),
+    g_warning (_("Parser warning: %s:%u:%u: %s"),
                scanner->input_name, scanner->line, scanner->position, message);
   } else {
-    g_critical (_("Parsing error: %s:%u:%u: %s"),
+    g_critical (_("Parser error: %s:%u:%u: %s"),
                 scanner->input_name, scanner->line, scanner->position, message);
     g_set_error (scanner->user_data,
                  GGD_FILE_TYPE_LOAD_ERROR, GGD_FILE_TYPE_LOAD_ERROR_PARSE,

@@ -420,7 +420,8 @@ get_config (GeanyDocument  *doc,
     
     doctype = ggd_file_type_get_doc (ft, doc_type);
     if (! doctype) {
-      msgwin_status_add (_("No documentation type \"%s\" for language \"%s\""),
+      msgwin_status_add (_("Documentation type \"%s\" does not exist for "
+                           "language \"%s\"."),
                          doc_type, doc->file_type->name);
     } else {
       if (file_type_) *file_type_ = ft;
@@ -475,7 +476,7 @@ insert_multiple_comments (GeanyDocument *doc,
       }
     } else if (! setting) {
       msgwin_status_add (_("No setting applies to symbol \"%s\" of type \"%s\" "
-                           "at line %lu"),
+                           "at line %lu."),
                          tag->name, ggd_tag_get_type_name (tag),
                          tag->atts.entry.line);
     }
@@ -516,7 +517,7 @@ ggd_insert_comment (GeanyDocument  *doc,
   tag_array = doc->tm_file->tags_array;
   tag = ggd_tag_find_from_line (tag_array, line + 1 /* it is a SCI line */);
   if (! tag || (tag->type & tm_tag_file_t)) {
-    msgwin_status_add (_("No valid tag for line %d"), line);
+    msgwin_status_add (_("No valid tag at line %d."), line);
   } else {
     if (get_config (doc, doc_type, &filetype, &doctype)) {
       GgdDocSetting  *setting;
