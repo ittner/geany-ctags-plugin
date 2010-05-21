@@ -506,6 +506,12 @@ plugin_cleanup (void)
   unload_configuration ();
 }
 
+void
+plugin_help (void)
+{
+  open_manual_handler (NULL, NULL);
+}
+
 
 /* --- Configuration dialog --- */
 
