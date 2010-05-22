@@ -560,7 +560,7 @@ plugin_configure (GtkDialog *dialog)
   
   /* General */
   frame = ggd_frame_new (_("General"));
-  gtk_box_pack_start (GTK_BOX (box), frame, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (box), frame, FALSE, FALSE, 0);
   box2 = gtk_vbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (frame), box2);
   /* auto-save */
