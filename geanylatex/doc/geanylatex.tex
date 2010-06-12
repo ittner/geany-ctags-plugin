@@ -47,7 +47,7 @@ openany,%
 \hypersetup{pdftex=true, colorlinks=true, breaklinks=true, linkcolor=black, urlcolor=darkblue}
 
 \title{Geany\LaTeX{} -- A \LaTeX{} plugin for Geany \\[1.5ex]
-	   \normalsize Version 0.5dev}
+	   \normalsize Version 0.5}
 \author{Frank Lanitz \\ \small{\href{mailto:frank@frank.uvena.de}{frank@frank.uvena.de}}}
 \date{\today}
 
@@ -93,7 +93,7 @@ It implements a couple of hopefully useful functions:
 
 \newpage
 \section{News \& ChangeLog}
-\subsection*{Since 0.4}
+\subsection*{Geany\LaTeX{} 0.5 -- 2010-06-13}
 \begin{itemize}
 
 	\item Introduced custom templates for \LaTeX-Wizard
@@ -110,7 +110,7 @@ It implements a couple of hopefully useful functions:
 				\item Autocompletion of \texttt{\textbackslash{}end\{\}}
 					and \texttt{\textbackslash{}endgroup\{\}}
 			\end{itemize}
-	\item Proceeded to Geany Plugin API v166
+	\item Proceeded to Geany Plugin API v184
 	\item Made reference insertion configurable.
 	\item Added an function to insert \textbackslash{}usepackage\{\} into
 		  header of file
@@ -211,7 +211,7 @@ htlatex geanylatex.tex xhtml -cvalidate -interaction=batchmode
 \section{Usage}
 \begin{figure}[h!]
 	\centering{\includegraphics[height=7cm]{img/plugin_manager.png}}
-	\caption{Plugin manager with Geany\LaTeX{} of Geany 0.16}
+	\caption{Plugin manager with Geany\LaTeX{} 0.5 at Geany 0.19}
 \end{figure}
 
 After Geany\LaTeX{} has been installed successful the plugin can be
@@ -238,7 +238,7 @@ The \LaTeX-Wizard is implementing a easy way creating a number of
 default documents.
 \begin{figure}[h!]
 	\centering{\includegraphics[height=7cm]{img/latexwizard.png}}
-	\caption{\LaTeX-Wizard of version 0.5dev}
+	\caption{\LaTeX-Wizard of version 0.5}
 \end{figure}
 
 The wizard is offering a chance to choose from a couple of templates
@@ -343,7 +343,7 @@ comfortable adding new labels and reference offering a GUI.
 
 \begin{figure}[h!]
 	\centering{\includegraphics[height=2.5cm]{img/insert_label.png}}
-	\caption{Insert label dialog on Geany\LaTeX{} 0.4}
+	\caption{Insert label dialog on Geany\LaTeX{} 0.5}
 \end{figure}
 
 After an label was added Geany\LaTeX{} is offering a dialog for
@@ -351,7 +351,7 @@ inserting normal references and page references to a label.
 
 \begin{figure}[h!]
 	\centering{\includegraphics[height=3.5cm]{img/insert_reference.png}}
-	\caption{Insert reference dialog on Geany\LaTeX{} 0.5svn}
+	\caption{Insert reference dialog on Geany\LaTeX{} 0.5}
 \end{figure}
 
 The suggestions inside the pull down are based on the aux files
@@ -454,7 +454,7 @@ will be inserted to the document.
 
 \begin{figure}[h!]
 	\centering{\includegraphics[height=2.5cm]{img/insert_environment.png}}
-	\caption{Insert environment dialog on Geany\LaTeX{} 0.4}
+	\caption{Insert environment dialog on Geany\LaTeX{} 0.5}
 \end{figure}
 
 
@@ -568,7 +568,6 @@ autocompletion or not. Values are either
 	\item Don't care about this inside plugin or
 	\item Always perform autocompletion on LaTeX
 \end{enumerate}
-
 
 \subsection{Key bindings}
 Keybindings which are available:
@@ -855,7 +854,6 @@ Since this is only a snapshot, you will find more recent information
 for all reported issues bug tracking system of SF at \\
 \url{http://sourceforge.net/tracker/?group\_id=222729}
 
-\newpage
 \section{Recommendations to improve work with \LaTeX{} and Geany}
 Geany is offering a number of nice features that can be used to make
 daily work more easy without need to write a new plugin or extend
