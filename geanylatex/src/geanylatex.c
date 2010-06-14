@@ -1431,7 +1431,7 @@ on_wizard_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
 			code = glatex_get_template_from_file(tmp->filepath);
 
 			/* Cleaning up template array as there is no usage for anymore */
-			g_ptr_array_foreach (glatex_wizard.template_list, (GFunc)glatex_free_TemplateEntry, NULL);
+			g_ptr_array_foreach (glatex_wizard.template_list, (GFunc)glatex_free_template_entry, NULL);
 			g_ptr_array_free(glatex_wizard.template_list, TRUE);
 		}
 
