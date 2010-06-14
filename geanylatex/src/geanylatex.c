@@ -28,10 +28,15 @@
 #include "geanylatex.h"
 #include "ctype.h"
 
-PLUGIN_VERSION_CHECK(184)
+PLUGIN_VERSION_CHECK(188)
 
-PLUGIN_SET_INFO(_("GeanyLaTeX"), _("Plugin to provide better LaTeX support"),
-	VERSION,"Frank Lanitz <frank@frank.uvena.de>")
+PLUGIN_SET_TRANSLATABLE_INFO(
+	LOCALEDIR,
+	GETTEXT_PACKAGE,
+	_("GeanyLaTeX"),
+	_("Plugin to provide better LaTeX support"),
+	VERSION,
+	"Frank Lanitz <frank@frank.uvena.de>")
 
 GeanyPlugin	 *geany_plugin;
 GeanyData	   *geany_data;
