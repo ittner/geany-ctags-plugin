@@ -288,14 +288,14 @@ plugin_configure(GtkDialog * dialog)
 }
 
 /* Functions to toggle the status of plugin */
-void glatex_set_latextoggle_status(gboolean new_status)
+static void glatex_set_latextoggle_status(gboolean new_status)
 {
 	/* No more function at the moment.*/
 	if (toggle_active != new_status)
 		toggle_active = new_status;
 }
 
-void glatex_toggle_status(G_GNUC_UNUSED GtkMenuItem * menuitem)
+static void glatex_toggle_status(G_GNUC_UNUSED GtkMenuItem * menuitem)
 {
 	if (toggle_active == TRUE)
 		glatex_set_latextoggle_status(FALSE);
@@ -628,7 +628,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 }
 
 
-void on_document_close(G_GNUC_UNUSED GObject *obj, GeanyDocument *doc,
+static void on_document_close(G_GNUC_UNUSED GObject *obj, GeanyDocument *doc,
 					   G_GNUC_UNUSED gpointer user_data)
 {
 	g_return_if_fail(doc != NULL);
@@ -682,7 +682,7 @@ void glatex_replace_special_character()
 }
 
 /* Called when keys were pressed */
-void glatex_kblatex_toggle(G_GNUC_UNUSED guint key_id)
+static void glatex_kblatex_toggle(G_GNUC_UNUSED guint key_id)
 {
 	if (toggle_active == TRUE)
 		glatex_set_latextoggle_status(FALSE);
@@ -703,7 +703,7 @@ PluginCallback plugin_callbacks[] =
 };
 
 
-inline gchar*
+static inline gchar*
 get_latex_command(gint tab_index)
 {
 	return glatex_char_array[tab_index].latex;
@@ -954,7 +954,7 @@ glatex_insert_ref_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 }
 
 
-void glatex_character_create_menu_item(GtkWidget *menu, const gchar *label,
+static void glatex_character_create_menu_item(GtkWidget *menu, const gchar *label,
 									   gint letter, MenuCallback callback)
 {
 	GtkWidget *tmp;
@@ -1013,7 +1013,7 @@ count_menu_cat_entries(CategoryName *tmp)
 }
 
 
-void glatex_sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template,
+static void glatex_sub_menu_init(GtkWidget *base_menu, SubMenuTemplate *menu_template,
 				   CategoryName *category_name,
 				   MenuCallback callback_function)
 {
@@ -1799,7 +1799,7 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	gtk_widget_show_all(dialog);
 }
 
-void init_keybindings()
+static void init_keybindings()
 {
 	/* init keybindins */
 	keybindings_set_item(plugin_key_group, KB_LATEX_WIZARD, glatex_kbwizard,
@@ -1866,7 +1866,7 @@ void plugin_help()
 }
 
 
-void glatex_init_configuration()
+static void glatex_init_configuration()
 {
 	GKeyFile *config = g_key_file_new();
 
