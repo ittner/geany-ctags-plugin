@@ -26,3 +26,4 @@ Features:
 * Make special characters extensible through files
 * Improve behaviour of levelup and leveldown of structures
 * Adding a font size chooser to toolbar
+* Adding support for dtx
