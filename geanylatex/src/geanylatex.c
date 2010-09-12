@@ -1924,18 +1924,11 @@ static void glatex_init_configuration()
 	g_key_file_free(config);
 }
 
-
-void
-plugin_init(G_GNUC_UNUSED GeanyData * data)
+void static
+add_menu_to_menubar()
 {
 	GtkWidget *tmp = NULL;
-	gint i;
-
-	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
-
-	glatex_init_configuration();
-	glatex_init_encodings_latex();
-
+	gint i;	
 	menu_latex = gtk_menu_item_new_with_mnemonic(_("_LaTeX"));
 	gtk_container_add(GTK_CONTAINER(ui_lookup_widget(geany->main_widgets->window,
 		"menubar1")), menu_latex);
@@ -1960,8 +1953,8 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	menu_latex_menu_special_char_submenu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_latex_menu_special_char),
 		menu_latex_menu_special_char_submenu);
-	glatex_sub_menu_init(menu_latex_menu_special_char_submenu, glatex_char_array, glatex_cat_names,
-		char_insert_activated);
+	glatex_sub_menu_init(menu_latex_menu_special_char_submenu,
+		glatex_char_array, glatex_cat_names, char_insert_activated);
 
 	menu_latex_ref = gtk_menu_item_new_with_mnemonic(_("Insert _Reference"));
 	ui_widget_set_tooltip_text(menu_latex_ref,
@@ -2081,18 +2074,6 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	g_signal_connect(menu_latex_insert_command, "activate",
 		G_CALLBACK(glatex_insert_command_activated), NULL);
 
-	init_keybindings();
-
-	/* Check whether the toolbar should be shown or not and do so*/
-	if (glatex_set_toolbar_active == TRUE)
-	{
-		glatex_toolbar = init_toolbar();
-	}
-	else
-	{
-		glatex_toolbar = NULL;
-	}
-
 	ui_add_document_sensitive(menu_latex_menu_special_char);
 	ui_add_document_sensitive(menu_latex_ref);
 	ui_add_document_sensitive(menu_latex_label);
@@ -2108,13 +2089,43 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	main_menu_item = menu_latex;
 }
 
+void static
+remove_menu_form_menubar()
+{
+	gtk_widget_destroy(main_menu_item);
+}
+
+
+void
+plugin_init(G_GNUC_UNUSED GeanyData * data)
+{
+	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
+
+	glatex_init_configuration();
+	glatex_init_encodings_latex();
+
+	add_menu_to_menubar();
+
+	init_keybindings();
+
+	/* Check whether the toolbar should be shown or not and do so*/
+	if (glatex_set_toolbar_active == TRUE)
+	{
+		glatex_toolbar = init_toolbar();
+	}
+	else
+	{
+		glatex_toolbar = NULL;
+	}
+
+}
+
 void
 plugin_cleanup()
 {
-	gtk_widget_destroy(main_menu_item);
 	if (glatex_toolbar != NULL)
 		gtk_widget_destroy(glatex_toolbar);
-
+	remove_menu_form_menubar();
 	g_free(config_file);
 	g_free(glatex_ref_chapter_string);
 	g_free(glatex_ref_page_string);
