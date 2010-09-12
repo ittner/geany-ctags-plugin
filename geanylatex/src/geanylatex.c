@@ -1801,7 +1801,7 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 
 static void init_keybindings()
 {
-	/* init keybindins */
+	/* init keybindings */
 	keybindings_set_item(plugin_key_group, KB_LATEX_WIZARD, glatex_kbwizard,
 		0, 0, "run_latex_wizard", _("Run LaTeX-Wizard"), menu_latex_wizard);
 	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_LABEL, glatex_kblabel_insert,
@@ -2100,6 +2100,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	ui_add_document_sensitive(menu_latex_insert_environment);
 	ui_add_document_sensitive(menu_latex_insert_usepackage);
 	ui_add_document_sensitive(menu_latex_insert_command);
+	ui_add_document_sensitive(menu_latex_fontsize);
 	ui_add_document_sensitive(menu_latex_replacement);
 
 	gtk_widget_show_all(menu_latex);

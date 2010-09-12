@@ -1,3 +1,9 @@
+2010-09-12  Frank Lanitz  <frank@frank.uvena.de>
+
+ * Fix a bug that keeps fonzt size choose from tools menu active even
+   there is no document open.
+
+
 2010-05-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Add a feature which is inserting {} automaticlly once a new line is
