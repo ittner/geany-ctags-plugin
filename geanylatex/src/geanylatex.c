@@ -2147,7 +2147,6 @@ plugin_cleanup()
 {
 	if (glatex_toolbar != NULL)
 		gtk_widget_destroy(glatex_toolbar);
-	gtk_widget_destroy(menu_latex_toolbar_wizard);
 	remove_menu_form_menubar();
 	remove_wizard_from_toolbar();
 	g_free(config_file);
