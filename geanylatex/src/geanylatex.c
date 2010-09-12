@@ -139,7 +139,8 @@ config_widgets;
 
 /* Some functions*/
 static void toggle_toolbar_items_by_file_type(gint id);
-
+static void add_menu_to_menubar();
+static void remove_menu_form_menubar();
 
 static GtkWidget *init_toolbar()
 {
@@ -312,6 +313,22 @@ static void toggle_toolbar_item(const gchar *path, gboolean new_status)
 	}
 }
 
+static void
+check_for_menu(gint ft_id)
+{
+	if (ft_id == GEANY_FILETYPES_LATEX &&
+		main_menu_item == NULL)
+	{
+		add_menu_to_menubar();
+	}
+	if (ft_id != GEANY_FILETYPES_LATEX &&
+		main_menu_item != NULL)
+	{
+		remove_menu_form_menubar();
+	}
+}
+
+
 static void activate_toolbar_items()
 {
 	if (uim == NULL)
@@ -370,6 +387,7 @@ static void on_document_activate(G_GNUC_UNUSED GObject *object,
 	if (main_is_realized() == TRUE)
 	{
 		toggle_toolbar_items_by_file_type(doc->file_type->id);
+		check_for_menu(doc->file_type->id);
 	}
 }
 
@@ -386,6 +404,8 @@ static void on_document_new(G_GNUC_UNUSED GObject *object, GeanyDocument *doc,
 }
 
 
+
+
 static void
 on_geany_startup_complete(G_GNUC_UNUSED GObject *obj,
 						  G_GNUC_UNUSED gpointer user_data)
@@ -396,7 +416,9 @@ on_geany_startup_complete(G_GNUC_UNUSED GObject *obj,
 	if (doc != NULL)
 	{
 		toggle_toolbar_items_by_file_type(doc->file_type->id);
+		check_for_menu(doc->file_type->id);
 	}
+	
 }
 
 
@@ -409,6 +431,7 @@ static void on_document_filetype_set(G_GNUC_UNUSED GObject *obj, GeanyDocument *
 	if (main_is_realized() == TRUE)
 	{
 		toggle_toolbar_items_by_file_type(doc->file_type->id);
+		check_for_menu(doc->file_type->id);
 	}
 }
 
@@ -636,6 +659,8 @@ static void on_document_close(G_GNUC_UNUSED GObject *obj, GeanyDocument *doc,
 
 	if (doc->index < 2)
 		deactivate_toolbar_items();
+	if (doc->index < 1)
+		remove_menu_form_menubar();
 }
 
 
@@ -2094,6 +2119,7 @@ void static
 remove_menu_form_menubar()
 {
 	gtk_widget_destroy(main_menu_item);
+	main_menu_item = NULL;
 }
 
 
@@ -2125,7 +2151,6 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	glatex_init_configuration();
 	glatex_init_encodings_latex();
 
-	add_menu_to_menubar();
 	add_wizard_to_toolbar();
 
 	init_keybindings();
