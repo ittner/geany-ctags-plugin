@@ -1937,7 +1937,8 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	glatex_init_encodings_latex();
 
 	menu_latex = gtk_menu_item_new_with_mnemonic(_("_LaTeX"));
-	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_latex);
+	gtk_container_add(GTK_CONTAINER(ui_lookup_widget(geany->main_widgets->window,
+		"menubar1")), menu_latex);
 
 	menu_latex_menu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_latex), menu_latex_menu);

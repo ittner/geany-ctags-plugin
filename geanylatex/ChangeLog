@@ -1,5 +1,6 @@
 2010-09-12  Frank Lanitz  <frank@frank.uvena.de>
 
+ * Moved LaTeX menu out of Tool menu and put it into generic menubar
  * Fix a bug that keeps fonzt size choose from tools menu active even
    there is no document open.
 
