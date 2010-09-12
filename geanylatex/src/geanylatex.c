@@ -140,7 +140,7 @@ config_widgets;
 /* Some functions*/
 static void toggle_toolbar_items_by_file_type(gint id);
 static void add_menu_to_menubar();
-static void remove_menu_form_menubar();
+static void remove_menu_from_menubar();
 
 static GtkWidget *init_toolbar()
 {
@@ -324,7 +324,7 @@ check_for_menu(gint ft_id)
 	if (ft_id != GEANY_FILETYPES_LATEX &&
 		main_menu_item != NULL)
 	{
-		remove_menu_form_menubar();
+		remove_menu_from_menubar();
 	}
 }
 
@@ -660,7 +660,7 @@ static void on_document_close(G_GNUC_UNUSED GObject *obj, GeanyDocument *doc,
 	if (doc->index < 2)
 		deactivate_toolbar_items();
 	if (doc->index < 1)
-		remove_menu_form_menubar();
+		remove_menu_from_menubar();
 }
 
 
@@ -2116,7 +2116,7 @@ add_menu_to_menubar()
 }
 
 void static
-remove_menu_form_menubar()
+remove_menu_from_menubar()
 {
 	gtk_widget_destroy(main_menu_item);
 	main_menu_item = NULL;
@@ -2172,7 +2172,7 @@ plugin_cleanup()
 {
 	if (glatex_toolbar != NULL)
 		gtk_widget_destroy(glatex_toolbar);
-	remove_menu_form_menubar();
+	remove_menu_from_menubar();
 	remove_wizard_from_toolbar();
 	g_free(config_file);
 	g_free(glatex_ref_chapter_string);
