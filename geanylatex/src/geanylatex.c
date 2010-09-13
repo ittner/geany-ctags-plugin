@@ -2118,8 +2118,12 @@ add_menu_to_menubar()
 void static
 remove_menu_from_menubar()
 {
-	gtk_widget_destroy(main_menu_item);
-	main_menu_item = NULL;
+	if (main_menu_item != NULL)
+	{
+		gtk_widget_destroy(main_menu_item);
+		main_menu_item = NULL;
+	}
+	
 }
 
 
@@ -2134,12 +2138,6 @@ add_wizard_to_toolbar()
 	gtk_widget_show_all(menu_latex_toolbar_wizard);
 	g_signal_connect(menu_latex_toolbar_wizard, "activate",
 			 G_CALLBACK(glatex_wizard_activated), NULL);
-}
-
-void static
-remove_wizard_from_toolbar()
-{
-	gtk_widget_destroy(menu_latex_toolbar_wizard);
 }
 
 
@@ -2173,7 +2171,6 @@ plugin_cleanup()
 	if (glatex_toolbar != NULL)
 		gtk_widget_destroy(glatex_toolbar);
 	remove_menu_from_menubar();
-	remove_wizard_from_toolbar();
 	g_free(config_file);
 	g_free(glatex_ref_chapter_string);
 	g_free(glatex_ref_page_string);
