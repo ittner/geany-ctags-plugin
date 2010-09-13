@@ -2126,9 +2126,18 @@ remove_menu_from_menubar()
 	
 }
 
+void static
+remove_menu_from_tools_menu()
+{
+	if (menu_latex_toolbar_wizard != NULL)
+	{
+		gtk_widget_destroy(menu_latex_toolbar_wizard);
+		menu_latex_toolbar_wizard = NULL;
+	}
+}
 
 void static
-add_wizard_to_toolbar()
+add_wizard_to_tools_menu()
 {
 	menu_latex_toolbar_wizard = ui_image_menu_item_new(GTK_STOCK_NEW,
 		_("LaTeX-_Wizard"));
@@ -2149,7 +2158,7 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	glatex_init_configuration();
 	glatex_init_encodings_latex();
 
-	add_wizard_to_toolbar();
+	add_wizard_to_tools_menu();
 
 	init_keybindings();
 
@@ -2171,6 +2180,7 @@ plugin_cleanup()
 	if (glatex_toolbar != NULL)
 		gtk_widget_destroy(glatex_toolbar);
 	remove_menu_from_menubar();
+	remove_menu_from_tools_menu();
 	g_free(config_file);
 	g_free(glatex_ref_chapter_string);
 	g_free(glatex_ref_page_string);
