@@ -2012,7 +2012,7 @@ add_menu_to_menubar()
 	g_signal_connect(menu_latex_insert_usepackage, "activate",
 		G_CALLBACK(glatex_insert_usepackage_dialog), NULL);
 
-	menu_latex_bibtex = gtk_menu_item_new_with_mnemonic(_("_BibTeX"));
+	menu_latex_bibtex = gtk_menu_item_new_with_mnemonic(_("_BibTeX entries"));
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_bibtex);
 
 	menu_latex_bibtex_submenu = gtk_menu_new();
