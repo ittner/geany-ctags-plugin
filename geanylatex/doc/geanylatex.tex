@@ -615,8 +615,8 @@ As not all users need to configure everything on there plugin, Geany
 command line.
 
 \subsubsection{Deactivate toolbar items if document is a non \TeX-type}
-
-By defaul, Geany\LaTeX{} is deactivating buttons inside toolbar, which
+\label{deactivate_toolbaritems_with_non_latex}
+By default, Geany\LaTeX{} is deactivating buttons inside toolbar, which
 don't make much sense to be applied on non-\TeX{} file types. As
 this is not always wished, its possible to turn this feature off
 via a hidden preferences.
@@ -638,6 +638,29 @@ glatex_deactivate_toolbaritems_with_non_latex=false
 Setting this option back to true will go back to default behaviour.
 
 Please ensure, you reload the plugin once this option has been changed.
+
+\subsubsection{Remove \LaTeX{} menu if document is a non \TeX-type} 
+
+Geany\LaTeX{} is enabling a separate menu inside Geany's main menu. 
+On default, its getting activated and deactivated based on the file 
+type of the current document. However, from time to time its annying 
+to have the menu entry switched maybe each time on switching between 
+two documents it can be set to keep even there is no LaTeX document 
+activ. 
+
+\begin{lstlisting}
+[general]
+glatex_set_koma_active=false
+glatex_set_toolbar_active=true
+
+[menu]
+glatex_deactivate_menubarentry_with_non_latex=false
+\end{lstlisting}
+
+This option might make sense in combination with deactivation of 
+toolbar items on changing to a non-\TeX{} document at 
+\ref{deactivate_toolbaritems_with_non_latex}, page \pageref
+{deactivate_toolbaritems_with_non_latex}.
 
 \subsubsection{Size of context for autocompletion}
 \label{sec:hidden_pref_autocompletion_context}

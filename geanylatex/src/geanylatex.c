@@ -68,6 +68,7 @@ static GtkWidget *menu_latex_toolbar_wizard = NULL;
 /* Options for plugin */
 static gboolean glatex_set_koma_active = FALSE;
 static gboolean glatex_deactivate_toolbaritems_with_non_latex = TRUE;
+static gboolean glatex_deactivate_menubarentry_with_non_latex = TRUE;
 static gchar *glatex_ref_chapter_string = NULL;
 static gchar *glatex_ref_page_string = NULL;
 static gchar *glatex_ref_all_string = NULL;
@@ -324,7 +325,10 @@ check_for_menu(gint ft_id)
 	if (ft_id != GEANY_FILETYPES_LATEX &&
 		main_menu_item != NULL)
 	{
-		remove_menu_from_menubar();
+		if (glatex_deactivate_menubarentry_with_non_latex == TRUE)
+		{
+			remove_menu_from_menubar();
+		}
 	}
 }
 
@@ -659,7 +663,8 @@ static void on_document_close(G_GNUC_UNUSED GObject *obj, GeanyDocument *doc,
 
 	if (doc->index < 2)
 		deactivate_toolbar_items();
-	if (doc->index < 1)
+	if (doc->index < 1 && 
+		glatex_deactivate_menubarentry_with_non_latex == TRUE)
 		remove_menu_from_menubar();
 }
 
@@ -1928,11 +1933,15 @@ static void glatex_init_configuration()
 	}
 	/* Increase value by an offset as we add a new line so 2 really means 2 */
 	glatex_autocompletion_context_size = glatex_autocompletion_context_size + 2;
+
 	glatex_autocompletion_only_for_latex = utils_get_setting_boolean(config, "autocompletion",
 		"glatex_autocompletion_only_for_latex", TRUE);
 
 	glatex_deactivate_toolbaritems_with_non_latex = utils_get_setting_boolean(config, "toolbar",
 		"glatex_deactivate_toolbaritems_with_non_latex", TRUE);
+	glatex_deactivate_menubarentry_with_non_latex = utils_get_setting_boolean(config, "menu",
+		"glatex_deactivate_menubarentry_with_non_latex", TRUE);
+	
 	glatex_ref_page_string = utils_get_setting_string(config, "reference",
 		"glatex_reference_page", _("page \\pageref{{{reference}}}"));
 	glatex_ref_chapter_string = utils_get_setting_string(config, "reference",
