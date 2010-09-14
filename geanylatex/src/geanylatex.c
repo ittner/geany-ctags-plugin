@@ -69,6 +69,7 @@ static GtkWidget *menu_latex_toolbar_wizard = NULL;
 static gboolean glatex_set_koma_active = FALSE;
 static gboolean glatex_deactivate_toolbaritems_with_non_latex = TRUE;
 static gboolean glatex_deactivate_menubarentry_with_non_latex = TRUE;
+static gboolean glatex_add_menu_on_startup;
 static gchar *glatex_ref_chapter_string = NULL;
 static gchar *glatex_ref_page_string = NULL;
 static gchar *glatex_ref_all_string = NULL;
@@ -420,7 +421,14 @@ on_geany_startup_complete(G_GNUC_UNUSED GObject *obj,
 	if (doc != NULL)
 	{
 		toggle_toolbar_items_by_file_type(doc->file_type->id);
-		check_for_menu(doc->file_type->id);
+		if (glatex_add_menu_on_startup == TRUE||
+			doc->file_type->id == GEANY_FILETYPES_LATEX)
+		{
+			if (main_menu_item == NULL)
+			{
+				add_menu_to_menubar();
+			}
+		}
 	}
 	
 }
@@ -1941,6 +1949,8 @@ static void glatex_init_configuration()
 		"glatex_deactivate_toolbaritems_with_non_latex", TRUE);
 	glatex_deactivate_menubarentry_with_non_latex = utils_get_setting_boolean(config, "menu",
 		"glatex_deactivate_menubarentry_with_non_latex", TRUE);
+	glatex_add_menu_on_startup = utils_get_setting_boolean(config, "menu", 
+		"glatex_add_menu_on_startup", FALSE);
 	
 	glatex_ref_page_string = utils_get_setting_string(config, "reference",
 		"glatex_reference_page", _("page \\pageref{{{reference}}}"));

@@ -640,7 +640,7 @@ Setting this option back to true will go back to default behaviour.
 Please ensure, you reload the plugin once this option has been changed.
 
 \subsubsection{Remove \LaTeX{} menu if document is a non \TeX-type} 
-
+\label{deactivate_menubarentry_with_non_latex}
 Geany\LaTeX{} is enabling a separate menu inside Geany's main menu. 
 On default, its getting activated and deactivated based on the file 
 type of the current document. However, from time to time its annying 
@@ -661,6 +661,28 @@ This option might make sense in combination with deactivation of
 toolbar items on changing to a non-\TeX{} document at 
 \ref{deactivate_toolbaritems_with_non_latex}, page \pageref
 {deactivate_toolbaritems_with_non_latex}.
+
+\subsubsection{Add \LaTeX{} menu on startup}
+
+In case of you want to see always the \LaTeX{}-menu independent of 
+you have a \LaTeX{} document open. To add the menu direct at startup 
+time you might set \texttt{glatex\_add\_menu\_on\_startup} inside 
+menu section of configuration file to true. 
+
+\begin{lstlisting}
+[general]
+glatex_set_koma_active=false
+glatex_set_toolbar_active=true
+
+[menu]
+glatex_deactivate_menubarentry_with_non_latex=false
+glatex_add_menu_on_startup=true
+\end{lstlisting}
+
+This options makes only sense in combination with 
+glatex\_deactivate\_menubarentry\_with\_non\_latex 
+as described in chapter \ref{deactivate_menubarentry_with_non_latex}, 
+page \pageref {deactivate_menubarentry_with_non_latex}.
 
 \subsubsection{Size of context for autocompletion}
 \label{sec:hidden_pref_autocompletion_context}
