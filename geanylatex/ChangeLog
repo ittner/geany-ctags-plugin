@@ -1,3 +1,8 @@
+2010-09-14  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Place LaTeX menu in front of help menu entry (hard coded)
+
+
 2010-09-12  Frank Lanitz  <frank@frank.uvena.de>
 
  * Moved LaTeX menu out of Tool menu and put it into generic menubar item.
