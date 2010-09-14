@@ -1955,11 +1955,14 @@ add_menu_to_menubar()
 {
 	GtkWidget *tmp = NULL;
 	gint i;	
+	GtkMenuShell *menubar;
 	
+	menubar = GTK_MENU_SHELL(
+				ui_lookup_widget(geany->main_widgets->window, "menubar1"));
+		
 	menu_latex = gtk_menu_item_new_with_mnemonic(_("_LaTeX"));
 	gtk_menu_shell_insert(
-		GTK_MENU_SHELL(ui_lookup_widget(geany->main_widgets->window, 
-		"menubar1")), menu_latex, 8);
+		menubar,menu_latex, g_list_length(menubar->children)- 1);
 
 	menu_latex_menu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_latex), menu_latex_menu);
