@@ -569,6 +569,8 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 								indent);
 							g_free(construct);
 						}
+						
+						g_free(buf);
 					}
 
 					/* Now we are handling the case, a new line has been inserted
