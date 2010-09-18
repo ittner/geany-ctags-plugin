@@ -458,9 +458,12 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 
 	/* Autocompletion for LaTeX specific stuff:
 	 * Introducing \end{} or \endgroup{} after a \begin{}
-	 *
-	 * Function has been taken from Geany's core under terms of GPLv2+
-	 * where it was original developed. */
+
+	 * Function is based on function which was inside
+	 * Geany's core under terms of GPLv2+
+	 * EXtended for GeanyLaTeX with some more autocompletion features
+	 * for e.g. _{} and ^{}.*/
+	 
 	if (glatex_autocompletion_active == TRUE &&
 		!(glatex_autocompletion_only_for_latex == TRUE &&
 		editor->document->file_type->id != GEANY_FILETYPES_LATEX))
@@ -552,7 +555,6 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 								}
 								g_free(tmp);
 								g_free(end_construct);
-
 							}
 
 							/* After we have this, we need to ensure basic
@@ -569,7 +571,6 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 								indent);
 							g_free(construct);
 						}
-						
 						g_free(buf);
 					}
 
@@ -577,12 +578,17 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 					* but no closing braces */
 					else if (glatex_autobraces_active == TRUE)
 					{
-						gint line = sci_get_line_from_position(sci, pos -
-									(editor_get_eol_char_len (editor) + 1));
-						gint line_len = sci_get_line_length(sci, line) -
-									editor_get_eol_char_len (editor);
+						gint line;
+
+						gint line_len;
 						gint i;
 						gchar *buf;
+
+						line = sci_get_line_from_position(sci, pos -
+									(editor_get_eol_char_len (editor) + 1));
+						line_len = sci_get_line_length(sci, line) -
+									editor_get_eol_char_len (editor);
+
 
 						/* Catching current line which has been 'finished'*/
 						buf = sci_get_line(sci, line);
