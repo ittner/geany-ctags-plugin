@@ -1924,7 +1924,7 @@ static void glatex_init_configuration()
 	glatex_set_toolbar_active = utils_get_setting_boolean(config, "general",
 		"glatex_set_toolbar_active", FALSE);
 	glatex_autocompletion_active = utils_get_setting_boolean(config, "general",
-		"glatex_set_autocompletion", FALSE);
+		"glatex_set_autocompletion", TRUE);
 	glatex_autobraces_active = utils_get_setting_boolean(config, "autocompletion",
 		"glatex_set_autobraces", TRUE);
 
