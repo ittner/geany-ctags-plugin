@@ -2171,14 +2171,17 @@ remove_menu_from_tools_menu()
 void static
 add_wizard_to_tools_menu()
 {
-	menu_latex_toolbar_wizard = ui_image_menu_item_new(GTK_STOCK_NEW,
-		_("LaTeX-_Wizard"));
-	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_latex_toolbar_wizard);
-	ui_widget_set_tooltip_text(menu_latex_toolbar_wizard,
-				 _("Starts a Wizard to easily create LaTeX-documents"));
-	gtk_widget_show_all(menu_latex_toolbar_wizard);
-	g_signal_connect(menu_latex_toolbar_wizard, "activate",
-			 G_CALLBACK(glatex_wizard_activated), NULL);
+	if (menu_latex_toolbar_wizard == NULL)
+	{
+		menu_latex_toolbar_wizard = ui_image_menu_item_new(GTK_STOCK_NEW,
+			_("LaTeX-_Wizard"));
+		gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu), menu_latex_toolbar_wizard);
+		ui_widget_set_tooltip_text(menu_latex_toolbar_wizard,
+					 _("Starts a Wizard to easily create LaTeX-documents"));
+		gtk_widget_show_all(menu_latex_toolbar_wizard);
+		g_signal_connect(menu_latex_toolbar_wizard, "activate",
+				 G_CALLBACK(glatex_wizard_activated), NULL);
+	}
 }
 
 
