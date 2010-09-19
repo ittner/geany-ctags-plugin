@@ -7,7 +7,7 @@
 
  * Moved LaTeX menu out of Tool menu and put it into generic menubar item.
    Make this menubar item be triggered by filetype. 
- * Fix a bug that keeps fonzt size choose from tools menu active even
+ * Fix a bug that keeps font size choser from tools menu active even
    there is no document open.
 
 
