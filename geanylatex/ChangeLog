@@ -1,3 +1,10 @@
+2010-09-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Added a feature that inserts capital letters on first letter of a 
+   sentence. This is not working with multibyte characters as German 
+   Umlauts.
+
+
 2010-09-14  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Place LaTeX menu in front of help menu entry.

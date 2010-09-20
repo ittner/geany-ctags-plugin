@@ -96,6 +96,8 @@ It implements a couple of hopefully useful functions:
 \subsection{Upcoming Geany\LaTeX{} 0.6}
 \begin{itemize}
 	\item Moved \LaTeX{} menu to a separate menu inside Geany main menu
+	\item Added a feature to autocapetlise letters on typing on begin of 
+		  a sentence
 \end{itemize}
 
 \subsection{Geany\LaTeX{} 0.5 -- 2010-06-13}
@@ -567,6 +569,17 @@ of editor widget. Option is turned off by default. Just give it a try.
 	\centering{\includegraphics[height=2cm]{img/toolbar.png}}
 	\caption{Plugin toolbar of Geany\LaTeX{} 0.5}
 \end{figure}
+
+
+\subsubsection{Capitalize letters on sentence begin}
+
+If this option is enabled, Geany\LaTeX{} will look for \textsc{.}, 
+\textsc{!} or \textsc{?} followed by a space. The next letter will 
+be inserted in capital letters. Currenty this is not working for 
+multichar letters as German Umlauts as well as the overwriting is 
+not supported very well at this point. In case of you don't want to 
+have the capital version of a letter in a particular case, just hit 
+undo (Ctrl + z in most cases). 
 
 \subsubsection{Modus of autocompletion}
 \label{sec:modus_of_autocompletion}

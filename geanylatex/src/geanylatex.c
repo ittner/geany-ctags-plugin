@@ -74,6 +74,7 @@ static gchar *glatex_ref_chapter_string = NULL;
 static gchar *glatex_ref_page_string = NULL;
 static gchar *glatex_ref_all_string = NULL;
 static gboolean glatex_set_toolbar_active = FALSE;
+static gboolean glatex_capitalize_sentence_starts = FALSE;
 
 /* We want to keep this deactivated by default as the
  * user needs to know what he is doing here.... */
@@ -136,6 +137,7 @@ static struct
 	GtkWidget *koma_active;
 	GtkWidget *toolbar_active;
 	GtkWidget *glatex_autocompletion_active;
+	GtkWidget *glatex_capitalize_sentence;
 }
 config_widgets;
 
@@ -183,6 +185,8 @@ on_configure_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
 			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(config_widgets.koma_active));
 		glatex_set_toolbar_active =
 			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(config_widgets.toolbar_active));
+		glatex_capitalize_sentence_starts =
+			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(config_widgets.glatex_capitalize_sentence));
 
 		/* Check the response code for geanyLaTeX's autocompletion functions.
 		 * Due compatibility with oder Geany versions cass 0 will be treated
@@ -203,6 +207,8 @@ on_configure_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
 			glatex_set_toolbar_active);
 		g_key_file_set_boolean(config, "general", "glatex_set_autocompletion",
 			glatex_autocompletion_active);
+		g_key_file_set_boolean(config, "autocompletion", 
+			"glatex_capitalize_sentence_starts", glatex_capitalize_sentence_starts);
 
 		if (!g_file_test(config_dir, G_FILE_TEST_IS_DIR)
 			&& utils_mkdir(config_dir, TRUE) != 0)
@@ -256,6 +262,8 @@ plugin_configure(GtkDialog * dialog)
 		_("Use KOMA script by default"));
 	config_widgets.toolbar_active = gtk_check_button_new_with_label(
 		_("Show extra plugin toolbar"));
+	config_widgets.glatex_capitalize_sentence = gtk_check_button_new_with_label(
+		_("Capitalize sentense on typing"));
 
 	config_widgets.glatex_autocompletion_active = gtk_combo_box_new_text();
 	gtk_combo_box_insert_text(GTK_COMBO_BOX(config_widgets.glatex_autocompletion_active), 0,
@@ -284,6 +292,9 @@ plugin_configure(GtkDialog * dialog)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(config_widgets.toolbar_active),
 		glatex_set_toolbar_active);
 	gtk_box_pack_start(GTK_BOX(vbox), config_widgets.toolbar_active, FALSE, FALSE, 2);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(config_widgets.glatex_capitalize_sentence), 
+		glatex_capitalize_sentence_starts);
+	gtk_box_pack_start(GTK_BOX(vbox), config_widgets.glatex_capitalize_sentence, FALSE, FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(vbox), hbox_autocompletion, FALSE, FALSE, 2);
 
 	gtk_widget_show_all(vbox);
@@ -455,7 +466,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 	gint pos;
 
 	g_return_val_if_fail(editor != NULL, FALSE);
-
+	sci = editor->sci;
 	/* Autocompletion for LaTeX specific stuff:
 	 * Introducing \end{} or \endgroup{} after a \begin{}
 
@@ -468,7 +479,6 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 		!(glatex_autocompletion_only_for_latex == TRUE &&
 		editor->document->file_type->id != GEANY_FILETYPES_LATEX))
 	{
-		sci = editor->sci;
 		pos = sci_get_current_position(sci);
 
 		if (nt->nmhdr.code == SCN_CHARADDED)
@@ -623,8 +633,8 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 					}
 					break;
 				} /* Closing case \r or \n */
-			case '_':
-			case '^':
+				case '_':
+				case '^':
 				{
 					if (glatex_autobraces_active == TRUE)
 					{
@@ -632,6 +642,31 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 						sci_set_current_position(sci, pos + 1, TRUE);
 					}
 					break;
+				}
+				default: 
+				{
+					if (glatex_capitalize_sentence_starts == TRUE)
+					{
+						if (sci_get_char_at(sci, pos -2) == ' ' &&
+							(sci_get_char_at(sci, pos -3) == '.' ||
+							 sci_get_char_at(sci, pos -3) == '!' ||
+							 sci_get_char_at(sci, pos -3) == '?' ))
+						{
+							gchar *upperLtr = NULL;
+							gchar *selection = NULL;
+							
+							sci_set_selection_start(sci, pos - 1);
+							sci_set_selection_end(sci, pos);
+						
+							selection = sci_get_selection_contents(sci);
+							upperLtr = g_utf8_strup(selection, -1);
+							sci_replace_sel(sci, upperLtr);
+							
+							g_free(upperLtr);
+							g_free(selection);
+						}
+						break;
+					}
 				}
 			} /* Closing switch  */
 			/* later there could be some else ifs for other keywords */
@@ -1953,6 +1988,8 @@ static void glatex_init_configuration()
 
 	glatex_autocompletion_only_for_latex = utils_get_setting_boolean(config, "autocompletion",
 		"glatex_autocompletion_only_for_latex", TRUE);
+	glatex_capitalize_sentence_starts = utils_get_setting_boolean(config, "autocompletion", 
+		"glatex_capitalize_sentence_starts", FALSE);	
 
 	glatex_deactivate_toolbaritems_with_non_latex = utils_get_setting_boolean(config, "toolbar",
 		"glatex_deactivate_toolbaritems_with_non_latex", TRUE);
