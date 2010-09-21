@@ -1784,7 +1784,6 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	{
 		author = geany_data->template_prefs->developer;
 		gtk_entry_set_text(GTK_ENTRY(glatex_wizard.author_textbox), author);
-		g_free(author);
 	}
 	gtk_misc_set_alignment(GTK_MISC(label_author), 0, 0.5);
 	gtk_table_attach_defaults(GTK_TABLE(table), label_author, 0, 1, 4, 5);
