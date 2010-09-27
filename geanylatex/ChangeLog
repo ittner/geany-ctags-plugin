@@ -1,7 +1,8 @@
 2010-09-26  Frank Lanitz  <frank@frank.uvena.de>
 
  * Try to backport automatic generation of LINGUAS files into waf script
-   as a backport from Geany-plugins build script. 
+   as a backport from Geany-plugins build script.
+ * Add a feature to put a icon for the wizard into Geany's main toolbar.
 
 
 2010-09-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

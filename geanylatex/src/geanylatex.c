@@ -75,6 +75,7 @@ static gchar *glatex_ref_page_string = NULL;
 static gchar *glatex_ref_all_string = NULL;
 static gboolean glatex_set_toolbar_active = FALSE;
 static gboolean glatex_capitalize_sentence_starts = FALSE;
+static gboolean glatex_wizard_to_generic_toolbar = FALSE;
 
 /* We want to keep this deactivated by default as the
  * user needs to know what he is doing here.... */
@@ -94,6 +95,8 @@ static GtkUIManager *uim;
 static GtkActionGroup *group;
 static GtkWidget *glatex_toolbar = NULL;
 static GtkWidget *box = NULL;
+
+static GtkToolItem *glatex_wizard_generic_toolbar_item = NULL;
 
 /* Configuration file */
 static gchar *config_file = NULL;
@@ -136,6 +139,7 @@ static struct
 	GtkWidget *toolbar_active;
 	GtkWidget *glatex_autocompletion_active;
 	GtkWidget *glatex_capitalize_sentence;
+	GtkWidget *wizard_to_generic_toolbar;
 }
 config_widgets;
 
@@ -143,6 +147,8 @@ config_widgets;
 static void toggle_toolbar_items_by_file_type(gint id);
 static void add_menu_to_menubar();
 static void remove_menu_from_menubar();
+static void add_wizard_to_generic_toolbar();
+static void remove_wizard_from_generic_toolbar();
 
 static GtkWidget *init_toolbar()
 {
@@ -185,7 +191,9 @@ on_configure_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
 			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(config_widgets.toolbar_active));
 		glatex_capitalize_sentence_starts =
 			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(config_widgets.glatex_capitalize_sentence));
-
+		glatex_wizard_to_generic_toolbar =
+			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(config_widgets.wizard_to_generic_toolbar));
+			
 		/* Check the response code for geanyLaTeX's autocompletion functions.
 		 * Due compatibility with oder Geany versions cass 0 will be treated
 		 * as FALSE, which means autocompletion is deactivated. */
@@ -207,6 +215,9 @@ on_configure_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
 			glatex_autocompletion_active);
 		g_key_file_set_boolean(config, "autocompletion", 
 			"glatex_capitalize_sentence_starts", glatex_capitalize_sentence_starts);
+		g_key_file_set_boolean(config, "toolbar", "glatex_wizard_to_generic_toolbar",
+			glatex_wizard_to_generic_toolbar);
+
 
 		if (!g_file_test(config_dir, G_FILE_TEST_IS_DIR)
 			&& utils_mkdir(config_dir, TRUE) != 0)
@@ -243,6 +254,18 @@ on_configure_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
 		{
 			gtk_widget_hide(glatex_toolbar);
 		}
+
+		/* Add wizard to generic toolbar if requested */
+		if (glatex_wizard_to_generic_toolbar == TRUE &&
+			glatex_wizard_generic_toolbar_item == NULL)
+		{
+			add_wizard_to_generic_toolbar();
+		}
+		else if (glatex_wizard_to_generic_toolbar == FALSE &&
+				 glatex_wizard_generic_toolbar_item != NULL)
+		{
+			remove_wizard_from_generic_toolbar();
+		}
 	}
 }
 
@@ -262,6 +285,8 @@ plugin_configure(GtkDialog * dialog)
 		_("Show extra plugin toolbar"));
 	config_widgets.glatex_capitalize_sentence = gtk_check_button_new_with_label(
 		_("Capitalize sentense on typing"));
+	config_widgets.wizard_to_generic_toolbar = gtk_check_button_new_with_label(
+		_("Add a wizard icon to Geany's main toolbar"));
 
 	config_widgets.glatex_autocompletion_active = gtk_combo_box_new_text();
 	gtk_combo_box_insert_text(GTK_COMBO_BOX(config_widgets.glatex_autocompletion_active), 0,
@@ -293,6 +318,9 @@ plugin_configure(GtkDialog * dialog)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(config_widgets.glatex_capitalize_sentence), 
 		glatex_capitalize_sentence_starts);
 	gtk_box_pack_start(GTK_BOX(vbox), config_widgets.glatex_capitalize_sentence, FALSE, FALSE, 2);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(config_widgets.wizard_to_generic_toolbar),
+		glatex_wizard_to_generic_toolbar);
+	gtk_box_pack_start(GTK_BOX(vbox), config_widgets.wizard_to_generic_toolbar, FALSE, FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(vbox), hbox_autocompletion, FALSE, FALSE, 2);
 
 	gtk_widget_show_all(vbox);
@@ -1993,6 +2021,8 @@ static void glatex_init_configuration()
 
 	glatex_deactivate_toolbaritems_with_non_latex = utils_get_setting_boolean(config, "toolbar",
 		"glatex_deactivate_toolbaritems_with_non_latex", TRUE);
+	glatex_wizard_to_generic_toolbar = utils_get_setting_boolean(config, "toolbar",
+		"glatex_wizard_to_generic_toolbar", TRUE);
 	glatex_deactivate_menubarentry_with_non_latex = utils_get_setting_boolean(config, "menu",
 		"glatex_deactivate_menubarentry_with_non_latex", TRUE);
 	glatex_add_menu_on_startup = utils_get_setting_boolean(config, "menu", 
@@ -2014,6 +2044,34 @@ static void glatex_init_configuration()
 
 	g_key_file_free(config);
 }
+
+
+void static
+add_wizard_to_generic_toolbar()
+{
+	if (glatex_wizard_generic_toolbar_item == NULL)
+	{
+		/* TODO: Find a better icon as this one is used way too often */
+		glatex_wizard_generic_toolbar_item =
+			gtk_tool_button_new_from_stock(GTK_STOCK_NEW);
+		plugin_add_toolbar_item(geany_plugin, glatex_wizard_generic_toolbar_item);
+		gtk_widget_show_all(GTK_WIDGET(glatex_wizard_generic_toolbar_item));
+		g_signal_connect(glatex_wizard_generic_toolbar_item, "clicked",
+				G_CALLBACK(glatex_wizard_activated), NULL);
+	}
+}
+
+
+void static
+remove_wizard_from_generic_toolbar()
+{
+	if (glatex_wizard_generic_toolbar_item != NULL)
+	{
+		gtk_widget_destroy(GTK_WIDGET(glatex_wizard_generic_toolbar_item));
+		glatex_wizard_generic_toolbar_item = NULL;
+	}
+}
+
 
 void static
 add_menu_to_menubar()
@@ -2185,6 +2243,7 @@ add_menu_to_menubar()
 	main_menu_item = menu_latex;
 }
 
+
 void static
 remove_menu_from_menubar()
 {
@@ -2196,6 +2255,7 @@ remove_menu_from_menubar()
 	
 }
 
+
 void static
 remove_menu_from_tools_menu()
 {
@@ -2205,6 +2265,7 @@ remove_menu_from_tools_menu()
 		menu_latex_toolbar_wizard = NULL;
 	}
 }
+
 
 void static
 add_wizard_to_tools_menu()
@@ -2245,6 +2306,15 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 		glatex_toolbar = NULL;
 	}
 
+	if (glatex_wizard_to_generic_toolbar == TRUE)
+	{
+		add_wizard_to_generic_toolbar();
+	}
+	else
+	{
+		glatex_wizard_generic_toolbar_item = NULL;
+	}
+
 }
 
 void
@@ -2254,8 +2324,11 @@ plugin_cleanup()
 		gtk_widget_destroy(glatex_toolbar);
 	remove_menu_from_menubar();
 	remove_menu_from_tools_menu();
+	remove_wizard_from_generic_toolbar();
 	g_free(config_file);
 	g_free(glatex_ref_chapter_string);
 	g_free(glatex_ref_page_string);
 	g_free(glatex_ref_all_string);
+	
 }
+
