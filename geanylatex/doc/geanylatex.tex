@@ -545,13 +545,19 @@ there is any.
 
 \section{Configuration}
 
-GeanyLaTeX{} can be configured in two major ways:
+GeanyLaTeX{} can be configured in three major ways:
 \begin{enumerate}
-\item GeanyLaTeX{}'s configuration dialog
-\item Geany's keybindings interface
+\item GeanyLaTeX{}'s configuration dialog (see chapter \ref{sec:configuration_dialog},
+	page \pageref{sec:configuration_dialog})
+\item Geany's keybindings interface (see chapter \ref{sec:key_bindings},
+	page \pageref{sec:key_bindings})
+\item By hidden preferences which needs to be configured directly inside
+	  configuration file (see chapter \ref{sec:hidden_preferences},
+	page \pageref{sec:hidden_preferences})
 \end{enumerate}
 
 \subsection{GeanyLaTeX{}'s configuration dialog}
+\label{sec:configuration_dialog}
 With version 0.4 the configuration dialog is offering two options which
 can be changed:
 
@@ -596,6 +602,7 @@ autocompletion or not. Values are either
 \end{enumerate}
 
 \subsection{Key bindings}
+\label{sec:key_bindings}
 Keybindings which are available:
 
 \begin{table}[H]
@@ -636,6 +643,7 @@ Insert enumerate list & Inserts an enumerate environment as well as a 1\up{st} \
 
 
 \subsection{Hidden preferencess}
+\label{sec:hidden_preferences}
 As not all users need to configure everything on there plugin, Geany
 \LaTeX{} has some hidden preferences which can be set through
 command line.
