@@ -1,0 +1,3063 @@
+# Japanese translation for GeanyLaTeX based on translation for geany-plugins
+# Copyright (C) 2009 THE geany-plugins'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the geany-plugins package.
+# Masami Chikahiro <cmasa.z321@gmail.com>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: GeanyLaTeX 0.6svn\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-09-26 13:28+0200\n"
+"PO-Revision-Date: 2009-07-19 13:40+0900\n"
+"Last-Translator: Masami Chikahiro <cmasa.z321@gmail.com>\n"
+"Language-Team: Japanese\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ../src/geanylatex.c:36
+#, fuzzy
+msgid "GeanyLaTeX"
+msgstr "LaTeX"
+
+#: ../src/geanylatex.c:37
+#, fuzzy
+msgid "Plugin to provide better LaTeX support"
+msgstr "LaTeX サポートを提供するプラグイン"
+
+#: ../src/geanylatex.c:105
+#, fuzzy
+msgid "Runs LaTeX wizard"
+msgstr "LaTeXウィザードを実行"
+
+#: ../src/geanylatex.c:106
+#, fuzzy
+msgid "Marks selected text as italic"
+msgstr "選択した文字を斜体に設定"
+
+#: ../src/geanylatex.c:107
+#, fuzzy
+msgid "Marks selected text as bold"
+msgstr "選択した文字を太字に設定"
+
+#: ../src/geanylatex.c:108
+#, fuzzy
+msgid "Underlines selected text"
+msgstr "選択した文字に下線を設定"
+
+#: ../src/geanylatex.c:109 ../src/formatpatterns.c:45
+#, fuzzy
+msgid "Centered"
+msgstr "中心揃え"
+
+#: ../src/geanylatex.c:110 ../src/formatpatterns.c:46
+#, fuzzy
+msgid "Left side oriented"
+msgstr "左揃え"
+
+#: ../src/geanylatex.c:111 ../src/formatpatterns.c:47
+#, fuzzy
+msgid "Right side oriented"
+msgstr "右揃え"
+
+#: ../src/geanylatex.c:215
+msgid "Plugin configuration directory could not be created."
+msgstr "プラグイン設定ディレクトリを作成できません。"
+
+#: ../src/geanylatex.c:260
+#, fuzzy
+msgid "Use KOMA script by default"
+msgstr "標準で KOMA スクリプトを使用"
+
+#: ../src/geanylatex.c:262
+#, fuzzy
+msgid "Show extra plugin toolbar"
+msgstr "追加プラグインツールバーを表示"
+
+#: ../src/geanylatex.c:264
+msgid "Capitalize sentense on typing"
+msgstr ""
+
+#: ../src/geanylatex.c:268
+msgid "Don't care about this inside plugin"
+msgstr ""
+
+#: ../src/geanylatex.c:270
+msgid "Always perform autocompletion on LaTeX"
+msgstr ""
+
+#: ../src/geanylatex.c:282
+msgid "Modus of autocompletion"
+msgstr ""
+
+#: ../src/geanylatex.c:811
+#, fuzzy
+msgid "Insert Label"
+msgstr "ラベルを挿入"
+
+#: ../src/geanylatex.c:824
+#, fuzzy
+msgid "Label name:"
+msgstr "ラベル名:"
+
+#: ../src/geanylatex.c:860
+#, fuzzy
+msgid "Insert Command"
+msgstr "Insert Environment"
+
+#: ../src/geanylatex.c:873
+#, fuzzy
+msgid "Command name:"
+msgstr "コマンド 0:"
+
+#: ../src/geanylatex.c:933
+#, fuzzy
+msgid "Insert Reference"
+msgstr "参照を挿入"
+
+#: ../src/geanylatex.c:946
+#, fuzzy
+msgid "Reference name:"
+msgstr "参照名:"
+
+#: ../src/geanylatex.c:971
+#, fuzzy
+msgid "_Standard Reference"
+msgstr "標準参照(_S)"
+
+#: ../src/geanylatex.c:976
+#, fuzzy
+msgid "_Page Reference"
+msgstr "ページ参照(_P)"
+
+#: ../src/geanylatex.c:981
+#, fuzzy
+msgid "_Add both"
+msgstr "ブレークポイントを追加"
+
+#: ../src/geanylatex.c:1178
+#, fuzzy
+msgid "More"
+msgstr "詳細"
+
+#: ../src/geanylatex.c:1234
+#, fuzzy
+msgid "Add additional package"
+msgstr "補助パッケージを追加"
+
+#: ../src/geanylatex.c:1247
+#, fuzzy
+msgid "Package name:"
+msgstr "ラベル名:"
+
+#: ../src/geanylatex.c:1250
+#, fuzzy
+msgid "Package options:"
+msgstr "パッケージオプション:"
+
+#: ../src/geanylatex.c:1641
+#, fuzzy
+msgid "Dear Sir or Madame"
+msgstr "敬称の書出し(Dear Sir や Madameなど)"
+
+#: ../src/geanylatex.c:1642
+#, fuzzy
+msgid "With kind regards"
+msgstr "文末の定型句(regardsなど)"
+
+#: ../src/geanylatex.c:1650
+#, fuzzy
+msgid "No template assigned. Aborting"
+msgstr "テンプレートが割り当てられていません.終了します"
+
+#. Building the wizard-dialog and showing it
+#: ../src/geanylatex.c:1677
+#, fuzzy
+msgid "LaTeX-Wizard"
+msgstr "LaTeXウィザード"
+
+#. Templates
+#. *  Adds custom templates if there are any. If there are none just
+#. *  adds default one
+#: ../src/geanylatex.c:1692
+#, fuzzy
+msgid "Template:"
+msgstr "テンプレート:"
+
+#: ../src/geanylatex.c:1696
+#, fuzzy
+msgid "Set the template which should be used for creating the new document"
+msgstr "新規文書を作成するのに使用されるテンプレートを設定"
+
+#: ../src/geanylatex.c:1705
+#, fuzzy
+msgid "Default"
+msgstr "標準 (%s)"
+
+#. Documentclass
+#: ../src/geanylatex.c:1716
+#, fuzzy
+msgid "Documentclass:"
+msgstr "文書クラス:"
+
+#: ../src/geanylatex.c:1719
+#, fuzzy
+msgid "Choose the kind of document you want to write"
+msgstr "作成する文書の種類を選択"
+
+#: ../src/geanylatex.c:1721 ../src/bibtexlabels.c:27
+#, fuzzy
+msgid "Book"
+msgstr "書籍"
+
+#: ../src/geanylatex.c:1723 ../src/bibtexlabels.c:26
+#, fuzzy
+msgid "Article"
+msgstr "論文"
+
+#: ../src/geanylatex.c:1725
+#, fuzzy
+msgid "Report"
+msgstr "レポート"
+
+#: ../src/geanylatex.c:1727
+#, fuzzy
+msgid "Letter"
+msgstr "手紙"
+
+#: ../src/geanylatex.c:1729
+#, fuzzy
+msgid "Presentation"
+msgstr "プレゼンテーション"
+
+#. Encoding
+#: ../src/geanylatex.c:1739
+#, fuzzy
+msgid "Encoding:"
+msgstr "エンコード方法:"
+
+#: ../src/geanylatex.c:1743
+#, fuzzy
+msgid "Set the encoding for your new document"
+msgstr "新規文書のエンコード方法を設定"
+
+#. fontsize
+#: ../src/geanylatex.c:1759
+#, fuzzy
+msgid "Font size:"
+msgstr "フォントサイズ:"
+
+#: ../src/geanylatex.c:1765
+#, fuzzy
+msgid "Set the default font size of your new document"
+msgstr "新規文書の標準フォントサイズを設定"
+
+#. Author
+#: ../src/geanylatex.c:1777
+#, fuzzy
+msgid "Author:"
+msgstr "作者:"
+
+#: ../src/geanylatex.c:1780
+#, fuzzy
+msgid ""
+"Sets the value of the \\author command. In most cases this should be your "
+"name"
+msgstr "\\author コマンドの値を設定。通常あなたの氏名を設定します。"
+
+#. Date
+#: ../src/geanylatex.c:1794
+#, fuzzy
+msgid "Date:"
+msgstr "日付:"
+
+#: ../src/geanylatex.c:1797
+#, fuzzy
+msgid ""
+"Sets the value of the \\date command inside header of your new created LaTeX-"
+"document. Keeping it at \\today is a good decision if you don't need any "
+"fixed date."
+msgstr ""
+"新規作成 LaTeX文書のヘッダに追加する\\dateコマンドの値を設定します。日付を一"
+"定にしたくないときは、\\todayのままにしておくのがよいでしょう。"
+
+#. Title of the new document
+#: ../src/geanylatex.c:1809
+#, fuzzy
+msgid "Title:"
+msgstr "表題:"
+
+#: ../src/geanylatex.c:1812
+#, fuzzy
+msgid "Sets the title of your new document."
+msgstr "新規文書の表題を設定します。"
+
+#. Papersize
+#: ../src/geanylatex.c:1821
+#, fuzzy
+msgid "Paper size:"
+msgstr "用紙サイズ:"
+
+#: ../src/geanylatex.c:1824
+#, fuzzy
+msgid "Choose the paper format for the newly created document"
+msgstr "新規文書の用紙を選択"
+
+#. Paper direction
+#: ../src/geanylatex.c:1837
+#, fuzzy
+msgid "Paper Orientation:"
+msgstr "プレゼンテーション"
+
+#: ../src/geanylatex.c:1840
+#, fuzzy
+msgid "Choose the paper orientation for the newly created document"
+msgstr "新規文書の用紙を選択"
+
+#: ../src/geanylatex.c:1861
+#, fuzzy
+msgid "Use KOMA-script classes if possible"
+msgstr "可能であれば、KOMAスクリプトクラスを使用します。"
+
+#: ../src/geanylatex.c:1863
+#, fuzzy
+msgid ""
+"Uses the KOMA-script classes by Markus Kohm.\n"
+"Keep in mind: To compile your document these classes have to be installed "
+"before."
+msgstr ""
+"Markus Kohmによる、KOMAスクリプト\n"
+"使用の注意: あなたの文書をコンパイルするには、これらのクラスを事前にインス"
+"トールする必要があります。"
+
+#: ../src/geanylatex.c:1870
+#, fuzzy
+msgid "Use draft mode"
+msgstr "草稿モードを使用"
+
+#: ../src/geanylatex.c:1872
+#, fuzzy
+msgid ""
+"Set the draft flag inside new created documents to get documents with a "
+"number of debugging helpers"
+msgstr ""
+"新規文書に草稿フラグを設定し、デバッグヘルパーを使用した文書を作成します。"
+
+#: ../src/geanylatex.c:1889
+#, fuzzy
+msgid "Run LaTeX-Wizard"
+msgstr "LaTeXウィザードを実行"
+
+#: ../src/geanylatex.c:1891
+#, fuzzy
+msgid "Insert \\label"
+msgstr "ラベル(\\label)を挿入"
+
+#: ../src/geanylatex.c:1893
+#, fuzzy
+msgid "Insert \\ref"
+msgstr "参照(\\ref)を挿入"
+
+#: ../src/geanylatex.c:1895
+#, fuzzy
+msgid "Insert linebreak \\\\ "
+msgstr "改行(\\\\)を挿入 "
+
+#: ../src/geanylatex.c:1898
+#, fuzzy
+msgid "Insert command"
+msgstr "環境を挿入"
+
+#: ../src/geanylatex.c:1900
+#, fuzzy
+msgid "Turn input replacement on/off"
+msgstr "入力置き換えのOn/Off"
+
+#: ../src/geanylatex.c:1904
+#, fuzzy
+msgid "Replace special characters"
+msgstr "特殊文字の置き換え"
+
+#: ../src/geanylatex.c:1907
+#, fuzzy
+msgid "Run insert environment dialog"
+msgstr "環境挿入ダイアログを実行"
+
+#: ../src/geanylatex.c:1909
+#, fuzzy
+msgid "Insert \\item"
+msgstr "項目を挿入(\\item)"
+
+#: ../src/geanylatex.c:1911
+#, fuzzy
+msgid "Format selection in bold font face"
+msgstr "太字フォント"
+
+#: ../src/geanylatex.c:1913
+#, fuzzy
+msgid "Format selection in italic font face"
+msgstr "斜体フォント"
+
+#: ../src/geanylatex.c:1915
+#, fuzzy
+msgid "Format selection in typewriter font face"
+msgstr "固定幅フォント"
+
+#: ../src/geanylatex.c:1917
+#, fuzzy
+msgid "Format selection centered"
+msgstr "中央合わせ"
+
+#: ../src/geanylatex.c:1919
+#, fuzzy
+msgid "Format selection left-aligned"
+msgstr "左寄せ"
+
+#: ../src/geanylatex.c:1921
+#, fuzzy
+msgid "Format selection right-aligned"
+msgstr "右寄せ "
+
+#: ../src/geanylatex.c:1924
+#, fuzzy
+msgid "Insert description list"
+msgstr "説明リストを挿入"
+
+#: ../src/geanylatex.c:1927
+#, fuzzy
+msgid "Insert itemize list"
+msgstr "項目を挿入(\\item)"
+
+#: ../src/geanylatex.c:1930
+#, fuzzy
+msgid "Insert enumerate list"
+msgstr "ダミーテキストを挿入"
+
+#: ../src/geanylatex.c:1933
+msgid "Set selection one level up"
+msgstr ""
+
+#: ../src/geanylatex.c:1936
+msgid "Set selection one level down"
+msgstr ""
+
+#: ../src/geanylatex.c:1939
+#, fuzzy
+msgid "Insert \\usepackage{}"
+msgstr "ラベル(\\label)を挿入"
+
+#: ../src/geanylatex.c:1946
+#, fuzzy
+msgid ""
+"GeanyLaTeX is a plugin to improve support for LaTeX in Geany.\n"
+"\n"
+"Please report all bugs or feature requests to one of the authors."
+msgstr ""
+"GeanyLaTeX は Geany で LaTexをよりよくサポートするプラグインです。\n"
+"不具合や機能追加については作者にレポートしてください。"
+
+#: ../src/geanylatex.c:1982
+msgid ""
+"glatex_set_autocompletion_contextsize has been initialized with an invalid "
+"value. Default value taken. Please check your configuration file"
+msgstr ""
+
+#: ../src/geanylatex.c:2002 ../src/geanylatex.c:2009
+msgid "page \\pageref{{{reference}}}"
+msgstr ""
+
+#: ../src/geanylatex.c:2006 ../src/geanylatex.c:2013
+msgid "\\ref{{{reference}}}, page \\pageref{{{reference}}}"
+msgstr ""
+
+#: ../src/geanylatex.c:2028
+#, fuzzy
+msgid "_LaTeX"
+msgstr "_LaTeX"
+
+#: ../src/geanylatex.c:2035 ../src/geanylatex.c:2215
+#, fuzzy
+msgid "LaTeX-_Wizard"
+msgstr "LaTeX-_Wizard"
+
+#: ../src/geanylatex.c:2038 ../src/geanylatex.c:2218
+#, fuzzy
+msgid "Starts a Wizard to easily create LaTeX-documents"
+msgstr "LaTeX 文書を簡単に作成するウィザードを開始"
+
+#: ../src/geanylatex.c:2043
+#, fuzzy
+msgid "I_nsert Special Character"
+msgstr "特殊文字の挿入(_S)"
+
+#: ../src/geanylatex.c:2045
+#, fuzzy
+msgid "Helps to use some not very common letters and signs"
+msgstr "あまり使われない特殊文字や記号を入力するのを補助します。"
+
+#: ../src/geanylatex.c:2055
+#, fuzzy
+msgid "Insert _Reference"
+msgstr "参照を挿入(_R)"
+
+#: ../src/geanylatex.c:2057
+#, fuzzy
+msgid "Inserting references to the document"
+msgstr "文書に参照を挿入します。"
+
+#: ../src/geanylatex.c:2062
+#, fuzzy
+msgid "Insert _Label"
+msgstr "ラベルを挿入(_L)"
+
+#: ../src/geanylatex.c:2064
+#, fuzzy
+msgid "Helps at inserting labels to a document"
+msgstr "文書にラベルを挿入します。"
+
+#: ../src/geanylatex.c:2070
+#, fuzzy
+msgid "Insert _Environment"
+msgstr "環境を挿入(_E)"
+
+#: ../src/geanylatex.c:2072
+#, fuzzy
+msgid "Helps at inserting an environment a document"
+msgstr "文書に環境を挿入します。"
+
+#: ../src/geanylatex.c:2078
+#, fuzzy
+msgid "Insert P_ackage"
+msgstr "ラベルを挿入(_L)"
+
+#: ../src/geanylatex.c:2080
+#, fuzzy
+msgid "A small dialog to insert \\usepackage{} into header of current file"
+msgstr ""
+"現在のファイルのヘッダに \\usepackage{} を挿入するための小さなダイアログ"
+
+#: ../src/geanylatex.c:2085
+#, fuzzy
+msgid "_BibTeX entries"
+msgstr "_BibTeX"
+
+#: ../src/geanylatex.c:2101
+#, fuzzy
+msgid "_Format"
+msgstr "書式(_F)"
+
+#. Add font size menu
+#: ../src/geanylatex.c:2118
+#, fuzzy
+msgid "F_ont size"
+msgstr "フォントサイズ(_O):"
+
+#: ../src/geanylatex.c:2136
+#, fuzzy
+msgid "_Special Character Replacement"
+msgstr "特殊文字の置換(_S)"
+
+#: ../src/geanylatex.c:2144
+#, fuzzy
+msgid "Bulk _Replace Special Characters"
+msgstr "特殊文字の大域置換(_R)"
+
+#: ../src/geanylatex.c:2146
+#, fuzzy
+msgid "_Replace selected special characters with TeX substitutes"
+msgstr "選択した特殊文字をTexの構文に置換(_R)"
+
+#: ../src/geanylatex.c:2154
+#, fuzzy
+msgid "Toggle _Special Character Replacement"
+msgstr "特殊文字置換の切り替え(_S)"
+
+#: ../src/geanylatex.c:2165
+#, fuzzy
+msgid "Insert _Command"
+msgstr "環境を挿入(_E)"
+
+#: ../src/geanylatex.c:2167
+#, fuzzy
+msgid "Inserting costumized command to document"
+msgstr "文書に参照を挿入します。"
+
+#: ../src/latexencodings.c:37
+#, fuzzy
+msgid "UTF-8"
+msgstr "UTF-8"
+
+#: ../src/latexencodings.c:38
+#, fuzzy
+msgid "US-ASCII"
+msgstr "US-ASCII"
+
+#: ../src/latexencodings.c:39
+#, fuzzy
+msgid "ISO-8859-1 (Latin-1)"
+msgstr "ISO-8859-1 (Latin-1)"
+
+#: ../src/latexencodings.c:41
+#, fuzzy
+msgid "ISO-8859-2 (Latin-2)"
+msgstr "ISO-8859-2 (Latin-2)"
+
+#: ../src/latexencodings.c:43
+#, fuzzy
+msgid "ISO-8859-3 (Latin-3)"
+msgstr "ISO-8859-3 (Latin-3)"
+
+#: ../src/latexencodings.c:45
+#, fuzzy
+msgid "ISO-8859-4 (Latin-4)"
+msgstr "ISO-8859-4 (Latin-4)"
+
+#: ../src/latexencodings.c:47
+#, fuzzy
+msgid "ISO-8859-5 (Latin-5)"
+msgstr "ISO-8859-5 (Latin-5)"
+
+#: ../src/latexencodings.c:49
+#, fuzzy
+msgid "ISO-8859-9 (Latin-9)"
+msgstr "ISO-8859-9 (Latin-9)"
+
+#: ../src/latexencodings.c:51
+#, fuzzy
+msgid "ISO-8859-10 (Latin-10)"
+msgstr "ISO-8859-10 (Latin-10)"
+
+#: ../src/latexencodings.c:53
+#, fuzzy
+msgid "IBM 850 code page"
+msgstr "IBM 850 コードページ"
+
+#: ../src/latexencodings.c:55
+#, fuzzy
+msgid "IBM 852 code page"
+msgstr "IBM 852 コードページ"
+
+#: ../src/latexencodings.c:57
+#, fuzzy
+msgid "Don't set any encoding"
+msgstr "コードページなし"
+
+#: ../src/letters.c:39
+#, fuzzy
+msgid "Greek letters"
+msgstr "ギリシャ文字"
+
+#: ../src/letters.c:40
+#, fuzzy
+msgid "German umlauts"
+msgstr "ドイツ語ウムラウト"
+
+#: ../src/letters.c:41 ../src/bibtexlabels.c:35
+msgid "Misc"
+msgstr "その他"
+
+#: ../src/letters.c:42
+#, fuzzy
+msgid "Arrow characters"
+msgstr "矢印記号"
+
+#: ../src/letters.c:43
+#, fuzzy
+msgid "Relational"
+msgstr "分数"
+
+#: ../src/letters.c:44
+#, fuzzy
+msgid "Binary operation"
+msgstr "バイナリ操作"
+
+#: ../src/bibtexlabels.c:28
+#, fuzzy
+msgid "Booklet"
+msgstr "冊子"
+
+#: ../src/bibtexlabels.c:29
+#, fuzzy
+msgid "Conference"
+msgstr "Conference"
+
+#: ../src/bibtexlabels.c:30
+#, fuzzy
+msgid "Inbook"
+msgstr "Inbook"
+
+#: ../src/bibtexlabels.c:31
+#, fuzzy
+msgid "Incollection"
+msgstr "Incollection"
+
+#: ../src/bibtexlabels.c:32
+#, fuzzy
+msgid "Inproceedings"
+msgstr "Inproceedings"
+
+#: ../src/bibtexlabels.c:33
+#, fuzzy
+msgid "Manual"
+msgstr "マニュアル"
+
+#: ../src/bibtexlabels.c:34
+#, fuzzy
+msgid "Mastersthesis"
+msgstr "Mastersthesis"
+
+#: ../src/bibtexlabels.c:36
+#, fuzzy
+msgid "PhdThesis"
+msgstr "PhdThesis"
+
+#: ../src/bibtexlabels.c:37
+#, fuzzy
+msgid "Proceedings"
+msgstr "Proceedings"
+
+#: ../src/bibtexlabels.c:38
+#, fuzzy
+msgid "Techreport"
+msgstr "Techreport"
+
+#: ../src/bibtexlabels.c:39
+#, fuzzy
+msgid "Unpublished"
+msgstr "Unpublished"
+
+#: ../src/bibtexlabels.c:43
+#, fuzzy
+msgid "Address"
+msgstr "Address"
+
+#: ../src/bibtexlabels.c:44
+#, fuzzy
+msgid "Annote"
+msgstr "Annote"
+
+#: ../src/bibtexlabels.c:45
+#, fuzzy
+msgid "Author"
+msgstr "Author"
+
+#: ../src/bibtexlabels.c:46
+#, fuzzy
+msgid "Booktitle"
+msgstr "Booktitle"
+
+#: ../src/bibtexlabels.c:47
+#, fuzzy
+msgid "Chapter"
+msgstr "Chapter"
+
+#: ../src/bibtexlabels.c:48
+#, fuzzy
+msgid "Crossref"
+msgstr "Crossref"
+
+#: ../src/bibtexlabels.c:49
+#, fuzzy
+msgid "Edition"
+msgstr "Edition"
+
+#: ../src/bibtexlabels.c:50
+#, fuzzy
+msgid "Editor"
+msgstr "Editor"
+
+#: ../src/bibtexlabels.c:51
+#, fuzzy
+msgid "E-print"
+msgstr "E-print"
+
+#: ../src/bibtexlabels.c:52
+#, fuzzy
+msgid "HowPublished"
+msgstr "HowPublished"
+
+#: ../src/bibtexlabels.c:53
+#, fuzzy
+msgid "Institution"
+msgstr "Institution"
+
+#: ../src/bibtexlabels.c:54
+#, fuzzy
+msgid "Journal"
+msgstr "Journal"
+
+#: ../src/bibtexlabels.c:55
+#, fuzzy
+msgid "Key"
+msgstr "Key"
+
+#: ../src/bibtexlabels.c:56
+#, fuzzy
+msgid "Month"
+msgstr "Month"
+
+#: ../src/bibtexlabels.c:57
+#, fuzzy
+msgid "Note"
+msgstr "Note"
+
+#: ../src/bibtexlabels.c:58
+#, fuzzy
+msgid "Number"
+msgstr "Number"
+
+#: ../src/bibtexlabels.c:59
+#, fuzzy
+msgid "Organization"
+msgstr "Organization"
+
+#: ../src/bibtexlabels.c:60
+#, fuzzy
+msgid "Pages"
+msgstr "Pages"
+
+#: ../src/bibtexlabels.c:61
+#, fuzzy
+msgid "Publisher"
+msgstr "Publisher"
+
+#: ../src/bibtexlabels.c:62
+#, fuzzy
+msgid "School"
+msgstr "School"
+
+#: ../src/bibtexlabels.c:63
+#, fuzzy
+msgid "Series"
+msgstr "Series"
+
+#: ../src/bibtexlabels.c:64
+#, fuzzy
+msgid "Title"
+msgstr "Title"
+
+#: ../src/bibtexlabels.c:65
+msgid "Type"
+msgstr "種類"
+
+#: ../src/bibtexlabels.c:66
+#, fuzzy
+msgid "URL"
+msgstr "URL"
+
+#: ../src/bibtexlabels.c:67
+#, fuzzy
+msgid "Volume"
+msgstr "Volume"
+
+#: ../src/bibtexlabels.c:68
+#, fuzzy
+msgid "Year"
+msgstr "Year"
+
+#: ../src/bibtexlabels.c:100
+#, fuzzy
+msgid "Address of publisher"
+msgstr "出版社の住所"
+
+#: ../src/bibtexlabels.c:101
+#, fuzzy
+msgid "Annotation for annotated bibliography styles"
+msgstr "Annotation for annotated bibliography styles"
+
+#: ../src/bibtexlabels.c:102
+#, fuzzy
+msgid "Name(s) of the author(s), separated by 'and' if more than one"
+msgstr "著者の名前, 複数あるときは 'and' で区切ります"
+
+#: ../src/bibtexlabels.c:103
+#, fuzzy
+msgid "Title of the book, if only part of it is being cited"
+msgstr "Title of the book, if only part of it is being cited"
+
+#: ../src/bibtexlabels.c:104
+#, fuzzy
+msgid "Chapter number"
+msgstr "章番号"
+
+#: ../src/bibtexlabels.c:105
+#, fuzzy
+msgid "Citation key of the cross-referenced entry"
+msgstr "Citation key of the cross-referenced entry"
+
+#: ../src/bibtexlabels.c:106
+#, fuzzy
+msgid "Edition of the book (such as \"first\" or \"second\")"
+msgstr "Edition of the book (such as \"first\" or \"second\")"
+
+#: ../src/bibtexlabels.c:107
+#, fuzzy
+msgid "Name(s) of the editor(s), separated by 'and' if more than one"
+msgstr "Name(s) of the editor(s), separated by 'and' if more than one"
+
+#: ../src/bibtexlabels.c:108
+#, fuzzy
+msgid "Specification of electronic publication"
+msgstr "Specification of electronic publication"
+
+#: ../src/bibtexlabels.c:109
+#, fuzzy
+msgid "Publishing method if the method is nonstandard"
+msgstr "Publishing method if the method is nonstandard"
+
+#: ../src/bibtexlabels.c:110
+#, fuzzy
+msgid "Institution that was involved in the publishing"
+msgstr "Institution that was involved in the publishing"
+
+#: ../src/bibtexlabels.c:111
+#, fuzzy
+msgid "Journal or magazine in which the work was published"
+msgstr "Journal or magazine in which the work was published"
+
+#: ../src/bibtexlabels.c:112
+#, fuzzy
+msgid ""
+"Hidden field used for specifying or overriding the alphabetical order of "
+"entries"
+msgstr ""
+"Hidden field used for specifying or overriding the alphabetical order of "
+"entries"
+
+#: ../src/bibtexlabels.c:113
+#, fuzzy
+msgid "Month of publication or creation if unpublished"
+msgstr "Month of publication or creation if unpublished"
+
+#: ../src/bibtexlabels.c:114
+#, fuzzy
+msgid "Miscellaneous extra information"
+msgstr "Miscellaneous extra information"
+
+#: ../src/bibtexlabels.c:115
+#, fuzzy
+msgid "Number of journal, magazine, or tech-report"
+msgstr "Number of journal, magazine, or tech-report"
+
+#: ../src/bibtexlabels.c:116
+#, fuzzy
+msgid "Sponsor of the conference"
+msgstr "Sponsor of the conference"
+
+#: ../src/bibtexlabels.c:117
+#, fuzzy
+msgid "Page numbers separated by commas or double-hyphens"
+msgstr "Page numbers separated by commas or double-hyphens"
+
+#: ../src/bibtexlabels.c:118
+#, fuzzy
+msgid "Name of publisher"
+msgstr "Name of publisher"
+
+#: ../src/bibtexlabels.c:119
+#, fuzzy
+msgid "School where thesis was written"
+msgstr "School where thesis was written"
+
+#: ../src/bibtexlabels.c:120
+#, fuzzy
+msgid "Series of books in which the book was published"
+msgstr "Series of books in which the book was published"
+
+#: ../src/bibtexlabels.c:121
+#, fuzzy
+msgid "Title of the work"
+msgstr "Title of the work"
+
+#: ../src/bibtexlabels.c:122
+#, fuzzy
+msgid "Type of technical report"
+msgstr "Type of technical report"
+
+#: ../src/bibtexlabels.c:123
+#, fuzzy
+msgid "Internet address"
+msgstr "Internet address"
+
+#: ../src/bibtexlabels.c:124
+#, fuzzy
+msgid "Number of the volume"
+msgstr "Number of the volume"
+
+#: ../src/bibtexlabels.c:125
+#, fuzzy
+msgid "Year of publication or creation if unpublished"
+msgstr "Year of publication or creation if unpublished"
+
+#: ../src/formatpatterns.c:38
+#, fuzzy
+msgid "Italic"
+msgstr "イタリック"
+
+#: ../src/formatpatterns.c:39
+#, fuzzy
+msgid "Bold"
+msgstr "太字"
+
+#: ../src/formatpatterns.c:40
+#, fuzzy
+msgid "Underline"
+msgstr "下線"
+
+#: ../src/formatpatterns.c:41
+#, fuzzy
+msgid "Typewriter"
+msgstr "固定幅"
+
+#: ../src/formatpatterns.c:42
+#, fuzzy
+msgid "Small Caps"
+msgstr "Small Caps"
+
+#: ../src/formatpatterns.c:43
+#, fuzzy
+msgid "Slanted"
+msgstr "傾斜"
+
+#: ../src/formatpatterns.c:44
+#, fuzzy
+msgid "Emphasis"
+msgstr "強調"
+
+#: ../src/formatpatterns.c:64
+#, fuzzy
+msgid "tiny"
+msgstr "極小"
+
+#: ../src/formatpatterns.c:65
+#, fuzzy
+msgid "scriptsize"
+msgstr "ふりがなサイズ"
+
+#: ../src/formatpatterns.c:66
+#, fuzzy
+msgid "footnotesize"
+msgstr "脚注サイズ"
+
+#: ../src/formatpatterns.c:67
+#, fuzzy
+msgid "small"
+msgstr "小"
+
+#: ../src/formatpatterns.c:68
+#, fuzzy
+msgid "normalsize"
+msgstr "通常サイズ"
+
+#: ../src/formatpatterns.c:69
+#, fuzzy
+msgid "large"
+msgstr "サイズ大"
+
+#: ../src/formatpatterns.c:70
+#, fuzzy
+msgid "Large"
+msgstr "大"
+
+#: ../src/formatpatterns.c:71
+#, fuzzy
+msgid "LARGE"
+msgstr "大"
+
+#: ../src/formatpatterns.c:72
+#, fuzzy
+msgid "huge"
+msgstr "特大"
+
+#: ../src/formatpatterns.c:73
+#, fuzzy
+msgid "Huge"
+msgstr "特大"
+
+#: ../src/latexenvironments.c:25
+#, fuzzy
+msgid "Environments"
+msgstr "環境"
+
+#: ../src/latexenvironments.c:26
+#, fuzzy
+msgid "Formating"
+msgstr "整形"
+
+#: ../src/latexenvironments.c:27
+#, fuzzy
+msgid "Document Structure"
+msgstr "文書構造"
+
+#: ../src/latexenvironments.c:28
+#, fuzzy
+msgid "Lists"
+msgstr "リスト"
+
+#: ../src/latexenvironments.c:29
+#, fuzzy
+msgid "Math"
+msgstr "数式"
+
+#: ../src/latexenvironments.c:195
+#, fuzzy
+msgid "Insert Environment"
+msgstr "環境を挿入"
+
+#: ../src/latexenvironments.c:209
+#, fuzzy
+msgid "Environment:"
+msgstr "環境:"
+
+#: ../src/latexutils.c:89
+#, fuzzy, c-format
+msgid ""
+"Could not determine where to insert package: %s\n"
+"Please try insert package manually"
+msgstr ""
+"パッケージのどこに挿入したらよいか分かりません: %s\n"
+"パッケージを手作業で挿入してください"
+
+#: ../src/latexutils.c:91
+#, fuzzy, c-format
+msgid "Could not determine where to insert package: %s"
+msgstr "パッケージのどこに挿入したらよいか分かりません: %s\n"
+
+#~ msgid "_Update"
+#~ msgstr "更新(_U)"
+
+#~ msgid "_Hide Message Window"
+#~ msgstr "メッセージウィンドウを隠す(_H)"
+
+#~ msgid "File"
+#~ msgstr "ファイル"
+
+#~ msgid "Line"
+#~ msgstr "行"
+
+#~ msgid "Task"
+#~ msgstr "タスク"
+
+#~ msgid "Tasks"
+#~ msgstr "タスク"
+
+#~ msgid "Context:"
+#~ msgstr "コンテキスト:"
+
+#~ msgid "Open URI"
+#~ msgstr "URIを開く"
+
+#~ msgid "Copy URI"
+#~ msgstr "URIをコピー"
+
+#~ msgid "Addons"
+#~ msgstr "アドオン"
+
+#~ msgid "Various small addons for Geany."
+#~ msgstr "Geanyむけのアドオン集"
+
+#~ msgid "Focus Bookmark List"
+#~ msgstr "ブックマークに切り替え"
+
+#~ msgid "Focus Tasks List"
+#~ msgstr "タスク一覧に切り替え"
+
+#~ msgid "Update Tasks List"
+#~ msgstr "タスク一覧を更新"
+
+#~ msgid "Run XML tagging"
+#~ msgstr "XMLタグ付けを実行"
+
+#~ msgid "Show toolbar item to show a list of currently open documents"
+#~ msgstr "現在の文書一覧を表示するツールバーボタンを表示"
+
+#~ msgid "Show a 'Open URI' menu item in the editor menu"
+#~ msgstr "'URIを開く'をエディタのメニューに追加"
+
+#~ msgid "Show available Tasks in the Messages Window"
+#~ msgstr "メッセージウィンドウに利用可能なタスクを表示"
+
+#~ msgid "Show tasks of all documents"
+#~ msgstr "すべての文書のタスクを表示"
+
+#~ msgid ""
+#~ "Whether to show the tasks of all open documents in the list or only those "
+#~ "of the current document."
+#~ msgstr ""
+#~ "現在の文書のタスクだけを表示するか、すべての文書のタスクを表示するかを選び"
+#~ "ます"
+
+#~ msgid "Specify a semicolon separated list of search tokens."
+#~ msgstr "セミコロンで区切られた検索文字列を指定"
+
+#~ msgid "Search tokens:"
+#~ msgstr "検索文字列:"
+
+#~ msgid "Show status icon in the Notification Area"
+#~ msgstr "通知領域にステータスアイコンを表示"
+
+#~ msgid "Show defined bookmarks (marked lines) in the sidebar"
+#~ msgstr "サイドバーにブックマークを表示"
+
+#~ msgid "Mark all occurrences of a word when double-clicking it"
+#~ msgstr "ダブルクリックしたときに単語をすべてマークする"
+
+#~ msgid "Strip trailing blank lines"
+#~ msgstr "文末の空白行を除去"
+
+#~ msgid "XML tagging for selection"
+#~ msgstr "選択用のXMLタグ付け"
+
+#~ msgid "Close Ot_her Documents"
+#~ msgstr "他の文書を閉じる(_H)"
+
+#~ msgid "C_lose All"
+#~ msgstr "すべて閉じる(_L)"
+
+#~ msgid "Show Document List"
+#~ msgstr "文書一覧を表示"
+
+#~ msgid "(Empty Line)"
+#~ msgstr "(空行)"
+
+#~ msgid "_Remove Bookmark"
+#~ msgstr "ブックマークを削除(_R)"
+
+#~ msgid "No."
+#~ msgstr "番号"
+
+#~ msgid "Contents"
+#~ msgstr "内容"
+
+#~ msgid "Bookmarks"
+#~ msgstr "ブックマーク"
+
+#~ msgid "XML tagging"
+#~ msgstr "XMLタグ付け"
+
+#~ msgid "Tag name to be inserted:"
+#~ msgstr "挿入するタグ名:"
+
+#~ msgid "Code navigation"
+#~ msgstr "コードナビ"
+
+#~ msgid ""
+#~ "This plugin adds features to facilitate navigation between source files.\n"
+#~ "As for the moment, it implements :\n"
+#~ "- switching between a .cpp file and the corresponding .h file\n"
+#~ "- [opening a file by typing its name -> TODO]"
+#~ msgstr ""
+#~ "このプラグインはソースファイルを移動する機能を追加します。\n"
+#~ "現時点で、次の機能があります。\n"
+#~ "- .cpp ファイルと対応する .h ファイル間の切り替え\n"
+#~ "- [名前を入力するとファイルを開く -> TODO]"
+
+#~ msgid "Lionel Fuentes"
+#~ msgstr "Lionel Fuentes"
+
+#~ msgid "Goto file"
+#~ msgstr "ファイルに移動"
+
+#~ msgid "goto_file"
+#~ msgstr "goto_file"
+
+#~ msgid "(From the %s plugin)"
+#~ msgstr "(%s プラグインより)"
+
+#~ msgid "Switch header/implementation"
+#~ msgstr "ヘッダとソースの切り替え"
+
+#~ msgid "switch_head_impl"
+#~ msgstr "switch_header_impl"
+
+#~ msgid "%s not found, create it ?"
+#~ msgstr "%s はありません。作成しますか?"
+
+#~ msgid "Headers extensions"
+#~ msgstr "ヘッダの拡張子"
+
+#~ msgid "Implementations extensions"
+#~ msgstr "ソースの拡張子"
+
+#~ msgid "Doc"
+#~ msgstr "Doc"
+
+#~ msgid "Call documentation viewer on current symbol."
+#~ msgstr "選択中の単語をオンラインヘルプで調べます"
+
+#~ msgid "Yura Siamshka <yurand2@gmail.com>"
+#~ msgstr "Yura Siamashka <yurand2@gmail.com>"
+
+#~ msgid "Could not parse the output of command"
+#~ msgstr "コマンド出力を解析できません"
+
+#~ msgid "Put output in buffer"
+#~ msgstr "バッファに出力"
+
+#~ msgid "Command 0:"
+#~ msgstr "コマンド 0:"
+
+#~ msgid "Command 1:"
+#~ msgstr "コマンド 1:"
+
+#~ msgid "%w will be replaced with current word\n"
+#~ msgstr "%w は現在の単語に置き換えられます\n"
+
+#~ msgid "Document current word"
+#~ msgstr "文書の現在の単語"
+
+#~ msgid "Document interactive"
+#~ msgstr "文書の動作"
+
+#~ msgid "Added breakpoint #%s in %s() at %s:%s\n"
+#~ msgstr "ブレークポイント #%s を関数 %s() に追加。場所 %s:%s\n"
+
+#~ msgid "Added breakpoint #%s at %s:%s\n"
+#~ msgstr "ブレークポイント #%s を追加。場所 %s:%s\n"
+
+#~ msgid "Added write watchpoint #%s for %s\n"
+#~ msgstr "出力監視ポイント #%s を追加。変数 %s\n"
+
+#~ msgid "Added read/write watchpoint #%s for %s\n"
+#~ msgstr "入出力監視ポイント #%s を追加。変数 %s\n"
+
+#~ msgid "Added read watchpoint #%s for %s\n"
+#~ msgstr "入力監視ポイント #%s を追加。変数 %s\n"
+
+#~ msgid "Watch/breakpoint deleted.\n"
+#~ msgstr "監視/ブレークポイントを削除。\n"
+
+#~ msgid "Failed to toggle breakpoint -\n"
+#~ msgstr "ブレークポイント切り替えに失敗 -\n"
+
+#~ msgid "Watch/breakpoint toggled.\n"
+#~ msgstr "監視/ブレークポイントを切り替え。\n"
+
+#~ msgid "Watch/breakpoint modified.\n"
+#~ msgstr "監視/ブレークポイントを変更。\n"
+
+#~ msgid "Failed to retrieve source search path setting from GDB."
+#~ msgstr "GDBのソースファイル検索パス設定の読み込みに失敗。"
+
+#~ msgid "Failed to retrieve executable search path setting from GDB."
+#~ msgstr "GDBの実行ファイル検索パス設定の読み込みに失敗。"
+
+#~ msgid "Failed to retrieve working directory setting from GDB."
+#~ msgstr "GDBの作業ディレクトリ設定の読み込みに失敗。"
+
+#~ msgid "Field list too long, not all items can be displayed.\n"
+#~ msgstr "項目リストが長すぎて、すべての項目が表示できません。\n"
+
+#~ msgid "Error starting target process!\n"
+#~ msgstr "ターゲットプロセス起動エラー!\n"
+
+#~ msgid ""
+#~ "This executable does not appear to contain the required debugging "
+#~ "information."
+#~ msgstr ""
+#~ "必要なデバッグ情報が含まれていないため、実行ファイルは表示できません。"
+
+#~ msgid "Program received signal %s (%s) at %s in function %s() at %s:%s"
+#~ msgstr "プログラムがシグナル %s (%s) を %s で受信。場所 関数 %s()  %s:%s"
+
+#~ msgid "Watchpoint #%s out of scope"
+#~ msgstr "監視ポイント #%s はスコープ範囲外"
+
+#~ msgid "Program exited on signal %s (%s).\n"
+#~ msgstr "プログラムはシグナル %s (%s) で終了。\n"
+
+#~ msgid "Unknown signal"
+#~ msgstr "不明なシグナル"
+
+#~ msgid "Program exited with code %d [%s]\n"
+#~ msgstr "プログラムは終了コード %d [%s]で終了。\n"
+
+#~ msgid "(unknown)"
+#~ msgstr "(不明)"
+
+#~ msgid "Program exited normally.\n"
+#~ msgstr "プログラムは正常に終了。\n"
+
+#~ msgid "tty temporary directory not specified!\n"
+#~ msgstr "tty 一時ディレクトリが指定されていません!\n"
+
+#~ msgid "tty temporary directory not found!\n"
+#~ msgstr "tty 一時ディレクトリがありません!\n"
+
+#~ msgid "tty helper program not specified!\n"
+#~ msgstr "tty ヘルパープログラムが指定されていません!\n"
+
+#~ msgid "tty helper program not found!\n"
+#~ msgstr "tty ヘルパープログラムがありません!\n"
+
+#~ msgid "Attaching to terminal %s\n"
+#~ msgstr "端末 %s に割り当て中\n"
+
+#~ msgid "Timeout waiting for TTY name.\n"
+#~ msgstr "TTY 名のタイムアウト待ち。\n"
+
+#~ msgid "GDB exited (pid=%d)\n"
+#~ msgstr "GDB が終了しました (pid=%d)\n"
+
+#~ msgid "Target process exited. (pid=%d; %s%s)\n"
+#~ msgstr "ターゲットプロセスが終了しました。(pid=%d; %s%s)\n"
+
+#~ msgid "code="
+#~ msgstr "コード="
+
+#~ msgid "reason:"
+#~ msgstr "理由:"
+
+#~ msgid "Directory %s not found!\n"
+#~ msgstr "ディレクトリ %s がありません!\n"
+
+#~ msgid "Shutting down target program.\n"
+#~ msgstr "ターゲットプログラムをシャットダウンします。\n"
+
+#~ msgid "Killing target program.\n"
+#~ msgstr "ターゲットプログラムを終了させます。\n"
+
+#~ msgid "Timeout waiting for target process.\n"
+#~ msgstr "ターゲットプログラムのタイムアウト待ち。\n"
+
+#~ msgid "Using a bigger hammer!\n"
+#~ msgstr "大きなハンマーを使用中!\n"
+
+#~ msgid "Waiting for target process to exit.\n"
+#~ msgstr "ターゲットプロセスの終了待ち。\n"
+
+#~ msgid "Killing GDB (pid=%d)\n"
+#~ msgstr "GDBを終了中 (pid=%d)\n"
+
+#~ msgid "Timeout trying to kill GDB.\n"
+#~ msgstr "GDBを終了しようとしてタイムアウトしました。\n"
+
+#~ msgid "Shutting down GDB\n"
+#~ msgstr "GDBをシャットダウンします。\n"
+
+#~ msgid "Waiting for GDB to exit.\n"
+#~ msgstr "GDBの終了待ち。\n"
+
+#~ msgid "Timeout waiting for GDB to exit.\n"
+#~ msgstr "GDBの終了のタイムアウト待ち。\n"
+
+#~ msgid "Starting gdb (pid=%d)\n"
+#~ msgstr "GDBを開始中 (pid=%d)\n"
+
+#~ msgid "Started target process. (pid=%d)\n"
+#~ msgstr "ターゲットプロセスを開始しました。(pid=%d)\n"
+
+#~ msgid "No %s selected"
+#~ msgstr "%s が選ばれていません"
+
+#~ msgid "watchpoint"
+#~ msgstr "監視ポイント"
+
+#~ msgid "breakpoint"
+#~ msgstr "ブレークポイント"
+
+#~ msgid "Delete selected watchpoint?"
+#~ msgstr "選択した監視ポイントを削除しますか?"
+
+#~ msgid "Delete selected breakpoint?"
+#~ msgstr "選択したブレークポイントを削除しますか?"
+
+#~ msgid "Edit watchpoint"
+#~ msgstr "監視ポイントを修正"
+
+#~ msgid "Edit breakpoint"
+#~ msgstr "ブレークポイントを修正"
+
+#~ msgid "Enabled"
+#~ msgstr "有効"
+
+#~ msgid " Break after "
+#~ msgstr " ブレーク条件 "
+
+#~ msgid " times. "
+#~ msgstr " 回ごと "
+
+#~ msgid " Break when "
+#~ msgstr " ブレーク条件 "
+
+#~ msgid " is true. "
+#~ msgstr " が trueのとき "
+
+#~ msgid "Add watchpoint"
+#~ msgstr "監視ポイントを追加"
+
+#~ msgid "Add breakpoint"
+#~ msgstr "ブレークポイントを追加"
+
+#~ msgid "Watchpoints"
+#~ msgstr "監視ポイント"
+
+#~ msgid "Breakpoints"
+#~ msgstr "ブレークポイント"
+
+#~ msgid "Environment settings"
+#~ msgstr "環境設定"
+
+#~ msgid ""
+#~ "\n"
+#~ " Command-line arguments passed to target program:"
+#~ msgstr ""
+#~ "\n"
+#~ " ターゲットプログラムに渡すコマンドライン引数:"
+
+#~ msgid ""
+#~ "\n"
+#~ " Search path for source files:"
+#~ msgstr ""
+#~ "\n"
+#~ " ソースプログラム検索パス:"
+
+#~ msgid ""
+#~ "\n"
+#~ " Working directory for target program:"
+#~ msgstr ""
+#~ "\n"
+#~ " ターゲットプログラムの作業ディレクトリ:"
+
+#~ msgid ""
+#~ "\n"
+#~ " Search path for executables:"
+#~ msgstr ""
+#~ "\n"
+#~ " 実行ファイル検索パス:"
+
+#~ msgid "Select Font"
+#~ msgstr "フォントを選択"
+
+#~ msgid "Preferences"
+#~ msgstr "設定"
+
+#~ msgid "Keep debug window on top."
+#~ msgstr "デバッグウィンドウを前面に表示。"
+
+#~ msgid "Show tooltips."
+#~ msgstr "ツールチップを表示"
+
+#~ msgid "Show icons."
+#~ msgstr "アイコンを表示"
+
+#~ msgid "Font for source code listings:"
+#~ msgstr "ソースプログラム一覧のフォント:"
+
+#~ msgid "Terminal program:"
+#~ msgstr "端末プログラム:"
+
+#~ msgid "_Examine"
+#~ msgstr "テスト(_E)"
+
+#~ msgid "Object info"
+#~ msgstr "オブジェクト情報"
+
+#~ msgid "Elements"
+#~ msgstr "要素"
+
+#~ msgid "Fields"
+#~ msgstr "項目"
+
+#~ msgid "Return to previous dialog."
+#~ msgstr "前の画面に戻る。"
+
+#~ msgid "Display additional information about the selected item."
+#~ msgstr "選択した項目の詳細な情報を表示する。"
+
+#~ msgid "Frame info"
+#~ msgstr "フレーム情報"
+
+#~ msgid ""
+#~ "\n"
+#~ "Frame #%s in %s() at %s:%s\n"
+#~ msgstr ""
+#~ "\n"
+#~ "フレーム #%s 場所 %s() ファイル %s:%s\n"
+
+#~ msgid "Function arguments"
+#~ msgstr "関数の引数"
+
+#~ msgid "Local variables"
+#~ msgstr "局所変数"
+
+#~ msgid "Return to stack list dialog."
+#~ msgstr "スタック表示ダイアログに戻る。"
+
+#~ msgid "Stack trace"
+#~ msgstr "スタックトレース"
+
+#~ msgid "Display additional information about the selected frame."
+#~ msgstr "選択したフレームの詳細な情報を表示する。"
+
+#~ msgid "Clea_r"
+#~ msgstr "消去(_R)"
+
+#~ msgid "Filename: "
+#~ msgstr "ファイル名: "
+
+#~ msgid "Variable to watch:"
+#~ msgstr "監視する変数:"
+
+#~ msgid "Line number or function name: "
+#~ msgstr "行番号または関数名: "
+
+#~ msgid "Access trigger:"
+#~ msgstr "アクセス トリガ:"
+
+#~ msgid "(no program)"
+#~ msgstr "(no program)"
+
+#~ msgid "loaded"
+#~ msgstr "loaded"
+
+#~ msgid "starting"
+#~ msgstr "starting"
+
+#~ msgid "running"
+#~ msgstr "running"
+
+#~ msgid "stopped"
+#~ msgstr "stopped"
+
+#~ msgid "terminated"
+#~ msgstr "terminated"
+
+#~ msgid "paused"
+#~ msgstr "paused"
+
+#~ msgid "Program received signal:"
+#~ msgstr "プログラムが受信したシグナル:"
+
+#~ msgid "Error:"
+#~ msgstr "エラー:"
+
+#~ msgid "Select executable to debug"
+#~ msgstr "デバッグする実行ファイルを選択"
+
+#~ msgid "Debugging of object files is not supported."
+#~ msgstr "オブジェクトファイルのデバッグはサポートされていません。"
+
+#~ msgid "You don't have permission to execute this file."
+#~ msgstr "このファイルを実行する権利がありません。"
+
+#~ msgid "Debugging of shared libraries is not supported."
+#~ msgstr "共有ライブラリのデバッグはサポートされていません。"
+
+#~ msgid "Debugging of core files id not supported."
+#~ msgstr "コアファイルのデバッグはサポートされていません。"
+
+#~ msgid "Target file must be ELF 32-bit x86 executable."
+#~ msgstr ""
+#~ "ターゲットファイルは ELF 32-bit x86 実行ファイルでなければなりません。"
+
+#~ msgid "You don't have permission to read this file."
+#~ msgstr "このファイルを読む権利がありません。"
+
+#~ msgid "Run to location"
+#~ msgstr "実行する位置"
+
+#~ msgid ":  "
+#~ msgstr ": "
+
+#~ msgid "no program"
+#~ msgstr "no program"
+
+#~ msgid "Run in terminal"
+#~ msgstr "端末で実行"
+
+#~ msgid "Execute target program inside a terminal window."
+#~ msgstr "ターゲットプログラムを端末ウィンドウで実行します。"
+
+#~ msgid "Ignore SIGPIPE"
+#~ msgstr "SIGPIPEを無視"
+
+#~ msgid ""
+#~ "Don't pause execution when target gets a SIGPIPE signal.\n"
+#~ "(Useful for certain networking applications.)"
+#~ msgstr ""
+#~ "ターゲットプログラムが SIGPIPE シグナルを受け取っても一時停止しません。\n"
+#~ "(ネットワーク アプリケーションのデバッグに便利です)"
+
+#~ msgid "Console:"
+#~ msgstr "コンソール:"
+
+#~ msgid "Send a GDB command directly to the debugger."
+#~ msgstr "GDB コマンドを直接デバッガに送ります。"
+
+#~ msgid "_Quit"
+#~ msgstr "終了(_Q)"
+
+#~ msgid "Exit everything"
+#~ msgstr "すべて終了します。"
+
+#~ msgid "GeanyGDB"
+#~ msgstr "GeanyGDB"
+
+#~ msgid "Integrated debugging with GDB."
+#~ msgstr "GDBを使ったデバッグを統合"
+
+#~ msgid "Jeff Pohlmeyer, Dominic Hopf"
+#~ msgstr "Jeff Pohlmeyer, Dominic Hopf"
+
+#~ msgid "Plugin configuration directory (%s) could not be created."
+#~ msgstr "プラグイン設定ディレクトリ (%s) を作成できません。"
+
+#~ msgid "geanygdb: ttyhelper program not found."
+#~ msgstr "geanygdb: ttyhelper プログラムがありません。"
+
+#~ msgid "Debu_g"
+#~ msgstr "デバッグ(_G)"
+
+#~ msgid "Debug"
+#~ msgstr "デバッグ"
+
+#~ msgid "Failed to resize memory output stream"
+#~ msgstr "メモリ出力ストリームのリサイズに失敗"
+
+#~ msgid ""
+#~ "Argument parsing regular expression did not match (argument list was: \"%s"
+#~ "\")"
+#~ msgstr "正規表現を展開した引数が一致しません(引数リスト: \"%s\")"
+
+#~ msgid "Failed to add global environment, skipping: %s"
+#~ msgstr "全体の環境の追加に失敗,スキップ: %s"
+
+#~ msgid "Failed to build comment: %s"
+#~ msgstr "コメントのビルドに失敗: %s"
+
+#~ msgid "Documentation type \"%s\" does not exist for language \"%s\"."
+#~ msgstr "文書種類 \"%s\" は言語 \"%s\" 向けには存在しません."
+
+#~ msgid "No setting applies to symbol \"%s\" of type \"%s\" at line %lu."
+#~ msgstr "シンボル \"%s\" に適用できる設定はありません(種類 \"%s\" 行 %lu)"
+
+#~ msgid "No valid tag at line %d."
+#~ msgstr "%d 行に有効なタグはありません"
+
+#~ msgid "boolean value"
+#~ msgstr "論理値"
+
+#~ msgid "invalid boolean value \"%s\""
+#~ msgstr "無効な論理値 \"%s\""
+
+#~ msgid "invalid template: %s"
+#~ msgstr "無効なテンプレート: %s"
+
+#~ msgid "position name"
+#~ msgstr "場所の名前"
+
+#~ msgid "invalid position \"%s\""
+#~ msgstr "無効な場所 \"%s\""
+
+#~ msgid "policy name"
+#~ msgstr "ポリシー名"
+
+#~ msgid "invalid policy \"%s\""
+#~ msgstr "無効なポリシー \"%s\""
+
+#~ msgid "merge policy"
+#~ msgstr "ポリシーを結合"
+
+#~ msgid "invalid merge policy \"%s\""
+#~ msgstr "無効なポリシーの結合 \"%s\""
+
+#~ msgid "type"
+#~ msgstr "種類"
+
+#~ msgid "invalid type \"%s\""
+#~ msgstr "無効な種類 \"%s\""
+
+#~ msgid "invalid setting name \"%s\""
+#~ msgstr "無効な設定名 \"%s\""
+
+#~ msgid "setting identifier"
+#~ msgstr "IDを設定"
+
+#~ msgid "Unknown type \"%s\", is it a typo?"
+#~ msgstr "不明な \"%s\", 書き間違いですか?"
+
+#~ msgid "match identifier"
+#~ msgstr "IDを照合"
+
+#~ msgid "match identifier is empty"
+#~ msgstr "IDの照合結果は空です"
+
+#~ msgid "documentation type identifier"
+#~ msgstr "文書種類ID"
+
+#~ msgid "documentation type"
+#~ msgstr "文書種類"
+
+#~ msgid "invalid regular expression: %s"
+#~ msgstr "無効な正規表現: %s"
+
+#~ msgid "invalid environment description: %s"
+#~ msgstr "無効な環境記述: %s"
+
+#~ msgid "setting"
+#~ msgstr "設定"
+
+#~ msgid "section name"
+#~ msgstr "セクション名"
+
+#~ msgid "duplicated section \"%s\""
+#~ msgstr "セクション重複 \"%s\""
+
+#~ msgid "invalid section name \"%s\""
+#~ msgstr "無効なセクション名 \"%s\""
+
+#~ msgid "input is empty"
+#~ msgstr "入力は空です"
+
+#~ msgid "Parser warning: %s:%u:%u: %s"
+#~ msgstr "パーサ警告: %s:%u:%u: %s"
+
+#~ msgid "Parser error: %s:%u:%u: %s"
+#~ msgstr "パーサエラー: %s:%u:%u: %s"
+
+#~ msgid "%s:%u:%u: %s"
+#~ msgstr "%s:%u:%u: %s"
+
+#~ msgid "File type configuration file for language \"%s\" not found: %s"
+#~ msgstr "言語 \"%s\" 向けのファイル種類設定ファイルが見つかりません: %s"
+
+#~ msgid "Failed to load file type \"%s\" from file \"%s\": %s"
+#~ msgstr "ファイル種類 \"%s\" の読み込みに失敗(設定ファイル \"%s\"): %s"
+
+#~ msgid "Unknown option"
+#~ msgstr "不明なオプション"
+
+#~ msgid ""
+#~ "Invalid option or proxy: either the proxy's property or the option type "
+#~ "is incompatible."
+#~ msgstr ""
+#~ "オプションまたはプロキシーが無効: プロキシーのプロパティかオプションの種類"
+#~ "が正しくありません."
+
+#~ msgid "Unknown value type for keyfile entry %s::%s"
+#~ msgstr "キーファイルエントリー %s::%s の値の種類が不明"
+
+#~ msgid "Error retrieving keyfile entry %s::%s: %s"
+#~ msgstr "キーファイルエントリー %s::%s: 読み込みエラー %s"
+
+#~ msgid "Documentation Generator"
+#~ msgstr "文書生成"
+
+#~ msgid "Generates documentation basis from source code"
+#~ msgstr "ソースコードより文書の元を生成"
+
+#~ msgid "Failed to load configuration: %s"
+#~ msgstr "設定の読み込みに失敗: %s"
+
+#~ msgid "Failed to save configuration: %s"
+#~ msgstr "設定の保存に失敗: %s"
+
+#~ msgid "Failed to find configuration file for file type \"%s\": %s"
+#~ msgstr "ファイル種類 \"%s\" 向けの設定ファイルが見つかりません: %s"
+
+#~ msgid "Insert Documentation Comment"
+#~ msgstr "文書コメントを挿入"
+
+#~ msgid "_Document Current Symbol"
+#~ msgstr "文書の現在のシンボル(_D)"
+
+#~ msgid "Generate documentation for the current symbol"
+#~ msgstr "現在のシンボルの文書を生成します"
+
+#~ msgid "Document _All Symbols"
+#~ msgstr "すべてのシンボルの文書(_A)"
+
+#~ msgid "Generate documentation for all symbols in the current document"
+#~ msgstr "現在の文書のすべてのシンボルについての文書を生成"
+
+#~ msgid "_Reload Configuration Files"
+#~ msgstr "設定ファイルの再読み込み(_R)"
+
+#~ msgid "Force reloading of the configuration files"
+#~ msgstr "設定ファイルを再読み込みします"
+
+#~ msgid "_Edit Current Language Configuration"
+#~ msgstr "現在の言語の設定を編集(_E)"
+
+#~ msgid "Open the current language configuration file for editing"
+#~ msgstr "現在の言語設定ファイルを編集のために開く"
+
+#~ msgid "Open _Manual"
+#~ msgstr "マニュアルを開く(_M)"
+
+#~ msgid "Open the manual in a browser"
+#~ msgstr "マニュアルをブラウザで開く"
+
+#~ msgid "_Documentation Generator"
+#~ msgstr "文書の生成(_D)"
+
+#~ msgid "General"
+#~ msgstr "全般"
+
+#~ msgid "_Save file before generating documentation"
+#~ msgstr "文書を生成する前にファイルを保存(_S)"
+
+#~ msgid ""
+#~ "Whether the current document should be saved to disc before generating "
+#~ "the documentation. This is a technical detail, but it is currently needed "
+#~ "to have an up-to-date tag list. If you disable this option and ask for "
+#~ "documentation generation on a modified document, the behavior may be "
+#~ "surprising since the comment will be generated for the last saved state "
+#~ "of this document and not the current one."
+#~ msgstr ""
+#~ "現在の文書からヘルプ文書を生成する前にディスクに保存するかどうかを指定しま"
+#~ "す.技術的な側面から見ると,タグ一覧が更新されます.このオプションを無効にし,"
+#~ "更新された文書からヘルプ文書を生成すると,現在の文書ではなく,最後に保存され"
+#~ "た状態からコメントが生成されます."
+
+#~ msgid "_Indent inserted documentation"
+#~ msgstr "挿入した文書にインデントをつける(_I)"
+
+#~ msgid ""
+#~ "Whether the inserted documentation should be indented to fit the "
+#~ "indentation at the insertion position."
+#~ msgstr "挿入した文書を、挿入位置でのインデントに合わせるかどうかを指定"
+
+#~ msgid "Documentation type"
+#~ msgstr "文書の種類"
+
+#~ msgid ""
+#~ "Choose the documentation type to use with each file type. The special "
+#~ "language \"All\" on top of the list is used to choose the default "
+#~ "documentation type, used for all languages that haven't one set."
+#~ msgstr ""
+#~ "それぞれのファイル種類に使用される文書種類を選択します。リストの先頭にある"
+#~ "特別な言語種類 \"すべて\" は、言語別の設定が用意されていないすべての言語に"
+#~ "使われます。"
+
+#~ msgid "Global environment"
+#~ msgstr "全体の環境"
+
+#~ msgid ""
+#~ "Global environment overrides and additions. This environment will be "
+#~ "merged with the file-type-specific ones."
+#~ msgstr ""
+#~ "全体の環境設定を変更したり追加します。この設定はファイル種類別の設定に結合"
+#~ "されます。"
+
+#~ msgid "Invalid tag"
+#~ msgstr "無効なタグ"
+
+#~ msgid "File \"%s\" exists but is not a regular file"
+#~ msgstr "ファイル \"%s\" は存在しますが通常のファイルではありません"
+
+#~ msgid "%s: no such file or directory"
+#~ msgstr "%s: ファイルまたはディレクトリがありません"
+
+#~ msgid "Language"
+#~ msgstr "言語"
+
+#~ msgid "All"
+#~ msgstr "すべて"
+
+#~ msgid "Default documentation type for languages that does not have one set"
+#~ msgstr "言語別の設定が用意されてしないすべて言語用の文書種類設定"
+
+#, fuzzy
+#~ msgid "GeanyLipsum"
+#~ msgstr "Lipsum"
+
+#~ msgid "Creating dummy text with Geany"
+#~ msgstr "Geanyでダミーテキストを作成"
+
+#~ msgid "Lipsum-Generator"
+#~ msgstr "Lipsum-Generator"
+
+#~ msgid "Enter the length of Lipsum text here"
+#~ msgstr "ダミーテキストの文字数を指定"
+
+#~ msgid "_Lipsum"
+#~ msgstr "_Lipsum"
+
+#~ msgid "Include Pseudotext to your code"
+#~ msgstr "あなたの文書にダミーテキストを追加します。"
+
+#~ msgid "Insert Lipsum text"
+#~ msgstr "ダミーテキストを挿入"
+
+#~ msgid "GeanySendMail"
+#~ msgstr "GeanySendMail"
+
+#~ msgid ""
+#~ "A little plugin to send the current file as attachment by user's favorite "
+#~ "mailer"
+#~ msgstr ""
+#~ "編集中のファイルをユーザが使用しているメールの添付ファイルとして送信するプ"
+#~ "ラグイン"
+
+#~ msgid "Recipient's Address"
+#~ msgstr "受信者アドレス"
+
+#~ msgid "Enter the recipient's e-mail address:"
+#~ msgstr "受信者の電子メールアドレスを入力:"
+
+#~ msgid ""
+#~ "Filename placeholder not found. The executed command might have failed."
+#~ msgstr "ファイル名がありません。実行したコマンドは間違っています。"
+
+#~ msgid ""
+#~ "Recipient address placeholder not found. The executed command might have "
+#~ "failed."
+#~ msgstr "受信者アドレスがありません。実行したコマンドは間違っています。"
+
+#~ msgid "Could not execute mailer. Please check your configuration."
+#~ msgstr "メールプログラムを実行できません。環境設定を確認してください。"
+
+#~ msgid "Please define a mail client first."
+#~ msgstr "メールプログラムを先に設定してください。"
+
+#~ msgid "File has to be saved before sending."
+#~ msgstr "送信する前にファイルを保存する必要があります。"
+
+#~ msgid "Mail"
+#~ msgstr "メール"
+
+#~ msgid "Send by mail"
+#~ msgstr "電子メールとして送信"
+
+#~ msgid "Path and options for the mail client:"
+#~ msgstr "メールプログラムのパスとオプション:"
+
+#~ msgid ""
+#~ "Note: \n"
+#~ "\t\\%f will be replaced by your file.\n"
+#~ "\t\\%r will be replaced by recipient's email address.\n"
+#~ "\t\\%b will be replaced by basename of a file\n"
+#~ "\tExamples:\n"
+#~ "\tsylpheed --attach \"\\%f\" --compose \"\\%r\"\n"
+#~ "\tmutt -s \"Sending '\\%b'\" -a \"\\%f\" \"\\%r\""
+#~ msgstr ""
+#~ "注: \n"
+#~ "\t\\%f はあなたのファイル名に置換されます。\n"
+#~ "\t\\%r は受信者の電子メールアドレスに置換されます。\n"
+#~ "\t\\%b はファイルのベース名に置換されます。\n"
+#~ "\t例:\n"
+#~ "\tsylpheed --attach \"\\%f\" --compose \"\\%r\"\n"
+#~ "\tmutt -s \"Sending '\\%b'\" -a \"\\%f\" \"\\%r\""
+
+#~ msgid "Showing icon in toolbar"
+#~ msgstr "ツールバーにアイコンを表示"
+
+#~ msgid "Shows a icon in the toolbar to send file more easy."
+#~ msgstr "ファイル送信を簡単にするためにツールバーにアイコンを表示します。"
+
+#~ msgid "Using dialog for entering email address of recipients"
+#~ msgstr "受信者のメールアドレスを入力するダイアログを使用"
+
+#~ msgid "Send file by mail"
+#~ msgstr "ファイルを電子メールとして送信"
+
+#~ msgid "_Mail document"
+#~ msgstr "文書をメールとして送信(_M)"
+
+#~ msgid ""
+#~ "Sends the opened file as unzipped attachment by any mailer from your $PATH"
+#~ msgstr ""
+#~ "任意の電子メールプログラムによって編集中のファイルを非圧縮の添付ファイルと"
+#~ "して送信"
+
+#~ msgid "GeanyVC"
+#~ msgstr "GeanyVC"
+
+#~ msgid "Interface to different Version Control systems."
+#~ msgstr "バージョン管理システムとのインタフェース"
+
+#~ msgid ""
+#~ "Yura Siamashka <yurand2@gmail.com>,\n"
+#~ "Frank Lanitz <frank@frank.uvena.de>"
+#~ msgstr ""
+#~ "Yura Siamashka <yurand2@gmail.com>,\n"
+#~ "Frank Lanitz <frank@frank.uvena.de>"
+
+#~ msgid "geanyvc: s_spawn_sync error: %s"
+#~ msgstr "geanyvc: s_spawn_sync エラー: %s"
+
+#~ msgid "geanyvc: vcdiff_file_activated: Unable to rename '%s' to '%s'"
+#~ msgstr ""
+#~ "geanyvc: vcdiff_file_activated:  '%s' から '%s' に名前変更できません。"
+
+#~ msgid "No changes were made."
+#~ msgstr "変更されたものはありません。"
+
+#~ msgid "No history avaible"
+#~ msgstr "履歴が利用できません"
+
+#~ msgid "Do you really want to revert: %s?"
+#~ msgstr "変更を取り消してもよいですか: %s?"
+
+#~ msgid "Do you really want to add: %s?"
+#~ msgstr "ファイルを追加してもよいですか: %s?"
+
+#~ msgid "Do you really want to remove: %s?"
+#~ msgstr "ファイルを削除してもよいですか: %s?"
+
+#~ msgid "Do you really want to update?"
+#~ msgstr "リポジトリから更新してもよいですか?"
+
+#~ msgid "Commit Y/N"
+#~ msgstr "リポジトリに反映してもよいですか Y/N"
+
+#~ msgid "Status"
+#~ msgstr "状態"
+
+#~ msgid "Path"
+#~ msgstr "パス"
+
+#~ msgid "Commit"
+#~ msgstr "コミット"
+
+#~ msgid "_De-/select all files"
+#~ msgstr "すべてのファイルを選択/解除(_D)"
+
+#~ msgid "<b>Commit message:</b>"
+#~ msgstr "<b>コミット メッセージ:</b>"
+
+#~ msgid "_Commit"
+#~ msgstr "コミット(_C)"
+
+#~ msgid "Nothing to commit."
+#~ msgstr "反映させるものはありません。"
+
+#~ msgid "Error initializing spell checking: %s"
+#~ msgstr "スペルチェッカ初期化エラー: %s"
+
+#~ msgid ""
+#~ "Error while setting up language for spellchecking. Please check "
+#~ "configuration. Error message was: %s"
+#~ msgstr ""
+#~ "スペルチェックの言語設定中にエラーになりました。環境設定を確認してくださ"
+#~ "い。エラーメッセージ: %s"
+
+#~ msgid "Set Changed-flag for document tabs created by the plugin"
+#~ msgstr "プラグインによって文書タブに作成された変更フラグを設定"
+
+#~ msgid ""
+#~ "If this option is activated, every new by the VC-plugin created document "
+#~ "tab will be marked as changed. Even this option is useful in some cases, "
+#~ "it could cause a big number of annoying \"Do you want to save\"-dialogs."
+#~ msgstr ""
+#~ "このオプションが有効な場合、VCプラグインによって新規に文書が作成されると、"
+#~ "変更ありにマークされます。このオプションが便利な場合もありますが、多くの文"
+#~ "書に対して逐一「保存しますか」ダイアログが表示される原因にもなります。"
+
+#~ msgid "Confirm adding new files to a VCS"
+#~ msgstr "新規ファイルをVCSに追加するかどうか確認"
+
+#~ msgid "Shows a confirmation dialog on adding a new (created) file to VCS."
+#~ msgstr ""
+#~ "新規に作成されたファイルをVCSに追加するかどうか確認ダイアログを表示しま"
+#~ "す。"
+
+#~ msgid "Maximize commit dialog"
+#~ msgstr "コミットダイアログを最大化"
+
+#~ msgid "Show commit dialog maximize."
+#~ msgstr "コミットダイアログを最大化して表示します。"
+
+#~ msgid "Use external diff viewer"
+#~ msgstr "外部diffビューアを使用"
+
+#~ msgid "Use external diff viewer for file diff."
+#~ msgstr "ファイルの差分を表示するのに外部のdiffビューアを使用します。"
+
+#~ msgid "Show VC entries at editor menu"
+#~ msgstr "'VCエントリー'をエディタのメニューに追加"
+
+#~ msgid "Show entries for VC functions inside editor menu"
+#~ msgstr "エディタメニュー内にVCの機能を表示"
+
+#~ msgid "Enable CVS"
+#~ msgstr "CVSを有効"
+
+#~ msgid "Enable GIT"
+#~ msgstr "GITを有効"
+
+#~ msgid "Enable SVN"
+#~ msgstr "SVNを有効"
+
+#~ msgid "Enable SVK"
+#~ msgstr "SVKを有効"
+
+#~ msgid "Enable Bazaar"
+#~ msgstr "Bazaarを有効"
+
+#~ msgid "Enable Mercurial"
+#~ msgstr "Mercurialを有効"
+
+#~ msgid "Spellcheck language"
+#~ msgstr "スペルチェック言語"
+
+#~ msgid "_VC file Actions"
+#~ msgstr "_VC ファイル アクション"
+
+#~ msgid "_File"
+#~ msgstr "ファイル(_F)"
+
+#~ msgid "_Diff"
+#~ msgstr "差分(_D)"
+
+#~ msgid "Make a diff from the current active file"
+#~ msgstr "現在のファイルとレポジトリのファイルの差分を作成します。"
+
+#~ msgid "_Revert"
+#~ msgstr "取り消し(_R)"
+
+#~ msgid "Restore pristine working copy file (undo local edits)."
+#~ msgstr "作業コピーのファイルを最初の状態に戻す(ローカルな編集を破棄)."
+
+#~ msgid "_Blame"
+#~ msgstr "履歴を追跡(_B)"
+
+#~ msgid "Shows the changes made at one file per revision and author."
+#~ msgstr "ファイルの変更履歴を版ごと修正者ごとに表示"
+
+#~ msgid "_History (log)"
+#~ msgstr "履歴ログ(_H)"
+
+#~ msgid "Shows the log of the current file"
+#~ msgstr "現在のファイルのログを表示"
+
+#~ msgid "_Original"
+#~ msgstr "オリジナル(_O)"
+
+#~ msgid "Shows the orignal of the current file"
+#~ msgstr "現在のファイルのオリジナルを表示"
+
+#~ msgid "_Add to Version Control"
+#~ msgstr "バージョン管理に追加(_A)"
+
+#~ msgid "Add file to repository."
+#~ msgstr "ファイルをレポジトリに追加"
+
+#~ msgid "_Remove from Version Control"
+#~ msgstr "バージョン管理から削除(_R)"
+
+#~ msgid "Remove file from repository."
+#~ msgstr "レポジトリからファイルを削除"
+
+#~ msgid "_Directory"
+#~ msgstr "ディレクトリ(_D)"
+
+#~ msgid "Make a diff from the directory of the current active file"
+#~ msgstr "現在のファイルのディレクトリから差分を作成"
+
+#~ msgid "Restore original files in the current folder (undo local edits)."
+#~ msgstr "現在のディレクトリの元のファイルを復元(ローカルな編集を破棄)"
+
+#~ msgid "Shows the log of the current directory"
+#~ msgstr "現在のディレクトリのログを表示"
+
+#~ msgid "_Base Directory"
+#~ msgstr "_BASE ディレクトリ"
+
+#~ msgid "Make a diff from the top VC directory"
+#~ msgstr "バージョン管理ディレクトリから diff を作成"
+
+#~ msgid "Revert any local edits."
+#~ msgstr "ローカルな編集を元に戻す"
+
+#~ msgid "Shows the log of the top VC directory"
+#~ msgstr "バージョン管理ディレクトリのログを表示"
+
+#~ msgid "VC _Commit"
+#~ msgstr "VC コミット(_C)"
+
+#~ msgid "Show diff of file"
+#~ msgstr "ファイルの差分を表示"
+
+#~ msgid "Show diff of directory"
+#~ msgstr "ディレクトリの差分を表示"
+
+#~ msgid "Show diff of basedir"
+#~ msgstr "BASEディレクトリの差分を表示"
+
+#~ msgid "Commit changes"
+#~ msgstr "変更を反映"
+
+#~ msgid "Show status"
+#~ msgstr "状態を表示"
+
+#~ msgid "Revert single file"
+#~ msgstr "1つのファイルを元に戻す"
+
+#~ msgid "Revert directory"
+#~ msgstr "ディレクトリを元に戻す"
+
+#~ msgid "Revert base directory"
+#~ msgstr "BASE ディレクトリに戻す"
+
+#~ msgid "Update file"
+#~ msgstr "ファイルを更新"
+
+#~ msgid "_VC"
+#~ msgstr "_VC"
+
+#~ msgid "_Status"
+#~ msgstr "状態(_S)"
+
+#~ msgid "Show status."
+#~ msgstr "状態を表示"
+
+#~ msgid "Update from remote repository."
+#~ msgstr "外部のレポジトリから更新"
+
+#~ msgid "Commit changes."
+#~ msgstr "変更を反映"
+
+#~ msgid "Try: "
+#~ msgstr "以下をお試しください: "
+
+#~ msgid "Checking"
+#~ msgstr "スペルチェック"
+
+#~ msgid "Checking file \"%s\" (lines %d to %d using %s):"
+#~ msgstr "ファイル \"%s\" を検査( %d から %d 行目に %s を使用):"
+
+#~ msgid "Checking file \"%s\" (using %s):"
+#~ msgstr "ファイル \"%s\" を検査(%s を使用):"
+
+#~ msgid "The checked text is spelled correctly."
+#~ msgstr "検査した文字の綴りは正しいです。"
+
+#~ msgid "The Enchant library couldn't be initialized (%s)."
+#~ msgstr "Enchantライブラリを初期化できません(%s)。"
+
+#~ msgid "unknown error (maybe the chosen language is not available)"
+#~ msgstr "不明なエラー(選択した言語は利用できません)"
+
+#~ msgid "Spell Check"
+#~ msgstr "スペルチェック"
+
+#~ msgid "Checks the spelling of the current document."
+#~ msgstr "現在の文書の綴りを検査"
+
+#~ msgid "The Geany developer team"
+#~ msgstr "Geany 開発チーム"
+
+#~ msgid "Run Spell Check"
+#~ msgstr "スペルチェックを実行"
+
+#~ msgid "Toggle Check While Typing"
+#~ msgstr "入力中のチェックを有効/無効"
+
+#~ msgid "Select Directory"
+#~ msgstr "ディレクトリを選択"
+
+#~ msgid "Check spelling while typing"
+#~ msgstr "入力中にスペルチェックを行う"
+
+#~ msgid "Show toolbar item to toggle spell checking"
+#~ msgstr "スペルチェックを有効/無効にするツールバーボタンを表示"
+
+#~ msgid "Show editor menu item to show spelling suggestions"
+#~ msgstr "修正候補を表示するエディタメニュー項目を表示"
+
+#~ msgid "Print misspelled words and suggestions in the messages window"
+#~ msgstr "メッセージウィンドウに間違った単語と修正候補を表示"
+
+#~ msgid "Language to use for the spell check:"
+#~ msgstr "スペルチェックの言語:"
+
+#~ msgid "_Directory to look for dictionary files:"
+#~ msgstr "辞書ファイルを探すディレクトリ(_D):"
+
+#~ msgid ""
+#~ "Read additional dictionary files from this directory. For now, this only "
+#~ "works with myspell dictionaries."
+#~ msgstr ""
+#~ "このディレクトリから追加の辞書を読み込みます。現時点では、myspell 辞書のみ"
+#~ "動作します。"
+
+#~ msgid "Spell checking while typing is now enabled"
+#~ msgstr "入力中のスペルチェックは有効です"
+
+#~ msgid "Spell checking while typing is now disabled"
+#~ msgstr "入力中のスペルチェックは無効です"
+
+#~ msgid ""
+#~ "Search term is too long to provide\n"
+#~ "spelling suggestions in the editor menu."
+#~ msgstr ""
+#~ "エディタメニューに修正候補を表示するには\n"
+#~ "検索する言葉が長すぎます"
+
+#~ msgid "Perform Spell Check"
+#~ msgstr "スペルチェックを実行"
+
+#~ msgid "More..."
+#~ msgstr "さらに..."
+
+#~ msgid "(No Suggestions)"
+#~ msgstr "(候補なし)"
+
+#~ msgid "Add \"%s\" to Dictionary"
+#~ msgstr "\"%s\" を辞書に追加"
+
+#~ msgid "Ignore All"
+#~ msgstr "すべて無視"
+
+#~ msgid "Default (%s)"
+#~ msgstr "標準 (%s)"
+
+#~ msgid "unknown"
+#~ msgstr "不明"
+
+#~ msgid "Toggle spell check while typing (current language: %s)"
+#~ msgstr "入力中のスペルチェックを有効/無効(現在の言語: %s)"
+
+#~ msgid "Spelling Suggestions"
+#~ msgstr "正しい単語の候補"
+
+#~ msgid "Shift Column"
+#~ msgstr "列を移動"
+
+#~ msgid "Shift a selection left and right"
+#~ msgstr "選択した箇所を左右に移動"
+
+#~ msgid "Shift Left"
+#~ msgstr "左に移動"
+
+#~ msgid "Shift Right"
+#~ msgstr "右に移動"
+
+#~ msgid ""
+#~ "Error in module \"%s\" at function %s():\n"
+#~ " expected type \"%s\" for argument #%d\n"
+#~ msgstr ""
+#~ "モジュール \"%s\" が関数 %s() でエラー:\n"
+#~ " 正しい変数型は \"%s\" (引数 #%d )\n"
+
+#~ msgid ""
+#~ "Error in module \"%s\" at function %s():\n"
+#~ " invalid table in argument #%d:\n"
+#~ " expected type \"%s\" for element #%d\n"
+#~ msgstr ""
+#~ "モジュール \"%s\" が関数 %s() でエラー:\n"
+#~ " 引数 #%d で無効なテーブル:\n"
+#~ " 正しい要素型は \"%s\" (要素 #%d)\n"
+
+#~ msgid "_Lua Scripts"
+#~ msgstr "_Lua スクリプト"
+
+#~ msgid "     ==>> %s: Building menu from '%s'\n"
+#~ msgstr "     ==>> %s: '%s' からメニューを構築\n"
+
+#~ msgid "Nothing to configure!"
+#~ msgstr "設定するものはありません。"
+
+#~ msgid ""
+#~ "You can create the script:\n"
+#~ "\n"
+#~ "\"%s\"\n"
+#~ "\n"
+#~ "to add your own custom configuration dialog."
+#~ msgstr ""
+#~ "以下のスクリプトを作成できます:\n"
+#~ "\n"
+#~ "\"%s\"\n"
+#~ "\n"
+#~ "あなたのカスタム環境設定ダイアログに追加します。"
+
+#~ msgid ""
+#~ "Error in module \"%s\" at function navigate():\n"
+#~ "unknown navigation mode \"%s\" for argument #1.\n"
+#~ msgstr ""
+#~ "モジュール \"%s\" が関数 navigate() でエラー:\n"
+#~ "不明なナビゲーションモード \"%s\" (引数 #1)\n"
+
+#~ msgid ""
+#~ "Error in module \"%s\" at function %s():\n"
+#~ "API command \"%s\" not implemented.\n"
+#~ msgstr ""
+#~ "モジュール \"%s\" が関数 %s() でエラー:\n"
+#~ "API コマンド \"%s\" が実装されていません。\n"
+
+#~ msgid ""
+#~ "Error in module \"%s\" at function %s():\n"
+#~ "not enough arguments for command \"%s\".\n"
+#~ msgstr ""
+#~ "モジュール \"%s\" が関数 %s() でエラー:\n"
+#~ "コマンド \"%s\"の引数が不足しています。\n"
+
+#~ msgid ""
+#~ "Error in module \"%s\" at function %s():\n"
+#~ "unknown command \"%s\" given for argument #1.\n"
+#~ msgstr ""
+#~ "モジュール \"%s\" が関数 %s() でエラー:\n"
+#~ "不明なコマンド \"%s\" (引数 #1)\n"
+
+#~ msgid ""
+#~ "Error in module \"%s\" at function %s():\n"
+#~ " invalid table in argument #%d:\n"
+#~ " unknown flag \"%s\" for element #%d\n"
+#~ msgstr ""
+#~ "モジュール \"%s\" が関数 %s() でエラー:\n"
+#~ " 引数 #%d で無効なテーブル:\n"
+#~ "  不明なフラグ \"%s\" (要素 #%d)\n"
+
+#~ msgid "<too large to display>"
+#~ msgstr "<大きすぎて表示できません>"
+
+#~ msgid "Open file"
+#~ msgstr "ファイルを開く"
+
+#~ msgid "Select file"
+#~ msgstr "ファイルを選択"
+
+#~ msgid "Browse..."
+#~ msgstr "参照..."
+
+#~ msgid "Select Color"
+#~ msgstr "色を選択"
+
+#~ msgid "Choose..."
+#~ msgstr "選択..."
+
+#~ msgid "Select..."
+#~ msgstr "選択..."
+
+#~ msgid "%s: Can't load support library %s!\n"
+#~ msgstr "%s: サポートライブラリ %s をロードできません!\n"
+
+#~ msgid "%s: Failed to initialize support library %s!\n"
+#~ msgstr "%s: サポートライブラリ %s の初期化に失敗!\n"
+
+#~ msgid "%s: Support library version mismatch: %s for %s (should be %s)!\n"
+#~ msgstr ""
+#~ "%s: サポートライブラリのバージョンが不一致: %s for %s (%s であるべきで"
+#~ "す)!\n"
+
+#~ msgid "%s: Support library ABI mismatch: %d for %s (should be %d)!\n"
+#~ msgstr "%s: サポートライブラリABIが不一致: %d for %s (%d であるべきです)!\n"
+
+#~ msgid "%s: Can't find support library %s!\n"
+#~ msgstr "%s: サポートライブラリ %s がありません!\n"
+
+#~ msgid ""
+#~ "The %s plugin failed to load properly.\n"
+#~ "Please check your installation."
+#~ msgstr ""
+#~ "プラグイン %s のロードに失敗。\n"
+#~ "インストールを確認してください。"
+
+#~ msgid ""
+#~ "Error in module \"%s\" at function %s():\n"
+#~ " expected type \"%s\" or \"%s\" for argument #%d\n"
+#~ msgstr ""
+#~ "モジュール \"%s\" が関数 %s() でエラー:\n"
+#~ " 正しい変数型は \"%s\" または \"%s\" (引数 #%d )\n"
+
+#~ msgid "Lua Script"
+#~ msgstr "Lua スクリプト"
+
+#~ msgid "Write and run Lua scripts for custom commands."
+#~ msgstr "Lua スクリプトで作成したカスタムコマンドを実行します"
+
+#~ msgid "Lua Script Plugin"
+#~ msgstr "Lua スクリプト プラグイン"
+
+#~ msgid ""
+#~ "%s %s: %s\n"
+#~ "Copyright (c) 2007-2008 "
+#~ msgstr ""
+#~ "%s %s: %s\n"
+#~ "Copyright (c) 2007-2008 "
+
+#~ msgid ""
+#~ "Error in module \"%s\" at function %s():\n"
+#~ "widget \"%s\" not found for argument #1.\n"
+#~ msgstr ""
+#~ "モジュール \"%s\" が関数 %s() でエラー:\n"
+#~ "ウィジェット \"%s\" がありません(引数 #1)\n"
+
+#~ msgid ""
+#~ "Error in module \"%s\" at function %s() argument #2:\n"
+#~ "widget \"%s\" has no signal named \"%s\".\n"
+#~ msgstr ""
+#~ "モジュール \"%s\" が関数 %s() 引数 #2 でエラー:\n"
+#~ "ウィジェット \"%s\" にシグナル名 \"%s\"がありません\n"
+
+#~ msgid "File exists"
+#~ msgstr "ファイルがあります"
+
+#~ msgid "Do you want to overwrite it?"
+#~ msgstr "上書きしますか?"
+
+#~ msgid "confirm"
+#~ msgstr "確認"
+
+#~ msgid "Save file"
+#~ msgstr "ファイルを保存"
+
+#~ msgid ""
+#~ "Error in module \"%s\" at function pickfile():\n"
+#~ "failed to parse filter string at argument #3.\n"
+#~ msgstr ""
+#~ "モジュール \"%s\" が関数 pickfile() でエラー:\n"
+#~ "引数 #3 のフィルタ文字列の解析に失敗\n"
+
+#~ msgid ""
+#~ "Error in module \"%s\" at function %s():\n"
+#~ "expected string \"open\" or \"save\" for argument #1.\n"
+#~ msgstr ""
+#~ "モジュール \"%s\" が関数 %s() でエラー:\n"
+#~ "引数 #1には文字列 \"open\" または \"save\" が必要です\n"
+
+#~ msgid "Lua script error:"
+#~ msgstr "Lua スクリプトエラー:"
+
+#~ msgid "Script timeout"
+#~ msgstr "スクリプトのタイムアウト"
+
+#~ msgid ""
+#~ "A Lua script seems to be taking excessive time to complete.\n"
+#~ "Do you want to continue waiting?"
+#~ msgstr ""
+#~ "Lua スクリプトが終了するまでに時間がかかりすぎているようです。\n"
+#~ "スクリプトが完了するまで待ちつづけますか?"
+
+#~ msgid "Script timeout exceeded."
+#~ msgstr "スクリプトがタイムアウト時間を越えました"
+
+#~ msgid "(error object is not a string)"
+#~ msgstr "(エラーオブジェクトは文字列ではありません)"
+
+#~ msgid "Unknown Error inside script."
+#~ msgstr "スクリプト内部で不明なエラー"
+
+#~ msgid "Out of memory."
+#~ msgstr "メモリ不足"
+
+#~ msgid "Failed to open script file."
+#~ msgstr "スクリプトファイルのオープン失敗"
+
+#~ msgid "Unknown error while loading script file."
+#~ msgstr "スクリプトファイル読み込み時の不明なエラー"
+
+#~ msgid "Project"
+#~ msgstr "プロジェクト"
+
+#~ msgid "Alternative project support."
+#~ msgstr "別のプロジェクト管理プラグイン"
+
+#~ msgid "Yura Siamashka <yurand2@gmail.com>"
+#~ msgstr "Yura Siamashka <yurand2@gmail.com>"
+
+#~ msgid "Project Preferences"
+#~ msgstr "プロジェクトの設定"
+
+#~ msgid "New Project"
+#~ msgstr "新規プロジェクト"
+
+#~ msgid "C_reate"
+#~ msgstr "作成(_R)"
+
+#~ msgid "Name:"
+#~ msgstr "名前:"
+
+#~ msgid "Location:"
+#~ msgstr "場所:"
+
+#~ msgid "Choose Project Location"
+#~ msgstr "プロジェクトの場所を選択"
+
+#~ msgid "Base path:"
+#~ msgstr "基本パス:"
+
+#~ msgid ""
+#~ "Base directory of all files that make up the project. This can be a new "
+#~ "path, or an existing directory tree. You can use paths relative to the "
+#~ "project filename."
+#~ msgstr ""
+#~ "すべてのファイルの基本パスは、プロジェクトを定義します。新規のパス、または"
+#~ "既存のディレクトリを指定できます。プロジェクトファイル名の相対パスを使用で"
+#~ "きます。"
+
+#~ msgid "Choose Project Base Path"
+#~ msgstr "プロジェクトの基本パスを選択"
+
+#~ msgid "Generate file list on load"
+#~ msgstr "ロード時にファイル一覧を生成"
+
+#~ msgid ""
+#~ "Automatically add files that match project type on project load "
+#~ "automaticly. You can't manually add/remove files if you checked this "
+#~ "option, since your modification will be lost on on next project load"
+#~ msgstr ""
+#~ "自動的にファイルを追加は、プロジェクトのプロジェクトの種類に一致したファイ"
+#~ "ルを自動的にロードします。このオプションを選択すると、あなたは手動でファイ"
+#~ "ルの追加や削除ができなくなります。あなたが手作業でした変更は次回にプロジェ"
+#~ "クトがロードされたときに失われます。"
+
+#~ msgid "Type:"
+#~ msgstr "種類:"
+
+#~ msgid "Project file \"%s\" already exists"
+#~ msgstr "プロジェクトファイル \"%s\" は既に存在します"
+
+#~ msgid "_Project"
+#~ msgstr "プロジェクト(_P)"
+
+#~ msgid "Delete Project"
+#~ msgstr "プロジェクトを削除"
+
+#~ msgid "Add File"
+#~ msgstr "ファイルを追加"
+
+#~ msgid "Find in Project"
+#~ msgstr "プロジェクト内を検索"
+
+#~ msgid "Remove File"
+#~ msgstr "ファイルを削除"
+
+#~ msgid "H_ide Sidebar"
+#~ msgstr "サイドバーを隠す(_I)"
+
+#~ msgid "Project \"%s\" opened."
+#~ msgstr "プロジェクト \"%s\" が開かれました"
+
+#~ msgid "Insert Numbers"
+#~ msgstr "番号を挿入"
+
+#~ msgid "Insert/Fill columns with numbers."
+#~ msgstr "列に番号を挿入"
+
+#~ msgid "Counting..."
+#~ msgstr "数えています..."
+
+#~ msgid "Preparing..."
+#~ msgstr "準備中..."
+
+#~ msgid "Inserting..."
+#~ msgstr "挿入中..."
+
+#~ msgid "For base 11 and above"
+#~ msgstr "基数が11以上のとき"
+
+#~ msgid "_Start:"
+#~ msgstr "開始(_S):"
+
+#~ msgid "S_tep:"
+#~ msgstr "増分(_T):"
+
+#~ msgid "_Base:"
+#~ msgstr "基数(_B):"
+
+#~ msgid "Letters:"
+#~ msgstr "文字:"
+
+#~ msgid "_Upper"
+#~ msgstr "大文字(_U)"
+
+#~ msgid "_Lower"
+#~ msgstr "小文字(_L)"
+
+#~ msgid "Base _prefix"
+#~ msgstr "接頭語(_P)"
+
+#~ msgid "0 for octal, 0x for hex, + for positive decimal"
+#~ msgstr "8進数には0,16進数には0x,正の10進数に+をつけることができます"
+
+#~ msgid "Padding:"
+#~ msgstr "余白:"
+
+#~ msgid "Sp_ace"
+#~ msgstr "空白(_A)"
+
+#~ msgid "_Zero"
+#~ msgstr "ゼロ(_Z)"
+
+#~ msgid "Insert _Numbers"
+#~ msgstr "番号を挿入(_N)"
+
+#~ msgid "Tree Browser"
+#~ msgstr "ツリーブラウザ"
+
+#~ msgid "Treeview filebrowser plugin."
+#~ msgstr "ツリー表示のファイル一覧プラグイン"
+
+#~ msgid "Directory '%s' not exists."
+#~ msgstr "ディレクトリ '%s' がありません"
+
+#~ msgid "Empty"
+#~ msgstr "空"
+
+#~ msgid "Could not execute configured external command '%s' (%s)."
+#~ msgstr "設定済みの外部コマンド '%s' が実行できません (%s)."
+
+#, fuzzy
+#~ msgid "NewDirectory"
+#~ msgstr "新規ディレクトリ"
+
+#, fuzzy
+#~ msgid "NewFile"
+#~ msgstr "新規ファイル"
+
+#~ msgid "Do you really want to delete '%s' ?"
+#~ msgstr "'%s' を削除してもよいですか?"
+
+#~ msgid "Go up"
+#~ msgstr "上に移動"
+
+#~ msgid "Set path from document"
+#~ msgstr "文書からパスを設定"
+
+#~ msgid "Open externally"
+#~ msgstr "外部アプリケーションで開く"
+
+#~ msgid "Open Terminal"
+#~ msgstr "端末で開く"
+
+#~ msgid "Set as root"
+#~ msgstr "rootに設定"
+
+#~ msgid "Create new directory"
+#~ msgstr "ディレクトリを作成"
+
+#~ msgid "Create new file"
+#~ msgstr "ファイルを作成"
+
+#~ msgid "Rename"
+#~ msgstr "名前変更"
+
+#~ msgid "Delete"
+#~ msgstr "削除"
+
+#~ msgid "Refresh"
+#~ msgstr "表示を更新"
+
+#~ msgid "Expand all"
+#~ msgstr "すべて展開"
+
+#~ msgid "Collapse all"
+#~ msgstr "すべて閉じる"
+
+#~ msgid "Close: %s"
+#~ msgstr "閉じる: %s"
+
+#~ msgid "Copy full path"
+#~ msgstr "完全パスをコピー"
+
+#~ msgid "Show bookmarks"
+#~ msgstr "ブックマークを表示"
+
+#~ msgid "Show hidden files"
+#~ msgstr "隠しファイルを表示"
+
+#~ msgid "Show bars"
+#~ msgstr "バーを表示"
+
+#~ msgid "Home"
+#~ msgstr "ホーム"
+
+#~ msgid "Track path"
+#~ msgstr "パスを記録"
+
+#~ msgid "Hide bars"
+#~ msgstr "バーを隠す"
+
+#~ msgid ""
+#~ "Filter (*.c;*.h;*.cpp), and if you want temporary filter using the '!' "
+#~ "reverse try for example this '!;*.c;*.h;*.cpp'"
+#~ msgstr ""
+#~ "フィルタ(*.c;*.h;*.cpp)と '!' 反転を使った一時フィルタを使用するには次のよ"
+#~ "うにします '!;*.c;*.h;*.cpp'"
+
+#~ msgid "Addressbar for example '/projects/my-project'"
+#~ msgstr "アドレスバーの入力例 '/projects/my-project'"
+
+#~ msgid "External open command"
+#~ msgstr "他のプログラムで開く"
+
+#~ msgid ""
+#~ "The command to execute when using \"Open with\". You can use %f and %d "
+#~ "wildcards.\n"
+#~ "%f will be replaced with the filename including full path\n"
+#~ "%d will be replaced with the path name of the selected file without the "
+#~ "filename"
+#~ msgstr ""
+#~ "\"他のプログラムで開く\" を使うときに実行されるコマンド. ワイルドカード%f "
+#~ "と %d を使用できます\n"
+#~ "%f は完全パスを含むファイル名に置き換えられます\n"
+#~ "%d は選択したファイルがあるパス名に置き換えられます"
+
+#~ msgid "Default directory deep to fill"
+#~ msgstr "最初に表示するディレクトリの深さ"
+
+#~ msgid "How many folders will opened and store in tree"
+#~ msgstr "ツリーにいくつのフォルダを展開するか"
+
+#~ msgid "Show bars at top (Require plugin restart)"
+#~ msgstr "バーを上に表示(プラグインの再起動が必要)"
+
+#~ msgid "On Windows, this just hide files that are prefixed with '.' (dot)"
+#~ msgstr "'.'(ドット)から始まるファイルを隠します"
+
+#~ msgid "Hide object files"
+#~ msgstr "オブジェクトファイルを表示しない"
+
+#~ msgid ""
+#~ "Don't show generated object files in the file browser, this includes *.o, "
+#~ "*.obj. *.so, *.dll, *.a, *.lib"
+#~ msgstr ""
+#~ "ファイルブラウザにオブジェクトファイルを表示しません。除外されるファイル"
+#~ "は *.o, *.obj. *.so, *.dll, *.a, *.lib です"
+
+#~ msgid "Reverse filter"
+#~ msgstr "フィルタを反転"
+
+#~ msgid "Follow current document"
+#~ msgstr "現在の文書を示す"
+
+#~ msgid "Single click, open document and focus it"
+#~ msgstr "シングルクリックで、文書を開き、それを示します"
+
+#~ msgid "Double click open directory"
+#~ msgstr "ダブルクリックで、ディレクトリを表示"
+
+#~ msgid "On expand, refresh directory view"
+#~ msgstr "展開時に、ディレクトリ表示を更新"
+
+#~ msgid "On delete file, close it if is opened"
+#~ msgstr "ファイルを削除時に、開いていたら閉じる"
+
+#~ msgid "Show tree lines"
+#~ msgstr "ツリー行数を表示"
+
+#~ msgid "Extra Selection"
+#~ msgstr "特殊な選択"
+
+#~ msgid "Column mode, select to line / matching brace."
+#~ msgstr "列選択モード、行番号指定選択、対応する括弧で選択"
+
+#~ msgid "E_xtra selection"
+#~ msgstr "特殊な選択(_X)"
+
+#~ msgid "_Column mode"
+#~ msgstr "列選択モード(_C)"
+
+#~ msgid "Column mode"
+#~ msgstr "列選択モード"
+
+#~ msgid "Select to _Line"
+#~ msgstr "行番号指定選択(_L)"
+
+#~ msgid "Select to line"
+#~ msgstr "行番号指定選択"
+
+#~ msgid "Select to Matching _Brace"
+#~ msgstr "対応する括弧で選択(_B)"
+
+#~ msgid "Select to matching brace"
+#~ msgstr "対応する括弧で選択"
+
+#~ msgid "Code Navigation plug-in configuration"
+#~ msgstr "コードナビ プラグイン設定"
+
+#~ msgid "Switch header / implementation"
+#~ msgstr "ヘッダとソースの切り替え"
+
+#~ msgid "_Load"
+#~ msgstr "_Load"
+
+#~ msgid "Load target program into debugger."
+#~ msgstr "ターゲットプログラムをデバッガにロードします。"
+
+#~ msgid "_Unload"
+#~ msgstr "_Unload"
+
+#~ msgid "Kill the target program AND the debugger."
+#~ msgstr "ターゲットプログラムとデバッガを終了します。"
+
+#~ msgid "_Run"
+#~ msgstr "_Run"
+
+#~ msgid "Execute target program in debugger."
+#~ msgstr "ターゲットプログラムをデバッガで実行します。"
+
+#~ msgid "_Kill"
+#~ msgstr "_Kill"
+
+#~ msgid "Kill the target program with SIGKILL."
+#~ msgstr "SIGKILL シグナルを送ってターゲットプログラムを終了させます。"
+
+#~ msgid "Pause the target program with SIGINT."
+#~ msgstr "SIGINT シグナルを送ってターゲットプログラムを一時停止します。"
+
+#~ msgid "Continue executing target program."
+#~ msgstr "ターゲットプログラムの実行を再開します。"
+
+#~ msgid "Step to the next line or function call."
+#~ msgstr "次の行または関数呼び出しを実行して止まります。"
+
+#~ msgid "Step _in"
+#~ msgstr "Step _in"
+
+#~ msgid "Execute the next machine instruction or function call."
+#~ msgstr "次の機械語命令または関数呼び出しまで実行して止まります。"
+
+#~ msgid "Step to the next line."
+#~ msgstr "次の行まで実行。"
+
+#~ msgid "Ne_xt in"
+#~ msgstr "Ne_xt in"
+
+#~ msgid "Execute the next machine instruction."
+#~ msgstr "次の機械語命令まで実行します。"
+
+#~ msgid "Run _to"
+#~ msgstr "Run _to"
+
+#~ msgid "Run to specified source line."
+#~ msgstr "ソースプログラムの位置を指定して実行します。"
+
+#~ msgid "Stac_k"
+#~ msgstr "Stac_k"
+
+#~ msgid "Display a backtrace of the current call stack."
+#~ msgstr "現在の呼び出しスタックを表示します。"
+
+#~ msgid "Add or remove breakpoints."
+#~ msgstr "ブレークポイントを追加または削除します。"
+
+#~ msgid "Add or remove watchpoints."
+#~ msgstr "監視ポイントを追加または削除します。"
+
+#~ msgid "_Finish"
+#~ msgstr "_Finish"
+
+#~ msgid "Complete the currently executing function."
+#~ msgstr "現在実行している関数を終了します。"
+
+#~ msgid "_Return"
+#~ msgstr "_Return"
+
+#~ msgid "Return immediately from the current function."
+#~ msgstr "現在実行している関数から直ちに戻ります。"
+
+#~ msgid "En_viron"
+#~ msgstr "En_viron"
+
+#~ msgid "Set target environment and command line options."
+#~ msgstr ""
+#~ "ターゲット プログラムの環境やコマンドライン オプションを設定します。"
+
+#~ msgid "_Options"
+#~ msgstr "_Options"
+
+#~ msgid "Set user interface options."
+#~ msgstr "ユーザ インタフェース オプションを設定します。"
+
+#~ msgid "VC"
+#~ msgstr "VC"
+
+#~ msgid "_History (Log)"
+#~ msgstr "履歴ログ(_H)"

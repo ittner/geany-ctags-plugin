@@ -1,3 +1,12 @@
+# German translation for GeanyLaTeX based on translation for geany-plugins
+# Copyright (C) 2009-2010 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the geany-plugins package.
+# Andrew Janke <a.janke@gmail.com>, 2009
+# Frank Lanitz <frank@frank.uvena.de>, 2009-2010
+# Dominic Hopf <dmaphy@gmail.com>, 2009
+# Michael Spahn <anyone90@googlemail.com>, 2009
+#
+
 msgid ""
 msgstr ""
 "Project-Id-Version: GeanyLaTeX\n"
