@@ -100,8 +100,6 @@ static gchar *config_file = NULL;
 
 LaTeXWizard glatex_wizard;
 
-PLUGIN_KEY_GROUP(geanylatex, COUNT_KB)
-
 const GtkActionEntry format_icons[] =
 {
 	{ "Wizard", GTK_STOCK_NEW, NULL, NULL, N_("Runs LaTeX wizard"), G_CALLBACK(glatex_kbwizard) },
@@ -1883,57 +1881,60 @@ glatex_wizard_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 
 static void init_keybindings()
 {
+	GeanyKeyGroup *key_group;
+	
 	/* init keybindings */
-	keybindings_set_item(plugin_key_group, KB_LATEX_WIZARD, glatex_kbwizard,
+	key_group = plugin_set_key_group(geany_plugin, "geanylatex", COUNT_KB, NULL);
+	keybindings_set_item(key_group, KB_LATEX_WIZARD, glatex_kbwizard,
 		0, 0, "run_latex_wizard", _("Run LaTeX-Wizard"), menu_latex_wizard);
-	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_LABEL, glatex_kblabel_insert,
+	keybindings_set_item(key_group, KB_LATEX_INSERT_LABEL, glatex_kblabel_insert,
 		0, 0, "insert_latex_label", _("Insert \\label"), menu_latex_label);
-	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_REF, glatex_kbref_insert,
+	keybindings_set_item(key_group, KB_LATEX_INSERT_REF, glatex_kbref_insert,
 		0, 0, "insert_latex_ref", _("Insert \\ref"), menu_latex_ref);
-	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_NEWLINE, glatex_kb_insert_newline,
+	keybindings_set_item(key_group, KB_LATEX_INSERT_NEWLINE, glatex_kb_insert_newline,
 		0, 0, "insert_new_line", _("Insert linebreak \\\\ "), NULL);
-	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_COMMAND,
+	keybindings_set_item(key_group, KB_LATEX_INSERT_COMMAND,
 		glatex_kb_insert_command_dialog, 0, 0, "latex_insert_command",
 		_("Insert command"), menu_latex_insert_command);
-	keybindings_set_item(plugin_key_group, KB_LATEX_TOGGLE_ACTIVE, glatex_kblatex_toggle,
+	keybindings_set_item(key_group, KB_LATEX_TOGGLE_ACTIVE, glatex_kblatex_toggle,
 		0, 0, "latex_toggle_status", _("Turn input replacement on/off"),
 		menu_latex_replace_toggle);
-	keybindings_set_item(plugin_key_group, KB_LATEX_REPLACE_SPECIAL_CHARS,
+	keybindings_set_item(key_group, KB_LATEX_REPLACE_SPECIAL_CHARS,
 		glatex_kb_replace_special_chars, 0, 0, "latex_replace_chars",
 		_("Replace special characters"), NULL);
-	keybindings_set_item(plugin_key_group, KB_LATEX_ENVIRONMENT_INSERT,
+	keybindings_set_item(key_group, KB_LATEX_ENVIRONMENT_INSERT,
 		glatex_kbref_insert_environment, 0, 0, "latex_insert_environment",
 		_("Run insert environment dialog"), menu_latex_insert_environment);
-	keybindings_set_item(plugin_key_group, KB_LATEX_INSERT_NEWITEM,
+	keybindings_set_item(key_group, KB_LATEX_INSERT_NEWITEM,
 		glatex_kb_insert_newitem, 0, 0, "latex_insert_item", _("Insert \\item"), NULL);
-	keybindings_set_item(plugin_key_group, KB_LATEX_FORMAT_BOLD, glatex_kb_format_bold,
+	keybindings_set_item(key_group, KB_LATEX_FORMAT_BOLD, glatex_kb_format_bold,
 		0, 0, "format_bold", _("Format selection in bold font face"), NULL);
-	keybindings_set_item(plugin_key_group, KB_LATEX_FORMAT_ITALIC, glatex_kb_format_italic,
+	keybindings_set_item(key_group, KB_LATEX_FORMAT_ITALIC, glatex_kb_format_italic,
 		0, 0, "format_italic", _("Format selection in italic font face"), NULL);
-	keybindings_set_item(plugin_key_group, KB_LATEX_FORMAT_TYPEWRITER, glatex_kb_format_typewriter,
+	keybindings_set_item(key_group, KB_LATEX_FORMAT_TYPEWRITER, glatex_kb_format_typewriter,
 		0, 0, "format_typewriter", _("Format selection in typewriter font face"), NULL);
-	keybindings_set_item(plugin_key_group, KB_LATEX_FORMAT_CENTER, glatex_kb_format_centering,
+	keybindings_set_item(key_group, KB_LATEX_FORMAT_CENTER, glatex_kb_format_centering,
 		0, 0, "format_center", _("Format selection centered"), NULL);
-	keybindings_set_item(plugin_key_group, KB_LATEX_FORMAT_LEFT, glatex_kb_format_left,
+	keybindings_set_item(key_group, KB_LATEX_FORMAT_LEFT, glatex_kb_format_left,
 		0, 0, "format_left", _("Format selection left-aligned"), NULL);
-	keybindings_set_item(plugin_key_group, KB_LATEX_FORMAT_RIGHT, glatex_kb_format_right,
+	keybindings_set_item(key_group, KB_LATEX_FORMAT_RIGHT, glatex_kb_format_right,
 		0, 0, "format_right", _("Format selection right-aligned"), NULL);
-	keybindings_set_item(plugin_key_group, KB_LATEX_ENVIRONMENT_INSERT_DESCRIPTION,
+	keybindings_set_item(key_group, KB_LATEX_ENVIRONMENT_INSERT_DESCRIPTION,
 		glatex_kb_insert_description_list, 0, 0, "insert_description_list",
 		_("Insert description list"), NULL);
-	keybindings_set_item(plugin_key_group, KB_LATEX_ENVIRONMENT_INSERT_ITEMIZE,
+	keybindings_set_item(key_group, KB_LATEX_ENVIRONMENT_INSERT_ITEMIZE,
 		glatex_kb_insert_itemize_list, 0, 0, "insert_itemize_list",
 		_("Insert itemize list"), NULL);
-	keybindings_set_item(plugin_key_group, KB_LATEX_ENVIRONMENT_INSERT_ENUMERATE,
+	keybindings_set_item(key_group, KB_LATEX_ENVIRONMENT_INSERT_ENUMERATE,
 		glatex_kb_insert_enumerate_list, 0, 0, "insert_enumerate_list",
 		_("Insert enumerate list"), NULL);
-	keybindings_set_item(plugin_key_group, KB_LATEX_STRUCTURE_LVLUP,
+	keybindings_set_item(key_group, KB_LATEX_STRUCTURE_LVLUP,
 		glatex_kb_structure_lvlup, 0, 0, "structure_lvl_up",
 		_("Set selection one level up"), NULL);
-	keybindings_set_item(plugin_key_group, KB_LATEX_STRUCTURE_LVLDOWN,
+	keybindings_set_item(key_group, KB_LATEX_STRUCTURE_LVLDOWN,
 		glatex_kb_structure_lvldown, 0, 0, "structure_lvl_down",
 		_("Set selection one level down"), NULL);
-	keybindings_set_item(plugin_key_group, KB_LATEX_USEPACKAGE_DIALOG,
+	keybindings_set_item(key_group, KB_LATEX_USEPACKAGE_DIALOG,
 		glatex_kb_usepackage_dialog, 0, 0, "usepackage_dialog",
 		_("Insert \\usepackage{}"), menu_latex_insert_usepackage);
 }
