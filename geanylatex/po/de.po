@@ -1,4 +1,4 @@
-# German translation for GeanyLaTeX based on translation for geany-plugins
+# German translation for GeanyLaTeX based on translation for geany-plugins. 
 # Copyright (C) 2009-2010 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany-plugins package.
 # Andrew Janke <a.janke@gmail.com>, 2009
@@ -6,746 +6,912 @@
 # Dominic Hopf <dmaphy@gmail.com>, 2009
 # Michael Spahn <anyone90@googlemail.com>, 2009
 #
-
 msgid ""
 msgstr ""
-"Project-Id-Version: GeanyLaTeX\n"
+"Project-Id-Version: GeanyLaTeX 0.6svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-25 23:39+0200\n"
-"PO-Revision-Date: \n"
+"POT-Creation-Date: 2010-09-26 13:57+0200\n"
+"PO-Revision-Date: 2010-09-26 14:00+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
-"Language-Team: geany-118n <geany-118n@uvena.de>\n"
+"Language-Team: German <geany-i18n@uvena.de>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: German\n"
-"X-Poedit-Country: GERMANY\n"
-"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/geanylatex.c:29
-msgid "LaTeX"
-msgstr "LaTeX"
+#: ../src/geanylatex.c:36
+msgid "GeanyLaTeX"
+msgstr "GeanyLaTeX"
 
-#: src/geanylatex.c:29
+#: ../src/geanylatex.c:37
 msgid "Plugin to provide better LaTeX support"
-msgstr "Plugin zum Verbessern des LaTeX-Support für Geany"
+msgstr "GeanyLaTeX bietet LaTeX-Support für Geany"
 
-#: src/geanylatex.c:95
+#: ../src/geanylatex.c:105
+msgid "Runs LaTeX wizard"
+msgstr "LaTeX-Assistent starten"
+
+#: ../src/geanylatex.c:106
 msgid "Marks selected text as italic"
 msgstr "Auswahl kursiv formatieren"
 
-#: src/geanylatex.c:96
+#: ../src/geanylatex.c:107
 msgid "Marks selected text as bold"
 msgstr "Auswahl fett formatieren"
 
-#: src/geanylatex.c:97
+#: ../src/geanylatex.c:108
 msgid "Underlines selected text"
 msgstr "Auswahl unterstreichen"
 
-#: src/geanylatex.c:181
-msgid "Plugin configuration directory could not be created."
-msgstr "Plugin-Konfigurationsverzeichnis konnte nicht erstellt werden."
+#: ../src/geanylatex.c:109
+#: ../src/formatpatterns.c:45
+msgid "Centered"
+msgstr "Zentriert"
 
-#: src/geanylatex.c:223
+#: ../src/geanylatex.c:110
+#: ../src/formatpatterns.c:46
+msgid "Left side oriented"
+msgstr "Linksbündig"
+
+#: ../src/geanylatex.c:111
+#: ../src/formatpatterns.c:47
+msgid "Right side oriented"
+msgstr "Rechtsbündig"
+
+#: ../src/geanylatex.c:215
+msgid "Plugin configuration directory could not be created."
+msgstr "Das Konfigurationsverzeichnis für das Plugin konnte nicht erstellt werden."
+
+#: ../src/geanylatex.c:260
 msgid "Use KOMA script by default"
 msgstr "KOMA-Script per Standard verwenden"
 
-#: src/geanylatex.c:225
+#: ../src/geanylatex.c:262
 msgid "Show extra plugin toolbar"
 msgstr "Zeige Werkzeugliste für das Plugin an"
 
-#: src/geanylatex.c:394
+#: ../src/geanylatex.c:264
+msgid "Capitalize sentense on typing"
+msgstr "Automatische Großschreibung am Satzanfang"
+
+#: ../src/geanylatex.c:268
+msgid "Don't care about this inside plugin"
+msgstr "Führe keine Autovervollständigung durch"
+
+#: ../src/geanylatex.c:270
+msgid "Always perform autocompletion on LaTeX"
+msgstr "Autovervollständigung in LaTeX durchführen"
+
+#: ../src/geanylatex.c:282
+msgid "Modus of autocompletion"
+msgstr "Typ der Autovervollständigung"
+
+#: ../src/geanylatex.c:811
 msgid "Insert Label"
 msgstr "Lesezeichen einfügen"
 
-#: src/geanylatex.c:407
+#: ../src/geanylatex.c:824
 msgid "Label name:"
 msgstr "Lesezeichenname:"
 
-#: src/geanylatex.c:444
+#: ../src/geanylatex.c:860
+msgid "Insert Command"
+msgstr "Befehl einfügen"
+
+#: ../src/geanylatex.c:873
+msgid "Command name:"
+msgstr "Befehlsname"
+
+#: ../src/geanylatex.c:933
 msgid "Insert Reference"
 msgstr "Verweis einfügen"
 
-#: src/geanylatex.c:457
+#: ../src/geanylatex.c:946
 msgid "Reference name:"
 msgstr "Lesezeichenname:"
 
-#: src/geanylatex.c:471
+#: ../src/geanylatex.c:971
 msgid "_Standard Reference"
 msgstr "_Normaler Verweis"
 
-#: src/geanylatex.c:476
+#: ../src/geanylatex.c:976
 msgid "_Page Reference"
 msgstr "Verweis auf _Seite"
 
-#: src/geanylatex.c:652
+#: ../src/geanylatex.c:981
+msgid "_Add both"
+msgstr "Beides hinzufügen"
+
+#: ../src/geanylatex.c:1178
 msgid "More"
 msgstr "Weitere"
 
+#: ../src/geanylatex.c:1234
+msgid "Add additional package"
+msgstr "Paket inzufügen"
+
+#: ../src/geanylatex.c:1247
+msgid "Package name:"
+msgstr "Paketname:"
+
+#: ../src/geanylatex.c:1250
+msgid "Package options:"
+msgstr "Paketoptionen:"
+
+#: ../src/geanylatex.c:1641
+msgid "Dear Sir or Madame"
+msgstr "Sehr geehrte Damen und Herren"
+
+#: ../src/geanylatex.c:1642
+msgid "With kind regards"
+msgstr "Mit freundlichen Grüßen"
+
+#: ../src/geanylatex.c:1650
+msgid "No template assigned. Aborting"
+msgstr "Keine Vorlage zugewiesen. Abbruch."
+
+#. Building the wizard-dialog and showing it
+#: ../src/geanylatex.c:1677
+msgid "LaTeX-Wizard"
+msgstr "LaTeX-Assistent"
+
+#. Templates
+#. *  Adds custom templates if there are any. If there are none just
+#. *  adds default one
+#: ../src/geanylatex.c:1692
+msgid "Template:"
+msgstr "Vorlage:"
+
+#: ../src/geanylatex.c:1696
+msgid "Set the template which should be used for creating the new document"
+msgstr "Bestimmt, welche Vorlage zum Erstellen des neuen Dokumentes genutzt werden soll."
+
+#: ../src/geanylatex.c:1705
+msgid "Default"
+msgstr "Vorgabe"
+
 #. Documentclass
-#: src/geanylatex.c:744
+#: ../src/geanylatex.c:1716
 msgid "Documentclass:"
 msgstr "Dokumentenklasse:"
 
-#: src/geanylatex.c:747
+#: ../src/geanylatex.c:1719
 msgid "Choose the kind of document you want to write"
 msgstr "Art des Dokumentes"
 
-#: src/geanylatex.c:749 src/bibtexlabels.c:27
+#: ../src/geanylatex.c:1721
+#: ../src/bibtexlabels.c:27
 msgid "Book"
-msgstr "Buch"
+msgstr "Buch (@Book)"
 
-#: src/geanylatex.c:751 src/bibtexlabels.c:26
+#: ../src/geanylatex.c:1723
+#: ../src/bibtexlabels.c:26
 msgid "Article"
-msgstr "Artikel"
+msgstr "Artikel (@Article)"
 
-#: src/geanylatex.c:753
+#: ../src/geanylatex.c:1725
 msgid "Report"
 msgstr "Bericht"
 
-#: src/geanylatex.c:755
+#: ../src/geanylatex.c:1727
 msgid "Letter"
 msgstr "Brief"
 
-#: src/geanylatex.c:757
+#: ../src/geanylatex.c:1729
 msgid "Presentation"
 msgstr "Präsentation"
 
 #. Encoding
-#: src/geanylatex.c:767
+#: ../src/geanylatex.c:1739
 msgid "Encoding:"
 msgstr "Zeichensatz:"
 
-#: src/geanylatex.c:771
+#: ../src/geanylatex.c:1743
 msgid "Set the encoding for your new document"
 msgstr "Zeichensatz für das neue Dokument"
 
 #. fontsize
-#: src/geanylatex.c:787
+#: ../src/geanylatex.c:1759
 msgid "Font size:"
 msgstr "Schriftgröße:"
 
-#: src/geanylatex.c:793
+#: ../src/geanylatex.c:1765
 msgid "Set the default font size of your new document"
 msgstr "Setzt die Standardschriftgröße für das neue Dokument"
 
 #. Author
-#: src/geanylatex.c:801
+#: ../src/geanylatex.c:1777
 msgid "Author:"
 msgstr "Autor:"
 
-#: src/geanylatex.c:804
-msgid ""
-"Sets the value of the \\author command. In most cases this should be your "
-"name"
-msgstr ""
-"Setzt den Eintrag für den \\author Befehl. Meist sollte hier Ihr Name stehen."
+#: ../src/geanylatex.c:1780
+msgid "Sets the value of the \\author command. In most cases this should be your name"
+msgstr "Setzt den Eintrag für den \\author Befehl. Meist sollte hier Ihr Name stehen."
 
 #. Date
-#: src/geanylatex.c:815
+#: ../src/geanylatex.c:1794
 msgid "Date:"
 msgstr "Datum:"
 
-#: src/geanylatex.c:818
-msgid ""
-"Sets the value of the \\date command inside header of your\t\t newly created "
-"LaTeX-document. Keeping it at \\today is a good \t\t decision if you don't "
-"need any fixed date."
-msgstr ""
-"Setzt den Eintrag für den \\date Befehl im Kopf des neuen Dokumentes. In den "
-"meisten Fällen sollte \\today eine gute Wahl sein."
+#: ../src/geanylatex.c:1797
+msgid "Sets the value of the \\date command inside header of your new created LaTeX-document. Keeping it at \\today is a good decision if you don't need any fixed date."
+msgstr "Setzt den Eintrag für den \\date Befehl im Kopf des neuen Dokumentes. In den meisten Fällen sollte \\today eine gute Wahl sein."
 
 #. Title of the new document
-#: src/geanylatex.c:827
+#: ../src/geanylatex.c:1809
 msgid "Title:"
 msgstr "Titel:"
 
-#: src/geanylatex.c:830
+#: ../src/geanylatex.c:1812
 msgid "Sets the title of your new document."
 msgstr "Setzt den Titel für das neue Dokument."
 
 #. Papersize
-#: src/geanylatex.c:836
+#: ../src/geanylatex.c:1821
 msgid "Paper size:"
 msgstr "Papiergröße:"
 
-#: src/geanylatex.c:839
+#: ../src/geanylatex.c:1824
 msgid "Choose the paper format for the newly created document"
-msgstr ""
-"Setzt das Papierformat als Argument der Dokumentenklasse für das neue "
-"Dokument"
+msgstr "Setzt das Papierformat als Argument der Dokumentenklasse für das neue Dokument"
 
-#. Building the wizard-dialog and showing it
-#: src/geanylatex.c:854
-msgid "LaTeX-Wizard"
-msgstr "LaTeX-Assistent"
+#. Paper direction
+#: ../src/geanylatex.c:1837
+msgid "Paper Orientation:"
+msgstr "Seitenausrichtung:"
 
-#: src/geanylatex.c:865
+#: ../src/geanylatex.c:1840
+msgid "Choose the paper orientation for the newly created document"
+msgstr "Setzt die Ausrichtung der Seite (Hoch- oder Querformat)  als Argument der Dokumentenklasse für das neue Dokument"
+
+#: ../src/geanylatex.c:1861
 msgid "Use KOMA-script classes if possible"
 msgstr "Benutze KOMA-Skript wenn möglich"
 
-#: src/geanylatex.c:867
+#: ../src/geanylatex.c:1863
 msgid ""
 "Uses the KOMA-script classes by Markus Kohm.\n"
-"Keep in mind: To compile your document these classeshave to be installed "
-"before."
-msgstr ""
-"Wenn diese Option aktiviert ist, werden die KOMA-Skript-Klassen von Markus "
-"Kohm genutzt. Sie müssen natürlich dafür installiert sein."
+"Keep in mind: To compile your document these classes have to be installed before."
+msgstr "Wenn diese Option aktiviert ist, werden die KOMA-Skript-Klassen von Markus Kohm genutzt. Sie müssen natürlich dafür installiert sein."
 
-#: src/geanylatex.c:874
+#: ../src/geanylatex.c:1870
 msgid "Use draft mode"
 msgstr "Entwurfsmodus benutzen"
 
-#: src/geanylatex.c:876
-msgid ""
-"Set the draft flag inside new created documents to get documents with a "
-"number of debugging helpers"
-msgstr ""
-"Setzt die Option draft für die Dokumentenklasse um das neue Dokument mit "
-"einer Nummer von kleinen Korrekturhinweisen zu versehen."
+#: ../src/geanylatex.c:1872
+msgid "Set the draft flag inside new created documents to get documents with a number of debugging helpers"
+msgstr "Setzt die Option draft für die Dokumentenklasse um das neue Dokument mit einer Nummer von kleinen Korrekturhinweisen zu versehen."
 
-#: src/geanylatex.c:1086
-msgid "Dear Sir or Madame"
-msgstr "Sehr geehrte Damen und Herren"
-
-#: src/geanylatex.c:1087
-msgid "With kind regards"
-msgstr "Mit freundlichen Grüßen"
-
-#: src/geanylatex.c:1101
+#: ../src/geanylatex.c:1889
 msgid "Run LaTeX-Wizard"
 msgstr "LaTeX-Assistent starten"
 
-#: src/geanylatex.c:1103
+#: ../src/geanylatex.c:1891
 msgid "Insert \\label"
 msgstr "\\label einfügen"
 
-#: src/geanylatex.c:1105
+#: ../src/geanylatex.c:1893
 msgid "Insert \\ref"
 msgstr "\\ref einfügen"
 
-#: src/geanylatex.c:1107
+#: ../src/geanylatex.c:1895
 msgid "Insert linebreak \\\\ "
 msgstr "Zeilenumbruch einfügen (\\\\)"
 
-#: src/geanylatex.c:1109
+#: ../src/geanylatex.c:1898
+msgid "Insert command"
+msgstr "Kommando eingeben"
+
+#: ../src/geanylatex.c:1900
 msgid "Turn input replacement on/off"
 msgstr "Eingabeersetzungsfunktion ein-/ausschalten"
 
-#: src/geanylatex.c:1113
+#: ../src/geanylatex.c:1904
 msgid "Replace special characters"
 msgstr "Sonderzeichen ersetzen"
 
-#: src/geanylatex.c:1116
+#: ../src/geanylatex.c:1907
 msgid "Run insert environment dialog"
 msgstr "Dialog zum Einfügen von Umgebungen"
 
-#: src/geanylatex.c:1118
+#: ../src/geanylatex.c:1909
 msgid "Insert \\item"
 msgstr "\\item einfügen"
 
-#: src/geanylatex.c:1120
+#: ../src/geanylatex.c:1911
 msgid "Format selection in bold font face"
 msgstr "Auswahl fett formatieren"
 
-#: src/geanylatex.c:1122
+#: ../src/geanylatex.c:1913
 msgid "Format selection in italic font face"
 msgstr "Auswahl kursiv formatieren"
 
-#: src/geanylatex.c:1124
+#: ../src/geanylatex.c:1915
 msgid "Format selection in typewriter font face"
 msgstr "Auswahl in Maschinenschrift formatieren"
 
-#: src/geanylatex.c:1126
+#: ../src/geanylatex.c:1917
 msgid "Format selection centered"
 msgstr "Auswahl zentrieren"
 
-#: src/geanylatex.c:1128
+#: ../src/geanylatex.c:1919
 msgid "Format selection left-aligned"
 msgstr "Auswahl linksbündig formatieren"
 
-#: src/geanylatex.c:1130
-msgid "Format selection right-aligned "
+#: ../src/geanylatex.c:1921
+msgid "Format selection right-aligned"
 msgstr "Auswahl rechtsbündig formatieren"
 
-#: src/geanylatex.c:1136
+#: ../src/geanylatex.c:1924
+msgid "Insert description list"
+msgstr "Description-Umgebung einfügen"
+
+#: ../src/geanylatex.c:1927
+msgid "Insert itemize list"
+msgstr "itemize-Liste einfügen"
+
+#: ../src/geanylatex.c:1930
+msgid "Insert enumerate list"
+msgstr "enumerate-Liste einfügen"
+
+#: ../src/geanylatex.c:1933
+msgid "Set selection one level up"
+msgstr "Markierung eine Gliederungsebene absenken"
+
+#: ../src/geanylatex.c:1936
+msgid "Set selection one level down"
+msgstr "Markierung eine Gliederungsebene anheben"
+
+#: ../src/geanylatex.c:1939
+msgid "Insert \\usepackage{}"
+msgstr "\\usepackage{} einfügen"
+
+#: ../src/geanylatex.c:1946
 msgid ""
 "GeanyLaTeX is a plugin to improve support for LaTeX in Geany.\n"
 "\n"
 "Please report all bugs or feature requests to one of the authors."
 msgstr ""
-"GeanyLaTeX ist ein Plugin zur Verbesserung des Supports für LaTeX in "
-"Geany. \n"
+"GeanyLaTeX ist ein Plugin welches LaTeX-Support für Geany mitbringt. \n"
 "\n"
-"Alle Fehler bitte an einen der Entwickler weiter melden."
+"Alle Fehler bitte an einen der Entwickler weitermelden."
 
-#: src/geanylatex.c:1169
+#: ../src/geanylatex.c:1982
+msgid "glatex_set_autocompletion_contextsize has been initialized with an invalid value. Default value taken. Please check your configuration file"
+msgstr "glatex_set_autocompletion_contextsize wurde mit einem ungültigen Wert initialisiert. Anstelle dessen wird der Standardwert genutzt. Bitte die Konfigurationsdatei prüfen."
+
+#: ../src/geanylatex.c:2002
+#: ../src/geanylatex.c:2009
+msgid "page \\pageref{{{reference}}}"
+msgstr "Seite \\pageref{{{reference}}}"
+
+#: ../src/geanylatex.c:2006
+#: ../src/geanylatex.c:2013
+msgid "\\ref{{{reference}}}, page \\pageref{{{reference}}}"
+msgstr "\\ref{{{reference}}}, Seite \\pageref{{{reference}}}"
+
+#: ../src/geanylatex.c:2028
 msgid "_LaTeX"
 msgstr "_LaTeX"
 
-#: src/geanylatex.c:1175
+#: ../src/geanylatex.c:2035
+#: ../src/geanylatex.c:2215
 msgid "LaTeX-_Wizard"
 msgstr "LaTeX-_Assistent"
 
-#: src/geanylatex.c:1178
+#: ../src/geanylatex.c:2038
+#: ../src/geanylatex.c:2218
 msgid "Starts a Wizard to easily create LaTeX-documents"
 msgstr "Öffnet einen Assistenten, um einfache LaTeX-Dokumente zu erstellen."
 
-#: src/geanylatex.c:1183
-msgid "Insert _Special Character"
+#: ../src/geanylatex.c:2043
+msgid "I_nsert Special Character"
 msgstr "_Sonderzeichen einfügen"
 
-#: src/geanylatex.c:1185
+#: ../src/geanylatex.c:2045
 msgid "Helps to use some not very common letters and signs"
 msgstr "Unterstützt bei der Verwendung von seltenen Sonderzeichen"
 
-#: src/geanylatex.c:1195
+#: ../src/geanylatex.c:2055
 msgid "Insert _Reference"
 msgstr "_Verweis einfügen"
 
-#: src/geanylatex.c:1197
+#: ../src/geanylatex.c:2057
 msgid "Inserting references to the document"
 msgstr "Eine Referenz in das Dokument einfügen"
 
-#: src/geanylatex.c:1202
+#: ../src/geanylatex.c:2062
 msgid "Insert _Label"
 msgstr "_Lesezeichen einfügen"
 
-#: src/geanylatex.c:1204
+#: ../src/geanylatex.c:2064
 msgid "Helps at inserting labels to a document"
 msgstr "Untersützt bei dem Einfügen von Lesezeichen in ein Dokument"
 
-#: src/geanylatex.c:1210
+#: ../src/geanylatex.c:2070
 msgid "Insert _Environment"
 msgstr "_Umgebung einfügen"
 
-#: src/geanylatex.c:1212
+#: ../src/geanylatex.c:2072
 msgid "Helps at inserting an environment a document"
 msgstr "Untersützt bei dem Einfügen einer Umgebung in ein Dokument"
 
-#: src/geanylatex.c:1217
-msgid "_BibTeX"
-msgstr "_BibTeX"
+#: ../src/geanylatex.c:2078
+msgid "Insert P_ackage"
+msgstr "_Paket einfügen"
 
-#: src/geanylatex.c:1233
+#: ../src/geanylatex.c:2080
+msgid "A small dialog to insert \\usepackage{} into header of current file"
+msgstr "Eine kleine Hilfe, um \\usepackage{} in den Kopf des Dokumentes ein zufügen. "
+
+#: ../src/geanylatex.c:2085
+msgid "_BibTeX entries"
+msgstr "_BibTeX Einträge"
+
+#: ../src/geanylatex.c:2101
 msgid "_Format"
 msgstr "_Format"
 
-#: src/geanylatex.c:1251
+#. Add font size menu
+#: ../src/geanylatex.c:2118
+msgid "F_ont size"
+msgstr "Sc_hriftgröße:"
+
+#: ../src/geanylatex.c:2136
 msgid "_Special Character Replacement"
 msgstr "Sonderzeichen _ersetzen"
 
-#: src/geanylatex.c:1259
+#: ../src/geanylatex.c:2144
 msgid "Bulk _Replace Special Characters"
 msgstr "Sonderzeichen ersetzen (Auswahl)"
 
-#: src/geanylatex.c:1261
-msgid "_Replace selected special cahracters with TeX substitutes"
+#: ../src/geanylatex.c:2146
+msgid "_Replace selected special characters with TeX substitutes"
 msgstr "Sonderzeichen mit den _TeX-Entsprechungen ersetzen"
 
-#: src/geanylatex.c:1269
+#: ../src/geanylatex.c:2154
 msgid "Toggle _Special Character Replacement"
 msgstr "Ersetzung während Eingabe"
 
-#: src/latexencodings.c:37
+#: ../src/geanylatex.c:2165
+msgid "Insert _Command"
+msgstr "_Befehl einfügen"
+
+#: ../src/geanylatex.c:2167
+msgid "Inserting costumized command to document"
+msgstr "Benutzerdefiniertes Kommando in Dokument einfügen"
+
+#: ../src/latexencodings.c:37
 msgid "UTF-8"
 msgstr "UTF-8"
 
-#: src/latexencodings.c:38
+#: ../src/latexencodings.c:38
 msgid "US-ASCII"
 msgstr "US-ASCII"
 
-#: src/latexencodings.c:39
+#: ../src/latexencodings.c:39
 msgid "ISO-8859-1 (Latin-1)"
 msgstr "ISO-8859-1 (Latin-1)"
 
-#: src/latexencodings.c:41
+#: ../src/latexencodings.c:41
 msgid "ISO-8859-2 (Latin-2)"
 msgstr "ISO-8859-2 (Latin-2)"
 
-#: src/latexencodings.c:43
+#: ../src/latexencodings.c:43
 msgid "ISO-8859-3 (Latin-3)"
 msgstr "ISO-8859-3 (Latin-3)"
 
-#: src/latexencodings.c:45
+#: ../src/latexencodings.c:45
 msgid "ISO-8859-4 (Latin-4)"
 msgstr "ISO-8859-4 (Latin-4)"
 
-#: src/latexencodings.c:47
+#: ../src/latexencodings.c:47
 msgid "ISO-8859-5 (Latin-5)"
 msgstr "ISO-8859-5 (Latin-5)"
 
-#: src/latexencodings.c:49
+#: ../src/latexencodings.c:49
 msgid "ISO-8859-9 (Latin-9)"
 msgstr "ISO-8859-9 (Latin-9)"
 
-#: src/latexencodings.c:51
+#: ../src/latexencodings.c:51
 msgid "ISO-8859-10 (Latin-10)"
 msgstr "ISO-8859-10 (Latin-10)"
 
-#: src/latexencodings.c:53
+#: ../src/latexencodings.c:53
 msgid "IBM 850 code page"
 msgstr "IBM 850 code page"
 
-#: src/latexencodings.c:55
+#: ../src/latexencodings.c:55
 msgid "IBM 852 code page"
 msgstr "IBM 852 code page"
 
-#: src/latexencodings.c:57 src/letters.c:41 src/bibtexlabels.c:35
-msgid "Misc"
-msgstr "Sonstiges"
+#: ../src/latexencodings.c:57
+msgid "Don't set any encoding"
+msgstr "Keine Zeichenkodierung explizit festlegen"
 
-#: src/letters.c:39
+#: ../src/letters.c:39
 msgid "Greek letters"
 msgstr "Griechische Buchstaben"
 
-#: src/letters.c:40
+#: ../src/letters.c:40
 msgid "German umlauts"
 msgstr "Deutsche Umlaute"
 
-#: src/letters.c:42
+#: ../src/letters.c:41
+#: ../src/bibtexlabels.c:35
+msgid "Misc"
+msgstr "Sonstige"
+
+#: ../src/letters.c:42
 msgid "Arrow characters"
 msgstr "Pfeil-Symbole"
 
-#: src/letters.c:43
+#: ../src/letters.c:43
 msgid "Relational"
 msgstr "Relationale Operatoren"
 
-#: src/letters.c:44
+#: ../src/letters.c:44
 msgid "Binary operation"
 msgstr "Binäre Operatoren"
 
-#: src/bibtexlabels.c:28
+#: ../src/bibtexlabels.c:28
 msgid "Booklet"
-msgstr "Büchlein (Booklet)"
+msgstr "Broschüre (@Booklet)"
 
-#: src/bibtexlabels.c:29
+#: ../src/bibtexlabels.c:29
 msgid "Conference"
-msgstr "Konferenz"
+msgstr "Konferenzbeitrag (@Conference)"
 
-#: src/bibtexlabels.c:30
+#: ../src/bibtexlabels.c:30
 msgid "Inbook"
-msgstr ""
+msgstr "Buchkapitel (@Inbook)"
 
-#: src/bibtexlabels.c:31
+#: ../src/bibtexlabels.c:31
 msgid "Incollection"
-msgstr ""
+msgstr "Sammelbandbeitrag (@Incollection)"
 
-#: src/bibtexlabels.c:32
+#: ../src/bibtexlabels.c:32
 msgid "Inproceedings"
-msgstr ""
+msgstr "Konferenzbeitrag (@Inproceedings)"
 
-#: src/bibtexlabels.c:33
+#: ../src/bibtexlabels.c:33
 msgid "Manual"
-msgstr "Handbuch"
+msgstr "Handbuch (@Manual)"
 
-#: src/bibtexlabels.c:34
+#: ../src/bibtexlabels.c:34
 msgid "Mastersthesis"
-msgstr "Masterarbeit"
+msgstr "Masterarbeit (@Mastersthesis)"
 
-#: src/bibtexlabels.c:36
+#: ../src/bibtexlabels.c:36
 msgid "PhdThesis"
-msgstr "Doktorarbeit"
+msgstr "Doktorarbeit (@PhdThesis)"
 
-#: src/bibtexlabels.c:37
+#: ../src/bibtexlabels.c:37
 msgid "Proceedings"
-msgstr ""
+msgstr "Konferenzband (@Proceedings)"
 
-#: src/bibtexlabels.c:38
+#: ../src/bibtexlabels.c:38
 msgid "Techreport"
-msgstr "Technischer Report"
+msgstr "Technischer Bericht (@Techreport)"
 
-#: src/bibtexlabels.c:39
+#: ../src/bibtexlabels.c:39
 msgid "Unpublished"
-msgstr "Unveröffentlicht"
+msgstr "Unveröffentlichtes (@Unpublished)"
 
-#: src/bibtexlabels.c:43
+#: ../src/bibtexlabels.c:43
 msgid "Address"
 msgstr "Adresse"
 
-#: src/bibtexlabels.c:44
+#: ../src/bibtexlabels.c:44
 msgid "Annote"
-msgstr ""
+msgstr "Note"
 
-#: src/bibtexlabels.c:45
+#: ../src/bibtexlabels.c:45
 msgid "Author"
 msgstr "Autor"
 
-#: src/bibtexlabels.c:46
+#: ../src/bibtexlabels.c:46
 msgid "Booktitle"
 msgstr "Buchtitel"
 
-#: src/bibtexlabels.c:47
+#: ../src/bibtexlabels.c:47
 msgid "Chapter"
 msgstr "Kapitel"
 
-#: src/bibtexlabels.c:48
+#: ../src/bibtexlabels.c:48
 msgid "Crossref"
-msgstr ""
+msgstr "Querverweis"
 
-#: src/bibtexlabels.c:49
+#: ../src/bibtexlabels.c:49
 msgid "Edition"
-msgstr ""
+msgstr "Ausgabe"
 
-#: src/bibtexlabels.c:50
+#: ../src/bibtexlabels.c:50
 msgid "Editor"
-msgstr ""
+msgstr "Autor"
 
-#: src/bibtexlabels.c:51
+#: ../src/bibtexlabels.c:51
 msgid "E-print"
-msgstr ""
+msgstr "E-print"
 
-#: src/bibtexlabels.c:52
+#: ../src/bibtexlabels.c:52
 msgid "HowPublished"
 msgstr "Wie veröffentlicht"
 
-#: src/bibtexlabels.c:53
+#: ../src/bibtexlabels.c:53
 msgid "Institution"
 msgstr "Instituation"
 
-#: src/bibtexlabels.c:54
+#: ../src/bibtexlabels.c:54
 msgid "Journal"
 msgstr "Journal"
 
-#: src/bibtexlabels.c:55
+#: ../src/bibtexlabels.c:55
 msgid "Key"
 msgstr "Schlüssel"
 
-#: src/bibtexlabels.c:56
+#: ../src/bibtexlabels.c:56
 msgid "Month"
 msgstr "Monat"
 
-#: src/bibtexlabels.c:57
+#: ../src/bibtexlabels.c:57
 msgid "Note"
 msgstr "Note"
 
-#: src/bibtexlabels.c:58
+#: ../src/bibtexlabels.c:58
 msgid "Number"
 msgstr "Nummer"
 
-#: src/bibtexlabels.c:59
+#: ../src/bibtexlabels.c:59
 msgid "Organization"
 msgstr "Organisation"
 
-#: src/bibtexlabels.c:60
+#: ../src/bibtexlabels.c:60
 msgid "Pages"
 msgstr "Seiten"
 
-#: src/bibtexlabels.c:61
+#: ../src/bibtexlabels.c:61
 msgid "Publisher"
 msgstr "Herausgeber"
 
-#: src/bibtexlabels.c:62
+#: ../src/bibtexlabels.c:62
 msgid "School"
 msgstr "Hochschule"
 
-#: src/bibtexlabels.c:63
+#: ../src/bibtexlabels.c:63
 msgid "Series"
 msgstr "Reihe"
 
-#: src/bibtexlabels.c:64
+#: ../src/bibtexlabels.c:64
 msgid "Title"
 msgstr "Titel"
 
-#: src/bibtexlabels.c:65
+#: ../src/bibtexlabels.c:65
 msgid "Type"
 msgstr "Typ"
 
-#: src/bibtexlabels.c:66
+#: ../src/bibtexlabels.c:66
 msgid "URL"
 msgstr "URL"
 
-#: src/bibtexlabels.c:67
+#: ../src/bibtexlabels.c:67
 msgid "Volume"
 msgstr "Ausgabe"
 
-#: src/bibtexlabels.c:68
+#: ../src/bibtexlabels.c:68
 msgid "Year"
 msgstr "Jahr"
 
-#: src/bibtexlabels.c:99
+#: ../src/bibtexlabels.c:100
 msgid "Address of publisher"
 msgstr "Adresse des Verlegers"
 
-#: src/bibtexlabels.c:100
+#: ../src/bibtexlabels.c:101
 msgid "Annotation for annotated bibliography styles"
-msgstr ""
+msgstr "Anmerkungen für den Bibliographie-Stil"
 
-#: src/bibtexlabels.c:101
+#: ../src/bibtexlabels.c:102
 msgid "Name(s) of the author(s), separated by 'and' if more than one"
-msgstr ""
+msgstr "Name(n) der Autoren, getrennt mit einem »and« sollten mehrere Autoren am Werk mitgearbeitet werden."
 
-#: src/bibtexlabels.c:102
+#: ../src/bibtexlabels.c:103
 msgid "Title of the book, if only part of it is being cited"
-msgstr ""
+msgstr "Titel des Buches, wenn nur ein Teil zitiert wird"
 
-#: src/bibtexlabels.c:103
+#: ../src/bibtexlabels.c:104
 msgid "Chapter number"
 msgstr "Nummer des Kapitels"
 
-#: src/bibtexlabels.c:104
+#: ../src/bibtexlabels.c:105
 msgid "Citation key of the cross-referenced entry"
-msgstr ""
+msgstr "Zitatmarke des verweisenden Eintrags"
 
-#: src/bibtexlabels.c:105
+#: ../src/bibtexlabels.c:106
 msgid "Edition of the book (such as \"first\" or \"second\")"
-msgstr "Auflage des Buches wie \"erste\" oder \"10. überarbeitete\""
+msgstr "Auflage des Buches wie \"erste\" oder \"10. Überarbeitung\""
 
-#: src/bibtexlabels.c:106
+#: ../src/bibtexlabels.c:107
 msgid "Name(s) of the editor(s), separated by 'and' if more than one"
-msgstr ""
+msgstr "Name(n) der Editoren, bei mehreren durch 'and' getrennt"
 
-#: src/bibtexlabels.c:107
+#: ../src/bibtexlabels.c:108
 msgid "Specification of electronic publication"
-msgstr ""
+msgstr "Spezifizierung der elektronischen Veröffentlichung"
 
-#: src/bibtexlabels.c:108
+#: ../src/bibtexlabels.c:109
 msgid "Publishing method if the method is nonstandard"
-msgstr ""
+msgstr "Publizierungsmethode wenn sie nicht Standard ist"
 
-#: src/bibtexlabels.c:109
+#: ../src/bibtexlabels.c:110
 msgid "Institution that was involved in the publishing"
 msgstr "Institution, die an der Veröffentlichung beteiligt war"
 
-#: src/bibtexlabels.c:110
+#: ../src/bibtexlabels.c:111
 msgid "Journal or magazine in which the work was published"
 msgstr "Journal oder Magazin, in dem die Arbeit veröffentlicht wurde"
 
-#: src/bibtexlabels.c:111
-msgid ""
-"Hidden field used for specifying or overriding the alphabetical order of "
-"entries"
-msgstr ""
+#: ../src/bibtexlabels.c:112
+msgid "Hidden field used for specifying or overriding the alphabetical order of entries"
+msgstr "Verstecktes Feld, welches zur Festlegung oder zum Überschreiben der alphabetischen Reihenfolge von Einträgen benutzt wird"
 
-#: src/bibtexlabels.c:112
+#: ../src/bibtexlabels.c:113
 msgid "Month of publication or creation if unpublished"
-msgstr ""
-"Monat der Publikation bzw. der Erstellung bei unveröffentlichten Werken"
+msgstr "Monat der Publikation bzw. der Erstellung bei unveröffentlichten Werken"
 
-#: src/bibtexlabels.c:113
+#: ../src/bibtexlabels.c:114
 msgid "Miscellaneous extra information"
 msgstr "Sonstige zusätzliche Informationen"
 
-#: src/bibtexlabels.c:114
+#: ../src/bibtexlabels.c:115
 msgid "Number of journal, magazine, or tech-report"
 msgstr "Nummer des Journals, des Magazins oder des technischen Reports"
 
-#: src/bibtexlabels.c:115
+#: ../src/bibtexlabels.c:116
 msgid "Sponsor of the conference"
 msgstr "Sponsor der Konferenz"
 
-#: src/bibtexlabels.c:116
+#: ../src/bibtexlabels.c:117
 msgid "Page numbers separated by commas or double-hyphens"
 msgstr "Seitenzahl(en) getrennt entweder durch Kommata, oder Hochkommata"
 
-#: src/bibtexlabels.c:117
+#: ../src/bibtexlabels.c:118
 msgid "Name of publisher"
 msgstr "Name des Herausgebers"
 
-#: src/bibtexlabels.c:118
+#: ../src/bibtexlabels.c:119
 msgid "School where thesis was written"
 msgstr "Schule/Hochschule, an der die Arbeit geschrieben wurde"
 
-#: src/bibtexlabels.c:119
+#: ../src/bibtexlabels.c:120
 msgid "Series of books in which the book was published"
 msgstr "Name der Serie, in der das Buch veröffentlicht wurde"
 
-#: src/bibtexlabels.c:120
+#: ../src/bibtexlabels.c:121
 msgid "Title of the work"
 msgstr "Titel der Arbeit"
 
-#: src/bibtexlabels.c:121
+#: ../src/bibtexlabels.c:122
 msgid "Type of technical report"
 msgstr "Art des technischen Reports"
 
-#: src/bibtexlabels.c:122
+#: ../src/bibtexlabels.c:123
 msgid "Internet address"
 msgstr "Internetadresse"
 
-#: src/bibtexlabels.c:123
+#: ../src/bibtexlabels.c:124
 msgid "Number of the volume"
 msgstr "Nummer der Ausgabe"
 
-#: src/bibtexlabels.c:124
+#: ../src/bibtexlabels.c:125
 msgid "Year of publication or creation if unpublished"
-msgstr ""
-"Jahr der Publikation oder der Erstellung, wenn das Werk noch nicht "
-"veröffentlicht ist."
+msgstr "Jahr der Publikation oder der Erstellung, wenn das Werk noch nicht veröffentlicht ist."
 
-#: src/formatpatterns.c:38
+#: ../src/formatpatterns.c:38
 msgid "Italic"
 msgstr "Kursiv"
 
-#: src/formatpatterns.c:39
-msgid "Boldfont"
+#: ../src/formatpatterns.c:39
+msgid "Bold"
 msgstr "Fettdruck"
 
-#: src/formatpatterns.c:40
+#: ../src/formatpatterns.c:40
 msgid "Underline"
 msgstr "Unterstrichen"
 
-#: src/formatpatterns.c:41
-msgid "Slanted"
-msgstr "Auswahl geneigt formatieren"
-
-#: src/formatpatterns.c:42
+#: ../src/formatpatterns.c:41
 msgid "Typewriter"
 msgstr "Schreibmaschine"
 
-#: src/formatpatterns.c:43
+#: ../src/formatpatterns.c:42
 msgid "Small Caps"
 msgstr "Kapitälchen"
 
-#: src/formatpatterns.c:44
+#: ../src/formatpatterns.c:43
+msgid "Slanted"
+msgstr "Geneigt (Slanted)"
+
+#: ../src/formatpatterns.c:44
 msgid "Emphasis"
 msgstr "Hervorhebung"
 
-#: src/formatpatterns.c:45
-msgid "Centered"
-msgstr "Zentriert"
+#: ../src/formatpatterns.c:64
+msgid "tiny"
+msgstr "tiny"
 
-#: src/formatpatterns.c:46
-msgid "Left side oriented"
-msgstr "Linksbündig"
+#: ../src/formatpatterns.c:65
+msgid "scriptsize"
+msgstr "scriptsize"
 
-#: src/formatpatterns.c:47
-msgid "Right side oriented"
-msgstr "Rechtsbündig"
+#: ../src/formatpatterns.c:66
+msgid "footnotesize"
+msgstr "footnotesize"
 
-#: src/latexenvironments.c:25
+#: ../src/formatpatterns.c:67
+msgid "small"
+msgstr "small"
+
+#: ../src/formatpatterns.c:68
+msgid "normalsize"
+msgstr "normalsize"
+
+#: ../src/formatpatterns.c:69
+msgid "large"
+msgstr "large"
+
+#: ../src/formatpatterns.c:70
+msgid "Large"
+msgstr "Large"
+
+#: ../src/formatpatterns.c:71
+msgid "LARGE"
+msgstr "LARGE"
+
+#: ../src/formatpatterns.c:72
+msgid "huge"
+msgstr "huge"
+
+#: ../src/formatpatterns.c:73
+msgid "Huge"
+msgstr "Huge"
+
+#: ../src/latexenvironments.c:25
 msgid "Environments"
 msgstr "Umgebungen"
 
-#: src/latexenvironments.c:26
+#: ../src/latexenvironments.c:26
 msgid "Formating"
 msgstr "Formatierungen"
 
-#: src/latexenvironments.c:27
+#: ../src/latexenvironments.c:27
 msgid "Document Structure"
 msgstr "Dokumentstruktur"
 
-#: src/latexenvironments.c:28
+#: ../src/latexenvironments.c:28
 msgid "Lists"
 msgstr "Listen"
 
-#: src/latexenvironments.c:29
+#: ../src/latexenvironments.c:29
 msgid "Math"
 msgstr "Mathematik"
 
-#: src/latexenvironments.c:117
+#: ../src/latexenvironments.c:195
 msgid "Insert Environment"
 msgstr "Umgebung einfügen"
 
-#: src/latexenvironments.c:131
+#: ../src/latexenvironments.c:209
 msgid "Environment:"
 msgstr "Umgebung:"
 
-#~ msgid "Insert label"
-#~ msgstr "Lesezeichen einfügen"
+#: ../src/latexutils.c:89
+#, c-format
+msgid ""
+"Could not determine where to insert package: %s\n"
+"Please try insert package manually"
+msgstr "Konnte nicht genau feststellen, wohin das Paket »%s« eingefügt werden soll. Bitte das Glück manuell versuchen!"
 
-#~ msgid "Insert reference"
-#~ msgstr "Verweis einfügen"
+#: ../src/latexutils.c:91
+#, c-format
+msgid "Could not determine where to insert package: %s"
+msgstr "Konnte nicht genau feststellen, wohin das Paket »%s« eingefügt werden soll."
 
-#~ msgid "Replacement of special characters"
-#~ msgstr "Sonderzeichen ersetzen"
