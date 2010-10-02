@@ -176,7 +176,7 @@ def configure(conf):
 	gtk_version = conf.check_cfg(modversion='gtk+-2.0', uselib_store='GTK')
 
 	# Checking for a 'good' geany
-	conf.check_cfg(package='geany', atleast_version='0.18', mandatory=True, args='--cflags --libs')
+	conf.check_cfg(package='geany', atleast_version='0.20', mandatory=True, args='--cflags --libs')
 
 	gtk_version = conf.check_cfg(modversion='gtk+-2.0') or 'Unknown'
 	geany_version = conf.check_cfg(modversion='geany') or 'Unknown'
