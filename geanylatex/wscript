@@ -45,7 +45,7 @@ import preproc
 from TaskGen import taskgen, feature
 
 
-APPNAME = 'geanylatex'
+APPNAME = 'geanylatex-sa'
 VERSION = '0.6dev'
 
 srcdir = '.'
@@ -299,8 +299,8 @@ def build(bld):
 
 	bld.new_task_gen(
 		features		= 'cc cshlib',
-		name			= 'geanylatex',
-		target			= 'geanylatex',
+		name			= 'geanylatex-sa',
+		target			= 'geanylatex-sa',
 		source			= geanylatex_sources,
 		includes		= '. src/',
 		uselib			= 'GTK GEANY',
