@@ -315,7 +315,7 @@ def build(bld):
 			features		= 'intltool_po',
 			podir			= 'po',
 			install_path	= '${LOCALEDIR}',
-			appname			= 'geanylatex'
+			appname			= 'geanylatex-sa'
 		)
 
 def shutdown():
