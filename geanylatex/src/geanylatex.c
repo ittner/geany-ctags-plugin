@@ -2046,7 +2046,7 @@ static void glatex_init_configuration()
 }
 
 
-void static
+static void
 add_wizard_to_generic_toolbar()
 {
 	if (glatex_wizard_generic_toolbar_item == NULL)
@@ -2062,7 +2062,7 @@ add_wizard_to_generic_toolbar()
 }
 
 
-void static
+static void 
 remove_wizard_from_generic_toolbar()
 {
 	if (glatex_wizard_generic_toolbar_item != NULL)
@@ -2073,7 +2073,7 @@ remove_wizard_from_generic_toolbar()
 }
 
 
-void static
+static void
 add_menu_to_menubar()
 {
 	GtkWidget *tmp = NULL;
@@ -2244,7 +2244,7 @@ add_menu_to_menubar()
 }
 
 
-void static
+static void
 remove_menu_from_menubar()
 {
 	if (main_menu_item != NULL)
@@ -2256,7 +2256,7 @@ remove_menu_from_menubar()
 }
 
 
-void static
+static void
 remove_menu_from_tools_menu()
 {
 	if (menu_latex_toolbar_wizard != NULL)
@@ -2267,7 +2267,7 @@ remove_menu_from_tools_menu()
 }
 
 
-void static
+static void
 add_wizard_to_tools_menu()
 {
 	if (menu_latex_toolbar_wizard == NULL)
@@ -2331,4 +2331,3 @@ plugin_cleanup()
 	g_free(glatex_ref_all_string);
 	
 }
-

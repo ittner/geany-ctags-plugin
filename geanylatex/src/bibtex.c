@@ -171,4 +171,3 @@ void glatex_bibtex_write_entry(GPtrArray *entry, gint doctype)
 	sci_end_undo_action(doc->editor->sci);
 	g_free(tmp);
 }
-
