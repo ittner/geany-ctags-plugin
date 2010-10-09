@@ -32,72 +32,72 @@ void glatex_insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem,
 
 	switch(doctype) {
 	case GLATEX_BIBTEX_ARTICLE:
-		g_ptr_array_index(entry, GLATEX_BIBTEX_AUTHOR) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_TITLE) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_JOURNAL) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_YEAR) = g_strdup("\0");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_AUTHOR) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_TITLE) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_JOURNAL) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_YEAR) = g_strdup("");
 		break;
 	case GLATEX_BIBTEX_BOOK:
-		g_ptr_array_index(entry, GLATEX_BIBTEX_AUTHOR) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_EDITOR) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_TITLE) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_PUBLISHER) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_YEAR) = g_strdup("\0");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_AUTHOR) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_EDITOR) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_TITLE) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_PUBLISHER) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_YEAR) = g_strdup("");
 		break;
 	case GLATEX_BIBTEX_BOOKLET:
-		g_ptr_array_index(entry, GLATEX_BIBTEX_TITLE) = g_strdup("\0");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_TITLE) = g_strdup("");
 		break;
 	case GLATEX_BIBTEX_CONFERENCE:
 	case GLATEX_BIBTEX_INCOLLECTION:
 	case GLATEX_BIBTEX_INPROCEEDINGS:
-		g_ptr_array_index(entry, GLATEX_BIBTEX_AUTHOR) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_TITLE) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_BOOKTITLE) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_YEAR) = g_strdup("\0");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_AUTHOR) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_TITLE) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_BOOKTITLE) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_YEAR) = g_strdup("");
 		break;
 	case GLATEX_BIBTEX_INBOOK:
-		g_ptr_array_index(entry, GLATEX_BIBTEX_AUTHOR) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_EDITOR) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_TITLE) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_CHAPTER) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_PAGES) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_PUBLISHER) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_YEAR) = g_strdup("\0");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_AUTHOR) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_EDITOR) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_TITLE) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_CHAPTER) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_PAGES) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_PUBLISHER) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_YEAR) = g_strdup("");
 		break;
 	case GLATEX_BIBTEX_MANUAL:
-		g_ptr_array_index(entry, GLATEX_BIBTEX_TITLE) = g_strdup("\0");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_TITLE) = g_strdup("");
 		break;
 	case GLATEX_BIBTEX_MASTERSTHESIS:
 	case GLATEX_BIBTEX_PHDTHESIS:
-		g_ptr_array_index(entry, GLATEX_BIBTEX_AUTHOR) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_TITLE) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_SCHOOL) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_YEAR) = g_strdup("\0");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_AUTHOR) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_TITLE) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_SCHOOL) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_YEAR) = g_strdup("");
 		break;
 	case GLATEX_BIBTEX_MISC:
 		for (i = 0; i < GLATEX_BIBTEX_N_ENTRIES; i++)
 		{
-			g_ptr_array_index(entry, i) = g_strdup("\0");
+			g_ptr_array_index(entry, i) = g_strdup("");
 		}
 	case GLATEX_BIBTEX_TECHREPORT:
-		g_ptr_array_index(entry, GLATEX_BIBTEX_AUTHOR) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_TITLE) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_INSTITUTION) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_YEAR) = g_strdup("\0");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_AUTHOR) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_TITLE) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_INSTITUTION) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_YEAR) = g_strdup("");
 		break;
 	case GLATEX_BIBTEX_UNPUBLISHED:
-		g_ptr_array_index(entry, GLATEX_BIBTEX_AUTHOR) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_TITLE) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_NOTE) = g_strdup("\0");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_AUTHOR) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_TITLE) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_NOTE) = g_strdup("");
 		break;
 	case GLATEX_BIBTEX_PROCEEDINGS:
-		g_ptr_array_index(entry, GLATEX_BIBTEX_TITLE) = g_strdup("\0");
-		g_ptr_array_index(entry, GLATEX_BIBTEX_YEAR) = g_strdup("\0");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_TITLE) = g_strdup("");
+		g_ptr_array_index(entry, GLATEX_BIBTEX_YEAR) = g_strdup("");
 		break;
 	default:
 		for (i = 0; i < GLATEX_BIBTEX_N_ENTRIES; i++)
 		{
-			g_ptr_array_index(entry, i) = g_strdup("\0");
+			g_ptr_array_index(entry, i) = g_strdup("");
 		}
 	}
 
