@@ -145,10 +145,10 @@ config_widgets;
 
 /* Some functions*/
 static void toggle_toolbar_items_by_file_type(gint id);
-static void add_menu_to_menubar();
-static void remove_menu_from_menubar();
-static void add_wizard_to_generic_toolbar();
-static void remove_wizard_from_generic_toolbar();
+static void add_menu_to_menubar(void);
+static void remove_menu_from_menubar(void);
+static void add_wizard_to_generic_toolbar(void);
+static void remove_wizard_from_generic_toolbar(void);
 
 static GtkWidget *init_toolbar()
 {
