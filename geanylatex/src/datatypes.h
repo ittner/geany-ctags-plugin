@@ -37,12 +37,14 @@ typedef struct
 	gboolean sorted;
 } CategoryName;
 
+
 typedef struct
 {
 	gchar *filepath;
 	gchar *label;
 	GString *template;
 } TemplateEntry;
+
 
 typedef struct
 {
@@ -60,5 +62,11 @@ typedef struct
 	GPtrArray *template_list;
 	gboolean draft_active;
 } LaTeXWizard;
+
+typedef struct
+{
+	gchar *latex;
+	gchar *label;
+} BibTeXType;
 
 #endif

@@ -74,13 +74,10 @@ enum {
 	GLATEX_BIBTEX_N_ENTRIES
 };
 
-extern gchar *glatex_label_types[];
-
 extern const gchar *glatex_label_tooltips[];
-
 extern const gchar *glatex_label_entry_keywords[];
-
 extern const gchar *glatex_label_entry[];
+extern BibTeXType glatex_bibtex_types[];
 
 int glatex_push_bibtex_entry(int style, GeanyDocument *doc);
 

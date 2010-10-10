@@ -746,7 +746,6 @@ static void on_document_close(G_GNUC_UNUSED GObject *obj, GeanyDocument *doc,
 }
 
 
-
 /* Called when keys were pressed */
 static void glatex_kblatex_toggle(G_GNUC_UNUSED guint key_id)
 {
@@ -2108,7 +2107,7 @@ add_menu_to_menubar()
 	for (i = 0; i < GLATEX_BIBTEX_N_TYPES; i++)
 	{
 		tmp = NULL;
-		tmp = gtk_menu_item_new_with_mnemonic(_(glatex_label_types[i]));
+		tmp = gtk_menu_item_new_with_mnemonic(_(glatex_bibtex_types[i].label));
 		gtk_container_add(GTK_CONTAINER(menu_latex_bibtex_submenu), tmp);
 		g_signal_connect(tmp, "activate",
 			G_CALLBACK(glatex_insert_bibtex_entry), GINT_TO_POINTER(i));
@@ -2287,5 +2286,4 @@ plugin_cleanup()
 	g_free(glatex_ref_chapter_string);
 	g_free(glatex_ref_page_string);
 	g_free(glatex_ref_all_string);
-	
 }

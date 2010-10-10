@@ -134,7 +134,7 @@ void glatex_bibtex_write_entry(GPtrArray *entry, gint doctype)
 	}
 	/* Adding the doctype to entry */
 	output = g_string_new("@");
-	g_string_append(output, glatex_label_types[doctype]);
+	g_string_append(output, glatex_bibtex_types[doctype].latex);
 	g_string_append(output, "{");
 	g_string_append(output, eol);
 
