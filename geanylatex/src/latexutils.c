@@ -119,3 +119,46 @@ glatex_insert_string(gchar *string, gboolean reset_position)
 	}
 }
 
+
+void glatex_replace_special_character()
+{
+	GeanyDocument *doc = NULL;
+	doc = document_get_current();
+
+	if (doc != NULL && sci_has_selection(doc->editor->sci))
+	{
+		guint selection_len;
+		gchar *selection = NULL;
+		GString *replacement = g_string_new(NULL);
+		guint i;
+		gchar *new = NULL;
+		const gchar *entity = NULL;
+		gchar buf[7];
+		gint len;
+
+		selection = sci_get_selection_contents(doc->editor->sci);
+
+		selection_len = strlen(selection);
+
+		for (i = 0; i < selection_len; i++)
+		{
+			len = g_unichar_to_utf8(g_utf8_get_char(selection + i), buf);
+			i = len - 1 + i;
+			buf[len] = '\0';
+			entity = glatex_get_entity(buf);
+
+			if (entity != NULL)
+			{
+				replacement = g_string_append(replacement, entity);
+			}
+			else
+			{
+				replacement = g_string_append(replacement, buf);
+			}
+		}
+		new = g_string_free(replacement, FALSE);
+		sci_replace_sel(doc->editor->sci, new);
+		g_free(selection);
+		g_free(new);
+	}
+}
