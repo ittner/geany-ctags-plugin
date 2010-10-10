@@ -39,11 +39,9 @@
 #include "latexstructure.h"
 #include "latexkeybindings.h"
 
-#ifdef HAVE_LOCALE_H
-# include <locale.h>
-#endif
 
 #include <string.h>
+
 typedef void (*MenuCallback) (G_GNUC_UNUSED GtkMenuItem * menuitem, G_GNUC_UNUSED gpointer gdata);
 
 
