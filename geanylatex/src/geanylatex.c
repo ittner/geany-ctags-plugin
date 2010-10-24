@@ -2275,12 +2275,15 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	{
 		glatex_wizard_generic_toolbar_item = NULL;
 	}
-	
-	if ((glatex_add_menu_on_startup == TRUE||
-		doc->file_type->id == GEANY_FILETYPES_LATEX) &&
-		main_menu_item == NULL)
+
+	if (doc != NULL)
 	{
-		add_menu_to_menubar();
+		if ((glatex_add_menu_on_startup == TRUE||
+			doc->file_type->id == GEANY_FILETYPES_LATEX) &&
+			main_menu_item == NULL)
+		{
+			add_menu_to_menubar();
+		}
 	}
 
 }
