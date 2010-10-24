@@ -1970,7 +1970,7 @@ static void glatex_init_configuration()
 	}
 	/* Increase value by an offset as we add a new line so 2 really means 2 */
 	glatex_autocompletion_context_size = glatex_autocompletion_context_size + 2;
-
+	
 	glatex_autocompletion_only_for_latex = utils_get_setting_boolean(config, "autocompletion",
 		"glatex_autocompletion_only_for_latex", TRUE);
 	glatex_capitalize_sentence_starts = utils_get_setting_boolean(config, "autocompletion", 
@@ -2244,6 +2244,10 @@ add_wizard_to_tools_menu()
 void
 plugin_init(G_GNUC_UNUSED GeanyData * data)
 {
+	GeanyDocument *doc = NULL;
+
+	doc = document_get_current();
+
 	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
 
 	glatex_init_configuration();
@@ -2270,6 +2274,13 @@ plugin_init(G_GNUC_UNUSED GeanyData * data)
 	else
 	{
 		glatex_wizard_generic_toolbar_item = NULL;
+	}
+	
+	if ((glatex_add_menu_on_startup == TRUE||
+		doc->file_type->id == GEANY_FILETYPES_LATEX) &&
+		main_menu_item == NULL)
+	{
+		add_menu_to_menubar();
 	}
 
 }

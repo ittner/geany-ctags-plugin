@@ -1,3 +1,9 @@
+2010-10-24  Frank Lanitz  <frank@frank.uvena.de>
+
+ * Ensure LaTeX menu is added to menubar on loading plugin when there is
+   already an LaTeX-document open.
+
+
 2010-09-26  Frank Lanitz  <frank@frank.uvena.de>
 
  * Try to backport automatic generation of LINGUAS files into waf script
