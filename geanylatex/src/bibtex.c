@@ -171,3 +171,22 @@ void glatex_bibtex_write_entry(GPtrArray *entry, gint doctype)
 	sci_end_undo_action(doc->editor->sci);
 	g_free(tmp);
 }
+
+void glatex_bibtex_insert_cite(gchar *reference_name, gchar *option)
+{
+	gchar *tmp;
+
+	g_return_if_fail(reference_name != NULL);
+	
+	if (option != NULL)
+	{
+		tmp = g_strconcat("\\cite[", option, "]{", reference_name, "}", NULL);
+	}
+	else
+	{
+		tmp = g_strconcat("\\cite{", reference_name, "}", NULL);
+	}
+	glatex_insert_string(tmp, TRUE);
+	g_free(tmp);
+}
+

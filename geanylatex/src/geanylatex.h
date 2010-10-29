@@ -72,4 +72,5 @@ void glatex_insert_usepackage_dialog(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	 G_GNUC_UNUSED gpointer gdata);
 void glatex_insert_command_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	 G_GNUC_UNUSED gpointer gdata);
+void on_insert_bibtex_dialog_activate(GtkMenuItem * menuitem, gpointer gdata);
 #endif

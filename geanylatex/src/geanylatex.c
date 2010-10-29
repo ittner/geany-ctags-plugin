@@ -42,7 +42,7 @@ GeanyPlugin	 *geany_plugin;
 GeanyData	   *geany_data;
 GeanyFunctions  *geany_functions;
 
-
+/* Widgets for plugin */
 static GtkWidget *menu_latex = NULL;
 static GtkWidget *menu_latex_menu = NULL;
 static GtkWidget *menu_latex_wizard = NULL;
@@ -52,6 +52,7 @@ static GtkWidget *menu_latex_ref = NULL;
 static GtkWidget *menu_latex_label = NULL;
 static GtkWidget *menu_latex_bibtex = NULL;
 static GtkWidget *menu_latex_bibtex_submenu = NULL;
+static GtkWidget *menu_latex_insert_bibtex_cite = NULL;
 static GtkWidget *menu_latex_format_insert = NULL;
 static GtkWidget *menu_latex_format_insert_submenu = NULL;
 static GtkWidget *menu_latex_fontsize = NULL;
@@ -150,6 +151,7 @@ static void remove_menu_from_menubar(void);
 static void add_wizard_to_generic_toolbar(void);
 static void remove_wizard_from_generic_toolbar(void);
 
+
 static GtkWidget *init_toolbar()
 {
 	GtkWidget *toolbar = NULL;
@@ -170,6 +172,7 @@ static GtkWidget *init_toolbar()
 
 	return toolbar;
 }
+
 
 static void
 on_configure_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
@@ -1265,6 +1268,55 @@ void glatex_insert_usepackage_dialog(G_GNUC_UNUSED GtkMenuItem * menuitem,
 
 }
 
+void
+on_insert_bibtex_dialog_activate(G_GNUC_UNUSED GtkMenuItem *menuitem,
+								 G_GNUC_UNUSED gpointer gdata)
+{
+	GtkWidget *dialog = NULL;
+	GtkWidget *vbox = NULL;
+	GtkWidget *label = NULL;
+	GtkWidget *textbox = NULL;
+	GtkWidget *table = NULL;
+
+	dialog = gtk_dialog_new_with_buttons(_("Insert Reference"),
+						 GTK_WINDOW(geany->main_widgets->window),
+						 GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
+						 GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+						 NULL);
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
+	gtk_widget_set_name(dialog, "GeanyDialog");
+	gtk_box_set_spacing(GTK_BOX(vbox), 10);
+
+	table = gtk_table_new(1, 2, FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(table), 6);
+	gtk_table_set_row_spacings(GTK_TABLE(table), 6);
+
+	label = gtk_label_new(_("BibTeX reference:"));
+	textbox = gtk_entry_new();
+
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+
+	gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 0, 1);
+	gtk_table_attach_defaults(GTK_TABLE(table), textbox, 1, 2, 0, 1);
+	gtk_container_add(GTK_CONTAINER(vbox), table);
+
+	g_signal_connect(G_OBJECT(textbox), "activate",
+		G_CALLBACK(glatex_enter_key_pressed_in_entry), dialog);
+
+	gtk_widget_show_all(vbox);
+
+	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	{
+		gchar *str = NULL;
+		str = g_strdup(gtk_entry_get_text(GTK_ENTRY(textbox)));
+		glatex_bibtex_insert_cite(str, NULL);
+
+		g_free(str);
+	}
+	
+	gtk_widget_destroy(dialog);
+}
+
 
 static void
 on_wizard_response(G_GNUC_UNUSED GtkDialog *dialog, gint response,
@@ -1922,6 +1974,9 @@ static void init_keybindings()
 	keybindings_set_item(key_group, KB_LATEX_USEPACKAGE_DIALOG,
 		glatex_kb_usepackage_dialog, 0, 0, "usepackage_dialog",
 		_("Insert \\usepackage{}"), menu_latex_insert_usepackage);
+	keybindings_set_item(key_group, KB_LATEX_INSERT_CITE,
+		glatex_kb_insert_bibtex_cite, 0, 0, "insert_cite_dialog",
+		_("Insert BibTeX reference dialog"), menu_latex_insert_bibtex_cite);
 }
 
 
@@ -2036,10 +2091,12 @@ add_menu_to_menubar()
 	GtkWidget *tmp = NULL;
 	gint i;	
 	GtkMenuShell *menubar;
-	
+
+	/* First we check for the menubar where to add the LaTeX menu */
 	menubar = GTK_MENU_SHELL(
 				ui_lookup_widget(geany->main_widgets->window, "menubar1"));
-		
+
+	/* Then we build up the menu and finally add it */
 	menu_latex = gtk_menu_item_new_with_mnemonic(_("_LaTeX"));
 	gtk_menu_shell_insert(
 		menubar,menu_latex, g_list_length(menubar->children)- 1);
@@ -2096,6 +2153,14 @@ add_menu_to_menubar()
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_insert_usepackage);
 	g_signal_connect(menu_latex_insert_usepackage, "activate",
 		G_CALLBACK(glatex_insert_usepackage_dialog), NULL);
+
+	menu_latex_insert_bibtex_cite =
+		gtk_menu_item_new_with_mnemonic(_("Insert B_ibTeX reference"));
+	ui_widget_set_tooltip_text(menu_latex_insert_bibtex_cite, 
+		_("Helps to insert a reference out of BibTeX files"));
+	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_insert_bibtex_cite);
+	g_signal_connect(menu_latex_insert_bibtex_cite, "activate",
+		G_CALLBACK(on_insert_bibtex_dialog_activate), NULL);
 
 	menu_latex_bibtex = gtk_menu_item_new_with_mnemonic(_("_BibTeX entries"));
 	gtk_container_add(GTK_CONTAINER(menu_latex_menu), menu_latex_bibtex);

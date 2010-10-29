@@ -27,3 +27,6 @@ Features:
 * Improve behaviour of levelup and leveldown of structures
 * Adding a font size chooser to toolbar
 * Adding support for dtx
+
+Generell:
+* Cleaning up code
