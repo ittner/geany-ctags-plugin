@@ -1,3 +1,8 @@
+2010-10-29  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Added a first version of a dialog supporting inserting a bibtex entry.
+
+
 2010-10-24  Frank Lanitz  <frank@frank.uvena.de>
 
  * Ensure LaTeX menu is added to menubar on loading plugin when there is
