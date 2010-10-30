@@ -26,7 +26,6 @@ gchar **glatex_read_file_in_array(const gchar *filename)
 {
 	gchar **result = NULL;
 	gchar *data;
-	GError *error = NULL;
 	
 	g_return_val_if_fail((filename != NULL), NULL);	
 	g_return_val_if_fail(g_file_get_contents(filename, &data, NULL, NULL), NULL);
