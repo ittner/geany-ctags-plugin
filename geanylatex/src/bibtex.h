@@ -84,5 +84,8 @@ void glatex_insert_bibtex_entry(G_GNUC_UNUSED GtkMenuItem * menuitem, gpointer g
 void glatex_bibtex_write_entry(GPtrArray *entry, gint doctype);
 GPtrArray *glatex_bibtex_init_empty_entry(void);
 void glatex_bibtex_insert_cite(gchar *reference_name, gchar *option);
+void glatex_parse_bib_file(const gchar* file, gpointer combobox);
+LaTeXLabel* glatex_parseLine_bib(const gchar *line);
+
 
 #endif

@@ -1272,13 +1272,18 @@ void
 on_insert_bibtex_dialog_activate(G_GNUC_UNUSED GtkMenuItem *menuitem,
 								 G_GNUC_UNUSED gpointer gdata)
 {
-	GtkWidget *dialog = NULL;
+	GtkWidget *dialog;
 	GtkWidget *vbox = NULL;
-	GtkWidget *label = NULL;
+	GtkWidget *label= NULL;
 	GtkWidget *textbox = NULL;
 	GtkWidget *table = NULL;
+	GtkWidget *tmp_entry = NULL;
+	GtkTreeModel *model = NULL;
+	GeanyDocument *doc = NULL;
 
-	dialog = gtk_dialog_new_with_buttons(_("Insert Reference"),
+	doc = document_get_current();
+
+	dialog = gtk_dialog_new_with_buttons(_("Insert BibTeX Reference"),
 						 GTK_WINDOW(geany->main_widgets->window),
 						 GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
 						 GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
@@ -1291,8 +1296,34 @@ on_insert_bibtex_dialog_activate(G_GNUC_UNUSED GtkMenuItem *menuitem,
 	gtk_table_set_col_spacings(GTK_TABLE(table), 6);
 	gtk_table_set_row_spacings(GTK_TABLE(table), 6);
 
-	label = gtk_label_new(_("BibTeX reference:"));
-	textbox = gtk_entry_new();
+	label = gtk_label_new(_("BiBTeX reference name:"));
+	textbox = gtk_combo_box_entry_new_text();
+
+	if (doc->real_path != NULL)
+	{
+		GDir *dir;
+		gchar *tmp_dir;
+		const gchar *filename;
+		
+		tmp_dir = g_path_get_dirname(doc->real_path);
+		dir = g_dir_open(tmp_dir, 0, NULL);
+
+		g_return_if_fail(dir != NULL);
+
+		foreach_dir(filename, dir)
+		{
+			gchar *fullpath = NULL;
+			fullpath = g_build_path(G_DIR_SEPARATOR_S, tmp_dir, filename, NULL);
+		
+			glatex_parse_bib_file(fullpath, textbox);
+			g_free(fullpath);
+		}
+		g_dir_close(dir);
+		model = gtk_combo_box_get_model(GTK_COMBO_BOX(textbox));
+		gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(model),
+			0, GTK_SORT_ASCENDING);
+	}
+
 
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
@@ -1300,20 +1331,34 @@ on_insert_bibtex_dialog_activate(G_GNUC_UNUSED GtkMenuItem *menuitem,
 	gtk_table_attach_defaults(GTK_TABLE(table), textbox, 1, 2, 0, 1);
 	gtk_container_add(GTK_CONTAINER(vbox), table);
 
-	g_signal_connect(G_OBJECT(textbox), "activate",
+	tmp_entry = gtk_bin_get_child(GTK_BIN(textbox));
+	g_signal_connect(G_OBJECT(tmp_entry), "activate",
 		G_CALLBACK(glatex_enter_key_pressed_in_entry), dialog);
 
 	gtk_widget_show_all(vbox);
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
-		gchar *str = NULL;
-		str = g_strdup(gtk_entry_get_text(GTK_ENTRY(textbox)));
-		glatex_bibtex_insert_cite(str, NULL);
+		gchar *ref_string = NULL;
+		GString *template_string = NULL;
 
-		g_free(str);
+		ref_string = g_strdup(gtk_combo_box_get_active_text(
+			GTK_COMBO_BOX(textbox)));
+
+		if (ref_string != NULL)
+		{
+			glatex_bibtex_insert_cite(ref_string, NULL);
+			g_free(ref_string);
+		}
+		else
+		{
+			if (ref_string != NULL)
+				g_free(ref_string);
+			if (template_string != NULL)
+				g_free(template_string);
+		}
 	}
-	
+
 	gtk_widget_destroy(dialog);
 }
 

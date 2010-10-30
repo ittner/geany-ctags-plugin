@@ -190,3 +190,66 @@ void glatex_bibtex_insert_cite(gchar *reference_name, gchar *option)
 	g_free(tmp);
 }
 
+/* Parses a given bib file and inserting found references into a given comboboy */
+void glatex_parse_bib_file(const gchar* file, gpointer combobox)
+{
+	gchar **bib_entries = NULL;
+	int i = 0;
+	LaTeXLabel *tmp;
+	gchar *tmp_label_name = NULL;
+	
+	if (file != NULL)
+	{
+		/*  Return if its not an bib file */
+		if (!g_str_has_suffix(file, ".bib"))
+		{
+			return;
+		}
+
+		bib_entries = glatex_read_file_in_array(file);
+
+		if (bib_entries != NULL)
+		{
+			for (i = 0; bib_entries[i] != NULL ; i++)
+			{
+				if  (g_str_has_prefix(bib_entries[i], "@"))
+				{
+					tmp = glatex_parseLine_bib(bib_entries[i]);
+					tmp_label_name = g_strdup(tmp->label_name);
+					gtk_combo_box_append_text(GTK_COMBO_BOX(combobox), tmp_label_name);
+					g_free(tmp);
+					g_free(tmp_label_name);
+				}
+			}
+			g_free(bib_entries);
+		}
+	}
+}
+
+
+LaTeXLabel* glatex_parseLine_bib(const gchar *line)
+{
+	LaTeXLabel *label;
+	const gchar *tmp_string = NULL;
+	const gchar *x = NULL;
+	gint l = 0;
+
+	label = g_new0(LaTeXLabel, 1);
+	
+	x = line;
+	
+	while (*x != '\0' && 
+		   *x != '{')
+	{
+		x++;
+	}
+	tmp_string = x + 1;
+	g_warning("%s", tmp_string);
+	while (*x != '\0' && *x != ',')
+	{
+		l++;
+		x++;
+	}
+	label->label_name = g_strndup(tmp_string, l - 1);
+	return label;
+}

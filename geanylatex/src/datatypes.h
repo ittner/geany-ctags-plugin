@@ -69,4 +69,11 @@ typedef struct
 	gchar *label;
 } BibTeXType;
 
+typedef struct
+{
+	gchar *label_name;
+	gint page;
+	gchar *chapter;
+} LaTeXLabel;
+
 #endif
