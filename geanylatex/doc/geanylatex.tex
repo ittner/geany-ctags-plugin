@@ -80,7 +80,8 @@ It implements a couple of hopefully useful functions:
 		  references \textbackslash ref{} and \textbackslash pageref{}
    		  getting suggestions from the document's aux file
 	\item Insertion of special characters through the menu
-	\item Help on BibTeX entries by templates
+	\item Help on BibTeX entries by templates and offering a list of
+		  available references.
 	\item Easy insertion of format patterns like \textbackslash texttt{}
 		  through the menu
 	\item Support of environment insertion by offering a dialog and
@@ -100,6 +101,8 @@ It implements a couple of hopefully useful functions:
 		  a sentence
 	\item Added a way to put a icon for \LaTeX{}-wizard into Geany's main
 		  toolbar
+	\item Added a dialog for inserting BibTeX references based on
+		  available *.bib-files
 \end{itemize}
 
 \subsection{Geany\LaTeX{} 0.5 -- 2010-06-13}
@@ -377,7 +380,8 @@ Both, the inserting labels as well as the inserting reference dialog
 can be accessed by key binding also. See Chapter \ref
 {kb_insert_label} here.
 
-\subsection{BibTeX templates for catalogue entries}
+\subsection{Support for BibTeX}
+\subsubsection{BibTeX templates for catalogue entries}
 Geany\LaTeX{} is offering a number of often used templates for BibTeX
 catalogue entries. They can be access by the plugin submenu in Geany's
 tools menu:
@@ -414,6 +418,23 @@ Year = {},
 }
 \end{lstlisting}
 \end{figure}
+
+\subsubsection{Inserting cite-reference}
+
+Geany\LaTeX{} is searching here for *.bib-files inside the directory
+of current active file. Its filtering for all references inside
+these files and putting it sorted and cleared from duplicated
+entries into the pulldown of the dialog. 
+
+\begin{figure}[h!]
+	\centering{\includegraphics[height=2.5cm]{img/bibtex_reference.png}}
+	\caption{Insert BibTeX reference dialog on Geany\LaTeX{} 0.6}
+\end{figure}
+
+With selecting one of the entries inside the pull down or by typing
+in your own reference name, pushing enter or hitting OK will insert
+a \texttt{\textbackslash{}cite\{\}} into your document with your
+given reference.
 
 \subsection{Replacement of special characters}
 Geany\LaTeX{} is able to replace special characters to their there \TeX\
