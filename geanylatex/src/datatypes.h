@@ -25,8 +25,8 @@
 typedef struct
 {
 	gint cat;
-	gchar *label;
-	gchar *latex;
+	const gchar *label;
+	const gchar *latex;
 } SubMenuTemplate;
 
 

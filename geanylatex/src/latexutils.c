@@ -98,7 +98,7 @@ void glatex_enter_key_pressed_in_entry(G_GNUC_UNUSED GtkWidget *widget, gpointer
 
 
 void
-glatex_insert_string(gchar *string, gboolean reset_position)
+glatex_insert_string(const gchar *string, gboolean reset_position)
 {
 	GeanyDocument *doc = NULL;
 
@@ -148,11 +148,12 @@ void glatex_replace_special_character()
 
 			if (entity != NULL)
 			{
-				replacement = g_string_append(replacement, entity);
+			
+				g_string_append(replacement, entity);
 			}
 			else
 			{
-				replacement = g_string_append(replacement, buf);
+				g_string_append(replacement, buf);
 			}
 		}
 		new = g_string_free(replacement, FALSE);

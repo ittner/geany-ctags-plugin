@@ -222,7 +222,7 @@ SubMenuTemplate glatex_char_array[] = {
 
 };
 
-gchar *glatex_get_entity(const gchar *letter)
+const gchar *glatex_get_entity(const gchar *letter)
 {
 	if (! utils_str_equal(letter, "\\"))
 	{

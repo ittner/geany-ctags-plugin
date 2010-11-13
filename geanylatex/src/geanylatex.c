@@ -772,7 +772,7 @@ PluginCallback plugin_callbacks[] =
 };
 
 
-static inline gchar*
+static inline const gchar*
 get_latex_command(gint tab_index)
 {
 	return glatex_char_array[tab_index].latex;
@@ -827,8 +827,8 @@ glatex_insert_label_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
 		gchar *label_str = NULL;
-		label_str = g_strconcat("\\label{",g_strdup(gtk_entry_get_text(
-			GTK_ENTRY(textbox_label))), "}", NULL);
+		label_str = g_strconcat("\\label{",gtk_entry_get_text(
+			GTK_ENTRY(textbox_label)), "}", NULL);
 		glatex_insert_string(label_str, TRUE);
 	}
 
