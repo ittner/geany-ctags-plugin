@@ -653,7 +653,8 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 							 * would cause a bigger mass. */
 							else if (buf[i] == ' ' ||
 									 buf[i] == '}' ||
-									 buf[i] == '{')
+									 buf[i] == '{' ||
+									 buf[i] == '"')
 							{
 								break;
 							}
