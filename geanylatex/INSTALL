@@ -1,7 +1,7 @@
 These installation instructions are written for a Linux system, but
 should work also on other plattforms as Windows is.
 
-Building the plugin requires Geany 0.19 or above (Geany Plugin API v188
+Building the plugin requires Geany 0.20 or above (Geany Plugin API v199
 or higher).
 
 You need for compliling the plugin the Geany header files installed.

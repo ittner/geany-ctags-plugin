@@ -28,7 +28,7 @@
 #include "geanylatex.h"
 #include "ctype.h"
 
-PLUGIN_VERSION_CHECK(188)
+PLUGIN_VERSION_CHECK(199)
 
 PLUGIN_SET_TRANSLATABLE_INFO(
 	LOCALEDIR,
@@ -797,42 +797,20 @@ glatex_insert_label_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	GtkWidget *textbox_label = NULL;
 	GtkWidget *table = NULL;
 
-	dialog = gtk_dialog_new_with_buttons(_("Insert Label"),
-						 GTK_WINDOW(geany->main_widgets->window),
-						 GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
-						 GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
-						 NULL);
-	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
-	gtk_widget_set_name(dialog, "GeanyDialog");
-	gtk_box_set_spacing(GTK_BOX(vbox), 10);
 
-	table = gtk_table_new(1, 2, FALSE);
-	gtk_table_set_col_spacings(GTK_TABLE(table), 6);
-	gtk_table_set_row_spacings(GTK_TABLE(table), 6);
-
-	label = gtk_label_new(_("Label name:"));
-	textbox_label = gtk_entry_new();
-
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-
-	gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 0, 1);
-	gtk_table_attach_defaults(GTK_TABLE(table), textbox_label, 1, 2, 0, 1);
-	gtk_container_add(GTK_CONTAINER(vbox), table);
-
-	g_signal_connect(G_OBJECT(textbox_label), "activate",
-		G_CALLBACK(glatex_enter_key_pressed_in_entry), dialog);
-
-	gtk_widget_show_all(vbox);
-
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	gchar *input = dialogs_show_input(_("Insert Label"),
+										GTK_WINDOW(geany->main_widgets->window),
+										_("Label name:"),
+										NULL);
+	
+	if (input)
 	{
 		gchar *label_str = NULL;
-		label_str = g_strconcat("\\label{",gtk_entry_get_text(
-			GTK_ENTRY(textbox_label)), "}", NULL);
+		label_str = g_strconcat("\\label{",input , "}", NULL);
 		glatex_insert_string(label_str, TRUE);
+		g_free(input);
+		g_free(label_str);
 	}
-
-	gtk_widget_destroy(dialog);
 }
 
 
