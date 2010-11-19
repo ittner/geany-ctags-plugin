@@ -801,7 +801,7 @@ glatex_insert_label_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 	if (input)
 	{
 		gchar *label_str = NULL;
-		
+
 		label_str = g_strconcat("\\label{",input , "}", NULL);
 		glatex_insert_string(label_str, TRUE);
 		g_free(input);
@@ -814,61 +814,31 @@ void
 glatex_insert_command_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 					 G_GNUC_UNUSED gpointer gdata)
 {
-	GtkWidget *dialog;
-	GtkWidget *vbox = NULL;
-	GtkWidget *label_command = NULL;
-	GtkWidget *textbox_command = NULL;
-	GtkWidget *table = NULL;
 
-	dialog = gtk_dialog_new_with_buttons(_("Insert Command"),
-						 GTK_WINDOW(geany->main_widgets->window),
-						 GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL,
-						 GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
-						 NULL);
-	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
-	gtk_widget_set_name(dialog, "GeanyDialog");
-	gtk_box_set_spacing(GTK_BOX(vbox), 10);
-
-	table = gtk_table_new(1, 2, FALSE);
-	gtk_table_set_col_spacings(GTK_TABLE(table), 6);
-	gtk_table_set_row_spacings(GTK_TABLE(table), 6);
-
-	label_command = gtk_label_new(_("Command name:"));
-
-	textbox_command = gtk_entry_new();
-
-	gtk_misc_set_alignment(GTK_MISC(label_command), 0, 0.5);
-
-	gtk_table_attach_defaults(GTK_TABLE(table), label_command, 0, 1, 0, 1);
-	gtk_table_attach_defaults(GTK_TABLE(table), textbox_command, 1, 2, 0, 1);
-	gtk_container_add(GTK_CONTAINER(vbox), table);
-
-	g_signal_connect(G_OBJECT(textbox_command), "activate",
-		G_CALLBACK(glatex_enter_key_pressed_in_entry), dialog);
-
-	gtk_widget_show_all(vbox);
-
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	gchar *input = NULL;
+	
+	input = dialogs_show_input(_("Insert Command"),
+								GTK_WINDOW(geany->main_widgets->window),
+								_("Command name:"),
+								NULL);
+	
+	if (input)
 	{
 		gchar *cmd_str = NULL;
-		const gchar *cmd = NULL;
 
 		GeanyDocument *doc = document_get_current();
-		cmd = gtk_entry_get_text(GTK_ENTRY(textbox_command));
 
 		sci_start_undo_action(doc->editor->sci);
 
-		cmd_str = g_strdup_printf("\\%s{", cmd);
+		cmd_str = g_strdup_printf("\\%s{", input);
 		glatex_insert_string(cmd_str, TRUE);
 		/* This shall put the cursor inside the braces */
 		glatex_insert_string("}", FALSE);
 
 		sci_end_undo_action(doc->editor->sci);
-
+		g_free(input);
 		g_free(cmd_str);
 	}
-
-	gtk_widget_destroy(dialog);
 }
 
 
