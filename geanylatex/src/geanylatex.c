@@ -791,21 +791,17 @@ void
 glatex_insert_label_activated(G_GNUC_UNUSED GtkMenuItem * menuitem,
 					   G_GNUC_UNUSED gpointer gdata)
 {
-	GtkWidget *dialog = NULL;
-	GtkWidget *vbox = NULL;
-	GtkWidget *label = NULL;
-	GtkWidget *textbox_label = NULL;
-	GtkWidget *table = NULL;
-
-
-	gchar *input = dialogs_show_input(_("Insert Label"),
-										GTK_WINDOW(geany->main_widgets->window),
-										_("Label name:"),
-										NULL);
+	gchar *input = NULL;
+	
+	input = dialogs_show_input(_("Insert Label"),
+								GTK_WINDOW(geany->main_widgets->window),
+								_("Label name:"),
+								NULL);
 	
 	if (input)
 	{
 		gchar *label_str = NULL;
+		
 		label_str = g_strconcat("\\label{",input , "}", NULL);
 		glatex_insert_string(label_str, TRUE);
 		g_free(input);
