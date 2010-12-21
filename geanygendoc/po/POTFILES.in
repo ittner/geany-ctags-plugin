@@ -1,9 +1,0 @@
-src/ggd.c
-src/ggd-doc-setting.c
-src/ggd-doc-type.c
-src/ggd-file-type.c
-src/ggd-file-type-loader.c
-src/ggd-file-type-manager.c
-src/ggd-options.c
-src/ggd-plugin.c
-src/ggd-utils.c
