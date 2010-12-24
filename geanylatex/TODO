@@ -25,6 +25,8 @@ Features:
 * Improve behaviour of levelup and leveldown of structures
 * Adding a font size chooser to toolbar
 * Adding support for dtx
+* Automatically inserting no breaking spaces (~) in particular situations
+* Converting tabulator seperated list to table
 
 Generell:
 * Cleaning up code
