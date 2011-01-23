@@ -49,6 +49,7 @@ enum
 	KB_LATEX_USEPACKAGE_DIALOG,
 	KB_LATEX_INSERT_COMMAND,
 	KB_LATEX_INSERT_CITE,
+	KB_LATEX_CONVERT_TO_TABLE,
 	COUNT_KB
 };
 
@@ -74,5 +75,6 @@ void glatex_kb_structure_lvldown(G_GNUC_UNUSED guint key_id);
 void glatex_kb_usepackage_dialog(G_GNUC_UNUSED guint key_id);
 void glatex_kb_insert_command_dialog(G_GNUC_UNUSED guint key_id);
 void glatex_kb_insert_bibtex_cite(G_GNUC_UNUSED guint key_id);
+void glatex_kb_convert_to_table(G_GNUC_UNUSED guint key_id);
 
 #endif

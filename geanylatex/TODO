@@ -27,6 +27,9 @@ Features:
 * Adding support for dtx
 * Automatically inserting no breaking spaces (~) in particular situations
 * Converting tabulator seperated list to table
+	* Set position of table (dialos?)
+	* Set colums of table (dialog?)
+	* Make sepeatorconfigurable
 
 Generell:
 * Cleaning up code

@@ -1967,6 +1967,9 @@ static void init_keybindings()
 	keybindings_set_item(key_group, KB_LATEX_INSERT_CITE,
 		glatex_kb_insert_bibtex_cite, 0, 0, "insert_cite_dialog",
 		_("Insert BibTeX reference dialog"), menu_latex_insert_bibtex_cite);
+	keybindings_set_item(key_group, KB_LATEX_CONVERT_TO_TABLE,
+		glatex_kb_convert_to_table, 0, 0, "convert_to_table",
+		_("Convert selection to table"), NULL);
 }
 
 

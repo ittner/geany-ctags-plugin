@@ -162,3 +162,40 @@ void glatex_replace_special_character()
 		g_free(new);
 	}
 }
+
+
+void glatex_convert_to_table()
+{
+	GeanyDocument *doc = NULL;
+	doc = document_get_current();
+
+	g_return_if_fail(doc != NULL);
+
+	if (sci_has_selection(doc->editor->sci))
+	{
+		gchar *selection = NULL;
+		gchar *new = NULL;
+		gchar *rowending = NULL;
+		GString *table = NULL;
+		GString *inner_table = NULL;
+
+		selection = sci_get_selection_contents(doc->editor->sci);
+		inner_table = g_string_new(selection);
+		utils_string_replace_all(inner_table, "\t", "  &  ");
+		rowending = g_strconcat(" \\\\", editor_get_eol_char(doc->editor), NULL);
+		utils_string_replace_all(inner_table, editor_get_eol_char(doc->editor), rowending);
+		new = g_string_free(inner_table, FALSE);
+
+		table = g_string_new(NULL);
+		g_string_printf(table, "\\begin{tabular}\n%s\n\\end{tabular}", new);
+
+		g_free(new);
+		
+		new = g_string_free(table, FALSE);
+		sci_replace_sel(doc->editor->sci, new);
+
+		g_free(selection);
+		g_free(new);
+		g_free(rowending);
+	}
+}

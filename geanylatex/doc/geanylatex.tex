@@ -103,6 +103,7 @@ It implements a couple of hopefully useful functions:
 		  toolbar
 	\item Added a dialog for inserting BibTeX references based on
 		  available *.bib-files
+	\item Convert a tab separated block into \LaTeX{}-table
 	\item Upgrade plugin API to version 199
 \end{itemize}
 
@@ -566,6 +567,28 @@ there is any.
 	\includegraphics[width=0.4\textwidth]{img/insert_usepackage.png}
 	\caption{Dialog for inserting \textbackslash{}usepackage\{\}}
 \end{figure}
+
+\subsection{Convert selected block to \LaTeX{}-table}
+
+This feature allows to convert a tabular formated block into \LaTeX{}-compatible
+table. In detail the feature replaces all occurrences of tabulator with \&
+surrounded by some spaces as well as adding \textbackslash{}\textbackslash{}
+at the end of each line. Nevertheless it also adds \texttt{tabular} environments
+around the selected passage.
+
+It will enclose your selection with an \texttt{tabular} environment.
+\begin{figure}[h!]
+\begin{lstlisting}
+\begin{tabular}
+	% selection converted to table
+\end{tabular}
+\end{lstlisting}
+\end{figure}
+
+After this has been done you will need to add the missing paramters
+for \texttt{tabular} like position and columns definitions as
+tabular environment is defined as to be used with
+\texttt{\textbackslash{}begin\{tabular\}[pos]\{table spec\}}.
 
 \section{Configuration}
 
