@@ -23,21 +23,21 @@
 
 void glatex_kblabel_insert(G_GNUC_UNUSED guint key_id)
 {
-	g_return_if_fail(document_get_current != NULL);
+	g_return_if_fail(document_get_current() != NULL);
 	glatex_insert_label_activated(NULL, NULL);
 }
 
 
 void glatex_kbref_insert(G_GNUC_UNUSED guint key_id)
 {
-	g_return_if_fail(document_get_current != NULL);	
+	g_return_if_fail(document_get_current() != NULL);	
 	glatex_insert_ref_activated(NULL, NULL);
 }
 
 
 void glatex_kbref_insert_environment(G_GNUC_UNUSED guint key_id)
 {
-	g_return_if_fail(document_get_current != NULL);
+	g_return_if_fail(document_get_current() != NULL);
 	glatex_insert_environment_dialog(NULL, NULL);
 }
 
@@ -50,122 +50,122 @@ void glatex_kbwizard(G_GNUC_UNUSED guint key_id)
 
 void glatex_kb_insert_newline(G_GNUC_UNUSED guint key_id)
 {
-	g_return_if_fail(document_get_current != NULL);
+	g_return_if_fail(document_get_current() != NULL);
 	glatex_insert_string("\\\\\n", TRUE);
 }
 
 
 void glatex_kb_insert_newitem(G_GNUC_UNUSED guint key_id)
 {
-	g_return_if_fail(document_get_current != NULL);
+	g_return_if_fail(document_get_current() != NULL);
 	glatex_insert_string("\\item ", TRUE);
 }
 
 
 void glatex_kb_replace_special_chars(G_GNUC_UNUSED guint key_id)
 {
-	g_return_if_fail(document_get_current != NULL);
+	g_return_if_fail(document_get_current() != NULL);
 	glatex_replace_special_character();
 }
 
 
 void glatex_kb_format_bold(G_GNUC_UNUSED guint key_id)
 {
-	g_return_if_fail(document_get_current != NULL);
+	g_return_if_fail(document_get_current() != NULL);
 	glatex_insert_latex_format(NULL, GINT_TO_POINTER(LATEX_BOLD));
 }
 
 
 void glatex_kb_format_italic(G_GNUC_UNUSED guint key_id)
 {
-	g_return_if_fail(document_get_current != NULL);
+	g_return_if_fail(document_get_current() != NULL);
 	glatex_insert_latex_format(NULL, GINT_TO_POINTER(LATEX_ITALIC));
 }
 
 
 void glatex_kb_format_typewriter(G_GNUC_UNUSED guint key_id)
 {
-	g_return_if_fail(document_get_current != NULL);
+	g_return_if_fail(document_get_current() != NULL);
 	glatex_insert_latex_format(NULL, GINT_TO_POINTER(LATEX_TYPEWRITER));
 }
 
 
 void glatex_kb_format_centering(G_GNUC_UNUSED guint key_id)
 {
-	g_return_if_fail(document_get_current != NULL);
+	g_return_if_fail(document_get_current() != NULL);
 	glatex_insert_latex_format(NULL, GINT_TO_POINTER(LATEX_CENTER));
 }
 
 
 void glatex_kb_format_left(G_GNUC_UNUSED guint key_id)
 {
-	g_return_if_fail(document_get_current != NULL);
+	g_return_if_fail(document_get_current() != NULL);
 	glatex_insert_latex_format(NULL, GINT_TO_POINTER(LATEX_LEFT));
 }
 
 
 void glatex_kb_format_right(G_GNUC_UNUSED guint key_id)
 {
-	g_return_if_fail(document_get_current != NULL);
+	g_return_if_fail(document_get_current() != NULL);
 	glatex_insert_latex_format(NULL, GINT_TO_POINTER(LATEX_RIGHT));
 }
 
 
 void glatex_kb_insert_description_list(G_GNUC_UNUSED guint key_id)
 {
-	g_return_if_fail(document_get_current != NULL);
+	g_return_if_fail(document_get_current() != NULL);
 	glatex_insert_list_environment(GLATEX_LIST_DESCRIPTION);
 }
 
 
 void glatex_kb_insert_itemize_list(G_GNUC_UNUSED guint key_id)
 {
-	g_return_if_fail(document_get_current != NULL);
+	g_return_if_fail(document_get_current() != NULL);
 	glatex_insert_list_environment(GLATEX_LIST_ITEMIZE);
 }
 
 
 void glatex_kb_insert_enumerate_list(G_GNUC_UNUSED guint key_id)
 {
-	g_return_if_fail(document_get_current != NULL);
+	g_return_if_fail(document_get_current() != NULL);
 	glatex_insert_list_environment(GLATEX_LIST_ENUMERATE);
 }
 
 
 void glatex_kb_structure_lvlup(G_GNUC_UNUSED guint key_id)
 {
-	g_return_if_fail(document_get_current != NULL);
+	g_return_if_fail(document_get_current() != NULL);
 	glatex_structure_lvlup();
 }
 
 
 void glatex_kb_structure_lvldown(G_GNUC_UNUSED guint key_id)
 {
-	g_return_if_fail(document_get_current != NULL);
+	g_return_if_fail(document_get_current() != NULL);
 	glatex_structure_lvldown();
 }
 
 
 void glatex_kb_usepackage_dialog(G_GNUC_UNUSED guint key_id)
 {
-	g_return_if_fail(document_get_current != NULL);
+	g_return_if_fail(document_get_current() != NULL);
 	glatex_insert_usepackage_dialog(NULL, NULL);
 }
 
 void glatex_kb_insert_command_dialog(G_GNUC_UNUSED guint key_id)
 {
-	g_return_if_fail(document_get_current != NULL);
+	g_return_if_fail(document_get_current() != NULL);
 	glatex_insert_command_activated(NULL, NULL);
 }
 
 void glatex_kb_insert_bibtex_cite(G_GNUC_UNUSED guint key_id)
 {
-	g_return_if_fail(document_get_current != NULL);
+	g_return_if_fail(document_get_current() != NULL);
 	on_insert_bibtex_dialog_activate(NULL, NULL);
 }
 
 void glatex_kb_convert_to_table(G_GNUC_UNUSED guint key_id)
 {
-	g_return_if_fail(document_get_current != NULL);
+	g_return_if_fail(document_get_current() != NULL);
 	glatex_convert_to_table();
 }
