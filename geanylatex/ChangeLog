@@ -1,3 +1,8 @@
+2011-01-29  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Backport update from convert to table function from HTMLTable-plugin
+
+
 2011-01-23  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Adding a feature which is converting a tabulator separated list into

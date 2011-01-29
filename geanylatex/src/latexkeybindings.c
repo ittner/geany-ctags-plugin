@@ -30,7 +30,7 @@ void glatex_kblabel_insert(G_GNUC_UNUSED guint key_id)
 
 void glatex_kbref_insert(G_GNUC_UNUSED guint key_id)
 {
-	g_return_if_fail(document_get_current() != NULL);	
+	g_return_if_fail(document_get_current() != NULL);
 	glatex_insert_ref_activated(NULL, NULL);
 }
 
@@ -167,5 +167,5 @@ void glatex_kb_insert_bibtex_cite(G_GNUC_UNUSED guint key_id)
 void glatex_kb_convert_to_table(G_GNUC_UNUSED guint key_id)
 {
 	g_return_if_fail(document_get_current() != NULL);
-	glatex_convert_to_table();
+	glatex_convert_to_table(FALSE);
 }

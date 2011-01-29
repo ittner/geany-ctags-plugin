@@ -26,10 +26,10 @@ gchar **glatex_read_file_in_array(const gchar *filename)
 {
 	gchar **result = NULL;
 	gchar *data;
-	
-	g_return_val_if_fail((filename != NULL), NULL);	
+
+	g_return_val_if_fail((filename != NULL), NULL);
 	g_return_val_if_fail(g_file_get_contents(filename, &data, NULL, NULL), NULL);
-	
+
 	if (data != NULL)
 	{
 		result = g_strsplit_set(data, "\r\n", -1);
@@ -147,7 +147,7 @@ void glatex_replace_special_character()
 
 			if (entity != NULL)
 			{
-			
+
 				g_string_append(replacement, entity);
 			}
 			else
@@ -163,38 +163,79 @@ void glatex_replace_special_character()
 }
 
 
-void glatex_convert_to_table()
+/* Based on reimplementation at HTMLTable plugin of Geany-Plugins package
+ * originally in GPL2+ */
+/* gboolean header is not yet used but to don't break API later its already
+ * defined */
+void glatex_convert_to_table(G_GNUC_UNUSED gboolean header)
 {
 	GeanyDocument *doc = NULL;
 	doc = document_get_current();
 
 	g_return_if_fail(doc != NULL);
-
 	if (sci_has_selection(doc->editor->sci))
 	{
 		gchar *selection = NULL;
-		gchar *new = NULL;
-		gchar *rowending = NULL;
-		GString *table = NULL;
-		GString *inner_table = NULL;
+		gchar **rows = NULL;
+		GString *replacement_str = NULL;
+		gchar *replacement = NULL;
 
+		/* Actually grabbing selection and splitting it into single
+		 * lines we will work on later */
 		selection = sci_get_selection_contents(doc->editor->sci);
-		inner_table = g_string_new(selection);
-		utils_string_replace_all(inner_table, "\t", "  &  ");
-		rowending = g_strconcat(" \\\\", editor_get_eol_char(doc->editor), NULL);
-		utils_string_replace_all(inner_table, editor_get_eol_char(doc->editor), rowending);
-		new = g_string_free(inner_table, FALSE);
-
-		table = g_string_new(NULL);
-		g_string_printf(table, "\\begin{tabular}\n%s\n\\end{tabular}", new);
-
-		g_free(new);
-		
-		new = g_string_free(table, FALSE);
-		sci_replace_sel(doc->editor->sci, new);
-
+		rows = g_strsplit_set(selection, "\r\n", -1);
 		g_free(selection);
-		g_free(new);
-		g_free(rowending);
+
+		/* Checking whether we do have something we can work on - Returning if not */
+		if (rows != NULL)
+		{
+			/* Adding header to replacement */
+			guint i;
+			guint j;
+
+			replacement_str = g_string_new("\\begin{tabular}{}\n");
+
+			/* Iteration onto rows and building up lines of table for
+			 * replacement */
+			for (i = 0; rows[i] != NULL ; i++)
+			{
+				gchar **columns = NULL;
+				columns = g_strsplit_set(rows[i], "\t", -1);
+
+				for (j = 0; columns[j] != NULL; j++)
+				{
+					if (j > 0)
+					{
+						g_string_append(replacement_str, "  &  ");
+					}
+					g_string_append(replacement_str, columns[j]);
+				}
+
+				g_string_append(replacement_str, "\\\\\n");
+
+				g_free(columns);
+			}
+		}
+
+		/* Adding the footer of table */
+
+		g_string_append(replacement_str, "\\end{tabular}\n");
+
+		/* Replacing selection with new table */
+		replacement = g_string_free(replacement_str, FALSE);
+		sci_replace_sel(doc->editor->sci, replacement);
+
+		g_free(rows);
+		g_free(replacement);
 	}
+	else
+	{
+		/* OK. Something went not as expected.
+		 * We did have a selection but cannot parse it into rows.
+		 * Aborting */
+		g_warning(_("Something went went wrong on parsing selection. Aborting"));
+		return;
+	} /* Selection was given -- end
+	   * in case of there was no selection we are just doing nothing */
+	return;
 }
