@@ -28,6 +28,5 @@ void glatex_usepackage(const gchar *pkg, const gchar *options);
 void glatex_enter_key_pressed_in_entry(G_GNUC_UNUSED GtkWidget *widget, gpointer dialog);
 void glatex_insert_string(const gchar *string, gboolean reset_position);
 void glatex_replace_special_character(void);
-void glatex_convert_to_table(G_GNUC_UNUSED gboolean header);
 
 #endif

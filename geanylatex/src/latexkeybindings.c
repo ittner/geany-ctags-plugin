@@ -163,9 +163,3 @@ void glatex_kb_insert_bibtex_cite(G_GNUC_UNUSED guint key_id)
 	g_return_if_fail(document_get_current() != NULL);
 	on_insert_bibtex_dialog_activate(NULL, NULL);
 }
-
-void glatex_kb_convert_to_table(G_GNUC_UNUSED guint key_id)
-{
-	g_return_if_fail(document_get_current() != NULL);
-	glatex_convert_to_table(FALSE);
-}

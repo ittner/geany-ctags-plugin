@@ -1,3 +1,8 @@
+2011-01-30  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * Move convert to table function to new Tableconvert plugin of Geany-Plugins.
+
+
 2011-01-29  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Backport update from convert to table function from HTMLTable-plugin

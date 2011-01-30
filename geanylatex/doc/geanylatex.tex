@@ -97,13 +97,12 @@ It implements a couple of hopefully useful functions:
 \subsection{Upcoming Geany\LaTeX{} 0.6}
 \begin{itemize}
 	\item Moved \LaTeX{} menu to a separate menu inside Geany main menu
-	\item Added a feature to autocapetlise letters on typing on begin of 
+	\item Added a feature to autocapetlise letters on typing on begin of
 		  a sentence
 	\item Added a way to put a icon for \LaTeX{}-wizard into Geany's main
 		  toolbar
 	\item Added a dialog for inserting BibTeX references based on
 		  available *.bib-files
-	\item Convert a tab separated block into \LaTeX{}-table
 	\item Upgrade plugin API to version 199
 \end{itemize}
 
@@ -426,7 +425,7 @@ Year = {},
 Geany\LaTeX{} is searching here for *.bib-files inside the directory
 of current active file. Its filtering for all references inside
 these files and putting it sorted and cleared from duplicated
-entries into the pulldown of the dialog. 
+entries into the pulldown of the dialog.
 
 \begin{figure}[h!]
 	\centering{\includegraphics[height=2.5cm]{img/bibtex_reference.png}}
@@ -548,7 +547,7 @@ check Chapter \ref {sec:hidden_pref_autocompletion_context}, page
 \pageref {sec:hidden_pref_autocompletion_context}.
 
 This feature is by default file type depending, so it will only work
-on \TeX{}-like file types as well its turned on by default. 
+on \TeX{}-like file types as well its turned on by default.
 
 
 \subsection{Inserting \textbackslash{}usepackage\{\}-entry to header}
@@ -568,27 +567,6 @@ there is any.
 	\caption{Dialog for inserting \textbackslash{}usepackage\{\}}
 \end{figure}
 
-\subsection{Convert selected block to \LaTeX{}-table}
-
-This feature allows to convert a tabular formated block into \LaTeX{}-compatible
-table. In detail the feature replaces all occurrences of tabulator with \&
-surrounded by some spaces as well as adding \textbackslash{}\textbackslash{}
-at the end of each line. Nevertheless it also adds \texttt{tabular} environments
-around the selected passage.
-
-It will enclose your selection with an \texttt{tabular} environment.
-\begin{figure}[h!]
-\begin{lstlisting}
-\begin{tabular}
-	% selection converted to table
-\end{tabular}
-\end{lstlisting}
-\end{figure}
-
-After this has been done you will need to add the missing paramters
-for \texttt{tabular} like position and columns definitions as
-tabular environment is defined as to be used with
-\texttt{\textbackslash{}begin\{tabular\}[pos]\{table spec\}}.
 
 \section{Configuration}
 
@@ -626,13 +604,13 @@ of editor widget. Option is turned off by default. Just give it a try.
 
 \subsubsection{Capitalize letters on sentence begin}
 
-If this option is enabled, Geany\LaTeX{} will look for \textsc{.}, 
-\textsc{!} or \textsc{?} followed by a space. The next letter will 
-be inserted in capital letters. Currenty this is not working for 
-multichar letters as German Umlauts as well as the overwriting is 
-not supported very well at this point. In case of you don't want to 
-have the capital version of a letter in a particular case, just hit 
-undo (Ctrl + z in most cases). 
+If this option is enabled, Geany\LaTeX{} will look for \textsc{.},
+\textsc{!} or \textsc{?} followed by a space. The next letter will
+be inserted in capital letters. Currenty this is not working for
+multichar letters as German Umlauts as well as the overwriting is
+not supported very well at this point. In case of you don't want to
+have the capital version of a letter in a particular case, just hit
+undo (Ctrl + z in most cases).
 
 \subsubsection{Add a wizard icon to Geany's main toolbar}
 This adds an icon for Geany\LaTeX{} wizard to Geany's main toolbar
@@ -1070,6 +1048,19 @@ function is similar to the \texttt{todo} package but doesn't require
 recompiling of the document. Recognised tags will be inserted to
 another tab in Geany's message widget.\\
 \textbf{Homepage:} \url{http://plugins.geany.org/addons/}
+
+
+\subsubsection{Tableconvert to convert a tabulator separated list into a table}
+
+Its an quiet annyoing problem which happens from time to time: There
+is a list of values e.g. from some experiment which needs to be
+included into your document. The \LaTeX{}-export filter of your
+spreadsheet tool is not very adavanced and you just want to insert a
+couple of lines and have to do it manually.
+
+Tableconvert is offering to convert a tabular separated list into an
+table. The plugin is also offering to convert such a list into a
+\LaTeX{}-like table and therefor is maybe useful on daily work.
 
 \section{License}
 Geany\LaTeX{} and all its parts is distributed under the terms of the
