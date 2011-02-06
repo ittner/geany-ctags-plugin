@@ -1,3 +1,8 @@
+2011-02-06  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * src/templace.c: Fix a little memory leak.
+
+
 2011-01-30  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Move convert to table function to new Tableconvert plugin of Geany-Plugins.
