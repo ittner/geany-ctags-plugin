@@ -163,3 +163,16 @@ void glatex_kb_insert_bibtex_cite(G_GNUC_UNUSED guint key_id)
 	g_return_if_fail(document_get_current() != NULL);
 	on_insert_bibtex_dialog_activate(NULL, NULL);
 }
+
+
+void glatex_kb_toggle_underscore_autobraces(G_GNUC_UNUSED guint key_id)
+{
+	if (glatex_autobraces_active == TRUE)
+	{
+		glatex_autobraces_active = FALSE;
+	}
+	else
+	{
+		glatex_autobraces_active = TRUE;
+	}
+}

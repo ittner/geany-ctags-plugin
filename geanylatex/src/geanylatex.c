@@ -85,7 +85,7 @@ static gboolean glatex_autocompletion_active = FALSE;
  * and \endgroup{}. */
 static gint glatex_autocompletion_context_size;
 static gboolean glatex_autocompletion_only_for_latex;
-static gboolean glatex_autobraces_active = TRUE;
+gboolean glatex_autobraces_active = TRUE;
 
 /* Function will be deactivated, when only loaded */
 static gboolean toggle_active = FALSE;
@@ -1967,6 +1967,9 @@ static void init_keybindings()
 	keybindings_set_item(key_group, KB_LATEX_INSERT_CITE,
 		glatex_kb_insert_bibtex_cite, 0, 0, "insert_cite_dialog",
 		_("Insert BibTeX reference dialog"), menu_latex_insert_bibtex_cite);
+	keybindings_set_item(key_group, KB_LATEX_TOGGLE_UNDERSCORE_AUTOBRACES,
+		glatex_kb_toggle_underscore_autobraces, 0, 0, "toggle_autobraces",
+		_("Toggle autocompletion for underscore and ^"), NULL);
 }
 
 
