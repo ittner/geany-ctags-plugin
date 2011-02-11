@@ -1,6 +1,7 @@
 2011-02-11  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * Add a switch to turn on/off autoadding of {} after ^ and _ via keystroke.
+ * Don't insert {} after \^ and \_.
 
 
 2011-02-06  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

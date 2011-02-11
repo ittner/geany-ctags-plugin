@@ -668,8 +668,11 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 				{
 					if (glatex_autobraces_active == TRUE)
 					{
-						sci_insert_text(sci, -1, "{}");
-						sci_set_current_position(sci, pos + 1, TRUE);
+						if (sci_get_char_at(sci, pos -2) != '\\')
+						{
+							sci_insert_text(sci, -1, "{}");
+							sci_set_current_position(sci, pos + 1, TRUE);
+						}
 					}
 					break;
 				}
