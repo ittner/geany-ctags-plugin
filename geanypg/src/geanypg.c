@@ -23,7 +23,7 @@
 GeanyPlugin     *geany_plugin;
 GeanyData       *geany_data;
 GeanyFunctions  *geany_functions;
-unsigned long    fcounter;
+
 /* Check that the running Geany supports the plugin API version used below, and check
  * for binary compatibility. */
 PLUGIN_VERSION_CHECK(201)
@@ -60,7 +60,6 @@ gpgme_error_t geanypg_show_err_msg(gpgme_error_t err)
 
 void plugin_init(GeanyData *data)
 {
-    fcounter = 0;
     gpgme_error_t err = geanypg_init_gpgme();
     if (err)
     {
