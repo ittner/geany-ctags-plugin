@@ -22,6 +22,7 @@ Features:
     * Navigation throught document
 * Code examples for very common problems
 * Make special characters extensible through files
+* Add French and Danish special chars to default distribution
 * Improve behaviour of levelup and leveldown of structures
 * Adding a font size chooser to toolbar
 * Adding support for dtx
