@@ -1,3 +1,85 @@
 ctags plugin
+============
 
-There is no README yet.
+A Geany plugin to browse symbol definitions using ctags/etags files.
+
+
+Requirements
+------------
+
+ * Geany >= 0.20 (http://www.geany.org/)
+ * GTK+ >= 2.8 (http://www.gtk.org/)
+ * ctags >= 5.8 (http://ctags.sf.net/) -- not technically required to run
+   the plugin, but you will need it to generate your tagfiles.
+
+
+Installation
+------------
+
+To install the plugin, just type the following commands in the "geany-plugins"
+top-level directory:
+
+  ./configure
+  make
+  make install
+
+To install *only* the ctags plugin, type this commands in the 'ctags'
+directory. You may also install the plugin in your account (i.e., not a
+system  wide installation) copying the file 'ctags.so' to
+'~/.config/geany/plugins/'.
+
+
+
+Usage
+-----
+
+The ctags plugin requires a tag database in a file named 'tags' in the current
+directory or any parent directory. To generate it, go to your source directory
+and run the command "ctags --fields=n -R ." -- this will list all tags from
+all recognized source files. Check the ctags documentation for more options.
+
+After enabling the plugin, just select some function and run "Tools" -> "Find
+ctag declaration" or press Control+] with the tag selected. It is possible to
+change this shortcut in the Geany preferences. All definitions will be listed
+in the Status Window. If a single definition is found, the respective file
+will be open and the cursor will be positioned in the declaration line.
+
+The tags file must be generated when the sources are changed.
+
+
+
+Unimplemented features
+----------------------
+
+This plugin is in the first stages of development. The folowing features are
+yet to be implemented:
+
+ * Click in a definition in the Status window jump to the file/line;
+ * A preferences window to define file names and other options;
+ * Do not require the selection of the tag (i.e. search the tag under the
+   cursor);
+ * Use the forward/back buttons;
+ * Update tags file automatically when a source file is changed.
+ * Suggestions?
+
+
+
+License
+-------
+
+ctags is distributed under the terms of the GNU General Public License as
+published by the Free Software Foundation, either version 2 of the License,
+or (at your option) any later version. You should have received a copy of
+the GNU General Public License along with this program.  If not, see
+http://www.gnu.org/licenses/.
+
+The files readtags.h and readtags.c, written by Darren Hiebert, are in the
+public domain.
+
+
+
+Author
+------
+
+Alexandre Erwin Ittner <alexandre@ittner.com.br> -- http://www.ittner.com.br/
+
