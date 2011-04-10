@@ -22,7 +22,8 @@ plugins = \
 	tableconvert \
 	treebrowser \
 	updatechecker \
-	webhelper
+	webhelper \
+	ctags
 
 ACLOCAL_AMFLAGS = -I build/cache -I build -I build/bundled --install
 
