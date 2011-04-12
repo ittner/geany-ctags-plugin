@@ -170,6 +170,25 @@ static void print_entry_msgwin(tagEntry *entry)
 		g_free(p);
 }
 
+
+static void jump_to_declaration(GeanyDocument *doc, gchar *text)
+{
+	struct Sci_TextToFind ttf;
+	ttf.chrg.cpMin = 0;
+	ttf.chrg.cpMax = sci_get_length(doc->editor->sci);
+	ttf.lpstrText = (gchar *) text;
+	gint pos = sci_find_text(doc->editor->sci, SCFIND_MATCHCASE, &ttf);
+	if (pos > -1)
+	{
+		/* TODO: mark position for back/forward */
+		gint line = sci_get_line_from_position(doc->editor->sci, pos);
+		sci_goto_line(doc->editor->sci, line, TRUE);
+	}
+	else
+		msgwin_status_add(_("Declaration not found. Tag file outdated"));
+}
+
+
 static void find_tag(GeanyDocument *doc, char *tag)
 {
 	char *fname = find_tag_file_name(doc);
@@ -193,7 +212,7 @@ static void find_tag(GeanyDocument *doc, char *tag)
 	tagEntry entry;
 	gint total_tags = 0;
 	gchar *first_file = NULL;
-	gint first_line = 0;
+	gchar *first_pattern = NULL;
 	gint result = TagFailure;
 
 	do
@@ -204,7 +223,7 @@ static void find_tag(GeanyDocument *doc, char *tag)
 			if (result == TagSuccess)
 			{
 				first_file = g_strdup(entry.file);
-				first_line = entry.address.lineNumber;
+				first_pattern = g_strdup_pattern(entry.address.pattern);
 			}
 		}
 		else
@@ -233,16 +252,15 @@ static void find_tag(GeanyDocument *doc, char *tag)
 		/* Open the document or show if it is already open */
 		GeanyDocument *ndoc = document_open_file(first_file, FALSE, NULL, NULL);
 		if (ndoc != NULL && ndoc->editor && ndoc->editor->sci)
-		{
-			/* TODO: mark position for back/forward */
-			sci_goto_line(ndoc->editor->sci, first_line - 1, TRUE);
-		}
+			jump_to_declaration(ndoc, first_pattern);
 		else
 			msgwin_status_add(_("Can not open document '%s'"), first_file);
 	}
 
 	if (first_file != NULL)
 		g_free(first_file);
+	if (first_pattern != NULL)
+		g_free(first_pattern);
 
 	tagsClose(tagfile);
 	g_free(fname);
