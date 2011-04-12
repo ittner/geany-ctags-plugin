@@ -156,6 +156,19 @@ static gchar *g_strdup_pattern(const char *pattern)
 }
 
 
+static void print_entry_msgwin(tagEntry *entry)
+{
+	/* TODO: click in the message jump to file/line */
+	gchar *p = g_strdup_pattern(entry->address.pattern);
+	if (entry->address.lineNumber > 0)
+		msgwin_status_add(_("'%s' found in %s, line %ld: %s"),
+			entry->name, entry->file, entry->address.lineNumber, p);
+	else
+		msgwin_status_add(_("'%s' found in %s: %s"),
+			entry->name, entry->file, p);
+	if (p != NULL)
+		g_free(p);
+}
 
 static void find_tag(GeanyDocument *doc, char *tag)
 {
@@ -198,13 +211,8 @@ static void find_tag(GeanyDocument *doc, char *tag)
 			result = tagsFindNext(tagfile, &entry);
 		if (result == TagSuccess)
 		{
-			gchar *p = g_strdup_pattern(entry.address.pattern);
-			/* TODO: click in the message jump to file/line */
-			msgwin_status_add(_("'%s' found in %s, line %ld: %s"),
-				entry.name, entry.file, entry.address.lineNumber, p);
+			print_entry_msgwin(&entry);
 			total_tags++;
-			if (p == NULL)
-				g_free(p);
 		}
 	}
 	while (result == TagSuccess);
