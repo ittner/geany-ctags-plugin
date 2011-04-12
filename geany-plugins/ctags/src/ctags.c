@@ -292,8 +292,8 @@ void plugin_init(GeanyData *data)
 
 	/* Set keyboard shortcut. Defaults to ^], as in vim */
 	keybindings_set_item(plugin_key_group, KB_CTRL_BRACKET, find_tag_kb,
-      GDK_bracketright, GDK_CONTROL_MASK, "find_ctag_declaration",
-       _("Find ctag declaration"), menu_item_jump_to_tag);
+		GDK_bracketright, GDK_CONTROL_MASK, "find_ctag_declaration",
+		_("Find ctag declaration"), menu_item_jump_to_tag);
 
 	/* TODO: make this configurable */
 	update_tag_file_names("tags");
