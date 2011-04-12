@@ -122,6 +122,40 @@ static gchar *find_tag_file_name(const GeanyDocument *doc)
 }
 
 
+/*
+ * Receive a ctags search pattern and returns a copy without the leading
+ * and trailing symbols (ie, get "/^something$/" and returns a new string
+ * with "something".  The caller must g_free the result.
+ */
+
+static gchar *g_strdup_pattern(const char *pattern)
+{
+	if (pattern == NULL)
+		return NULL;
+	if (*pattern == '/')
+	{
+		pattern++;
+		if (*pattern == '^')
+			pattern++;
+	}
+	if (*pattern == '\0')
+		return NULL;
+	gchar *new_pattern = g_strdup(pattern);
+	gint len = strlen(new_pattern);
+	if (len > 1 && new_pattern[len-2] == '/')
+	{
+		new_pattern[len-2] = '\0';
+		len--;
+	}
+	if (len > 1 && new_pattern[len-2] == '$')
+	{
+		new_pattern[len-2] = '\0';
+		len--;
+	}
+	return new_pattern;
+}
+
+
 
 static void find_tag(GeanyDocument *doc, char *tag)
 {
@@ -164,11 +198,13 @@ static void find_tag(GeanyDocument *doc, char *tag)
 			result = tagsFindNext(tagfile, &entry);
 		if (result == TagSuccess)
 		{
+			gchar *p = g_strdup_pattern(entry.address.pattern);
 			/* TODO: click in the message jump to file/line */
 			msgwin_status_add(_("'%s' found in %s, line %ld: %s"),
-				entry.name, entry.file, entry.address.lineNumber,
-				entry.address.pattern);
+				entry.name, entry.file, entry.address.lineNumber, p);
 			total_tags++;
+			if (p == NULL)
+				g_free(p);
 		}
 	}
 	while (result == TagSuccess);
