@@ -56,8 +56,22 @@ PLUGIN_KEY_GROUP(ctags, KB_MAX)
 
 static GtkWidget *menu_item_jump_to_tag = NULL;
 
-/* TODO: make this configurable */
-#define TAG_FILE_NAME "tags"
+/* A array of all file names understood as tag files */
+static gchar **tag_file_names = NULL;
+
+/*
+ * Update the array 'tag_file_names' to reflect the given comma-separated
+ * list of valid names for tag files. If NULL, just frees the list.
+ */
+static void update_tag_file_names(const gchar *names)
+{
+	if (tag_file_names != NULL)
+		g_strfreev(tag_file_names);
+	if (names != NULL)
+		tag_file_names = g_strsplit_set(names, " \t\n\r;,", 0);
+	else
+		tag_file_names = NULL;
+}
 
 
 /*
@@ -86,13 +100,19 @@ static gchar *find_tag_file_name(const GeanyDocument *doc)
 	gint i = strlen(dir) - 1;
 	while (i >= 0)
 	{
-		gchar *path = g_build_filename(dir, TAG_FILE_NAME, NULL);
-		if (g_file_test(path, G_FILE_TEST_EXISTS))
+		gint j;
+		for (j = 0; tag_file_names[j]; j++)
 		{
-			g_free(dir);
-			return path;
+			if (*tag_file_names[j] == '\0')	/* empty string */
+				continue;
+			gchar *path = g_build_filename(dir, tag_file_names[j], NULL);
+			if (g_file_test(path, G_FILE_TEST_EXISTS))
+			{
+				g_free(dir);
+				return path;
+			}
+			g_free(path);
 		}
-		g_free(path);
 		while (i >= 0 && !G_IS_DIR_SEPARATOR(dir[i]))
 			i--;
 		dir[i] = '\0';
@@ -231,12 +251,15 @@ void plugin_init(GeanyData *data)
       GDK_bracketright, GDK_CONTROL_MASK, "find_ctag_declaration",
        _("Find ctag declaration"), menu_item_jump_to_tag);
 
+	/* TODO: make this configurable */
+	update_tag_file_names("tags");
 }
 
 
 void plugin_cleanup(void)
 {
 	gtk_widget_destroy(menu_item_jump_to_tag);
+	update_tag_file_names(NULL);
 }
 
 
