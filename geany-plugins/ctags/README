@@ -35,8 +35,8 @@ Usage
 
 The ctags plugin requires a tag database in a file named 'tags' in the current
 directory or any parent directory. To generate it, go to your source directory
-and run the command "ctags --fields=n -R ." -- this will list all tags from
-all recognized source files. Check the ctags documentation for more options.
+and run the command "ctags -R" -- this will list all tags from all recognized
+source files. Check the ctags documentation for more options.
 
 After enabling the plugin, just select some function and run "Tools" -> "Find
 ctag declaration" or press Control+] with the tag selected. It is possible to
@@ -44,7 +44,7 @@ change this shortcut in the Geany preferences. All definitions will be listed
 in the Status Window. If a single definition is found, the respective file
 will be open and the cursor will be positioned in the declaration line.
 
-The tags file must be generated when the sources are changed.
+The tags file must be generated when the sources are significantly changed.
 
 
 
