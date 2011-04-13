@@ -51,10 +51,11 @@ PLUGIN_SET_INFO(_("ctags"), _("Browse symbols in ctags/etags files"),
 	VERSION, "Alexandre Erwin Ittner <alexandre@ittner.com.br>");
 
 /* Keybindings */
-enum { KB_FIND_SELECTED_CTAG, KB_MAX };
+enum { KB_FIND_SELECTED_CTAG, KB_FIND_TYPED_CTAG, KB_MAX };
 PLUGIN_KEY_GROUP(ctags, KB_MAX)
 
 static GtkWidget *menu_item_find_selected_tag = NULL;
+static GtkWidget *menu_item_find_typed_tag = NULL;
 
 /* A array of all file names understood as tag files */
 static gchar **tag_file_names = NULL;
@@ -288,11 +289,30 @@ static void find_selected_ctag_cb(GtkMenuItem *menuitem, gpointer gdata)
 		msgwin_status_add(_("Select some text to search for declarations"));
 }
 
+static void find_typed_ctag_cb(GtkMenuItem *menuitem, gpointer gdata)
+{
+	GeanyDocument *doc = document_get_current();
+	if (doc == NULL)
+		return;
+	gchar *text =  dialogs_show_input(_("Find ctag declaration"),
+		GTK_WINDOW(geany->main_widgets->window), _("Symbol to search:"), "");
+	if (text != NULL)
+	{
+		if (strlen(text) > 0)
+			find_tag(doc, text);
+		g_free(text);
+	}
+}
 
 /* For the keyboard shortcut */
 static void find_selected_ctag_kb(guint key_id)
 {
 	find_selected_ctag_cb(NULL, NULL);
+}
+
+static void find_typed_ctag_kb(guint key_id)
+{
+	find_typed_ctag_cb(NULL, NULL);
 }
 
 
@@ -315,6 +335,20 @@ void plugin_init(GeanyData *data)
 		"find_selected_ctag_declaration", _("Find selected ctag declaration"),
 		menu_item_find_selected_tag);
 
+	menu_item_find_typed_tag = gtk_menu_item_new_with_mnemonic(
+		_("Find ctag declaration..."));
+	gtk_widget_show(menu_item_find_typed_tag);
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu),
+		menu_item_find_typed_tag);
+	g_signal_connect(menu_item_find_typed_tag, "activate",
+		G_CALLBACK(find_typed_ctag_cb), NULL);
+
+	ui_add_document_sensitive(menu_item_find_typed_tag);
+
+	keybindings_set_item(plugin_key_group, KB_FIND_TYPED_CTAG,
+		find_typed_ctag_kb, 0, 0, "find_ctag_declaration",
+		_("Find ctag declaration"), menu_item_find_typed_tag);
+
 	/* TODO: make this configurable */
 	update_tag_file_names("tags");
 }
@@ -323,6 +357,7 @@ void plugin_init(GeanyData *data)
 void plugin_cleanup(void)
 {
 	gtk_widget_destroy(menu_item_find_selected_tag);
+	gtk_widget_destroy(menu_item_find_typed_tag);
 	update_tag_file_names(NULL);
 }
 
