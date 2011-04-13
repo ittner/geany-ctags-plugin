@@ -319,6 +319,22 @@ static void find_typed_ctag_kb(guint key_id)
 void plugin_init(GeanyData *data)
 {
 	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
+
+	menu_item_find_typed_tag = gtk_menu_item_new_with_mnemonic(
+		_("Find ctag declaration..."));
+	gtk_widget_show(menu_item_find_typed_tag);
+	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu),
+		menu_item_find_typed_tag);
+	g_signal_connect(menu_item_find_typed_tag, "activate",
+		G_CALLBACK(find_typed_ctag_cb), NULL);
+
+	ui_add_document_sensitive(menu_item_find_typed_tag);
+
+	keybindings_set_item(plugin_key_group, KB_FIND_TYPED_CTAG,
+		find_typed_ctag_kb, 0, 0, "find_ctag_declaration",
+		_("Find ctag declaration"), menu_item_find_typed_tag);
+
+
 	menu_item_find_selected_tag = gtk_menu_item_new_with_mnemonic(
 		_("Find selected ctag declaration"));
 	gtk_widget_show(menu_item_find_selected_tag);
@@ -334,20 +350,6 @@ void plugin_init(GeanyData *data)
 		find_selected_ctag_kb, GDK_bracketright, GDK_CONTROL_MASK,
 		"find_selected_ctag_declaration", _("Find selected ctag declaration"),
 		menu_item_find_selected_tag);
-
-	menu_item_find_typed_tag = gtk_menu_item_new_with_mnemonic(
-		_("Find ctag declaration..."));
-	gtk_widget_show(menu_item_find_typed_tag);
-	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu),
-		menu_item_find_typed_tag);
-	g_signal_connect(menu_item_find_typed_tag, "activate",
-		G_CALLBACK(find_typed_ctag_cb), NULL);
-
-	ui_add_document_sensitive(menu_item_find_typed_tag);
-
-	keybindings_set_item(plugin_key_group, KB_FIND_TYPED_CTAG,
-		find_typed_ctag_kb, 0, 0, "find_ctag_declaration",
-		_("Find ctag declaration"), menu_item_find_typed_tag);
 
 	/* TODO: make this configurable */
 	update_tag_file_names("tags");
