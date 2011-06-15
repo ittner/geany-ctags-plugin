@@ -124,9 +124,10 @@ static gchar *find_tag_file_name(const GeanyDocument *doc)
 
 
 /*
- * Receive a ctags search pattern and returns a copy without the leading
- * and trailing symbols (ie, get "/^something$/" and returns a new string
- * with "something".  The caller must g_free the result.
+ * Receive a ctags search pattern and returns a copy without any special
+ * symbols (ie, get "/^something \(with regex chars\)$/" and returns a
+ * new string with "something (with regex chars)". The caller must
+ * g_free the result.
  */
 
 static gchar *g_strdup_pattern(const char *pattern)
@@ -141,17 +142,26 @@ static gchar *g_strdup_pattern(const char *pattern)
 	}
 	if (*pattern == '\0')
 		return NULL;
-	gchar *new_pattern = g_strdup(pattern);
-	gint len = strlen(new_pattern);
+
+	gchar *new_pattern = g_strdup(pattern); /* This string will be rewritten */
+	gint len = 0;
+	gint i = 0;
+	while (pattern[i] != '\0')
+	{
+		if (pattern[i] == '\\')
+			i++;
+		new_pattern[len++] = pattern[i++];
+	}
+	new_pattern[len++] = '\0';
 	if (len > 1 && new_pattern[len-2] == '/')
 	{
 		new_pattern[len-2] = '\0';
 		len--;
-	}
-	if (len > 1 && new_pattern[len-2] == '$')
-	{
-		new_pattern[len-2] = '\0';
-		len--;
+		if (len > 1 && new_pattern[len-2] == '$')
+		{
+			new_pattern[len-2] = '\0';
+			len--;
+		}
 	}
 	return new_pattern;
 }
